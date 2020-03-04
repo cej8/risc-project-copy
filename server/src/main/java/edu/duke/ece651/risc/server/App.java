@@ -3,6 +3,8 @@
  */
 package edu.duke.ece651.risc.server;
 
+import edu.duke.ece651.risc.shared.*;
+
 public class App {
     public String getGreeting() {
         return "Hello world.";

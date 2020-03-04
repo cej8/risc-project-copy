@@ -1,7 +1,5 @@
 package edu.duke.ece651.risc.shared;
 
-import java.io.Serializable;
-
 public abstract class AbstractPlayer implements Serializable{
   private String name;
   private boolean isPlaying;
@@ -19,5 +17,17 @@ public void setPlaying(boolean isPlaying) {
 	this.isPlaying = isPlaying;
 }
 
-  
+
 }
+
+ 
+  
+
+
+
+    
+       
+  
+
+    
+     
