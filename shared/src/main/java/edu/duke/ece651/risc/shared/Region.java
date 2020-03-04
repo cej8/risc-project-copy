@@ -5,17 +5,17 @@ import java.util.List;
 
 // Class to handle keeping track of region owner, unit numbers, and adjacent regions
 public class Region implements Serializable {
-  private static final long serialVersionUID = 1L; // what does this mean? Different number?
+  private static final long serialVersionUID = 2L; //is there a more intuitive numbering we could use?
   private AbstractPlayer owner;
   private Unit units;
   private List<Region> adjRegions;
 
-  /*  public void assignRegion(AbstractPlayer o, Unit u){
-    
-      }*/
+  public void assignRegion(AbstractPlayer p, Unit u) {
+    //assigns this region to Player p with Unit .. is this not just setOwner + setUnits?
+  }
   //Setters
-  public void setOwner(AbstractPlayer o){
-    this.owner = o;
+  public void setOwner(AbstractPlayer p){
+    this.owner = p;
   }
   public void setUnits(Unit u){
     this.units = u;

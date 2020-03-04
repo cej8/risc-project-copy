@@ -1,8 +1,0 @@
-package edu.duke.ece651.risc.shared;
-
-import java.io.Serializable;
-
-public class Region implements Serializable {
-  private static final long serialVersionUID = 1L; // what does this mean? Different number?
-
-}

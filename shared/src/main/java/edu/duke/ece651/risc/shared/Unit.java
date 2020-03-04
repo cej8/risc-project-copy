@@ -5,7 +5,7 @@ import java.io.Serializable;
 // Class to set number of units for players
 public class Unit implements Serializable {
   private Integer units;
-  private static final long serialVersionUID = 1234L;
+  private static final long serialVersionUID = 1L; //more intuitive numbering?
 
   public Integer getUnits(){
     return units;
