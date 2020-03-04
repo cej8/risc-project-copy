@@ -1,0 +1,20 @@
+package edu.duke.ece651.risc.shared;
+
+public class ConfirmationMessage implements MessageInterface{
+  private boolean message;
+  
+	@Override
+	public MessageInterface unpacker() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isMessage() {
+		return message;
+	}
+
+	public void setMessage(boolean message) {
+		this.message = message;
+	}
+
+}
