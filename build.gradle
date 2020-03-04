@@ -1,0 +1,28 @@
+allprojects {
+    //task hello << { task -> println "I'm $task.project.name " }
+    task hello {
+        doLast {
+            println("I'm $project.name")
+        }
+    }
+}
+subprojects{
+    apply plugin: "java"
+    /*repositories {
+        mavenCentral()
+    }*/
+}
+
+// Project specific stuff
+project (':shared'){
+}
+project (':server'){
+    dependencies {
+        implementation project(':shared')
+    }
+}
+project (':client'){
+    dependencies {
+        implementation project(':shared')
+    } 
+}
