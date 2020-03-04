@@ -1,20 +1,33 @@
 package edu.duke.ece651.risc.shared;
 
-public abstract class AbstractPlayer {
-  protected String name;
-  protected boolean isPlaying;
-  // setters
-  public void setName(String n){
-    this.name = n;
-  }
-  public void setisPlaying(boolean b){
-    this.isPlaying = b;
-  }
-  // getters
-  public boolean getisPlaying(){
-    return isPlaying; 
-  }
-  public String getName(){
-    return name;
-  }
+public abstract class AbstractPlayer implements Serializable{
+  private String name;
+  private boolean isPlaying;
+  private static final long serialVersionUID = 5L;
+public String getName() {
+	return name;
 }
+public void setName(String name) {
+	this.name = name;
+}
+public boolean isPlaying() {
+	return isPlaying;
+}
+public void setPlaying(boolean isPlaying) {
+	this.isPlaying = isPlaying;
+}
+
+
+}
+
+ 
+  
+
+
+
+    
+       
+  
+
+    
+     

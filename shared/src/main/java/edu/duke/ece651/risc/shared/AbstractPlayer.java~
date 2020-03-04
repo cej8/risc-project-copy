@@ -1,0 +1,8 @@
+package edu.duke.ece651.risc.shared;
+
+public abstract class AbstractPlayer {
+  private String name;
+  private boolean isPlaying;
+
+  
+}
