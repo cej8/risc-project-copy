@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="edu.duke.ece651.risc.shared.MessageInterfaceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-03-04T02:13:41" hostname="cecile-VirtualBox" time="0.149">
-  <properties/>
-  <testcase name="test_Messages()" classname="edu.duke.ece651.risc.shared.MessageInterfaceTest" time="0.149"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
