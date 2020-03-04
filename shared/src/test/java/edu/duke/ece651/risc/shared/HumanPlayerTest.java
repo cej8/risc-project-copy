@@ -17,6 +17,7 @@ public class HumanPlayerTest {
     assertEquals(true, h.isPlaying());
     assertEquals(s, h.getSocket());
     assertEquals(true, h.isWatching());
+    
   }
 
 }

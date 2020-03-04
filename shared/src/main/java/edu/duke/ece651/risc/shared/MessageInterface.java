@@ -1,5 +1,8 @@
 package edu.duke.ece651.risc.shared;
 
-public interface MessageInterface {
+import java.io.Serializable;
+
+public interface MessageInterface extends Serializable{
   // MessageInterface unpacker();
+
 }
