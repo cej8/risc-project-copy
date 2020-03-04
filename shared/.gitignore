@@ -3,3 +3,5 @@
 
 # Ignore Gradle build output directory
 build
+# bin is where the debug version of the code goes with C-c C-d
+bin
