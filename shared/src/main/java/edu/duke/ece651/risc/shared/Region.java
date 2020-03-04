@@ -5,7 +5,7 @@ import java.util.List;
 
 // Class to handle keeping track of region owner, unit numbers, and adjacent regions
 public class Region implements Serializable {
-  private static final long serialVersionUID = 2L; //is there a more intuitive numbering we could use?
+  private static final long serialVersionUID = 1L; //is there a more intuitive numbering we could use?
   private AbstractPlayer owner;
   private Unit units;
   private List<Region> adjRegions;
