@@ -10,9 +10,9 @@ public class Region implements Serializable {
   private Unit units;
   private List<Region> adjRegions;
 
-  public void assignRegion(AbstractPlayer o, Unit u){
+  /*  public void assignRegion(AbstractPlayer o, Unit u){
     
-  }
+      }*/
   //Setters
   public void setOwner(AbstractPlayer o){
     this.owner = o;
