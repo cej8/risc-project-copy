@@ -12,6 +12,7 @@ public class Board implements Serializable {
     this.setRegions(regionList);
   }
   
+  //get and set List of Regions
   public List<Region> getRegions(){
     return this.regions;
   }
