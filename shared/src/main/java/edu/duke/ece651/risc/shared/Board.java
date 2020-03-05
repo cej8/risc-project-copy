@@ -12,33 +12,30 @@ public class Board implements Serializable {
     this.setRegions(regionList);
   }
   
-  List<Region> getRegions(){
+  public List<Region> getRegions(){
     return this.regions;
   }
 
- List<Region> setRegions(List<Region> regionList){
+ public void setRegions(List<Region> regionList){
     this.regions = regionList;
   }
 
   
-  public void updateBoard(Socket socket)  {
-    Board masterBoard = null;
-    try{
-      ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
-      masterBoard = (Board) is.readObject();
-      is.close();
-      this.regions = masterBoard.getRegions();
-    }
-    catch(IOException e) {
-      System.out.println("IOException is caught");
-    }
-    catch(ClassNotFoundException e) {
-      System.out.println("ClassNotFoundException is caught");
-    } 
-  }
-
-
-
+  // public void updateClientBoard(Socket socket)  {
+  //   Board masterBoard = null;
+  //   try{
+  //     ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
+  //     masterBoard = (Board) is.readObject();
+  //     is.close();
+  //     this.setRegions(masterBoard.getRegions());
+  //   }
+  //   catch(IOException e) {
+  //     System.out.println("IOException is caught");
+  //   }
+  //   catch(ClassNotFoundException e) {
+  //     System.out.println("ClassNotFoundException is caught");
+  //   } 
+  
   
 }
 
