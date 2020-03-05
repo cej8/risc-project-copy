@@ -20,7 +20,7 @@ public class ParentServerTest {
     ChildServer child = ps.getChildren().get(0);
     StringMessage message = new StringMessage("I am testing networking");
     try{
-      child.sendObject(message);
+      child.getPlayer().sendObject(message);
     }
     catch(Exception e){
       e.printStackTrace(System.out);

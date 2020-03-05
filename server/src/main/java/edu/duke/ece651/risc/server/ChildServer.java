@@ -22,14 +22,7 @@ public class ChildServer extends Thread{
     this.parent = parent;
   }
 
-  public void sendObject(Object object) throws IOException{
-    player.sendObject(object);
-  }
-  public Object receiveObject() throws IOException, ClassNotFoundException{
-    return player.receiveObject();
-  }
-
-  public void closeAll(){
-    player.closeAll();
+  public AbstractPlayer getPlayer(){
+    return player;
   }
 }

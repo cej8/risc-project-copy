@@ -39,7 +39,7 @@ public class ParentServer {
 
   public void closeAll(){
     for(ChildServer child : children){
-      child.closeAll();
+      child.getPlayer().closeAll();
     }
     try{
       serverSocket.close();
