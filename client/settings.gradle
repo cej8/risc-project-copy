@@ -8,3 +8,5 @@
  */
 
 rootProject.name = 'client'
+include ':shared'
+project(':shared').projectDir = new File("../shared")
