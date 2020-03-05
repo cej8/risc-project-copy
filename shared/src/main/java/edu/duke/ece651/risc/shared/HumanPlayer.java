@@ -6,10 +6,13 @@ public class HumanPlayer extends AbstractPlayer {
   private Socket socket;
   private static final long serialVersionUID = 6L;
 
+  public HumanPlayer(){
+
+  }
   public HumanPlayer(String name, Socket s){
-    this.name= name;
-    this.socket=s;
-    this.isPlaying =true;
+    setName( name);
+    setSocket(s);
+    setPlaying(true);
   }
 public Socket getSocket() {
 	return socket;

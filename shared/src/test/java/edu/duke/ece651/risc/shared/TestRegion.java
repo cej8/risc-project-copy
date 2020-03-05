@@ -11,19 +11,20 @@ public class TestRegion {
   @Test
   public void test_Region() {
     Region region = new Region();
+    
     AbstractPlayer p = new HumanPlayer();
     p.setName("test");
     region.setOwner(p);
-    Unit u = new Unit();
-    u.setUnits(3);
+    Unit u = new Unit(3);
+    //  u.setUnits(3);
     region.setUnits(u);
     // region 2
     Region region2 = new Region();
     AbstractPlayer p2 = new HumanPlayer();
     p2.setName("test");
     region2.setOwner(p2);
-    Unit u2 = new Unit();
-    u2.setUnits(3);
+    Unit u2 = new Unit(2);
+    // u2.setUnits(3);
     region2.setUnits(u2);
     ArrayList<Region> regionList = new ArrayList<Region>();
     regionList.add(region);
@@ -32,6 +33,8 @@ public class TestRegion {
     assertEquals(p,region.getOwner());
     assertEquals(u,region.getUnits());
     assertEquals(regionList, region.getAdjRegions());
+
+    Region region3= new Region(p,u);
   }
 
 }

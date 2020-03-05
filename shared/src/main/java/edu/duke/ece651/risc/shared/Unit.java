@@ -7,6 +7,9 @@ public class Unit implements Serializable {
   private Integer units;
   private static final long serialVersionUID = 2L; //more intuitive numbering?
 
+  public Unit(){
+
+  }
   public Unit(Integer u){
     setUnits(u);
   }

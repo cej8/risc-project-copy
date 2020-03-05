@@ -9,14 +9,16 @@ public class HumanPlayerTest {
   @Test
   public void test_PlayerCreation() {
     Socket s = new Socket();
-    HumanPlayer h = new HumanPlayer();
-    h.setName("Human1");
-    h.setPlaying(true);
-    h.setSocket(s);
+    HumanPlayer human = new HumanPlayer();
+    AbstractPlayer h = new HumanPlayer("Human1",s);
+    //  h.setName("Human1");
+    // h.setPlaying(true);
+    human.setSocket(s);
     assertEquals("Human1",h.getName());
     assertEquals(true, h.isPlaying());
-    assertEquals(s, h.getSocket());
-    assertEquals(true, h.isWatching());
+    assertEquals(s, human .getSocket());
+    assertEquals(true, human.isWatching());
+    
     
   }
 
