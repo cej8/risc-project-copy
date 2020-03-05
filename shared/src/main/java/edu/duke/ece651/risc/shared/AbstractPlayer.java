@@ -30,12 +30,9 @@ public void setPlaying(boolean isPlaying) {
       e.printStackTrace(System.out);
     }
   }
-
-  
   public void sendObject(Object object) throws IOException{
     outputStream.writeObject(object);
   }
-
   public Object receiveObject() throws IOException, ClassNotFoundException{
     return inputStream.readObject();
   }
