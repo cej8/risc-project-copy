@@ -36,7 +36,10 @@ dependencies {
 
 //    clover 'org.openclover:clover:4.3.1'
     compile project(':shared')
+
+    testCompile "org.mockito:mockito-core:2.+"    
 }
+
 test{
     testLogging{
         showStandardStreams = true
