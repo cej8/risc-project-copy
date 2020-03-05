@@ -11,11 +11,9 @@ public class Region implements Serializable {
   private List<Region> adjRegions;
 
   public Region(){
-  }
-  public Region(AbstractPlayer p, Unit u){// will need to be modified
-    assignRegion(p,u);
-  }
 
+  }
+  public Region(AbstractPlayer p, 
   public void assignRegion(AbstractPlayer p, Unit u) {
     //assigns this region to Player p with Unit .. is this not just setOwner + setUnits?
     setOwner(p);
