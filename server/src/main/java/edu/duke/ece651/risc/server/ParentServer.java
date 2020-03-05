@@ -25,7 +25,7 @@ public class ParentServer {
     while(children.size() < MAX_PLAYERS){
       HumanPlayer newPlayer;
       try{
-        newPlayer = new HumanPlayer("Player " + new Integer(children.size()+1).toString(), serverSocket.accept());
+        newPlayer = new HumanPlayer("Player " + Integer.toString(children.size()+1), serverSocket.accept());
       }
       catch(Exception e){
         e.printStackTrace(System.out);

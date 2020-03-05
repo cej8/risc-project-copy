@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class HumanPlayerTest {
   @Test
   public void test_PlayerCreation() {
-    Socket s = new Socket();
+    /* Socket s = new Socket();
     HumanPlayer human = new HumanPlayer();
     try{
       AbstractPlayer h = new HumanPlayer("Human1",s);
@@ -23,7 +23,7 @@ public class HumanPlayerTest {
     }
     catch(IOException e){
       e.printStackTrace(System.out);
-    }
+    }*/
     
     
   }

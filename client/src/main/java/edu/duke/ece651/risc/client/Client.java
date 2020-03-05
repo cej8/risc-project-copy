@@ -17,7 +17,7 @@ public class Client {
       socket = new Socket(address, port);
       fromServer = new ObjectInputStream(socket.getInputStream());
       toServer = new ObjectOutputStream(socket.getOutputStream());
-      System.out.println("Connected to " + address + ":" + new Integer(port).toString());
+      System.out.println("Connected to " + address + ":" + Integer.toString(port));
     }
     catch(Exception e){
       e.printStackTrace(System.out);
