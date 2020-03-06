@@ -22,7 +22,9 @@ public class BoardTest {
     
     //Socket socket = new Socket(mockParentServer.getInetAddress, 0);
     when(mockParentServer.accept()).thenReturn(mockClientSocket);
-    AbstractPlayer player1 = new HumanPlayer("Player 1", mockClientSocket);
+    // AbstractPlayer player1 = new HumanPlayer("Player 1", mockClientSocket);
+    AbstractPlayer player1 = new HumanPlayer("Player 1");
+  
     when(mockClientSocket.getInputStream()).thenReturn(mockInputStream);
     when(mockClientSocket.getOutputStream()).thenReturn(mockOutputStream);
 
@@ -49,5 +51,6 @@ public class BoardTest {
     board.setRegions(regions2);
     assertEquals(regions2, board.getRegions());    
   }
+
 
 }

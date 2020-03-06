@@ -18,11 +18,16 @@ public class TextDisplayTest {
     OutputStream mockOutputStream = mock(OutputStream.class); 
 
     Socket mockClientSocket1 = mock(Socket.class);
-    AbstractPlayer player1 = new HumanPlayer("Player 1", mockClientSocket1);
+    // AbstractPlayer player1 = new HumanPlayer("Player 1", mockClientSocket1);
+    AbstractPlayer player1 = new HumanPlayer("Player 1");
+    
     Socket mockClientSocket2 = mock(Socket.class);
-    AbstractPlayer player2 = new HumanPlayer("Player 2", mockClientSocket2);
+    // AbstractPlayer player2 = new HumanPlayer("Player 2", mockClientSocket2);
+    AbstractPlayer player2 = new HumanPlayer("Player 2");
+   
     Socket mockClientSocket3 = mock(Socket.class);
-    AbstractPlayer player3 = new HumanPlayer("Player 3", mockClientSocket3);
+    // AbstractPlayer player3 = new HumanPlayer("Player 3", mockClientSocket3);
+    AbstractPlayer player3 = new HumanPlayer("Player 3");
 
       when(mockClientSocket1.getInputStream()).thenReturn(mockInputStream);
     when(mockClientSocket1.getOutputStream()).thenReturn(mockOutputStream);
