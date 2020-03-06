@@ -13,7 +13,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application.
     id 'application'
 
-    //id 'com.bmuschko.clover' version '2.2.3'
+   // id 'com.bmuschko.clover' version '2.2.3'
 }
 
 repositories {
@@ -32,7 +32,7 @@ dependencies {
     // Use JUnit Jupiter Engine for testing.
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
 
-//    clover 'org.openclover:clover:4.3.1'
+    //clover 'org.openclover:clover:4.3.1'
     compile project(':shared')
 
     testCompile "org.mockito:mockito-core:2.+"
@@ -44,11 +44,11 @@ test{
         exceptionFormat = 'full'
     }
 }
-//clover{
-//    compiler{
-//        additionalArgs = "-g:lines,source,vars"
-//    }
-//}
+/*clover{
+    compiler{
+        additionalArgs = "-g:lines,source,vars"
+    }
+}*/
 
 application {
     // Define the main class for the application.

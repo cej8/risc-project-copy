@@ -28,7 +28,7 @@ public class Region implements Serializable {
   public void setUnits(Unit u){
     this.units = u;
   }
-  void setAdjRegions(List<Region> adj){
+  public void setAdjRegions(List<Region> adj){
     this.adjRegions = adj;
   }
   //Getters
