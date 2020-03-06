@@ -16,7 +16,7 @@ public class TextDisplay implements ClientOutputInterface {
   //returns a String of all of the board info
   private String createBoard(Board b){
     StringBuilder boardText = new StringBuilder();
-    Map<AbstractPlayer, List<Region>> playerRegionMap = this.getPlayerToRegionMap(b);
+    Map<AbstractPlayer, List<Region>> playerRegionMap = b.getPlayerToRegionMap();
     for(Map.Entry<AbstractPlayer, List<Region>>  entry : playerRegionMap.entrySet()) { //for each entry in the map
       boardText.append(entry.getKey().getName() + ": \n---------\n"); //append player name
       for (Region r : entry.getValue()){ //for each region the player has
