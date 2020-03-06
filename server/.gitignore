@@ -3,3 +3,6 @@
 
 # Ignore Gradle build output directory
 build
+
+# This is where debug version of code goes
+bin
