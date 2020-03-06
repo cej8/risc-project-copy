@@ -17,10 +17,15 @@ public class BoardTest {
     //set up mock server
     ServerSocket mockParentServer = mock(ServerSocket.class);
     Socket mockClientSocket = mock(Socket.class);
+    InputStream mockInputStream = mock(InputStream.class); 
+    OutputStream mockOutputStream = mock(OutputStream.class); 
+    
     //Socket socket = new Socket(mockParentServer.getInetAddress, 0);
     when(mockParentServer.accept()).thenReturn(mockClientSocket);
     AbstractPlayer player1 = new HumanPlayer("Player 1", mockClientSocket);
-    //when(mockClientSocket.getInputStream()).thenReturn();
+    when(mockClientSocket.getInputStream()).thenReturn(mockInputStream);
+    when(mockClientSocket.getOutputStream()).thenReturn(mockOutputStream);
+
     //set up units/regions/adjancies
     Unit unit = new Unit(10);
     Unit adjUnit = new Unit(15); 
