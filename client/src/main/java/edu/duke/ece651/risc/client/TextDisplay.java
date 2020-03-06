@@ -14,9 +14,9 @@ public class TextDisplay implements ClientOutputInterface {
   }
 
   //returns a String of all of the board info
-  public String createBoard(Board b){
+  private String createBoard(Board b){
     StringBuilder boardText = new StringBuilder();
-    Map<AbstractPlayer, List<Region>> playerRegionMap = this.playerToRegionMap(b);
+    Map<AbstractPlayer, List<Region>> playerRegionMap = this.getPlayerToRegionMap(b);
     for(Map.Entry<AbstractPlayer, List<Region>>  entry : playerRegionMap.entrySet()) { //for each entry in the map
       boardText.append(entry.getKey().getName() + ": \n---------\n"); //append player name
       for (Region r : entry.getValue()){ //for each region the player has
@@ -52,34 +52,7 @@ public class TextDisplay implements ClientOutputInterface {
       
 
   
-  //Creates a Map of Players to a List of all their owned regions 
-  private Map<AbstractPlayer, List<Region>> playerToRegionMap(Board b){
-    Map<AbstractPlayer, List<Region>> playerRegionMap = new HashMap<AbstractPlayer, List<Region>>();
-    List<Region> allRegions = b.getRegions(); //get all the regions
-    Set<AbstractPlayer> allPlayers = playerSet(b); //get all the players
-    for (AbstractPlayer p : allPlayers){ //for each player p
-      List<Region> playerRegions = new ArrayList<Region>(); //create a list of their regions
-      for (Region r : allRegions){ //for each regions r on the board
-        if (r.getOwner() == p){ //if the owner is player p
-          playerRegions.add(r); //add region r to their list of regions
-        }
-      }
-      playerRegionMap.put(p, playerRegions); //add this <p, r> to the map
-      }
-    return playerRegionMap;
-  }
-
-
-
-  //Creates a Set of all Players on the Board -- should I move this into the Board class so it could be used elsewhere?
-  private Set<AbstractPlayer> playerSet(Board b){
-    List<Region> allRegions = b.getRegions();
-    Set<AbstractPlayer> allPlayers = new HashSet<AbstractPlayer>();
-    for (Region r : allRegions){ //for each region on the board
-      allPlayers.add(r.getOwner()); //add that player's owner to the set
-    }
-    return allPlayers;
-  }
+ 
 
 
 
