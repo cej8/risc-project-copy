@@ -7,17 +7,27 @@ import java.util.List;
 public class Region implements Serializable {
   private static final long serialVersionUID = 1L; //is there a more intuitive numbering we could use?
   private AbstractPlayer owner;
+  private String name;
   private Unit units;
   private List<Region> adjRegions;
 
   public Region(){
   }
+
+  //Constructor for assigning name to region (before Players are assigned)
+  public Region (String n){
+    setName(n);
+    setOwner(null);
+    setUnits(null);
+  }
+  
   public Region(AbstractPlayer p, Unit u){// will need to be modified
-    assignRegion(p,u);
+    setOwner(p);
+    setUnits(u);
   }
 
   public void assignRegion(AbstractPlayer p, Unit u) {
-    //assigns this region to Player p with Unit .. is this not just setOwner + setUnits?
+    //assigns this region to Player p with Unit .. is this not just setOwner + setUnits? Do we need this?
     setOwner(p);
     setUnits(u);
   }
@@ -31,6 +41,9 @@ public class Region implements Serializable {
   public void setAdjRegions(List<Region> adj){
     this.adjRegions = adj;
   }
+  public void setName(String n){
+    this.name = n;
+  }
   //Getters
   public AbstractPlayer getOwner(){
     return owner;
@@ -40,5 +53,9 @@ public class Region implements Serializable {
   }
   public List<Region> getAdjRegions(){
     return adjRegions;
+  }
+
+  public String getName(){
+    return name;
   }
 }

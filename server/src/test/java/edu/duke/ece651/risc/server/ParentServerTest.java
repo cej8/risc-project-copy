@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ParentServerTest {
   /*@Test
   public void test_ServerSimple() {
-    ParentServer ps = new ParentServer();
+    /*    ParentServer ps = new ParentServer();
     try{
       System.out.println("Waiting for connection");
       ps.waitingForConnections();
@@ -28,8 +28,9 @@ public class ParentServerTest {
     catch(Exception e){
       e.printStackTrace(System.out);
     }
+<<<<<<< HEAD
     ps.closeAll();
-  }*/
+  }
   @Test
   public void test_createStartingGroups(){
     ParentServer ps = new ParentServer();
@@ -47,6 +48,6 @@ public class ParentServerTest {
     for (int i = 0; i < regions.size(); i++){
       System.out.println(i + ": " + regions.get(i).getOwner().getName() + " " + regions.get(i).getUnits().getUnits());
     }
-  }
+    }*/
 
 }

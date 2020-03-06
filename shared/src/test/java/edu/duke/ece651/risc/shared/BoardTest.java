@@ -15,12 +15,17 @@ public class BoardTest {
   /* @Test
   public void test_Board() throws IOException{
     //set up mock server
-    ServerSocket mockParentServer = mock(ServerSocket.class);
+    /*    ServerSocket mockParentServer = mock(ServerSocket.class);
     Socket mockClientSocket = mock(Socket.class);
+    InputStream mockInputStream = mock(InputStream.class); 
+    OutputStream mockOutputStream = mock(OutputStream.class); 
+    
     //Socket socket = new Socket(mockParentServer.getInetAddress, 0);
     when(mockParentServer.accept()).thenReturn(mockClientSocket);
     AbstractPlayer player1 = new HumanPlayer("Player 1", mockClientSocket);
-    //when(mockClientSocket.getInputStream()).thenReturn();
+    when(mockClientSocket.getInputStream()).thenReturn(mockInputStream);
+    when(mockClientSocket.getOutputStream()).thenReturn(mockOutputStream);
+
     //set up units/regions/adjancies
     Unit unit = new Unit(10);
     Unit adjUnit = new Unit(15); 
@@ -42,7 +47,7 @@ public class BoardTest {
     assertEquals(regions, board.getRegions());
     assertFalse(regions2 == board.getRegions());
     board.setRegions(regions2);
-    assertEquals(regions2, board.getRegions());    
+    assertEquals(regions2, board.getRegions());    */
   }
 */
 }
