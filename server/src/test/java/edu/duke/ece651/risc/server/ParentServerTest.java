@@ -30,7 +30,7 @@ public class ParentServerTest {
     }
     ps.closeAll();
     }*/
-  @Test
+  /* @Test
   public void test_createStartingGroups(){
     ParentServer ps = new ParentServer();
     HumanPlayer player = new HumanPlayer();
@@ -47,6 +47,24 @@ public class ParentServerTest {
     for (int i = 0; i < regions.size(); i++){
       System.out.println(i + ": " + regions.get(i).getOwner().getName() + " " + regions.get(i).getUnits().getUnits());
     }
+    }*/
+  @Test
+  public void test_startingGroups(){
+    ParentServer ps = new ParentServer();
+    //ps.createBoard();
+    ps.createStartingGroups();
+    Board board = ps.getBoard();
+    List<Region> regions = board.getRegions();
+    List<Region> adjRegion;
+    for (int i = 0; i < regions.size(); i++){
+      adjRegion = regions.get(i).getAdjRegions();
+      System.out.println(regions.get(i).getName() + ": Group Name: " + regions.get(i).getOwner().getName() + " Units: " + regions.get(i).getUnits().getUnits());
+      System.out.print("Adj Regions: ");
+      for (int j = 0; j < adjRegion.size(); j++) {
+        System.out.print(adjRegion.get(j).getName() + " ");
+      }
+      System.out.println();
     }
+  }
 
 }
