@@ -48,6 +48,5 @@ public class BoardTest {
     assertFalse(regions2 == board.getRegions());
     board.setRegions(regions2);
     assertEquals(regions2, board.getRegions());    */
-  }
-*/
+  // }
 }

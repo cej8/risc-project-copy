@@ -8,9 +8,10 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application.
     id 'application'
-
+}
 application {
     // Define the main class for the application.
     mainClassName = 'edu.duke.ece651.risc.server.App'
 }
+
 

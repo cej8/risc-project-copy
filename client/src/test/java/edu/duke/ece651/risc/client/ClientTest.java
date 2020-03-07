@@ -16,7 +16,7 @@ public class ClientTest {
       System.out.println(message.getMessage());
     }
     catch(Exception e){
-      e.printStackTrace(System.out);
+           e.printStackTrace(System.out);
       return;
     }
     finally{
@@ -24,9 +24,8 @@ public class ClientTest {
         client.closeAll();
       }
       catch(Exception e){
-        e.printStackTrace(System.out);
+             e.printStackTrace(System.out);
       }
     }
   }
-
 }

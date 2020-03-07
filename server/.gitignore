@@ -6,3 +6,6 @@ build
 
 # This is where debug version of code goes
 bin
+
+#
+.classpath

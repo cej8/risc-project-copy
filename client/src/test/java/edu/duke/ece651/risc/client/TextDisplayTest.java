@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class TextDisplayTest {
-  @Test
-  public void test_TestDisplayTest() throws IOException{
+  //  @Test
+  /*  public void test_TestDisplayTest() throws IOException{
     //setup Player
     InputStream mockInputStream = mock(InputStream.class); 
     OutputStream mockOutputStream = mock(OutputStream.class); 
@@ -80,6 +80,6 @@ public class TextDisplayTest {
 
  
     coi.displayBoard(board);
-  }
+    }*/
 
 }

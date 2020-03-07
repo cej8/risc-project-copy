@@ -9,7 +9,7 @@ public class Client {
   private Socket socket;
   private ObjectInputStream fromServer;
   private ObjectOutputStream toServer;
-  //Board board;
+  Board board;
   //boolean isPlaying
 
   void makeConnection(String address, int port){

@@ -28,9 +28,8 @@ public class ParentServerTest {
     catch(Exception e){
       e.printStackTrace(System.out);
     }
-<<<<<<< HEAD
     ps.closeAll();
-  }
+    }*/
   @Test
   public void test_createStartingGroups(){
     ParentServer ps = new ParentServer();
@@ -48,6 +47,6 @@ public class ParentServerTest {
     for (int i = 0; i < regions.size(); i++){
       System.out.println(i + ": " + regions.get(i).getOwner().getName() + " " + regions.get(i).getUnits().getUnits());
     }
-    }*/
+    }
 
 }
