@@ -10,6 +10,10 @@ public class HumanPlayer extends AbstractPlayer {
   public HumanPlayer(){
 
   }
+  public HumanPlayer(String name){//testing construcotr for tests that do no dpend on socket connection
+    this.isPlaying = true;
+    this.name = name;
+  }
   public HumanPlayer(String name, Socket s) throws IOException{
     this.name = name;
     this.socket = s;
