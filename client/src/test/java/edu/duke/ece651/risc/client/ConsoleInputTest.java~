@@ -1,0 +1,15 @@
+package edu.duke.ece651.risc.client;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+public class ConsoleInputTest {
+  @Test
+  public void test_readConsole() {
+    ClientInputInterface i = new ConsoleInput();
+    InputStream input = new FileInputStream();
+    assertEquals("This is a test", i.readInput(input));
+  }
+
+}
