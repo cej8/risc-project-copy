@@ -8,7 +8,7 @@ import java.io.*;
 public class ParentServer {
   private final int PORT = 12345;
   private final int MAX_PLAYERS = 1;
-  private final int MAX_REGIONS = 15;
+  private final int MAX_REGIONS = 12;
   private ServerSocket serverSocket;
   private List<ChildServer> children;
   private Board board;
@@ -43,7 +43,7 @@ public class ParentServer {
     children.add(c);
   }
   // Generate initial board, set region groups based on number of players
-  public void createStartingGroupsHelper(String groupName, int iStart, int iEnd, List<Region> regionList){
+  public void createStartingGroupsHelper(char groupName, int iStart, int iEnd, List<Region> regionList){
     HumanPlayer player;
     Unit u = new Unit();
     u.setUnits(0);
@@ -61,30 +61,19 @@ public class ParentServer {
     board = genBoard.getBoard();
     int numPlayers = 5;
     List<Region> regionList = board.getRegions();
-    switch (numPlayers){
-      case 2:
-        createStartingGroupsHelper("A",0,6,regionList);
-        createStartingGroupsHelper("B",6,12,regionList);
-        break;
-      case 3:
-        createStartingGroupsHelper("A",0,4,regionList);
-        createStartingGroupsHelper("B",4,8,regionList);
-        createStartingGroupsHelper("c",8,12,regionList);
-        break;
-      case 4:
-        createStartingGroupsHelper("A",0,3,regionList);
-        createStartingGroupsHelper("B",3,6,regionList);
-        createStartingGroupsHelper("C",6,9,regionList);
-        createStartingGroupsHelper("D",9,12,regionList);
-        break;
-      case 5:
-        createStartingGroupsHelper("A",0,2,regionList);
-        createStartingGroupsHelper("B",2,4,regionList);
-        createStartingGroupsHelper("C",4,6,regionList);
-        createStartingGroupsHelper("No Placement",6,8,regionList);
-        createStartingGroupsHelper("D",8,10,regionList);
-        createStartingGroupsHelper("E",10,12,regionList);
-        break;
+    char groupName = 'A';
+    int remainder = MAX_REGIONS % numPlayers;
+    int placementRegions = MAX_REGIONS - remainder;
+    int groupSize = placementRegions / numPlayers;
+    int numGroups;
+    if (numPlayers == 5){
+      numGroups = numPlayers + 1;
+    } else {
+      numGroups = numPlayers;
+    }
+    for (int i = 0; i < numGroups; i++){
+      createStartingGroupsHelper(groupName,(groupSize * i), (groupSize + (groupSize * i)), regionList);
+      groupName++;
     }
   }
   public void closeAll(){
