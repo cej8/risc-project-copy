@@ -20,6 +20,13 @@ subprojects{
         additionalArgs = "-g:lines,source,vars"
     }
     }
+
+    clover {
+      report{
+        xml= true
+        html = true
+      }
+    }
     test{
         testLogging{
             showStandardStreams = true
@@ -30,7 +37,28 @@ subprojects{
         // Use junit platform for unit tests
         useJUnitPlatform()
     }
+
+    tasks.withType(JavaCompile) {
+     options.debug = true
+    }
+    task resolveDependencies {
+       doLast {
+           project.rootProject.allprojects.each { subProject ->
+               subProject.buildscript.configurations.each { configuration->
+                  if(configuration.canBeResolved) {
+                     configuration.resolve()
+                  }
+               }
+               subProject.configurations.each { configuration ->
+                  if(configuration.canBeResolved) {
+                     configuration.resolve()
+                  }
+               }
+           }
+       }
+    }
 }
+
 
 // Project specific stuff
 project (':shared'){
