@@ -1,0 +1,7 @@
+package edu.duke.ece651.risc.shared;
+
+// Class defines how to execute placing units initially on board
+public class PlacementOrder extends DestinationOrder {
+  private static final long serialVersionUID = 11L;
+  
+}
