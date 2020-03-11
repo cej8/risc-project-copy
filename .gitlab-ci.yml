@@ -34,8 +34,6 @@ pages:
  dependencies:
    - test
  script:
-   - ls
-   - ls coverage
    - mv coverage public/
  artifacts:
    paths:
