@@ -17,15 +17,15 @@ public class RegionValidator implements ValidatorInterface {
 	@Override
 	public boolean isValidMove(MoveOrder m, Board b) {
     //owned by the same person
-    List<Region> ownedRegions=b.getPlayerToRegionMap().get(m.getSource().getOwner());
-    for(Region region: ownedRegions){
-      if(region==m.getDestination()){//destination is in source owner's list of regions
-        if(isConnected(m.getSource(), m.getDestination())){
+  //  List<Region> ownedRegions=b.getPlayerToRegionMap().get(m.getSource().getOwner());
+//    for(Region region: ownedRegions){
+  //    if(region==m.getDestination()){//destination is in source owner's list of regions
+    //    if(isConnected(m.getSource(), m.getDestination())){
            //and have path to get there via adjacent regions
-          return true;
-        }
-      }
-    }
+      //    return true;
+        //}
+      //}
+    //}
     return false;
 	}
 
