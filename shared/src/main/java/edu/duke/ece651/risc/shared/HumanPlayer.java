@@ -5,7 +5,7 @@ import java.io.*;
 
 public class HumanPlayer extends AbstractPlayer {
   private static final long serialVersionUID = 6L;
-
+    private Socket socket=null;
   public HumanPlayer(){
 
   }
@@ -14,6 +14,17 @@ public class HumanPlayer extends AbstractPlayer {
     this.isPlaying = true;
     this.name = name;
   }
+  
+public HumanPlayer(String name, Socket s) throws IOException{
+    //SHOULD BE DEPRECATED to decouple socket from inputstream and outputstream
+    this.name = name;
+    this.socket = s;
+    this.isPlaying = true;
+    this.outputStream = new ObjectOutputStream(s.getOutputStream());
+    this.inputStream = new ObjectInputStream(s.getInputStream());
+  }
+
+
 
   public HumanPlayer(String name, InputStream in, OutputStream out) throws IOException{
     this.name = name;
