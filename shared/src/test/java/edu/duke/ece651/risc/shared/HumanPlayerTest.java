@@ -14,13 +14,11 @@ public class HumanPlayerTest {
       AbstractPlayer h = new HumanPlayer("Human1");
       ArrayList<Object> someObjects = new ArrayList<Object>();
       someObjects.add(new ArrayList<Region>());
-      AbstractPlayer player1 = new HumanPlayer("Player 1", MockTests.setupMockSocket(someObjects));
-
-       h.setPlaying(true);
+      //  AbstractPlayer player1 = new HumanPlayer("Player 1", MockTests.setupMockSocket(someObjects));
+      AbstractPlayer player2 = new HumanPlayer("Player 2", MockTests.setupMockInput(someObjects),MockTests.setupMockOutput());
+      h.setPlaying(true);
       assertEquals("Human1",h.getName());
       assertEquals(true, h.isPlaying());
-      //assertEquals(s, human.getSocket());
-      //  assertEquals(true, h.isWatching());
          }
      catch(IOException e){
       e.printStackTrace(System.out);

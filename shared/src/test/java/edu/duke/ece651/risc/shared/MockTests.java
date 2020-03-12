@@ -16,7 +16,9 @@ import java.util.ArrayList;
 
 
 public class MockTests {
+  //this class contains the methods to create a mocked socket, and mocked input and output streams
   public ArrayList<Object> objsFrom(ByteArrayOutputStream os)throws IOException, ClassNotFoundException{
+    //method to read objs from a mocked outputstream
     ByteArrayInputStream inp = new ByteArrayInputStream(os.toByteArray());
     ObjectInputStream ois = new ObjectInputStream(inp);
     ArrayList<Object> objs = new ArrayList<Object>();
@@ -26,34 +28,39 @@ public class MockTests {
     }
     return objs;
   }
-  static InputStream setupMockInput(ArrayList<Object> inputs)throws IOException{
+  public static InputStream setupMockInput(ArrayList<Object> inputs)throws IOException{
+    //take in an arbitrary list of objects and write them to an inputstream to read out as bytes
     ByteArrayOutputStream temp = new ByteArrayOutputStream();
     ObjectOutputStream oos = new ObjectOutputStream(temp);
     for(Object o: inputs){
       oos.writeObject(o);
     }
-    oos.flush();
-    //  ByteArrayInputStream inp = new ByteArrayInputStream(oos.toByteArray());
+    oos.flush();//write data to underlying byteoutputstream
     ByteArrayInputStream inp = new ByteArrayInputStream(temp.toByteArray());
    
     return inp;
     
   }
 
- public static Socket setupMockSocket(ArrayList<Object>inputs)throws IOException{
-    // ServerSocket mockParentServer = mock(ServerSocket.class);
-    Socket mockClientSocket = mock(Socket.class);
-    //  InputStream mockInputStream = mock(InputStream.class); 
-    // OutputStream mockOutputStream = mock(OutputStream.class); 
-    
-    //    when(mockParentServer.accept()).thenReturn(mockClientSocket);
-    
-    //  when(mockClientSocket.getInputStream()).thenReturn(mockInputStream);
-    // when(mockClientSocket.getOutputStream()).thenReturn(mockOutputStream);
 
-    //  Socket s = mock(Socket.class);
+ public static OutputStream setupMockOutput()throws IOException{
+   //create a new byteoutputstream
+   return new ByteArrayOutputStream();
+    
+  }
+
+
+  
+ public static Socket setupMockSocket(ArrayList<Object>inputs)throws IOException{
+   //create the mocked sokcet behavior by defining getinputstream, getoutputstream, and accpet by the parent server
+    ServerSocket mockParentServer = mock(ServerSocket.class);
+    Socket mockClientSocket = mock(Socket.class);
+    when(mockParentServer.accept()).thenReturn(mockClientSocket);
     InputStream inp = setupMockInput(inputs);
+    OutputStream out = setupMockOutput();
     when(mockClientSocket.getInputStream()).thenReturn(inp);
+    when(mockClientSocket.getOutputStream()).thenReturn(out);
+   
     return mockClientSocket;
   }
 

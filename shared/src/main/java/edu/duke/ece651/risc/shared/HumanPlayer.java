@@ -15,12 +15,20 @@ public class HumanPlayer extends AbstractPlayer {
     this.name = name;
   }
   public HumanPlayer(String name, Socket s) throws IOException{
+    //SHOULD BE DEPRECATED to decouple socket from inputstream and outputstream
     this.name = name;
     this.socket = s;
     this.isPlaying = true;
     this.outputStream = new ObjectOutputStream(s.getOutputStream());
     this.inputStream = new ObjectInputStream(s.getInputStream());
   }
+  public HumanPlayer(String name, InputStream in, OutputStream out) throws IOException{
+    this.name = name;
+    this.isPlaying = true;
+    this.outputStream = new ObjectOutputStream(out);
+    this.inputStream = new ObjectInputStream(in);
+  }
+
 public Socket getSocket() {
 	return socket;
 }
