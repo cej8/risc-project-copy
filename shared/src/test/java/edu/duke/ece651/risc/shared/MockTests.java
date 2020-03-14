@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class MockTests {
   //this class contains the methods to create a mocked socket, and mocked input and output streams
-  public ArrayList<Object> getObjsFromOutputStream(ByteArrayOutputStream os)throws IOException, ClassNotFoundException{
+  public static ArrayList<Object> getObjsFromOutputStream(ByteArrayOutputStream os)throws IOException, ClassNotFoundException{
     //method to read objs from a mocked outputstream
     ByteArrayInputStream inp = new ByteArrayInputStream(os.toByteArray());
     ObjectInputStream ois = new ObjectInputStream(inp);
