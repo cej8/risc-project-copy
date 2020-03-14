@@ -16,9 +16,9 @@ subprojects{
         testCompile "org.mockito:mockito-core:2.+"
     }
     clover{
-    compiler{
-        additionalArgs = "-g:lines,source,vars"
-    }
+        compiler{
+            additionalArgs = "-g:lines,source,vars"
+        }
     }
     test{
         testLogging{
@@ -34,6 +34,23 @@ subprojects{
     tasks.withType(JavaCompile) {
      options.debug = true
     }
+    
+    configurations {
+        testPkg {
+            extendsFrom(testRuntime)
+        }
+    }
+    
+    task testCode(type: Jar) {
+        classifier = 'test'
+        from sourceSets.test.output
+    }
+    
+    
+    artifacts {
+        testPkg testCode
+    }
+    
     task resolveDependencies {
        doLast {
            project.rootProject.allprojects.each { subProject ->
@@ -66,11 +83,13 @@ project (':shared'){
 project (':server'){
     dependencies {
         implementation project(':shared')
+        testImplementation project(path: ':shared', configuration: "testPkg")
     }
 }
 project (':client'){
     dependencies {
         implementation project(':shared')
+        testImplementation project(path: ':shared', configuration: "testPkg")
     } 
 }
 
