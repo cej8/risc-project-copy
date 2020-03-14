@@ -18,17 +18,26 @@ public class ClientTest {
     Socket mockSocket = MockTests.setupMockSocket(inputs);
     Client client = new Client();
     client.makeConnection(mockSocket);
-    
-
-    //System.out.println("Connected to " + client.getSocket().getLocalAddress() + ":" +  client.getSocket().getLocalPort());
     try {
-     
-    } catch (Exception e) {
+      assertEquals(null, client.getBoard().getRegions());
+      client.updateClientBoard();
+      //make sure region list same size
+      assertEquals(board.getRegions().size(), client.getBoard().getRegions().size());
+      //test to make sure region added all regions by name
+      Set<String> regionNames = new HashSet<String>();
+      for (Region r : board.getRegions()){
+        regionNames.add(r.getName());
+      }
+      for (Region r : client.getBoard().getRegions()){
+        assertTrue(regionNames.contains(r.getName()));
+      }
+
+    } catch (Exception e) { //TODO -- test exception handling
       e.printStackTrace(System.out);
       return;
     } finally {
       try {
-        //client.closeAll();
+        //client.closeAll(); //TODO - mocking closing the connection
       } catch (Exception e) {
         e.printStackTrace(System.out);
       }
@@ -42,8 +51,11 @@ public class ClientTest {
     Unit adjUnit = new Unit(15);
     Unit adjUnit2 = new Unit(20);
     Region region = new Region(player1, unit);
+    region.setName("Earth");
     Region adjRegion = new Region(player1, adjUnit);
+    adjRegion.setName("Mars");
     Region adjRegion2 = new Region(player1, adjUnit2);
+    adjRegion2.setName("Pluto");
     List<Region> regions = new ArrayList<Region>();
     regions.add(region);
     regions.add(adjRegion);
@@ -55,12 +67,16 @@ public class ClientTest {
     return board;
   }
 
-
- //@Test
-  public void test_ClientSimple() {
+  @Test
+  public void test_ClientSimple() throws IOException{
     Client client = new Client();
-    client.makeConnection("localhost", 12345);
-    StringMessage message;
+    ArrayList<Object> objs = new ArrayList<Object>();
+    StringMessage message = new StringMessage("test sending string message");
+    objs.add(message);
+    Socket mockSocket = MockTests.setupMockSocket(objs);
+    //    client.makeConnection("localhost", 12345);
+    client.makeConnection(mockSocket);
+  
     try {
       message = (StringMessage) (client.receiveObject());
       System.out.println(message.getMessage());
@@ -69,7 +85,7 @@ public class ClientTest {
       return;
     } finally {
       try {
-        client.closeAll();
+        // client.closeAll(); //TODO -- mocking closeAll
       } catch (Exception e) {
         e.printStackTrace(System.out);
       }
