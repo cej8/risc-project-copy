@@ -26,6 +26,10 @@ public class ParentServer {
     this();
     serverSocket = new ServerSocket(port);
   }
+
+  public void setSocket(int port) throws IOException{
+    serverSocket = new ServerSocket(port);
+  }
   
   public List<ChildServer> getChildren(){
     return children;
@@ -174,6 +178,8 @@ public class ParentServer {
         continue;
       }
 
+      castOrder.convertOrderRegions(board);
+
       //Add list if not present
       if(!orderMap.containsKey(castOrder.getClass().getName())){
         orderMap.put(castOrder.getClass().getName(), new ArrayList<OrderInterface>());
@@ -208,15 +214,6 @@ public class ParentServer {
 
 
   public void playGame(){
-    if(serverSocket == null){
-      try{
-        serverSocket = new ServerSocket(PORT);
-      }
-      catch(Exception e){
-        e.printStackTrace();
-        return;
-      }
-    }
     
     try{
       waitingForConnections();
