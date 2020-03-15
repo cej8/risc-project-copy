@@ -11,6 +11,7 @@ public class RegionValidator implements ValidatorInterface {
       if (visited.contains(neighbor)) {
         continue;// check if already visited
       }
+<<<<<<< HEAD
       visited.add(neighbor);
       if (start.getOwner().getName().equals(neighbor.getOwner().getName())) {// owned by the same player
 
@@ -41,6 +42,25 @@ public class RegionValidator implements ValidatorInterface {
     }
     // }
     // }
+=======
+      return isConnected(neighbor, end);
+    }
+    
+    return false;
+  }
+	@Override
+	public boolean isValidMove(MoveOrder m, Board b) {
+    //owned by the same person
+  //  List<Region> ownedRegions=b.getPlayerToRegionMap().get(m.getSource().getOwner());
+//    for(Region region: ownedRegions){
+  //    if(region==m.getDestination()){//destination is in source owner's list of regions
+    //    if(isConnected(m.getSource(), m.getDestination())){
+           //and have path to get there via adjacent regions
+      //    return true;
+        //}
+      //}
+    //}
+>>>>>>> a9e6f79e776aca868e75a57510ba951a0b9eaaba
     return false;
   }
 

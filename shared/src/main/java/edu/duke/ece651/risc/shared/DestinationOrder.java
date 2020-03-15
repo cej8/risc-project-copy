@@ -7,5 +7,5 @@ public abstract class DestinationOrder implements OrderInterface {
   protected Region destination;
   protected Unit units;
   @Override
-  abstract public void doAction(Board b);
+  abstract public void doAction();
 }

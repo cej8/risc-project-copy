@@ -8,7 +8,7 @@ public class PlacementOrder extends DestinationOrder {
     this.units = u;
   }
   @Override
-  public void doAction(Board b){
+  public void doAction(){
     destination.setUnits(this.units);
   }
 

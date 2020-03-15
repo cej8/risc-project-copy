@@ -7,6 +7,7 @@ public abstract class SourceDestinationOrder implements OrderInterface {
   protected Region destination;
   protected Unit units;
 	@Override
+<<<<<<< HEAD
   abstract public void doAction(Board b);
 	public Region getSource() {
 		return source;
@@ -17,5 +18,8 @@ public abstract class SourceDestinationOrder implements OrderInterface {
 	public Unit getUnits() {
 		return units;
 	}
+=======
+  abstract public void doAction();
+>>>>>>> a9e6f79e776aca868e75a57510ba951a0b9eaaba
 
 }
