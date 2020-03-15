@@ -208,6 +208,16 @@ public class ParentServer {
 
 
   public void playGame(){
+    if(serverSocket == null){
+      try{
+        serverSocket = new ServerSocket(PORT);
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        return;
+      }
+    }
+    
     try{
       waitingForConnections();
     }
