@@ -17,6 +17,10 @@ public class AttackOrderTest {
   public void test_attack3() {
     setupTestAttack(10, 10, 5);
   }
+  @Test
+  public void test_attack4(){
+    setupTestAttack(2,10,1);
+  }
 
   //method for creating attacks to test
   private void setupTestAttack(int numSourceUnits, int numDestUnits, int numAttackUnits) {
@@ -34,7 +38,7 @@ public class AttackOrderTest {
     Unit u = new Unit(numAttackUnits);
     // attack
     AttackOrder ao = new AttackOrder(s, d, u);
-    ao.doAction(null);
+    ao.doAction();
   }
 
 }

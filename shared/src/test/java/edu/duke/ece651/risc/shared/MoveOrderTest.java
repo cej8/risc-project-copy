@@ -29,7 +29,7 @@ public class MoveOrderTest {
     assertEquals(8, r3.getUnits().getUnits());
     
     for(OrderInterface order: moves){
-      order.doAction(b);
+      order.doAction();
     }
     assertEquals(8, r1.getUnits().getUnits());
     assertEquals(8, r2.getUnits().getUnits());

@@ -10,7 +10,7 @@ public class MoveOrder extends SourceDestinationOrder {
     this.units = u;
   }
 	@Override
-  public void doAction(Board b) {
+  public void doAction() {
     //remove units from source region and add them to the destination region
     source.setUnits(new Unit(source.getUnits().getUnits() - this.units.getUnits()));
     destination.setUnits(new Unit(destination.getUnits().getUnits()+this.units.getUnits()));
