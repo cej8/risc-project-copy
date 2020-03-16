@@ -43,11 +43,14 @@ public class ParentServer {
         Socket playerSocket = serverSocket.accept();
         playerSocket.setSoTimeout(60*1000);
         newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1), playerSocket);
+        //Send object to client
+        newPlayer.sendObject(newPlayer);
       } catch (Exception e) {
         e.printStackTrace(System.out);
         continue;
       }
       System.out.println(newPlayer.getName() + " joined.");
+      //Add player to list
       children.add(new ChildServer(newPlayer, this));
     }
     
@@ -103,9 +106,14 @@ public class ParentServer {
   }
 
   public int numAlive(){
+    //Counts unique region owners
     int numAlive = 0;
-    for(ChildServer child : children){
-      if(child.getPlayer().isPlaying()) numAlive++;
+    Set<AbstractPlayer> players = new HashSet<AbstractPlayer>();
+    for(Region r : board.getRegions()){
+      if(!players.contains(r.getOwner())){
+        numAlive++;
+        players.add(r.getOwner());
+      }
     }
     return numAlive;
   }
@@ -115,13 +123,15 @@ public class ParentServer {
 
     boolean succeed = false;
 
+    //Check valid input
     if(!groupName.matches("^Group [A-E]$")){
       return succeed;
     }
-    
+    //If valid then replace all group with player
     for(Region r : board.getRegions()){
       if(r.getOwner().getName().equals(groupName)){
         r.setOwner(player);
+        //Only change boolean if something replaced
         succeed = true;
       }
     }
@@ -153,11 +163,16 @@ public class ParentServer {
   }
 
   public Set<AbstractPlayer> playersLeft(){
+    //Returns set of all players still playing
     Set<AbstractPlayer> players = new HashSet<AbstractPlayer>();
     for(ChildServer child : children){
       if(child.getPlayer().isPlaying()) players.add(child.getPlayer());
     }
     return players;
+  }
+
+  public int numPlayersLeft(){
+    return playersLeft().size();
   }
 
   public synchronized void addOrdersToMap(List<OrderInterface> orders){
@@ -178,9 +193,10 @@ public class ParentServer {
         continue;
       }
 
+      //Call conversion method to get proper regions on server's board
       castOrder.convertOrderRegions(board);
 
-      //Add list if not present
+      //Add list if not present for order type
       if(!orderMap.containsKey(castOrder.getClass().getName())){
         orderMap.put(castOrder.getClass().getName(), new ArrayList<OrderInterface>());
       }
@@ -206,6 +222,7 @@ public class ParentServer {
   }
 
   public void applyOrderList(List<OrderInterface> orders){
+    //Simply call doAction for each order
     for(int i = 0; i < orders.size(); i++){
       orders.get(i).doAction();
     }
@@ -216,6 +233,7 @@ public class ParentServer {
   public void playGame(){
     
     try{
+      //Wait for MAX_PLAYERS to connect
       waitingForConnections();
     }
     catch(Exception e){
@@ -223,8 +241,10 @@ public class ParentServer {
       closeAll();
       return;
     }
+    //While regions not owned all by one player
     while(numAlive() > 1){
       try{
+        //Prompt users
         callThreads();
       }
       catch(Exception e){
@@ -232,19 +252,22 @@ public class ParentServer {
         closeAll();
         return;
       }
+      //Apply orders
       applyOrders();
     }
 
+    //If one player alive then create message --> send
     AbstractPlayer winner = playersLeft().iterator().next();
     StringMessage winnerMessage = new StringMessage(winner.getName() + " is the winner!");
-    
+
+    //Send message to all children
     for(ChildServer child : children){
       try{
         child.getPlayer().sendObject(winnerMessage);
       }
       catch(Exception e){}
     }
-    
+    //Close all
     closeAll();
   }
   
