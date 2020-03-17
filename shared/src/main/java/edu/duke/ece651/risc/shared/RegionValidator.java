@@ -3,7 +3,8 @@ package edu.duke.ece651.risc.shared;
 import java.util.*;
 
 public class RegionValidator implements ValidatorInterface {
-  private boolean hasValidPath(Region start, Region end,Set<Region> visited) {
+  private boolean hasValidPath(Region start, Region end, Set<Region> visited) {
+    // helper method
     // find a path of connected nodes from start to end
     // Set<Region> visited = new HashSet<Region>();
     visited.add(start);
@@ -17,44 +18,84 @@ public class RegionValidator implements ValidatorInterface {
         if (neighbor == end) {
           return true;
         }
-
         return hasValidPath(neighbor, end, visited);
       }
-
     }
-
     return false;
   }
 
-  @Override
+  // helper method
   public boolean isValidMove(MoveOrder m, Board b) {
     // owned by the same person
-    // List<Region>
-    // ownedRegions=b.getPlayerToRegionMap().get(m.getSource().getOwner());
-    // for(Region region: ownedRegions){
-    // if(region==m.getDestination()){//destination is in source owner's list of
-    // regions
     if (hasValidPath(m.getSource(), m.getDestination(), new HashSet<Region>())) {
       // and have path to get there via adjacent regions
-      return true;
-
+     return true;
     }
-    
     return false;
   }
 
- 
-  @Override
+  // helper method
   public boolean isValidPlacement(PlacementOrder p, AbstractPlayer player, Board b) {
-    // check that player ownd the regions they are placing units in
-    // List<Region>
-    // ownedRegions=b.getPlayerToRegionMap().get(p.getDestination().getOwner()player);
-    // for(Region region: ownedRegions){
-    // if(region == p.getDestination()){
-    // return true;
-    // }
-    // }
+    // check that player owns the regions they are placing units in
+    List<Region> ownedRegions = b.getPlayerToRegionMap().get(p.getDestination().getOwner());
+    for (Region region : ownedRegions) {
+      if (region.getName().equals(p.getDestination().getName())) {
+        // if region is in teh playerd list of owned regions
+       return true;
+      }
+    }
     return false;
   }
 
+  // helper method
+  public boolean isValidAttack(AttackOrder a, Board b) {
+    // regions must be owned by different players
+    if (a.getSource().getOwner().getName().equals(a.getDestination().getOwner().getName())) {
+      return false;
+    }
+    // regions must be adjacent
+    for (Region neighbor : a.getSource().getAdjRegions()) {
+      if (neighbor == a.getDestination()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public boolean attacksAreValid(List<AttackOrder> attackList, Board b) {
+    for (AttackOrder attack : attackList) {
+      if (!isValidAttack(attack, b)) {
+        return false;
+      }
+      attack.doAction();
+    }
+    // if all attacks are valid
+    return true;
+  }
+
+  @Override
+  public boolean movesAreValid(List<MoveOrder> moveList, Board b) {
+    for (MoveOrder move : moveList) {
+      if (!isValidMove(move, b)) {
+        return false;
+      }
+      move.doAction();
+    }
+    // if all moves are valid
+    return true;
+  }
+
+  @Override
+  public boolean placementsAreValid(List<PlacementOrder> placementList, AbstractPlayer player, Board b) {
+    for (PlacementOrder place : placementList) {
+      if (!isValidPlacement(place, player, b)) {
+        return false;
+      }
+      place.doAction();
+    }
+    // if all placements are valid
+    return true;
+
+  }
 }

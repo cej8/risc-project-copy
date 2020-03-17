@@ -1,8 +1,11 @@
 package edu.duke.ece651.risc.shared;
 
+import java.util.List;
+
 public interface ValidatorInterface {
-  public boolean isValidMove(MoveOrder m, Board b);
-  // public boolean isValidAttack(AttackOrder  a);
-  public boolean isValidPlacement(PlacementOrder p,AbstractPlayer player, Board b);
+  //this interface will be used to validate moves on regions and units are valid
+  public boolean movesAreValid(List <MoveOrder> m, Board b);
+  public boolean attacksAreValid(List <AttackOrder> a, Board b);
+  public boolean placementsAreValid(List <PlacementOrder> p, AbstractPlayer player, Board b);
   
 }
