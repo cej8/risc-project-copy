@@ -25,7 +25,7 @@ public class RegionValidator implements ValidatorInterface {
   }
 
   // helper method
-  public boolean isValidMove(MoveOrder m, Board b) {
+  public boolean isValidMove(MoveOrder m) {
     // owned by the same person
     if (hasValidPath(m.getSource(), m.getDestination(), new HashSet<Region>())) {
       // and have path to get there via adjacent regions
@@ -35,20 +35,16 @@ public class RegionValidator implements ValidatorInterface {
   }
 
   // helper method
-  public boolean isValidPlacement(PlacementOrder p, AbstractPlayer player, Board b) {
+  public boolean isValidPlacement(PlacementOrder p, AbstractPlayer player) {
     // check that player owns the regions they are placing units in
-    List<Region> ownedRegions = b.getPlayerToRegionMap().get(p.getDestination().getOwner());
-    for (Region region : ownedRegions) {
-      if (region.getName().equals(p.getDestination().getName())) {
-        // if region is in teh playerd list of owned regions
-       return true;
-      }
+    if(p.getDestination().getOwner()==player){
+      return true;
     }
     return false;
   }
 
   // helper method
-  public boolean isValidAttack(AttackOrder a, Board b) {
+  public boolean isValidAttack(AttackOrder a) {
     // regions must be owned by different players
     if (a.getSource().getOwner().getName().equals(a.getDestination().getOwner().getName())) {
       return false;
@@ -65,7 +61,7 @@ public class RegionValidator implements ValidatorInterface {
   @Override
   public boolean attacksAreValid(List<AttackOrder> attackList, Board b) {
     for (AttackOrder attack : attackList) {
-      if (!isValidAttack(attack, b)) {
+      if (!isValidAttack(attack)) {
         return false;
       }
       attack.doAction();
@@ -77,7 +73,7 @@ public class RegionValidator implements ValidatorInterface {
   @Override
   public boolean movesAreValid(List<MoveOrder> moveList, Board b) {
     for (MoveOrder move : moveList) {
-      if (!isValidMove(move, b)) {
+      if (!isValidMove(move)) {
         return false;
       }
       move.doAction();
@@ -89,7 +85,7 @@ public class RegionValidator implements ValidatorInterface {
   @Override
   public boolean placementsAreValid(List<PlacementOrder> placementList, AbstractPlayer player, Board b) {
     for (PlacementOrder place : placementList) {
-      if (!isValidPlacement(place, player, b)) {
+      if (!isValidPlacement(place, player)) {
         return false;
       }
       place.doAction();

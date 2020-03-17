@@ -70,6 +70,8 @@ public class ValidatorTest {
     Board b = new Board(regions);
 
     RegionValidator rv = new RegionValidator();
+    ValidatorHelper vh = new ValidatorHelper();
+    
     MoveOrder move12 = new MoveOrder(r1, r2, new Unit(5));// valid adjacent
     MoveOrder move23 = new MoveOrder(r2, r3, new Unit(2));// invalid (diff owner)
     MoveOrder move14 = new MoveOrder(r1, r4, new Unit(3));// valid not adjacent
@@ -92,6 +94,10 @@ public class ValidatorTest {
     region1.setOwner(p1);
     Region region2 = new Region("region2");
     region2.setOwner(p2);
+    List<Region> pRegions = new ArrayList<Region>();
+    pRegions.add(region1);
+    pRegions.add(region2);
+    Board b1 = new Board(pRegions);
     
     PlacementOrder po1= new PlacementOrder(region1, new Unit(2));
     PlacementOrder po2= new PlacementOrder(region2, new Unit(2));
@@ -99,22 +105,22 @@ public class ValidatorTest {
     placements.add(po1);
     placements.add(po2);
 
-    assertEquals(true, rv.isValidMove(move12, b));
-    assertEquals(false, rv.isValidMove(move23, b));
-    assertEquals(true, rv.isValidMove(move14, b));
-    assertEquals(false, rv.isValidMove(move15, b));
-    assertEquals(false, rv. movesAreValid(moves, b));
+    assertEquals(true, rv.isValidMove(move12));
+    assertEquals(false, rv.isValidMove(move23));
+    assertEquals(true, rv.isValidMove(move14));
+    assertEquals(false, rv.isValidMove(move15));
+    assertEquals(false, vh.getRegionValidator(). movesAreValid(moves,b));
    
-
-    assertEquals(true, rv.isValidAttack(attack13, b));
-    assertEquals(false, rv.isValidAttack(attack23, b));
-    assertEquals(false, rv.isValidAttack(attack36, b));
-    assertEquals(false, rv. attacksAreValid(attacks, b));
+    assertEquals(true, rv.isValidAttack(attack13));
+    assertEquals(false, rv.isValidAttack(attack23));
+    assertEquals(false, rv.isValidAttack(attack36));
+    assertEquals(false, vh.getRegionValidator(). attacksAreValid(attacks,b));
      
-    // assertEquals(true, rv.isValidPlacement(po1,p1,b));//valid
-    //  assertEquals(false, rv.isValidPlacement(po2,p1,b));//invalid (does not own)
-    // assertEquals(false, rv.placementsAreValid(placements, p2, b));
-                 
+    assertEquals(true, rv.isValidPlacement(po1,p1));//valid
+    assertEquals(false, rv.isValidPlacement(po2,p1));//invalid (does not own)
+    assertEquals(false, vh.getRegionValidator().placementsAreValid(placements, p2,b1));
+
+    
   }
 
 }
