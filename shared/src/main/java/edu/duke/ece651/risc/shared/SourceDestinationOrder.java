@@ -8,5 +8,13 @@ public abstract class SourceDestinationOrder implements OrderInterface {
   protected Unit units;
 	@Override
   abstract public void doAction();
-
+	public Region getSource() {
+		return source;
+	}
+	public Region getDestination() {
+		return destination;
+	}
+	public Unit getUnits() {
+		return units;
+	}
 }
