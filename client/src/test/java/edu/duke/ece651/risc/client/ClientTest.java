@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class ClientTest {
-@Test
+  /*@Test
   public void test_updateBoard() throws IOException {
     AbstractPlayer player1 = new HumanPlayer("Player 1");
     Board board = getTestBoard(player1);
@@ -44,8 +44,14 @@ public class ClientTest {
     }
 
     
+  }*/
+  @Test
+  public void test_placement(){
+    AbstractPlayer player1 = new HumanPlayer("player1");
+    Board board = getTestBoard(player1);
+    Client client = new Client(board);
+    client.createPlacements();
   }
-
   private Board getTestBoard(AbstractPlayer player1) {
     Unit unit = new Unit(10);
     Unit adjUnit = new Unit(15);
@@ -67,7 +73,7 @@ public class ClientTest {
     return board;
   }
 
-  @Test
+  /* @Test
   public void test_ClientSimple() throws IOException{
     Client client = new Client();
     ArrayList<Object> objs = new ArrayList<Object>();
@@ -90,7 +96,7 @@ public class ClientTest {
         e.printStackTrace(System.out);
       }
     }
-  }
+  }*/
 
 
 }

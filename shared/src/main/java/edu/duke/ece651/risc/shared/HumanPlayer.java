@@ -33,11 +33,15 @@ public HumanPlayer(String name, Socket s) throws IOException{
     this.inputStream = new ObjectInputStream(in);
   }
 
-
-  public  boolean isWatching(){
-   //TODO: implement method
-   return true;
- }
-
+  @Override
+  public void closeAll(){
+    super.closeAll();
+    try{
+      socket.close();
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
+  }
   
 }
