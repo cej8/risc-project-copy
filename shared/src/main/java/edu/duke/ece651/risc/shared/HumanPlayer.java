@@ -5,9 +5,9 @@ import java.io.*;
 
 public class HumanPlayer extends AbstractPlayer {
   private static final long serialVersionUID = 6L;
-    private Socket socket=null;
+  // private Socket socket=null;
   public HumanPlayer(){
-
+    
   }
 
   public HumanPlayer(String name) {//testing construcotr for tests that do no dpend on socket connection
@@ -17,20 +17,22 @@ public class HumanPlayer extends AbstractPlayer {
   
 public HumanPlayer(String name, Socket s) throws IOException{
     //SHOULD BE DEPRECATED to decouple socket from inputstream and outputstream
+    this.connection = new Connection();
     this.name = name;
-    this.socket = s;
+    this.connection.setSocket(s);
     this.isPlaying = true;
-    this.outputStream = new ObjectOutputStream(s.getOutputStream());
-    this.inputStream = new ObjectInputStream(s.getInputStream());
+    this.connection.setOutputStream(new ObjectOutputStream(s.getOutputStream()));
+    this.connection.setInputStream(new ObjectInputStream(s.getInputStream()));
   }
 
 
 
   public HumanPlayer(String name, InputStream in, OutputStream out) throws IOException{
+    this.connection = new Connection();
     this.name = name;
     this.isPlaying = true;
-    this.outputStream = new ObjectOutputStream(out);
-    this.inputStream = new ObjectInputStream(in);
+    this.connection.setOutputStream (new ObjectOutputStream(out));
+    this.connection.setInputStream( new ObjectInputStream(in));
   }
 
 
