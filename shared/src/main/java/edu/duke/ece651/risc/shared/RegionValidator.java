@@ -58,7 +58,7 @@ public class RegionValidator implements ValidatorInterface {
   }
 
   @Override
-  public boolean attacksAreValid(List<AttackOrder> attackList, Board b) {
+  public boolean attacksAreValid(List<AttackOrder> attackList) {
     for (AttackOrder attack : attackList) {
       if (!isValidAttack(attack)) {
         return false;
@@ -70,7 +70,7 @@ public class RegionValidator implements ValidatorInterface {
   }
 
   @Override
-  public boolean movesAreValid(List<MoveOrder> moveList, Board b) {
+  public boolean movesAreValid(List<MoveOrder> moveList) {
     for (MoveOrder move : moveList) {
       if (!isValidMove(move)) {
         return false;
@@ -82,7 +82,7 @@ public class RegionValidator implements ValidatorInterface {
   }
 
   @Override
-  public boolean placementsAreValid(List<PlacementOrder> placementList, AbstractPlayer player, Board b) {
+  public boolean placementsAreValid(List<PlacementOrder> placementList, AbstractPlayer player) {
     for (PlacementOrder place : placementList) {
       if (!isValidPlacement(place, player)) {
         return false;
