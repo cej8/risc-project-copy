@@ -36,20 +36,20 @@ public class Connection {
     }
   }
 
-public void setInputStream(ObjectInputStream inputStream) {
-	this.inputStream = inputStream;
-}
+  public void setInputStream(ObjectInputStream inputStream) {
+    this.inputStream = inputStream;
+  }
 
-public void setOutputStream(ObjectOutputStream outputStream) {
-	this.outputStream = outputStream;
-}
+  public void setOutputStream(ObjectOutputStream outputStream) {
+    this.outputStream = outputStream;
+  }
 
-public Socket getSocket() {
-	return socket;
-}
+  public Socket getSocket() {
+    return socket;
+  }
 
-public void setSocket(Socket socket) {
-	this.socket = socket;
-}
+  public void setSocket(Socket socket) {
+    this.socket = socket;
+  }
   
 }
