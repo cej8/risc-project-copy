@@ -78,8 +78,10 @@ public class ClientTest {
     client.makeConnection(mockSocket);
   
     try {
-      message = (StringMessage) (client.receiveObject());
-      System.out.println(message.getMessage());
+    
+      message = (StringMessage) (client.getConnection().receiveObject());
+      assertEquals("test sending string message", message.unpacker());
+    
     } catch (Exception e) {
       e.printStackTrace(System.out);
       return;
