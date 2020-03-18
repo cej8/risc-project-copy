@@ -8,8 +8,7 @@ public class ValidatorHelper {
 
   ValidatorHelper() {
     regionValidator = new RegionValidator();
-    //TODO:uncomment when other validator is written
-    // unitValidator = new UnitValidator();
+    unitValidator = new UnitValidator();
   }
 
   public ValidatorInterface getRegionValidator() {
