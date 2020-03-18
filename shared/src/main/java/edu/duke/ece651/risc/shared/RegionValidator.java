@@ -14,7 +14,6 @@ public class RegionValidator implements ValidatorInterface {
       }
       visited.add(neighbor);
       if (start.getOwner().getName().equals(neighbor.getOwner().getName())) {// owned by the same player
-
         if (neighbor == end) {
           return true;
         }
@@ -76,7 +75,7 @@ public class RegionValidator implements ValidatorInterface {
       if (!isValidMove(move)) {
         return false;
       }
-      move.doAction();
+      move.doAction(); 
     }
     // if all moves are valid
     return true;
