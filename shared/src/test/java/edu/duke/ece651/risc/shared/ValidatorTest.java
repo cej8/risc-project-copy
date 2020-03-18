@@ -31,22 +31,22 @@ public class ValidatorTest {
 
     List<Region> pRegions = getRegionsForPlacement(p1, p2);
     List<PlacementOrder> placements = getPlacementList(p1, p2);
-    Board b1 = new Board(pRegions);
+    //Board b1 = new Board(pRegions);
     
     assertEquals(true, rv.isValidMove(moves.get(0)));
     assertEquals(false, rv.isValidMove(moves.get(1)));
     assertEquals(true, rv.isValidMove(moves.get(2)));
     assertEquals(false, rv.isValidMove(moves.get(3)));
-    assertEquals(false, vh.getRegionValidator(). movesAreValid(moves,b));
+    assertEquals(false, vh.getRegionValidator(). movesAreValid(moves));
    
     assertEquals(true, rv.isValidAttack(attacks.get(0)));
     assertEquals(false, rv.isValidAttack(attacks.get(1)));
     assertEquals(false, rv.isValidAttack(attacks.get(2)));
-    assertEquals(false, vh.getRegionValidator(). attacksAreValid(attacks,b));
+    assertEquals(false, vh.getRegionValidator(). attacksAreValid(attacks));
      
     assertEquals(true, rv.isValidPlacement(placements.get(0),p1));//valid
     assertEquals(false, rv.isValidPlacement(placements.get(1),p1));//invalid (does not own)
-    assertEquals(false, vh.getRegionValidator().placementsAreValid(placements, p2,b1));
+    assertEquals(false, vh.getRegionValidator().placementsAreValid(placements, p2));
 
   }
 
