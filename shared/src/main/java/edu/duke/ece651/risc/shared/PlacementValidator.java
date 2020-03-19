@@ -2,9 +2,10 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.List;
 
+// Class to validate if initial unit placements are allowed compared to game rules
 public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
-  AbstractPlayer player;
-  Unit playerUnits;
+  private AbstractPlayer player;
+  private Unit playerUnits;
   public PlacementValidator(AbstractPlayer p, Unit u){
     this.player=p;
     this.playerUnits=u;
@@ -27,10 +28,8 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
     }
     // if all placements are valid
     return true;
-
   }
 	
-
 	@Override
     public boolean validateUnits(List<PlacementOrder> orders) {
     int totalUnits = this.playerUnits.getUnits();
