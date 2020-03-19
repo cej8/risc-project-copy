@@ -20,6 +20,10 @@ public abstract class SourceDestinationOrder implements OrderInterface {
     return source;
   }
 
+  public Unit getUnits(){
+    return units;
+  }
+
 	@Override
   abstract public void doAction();
 

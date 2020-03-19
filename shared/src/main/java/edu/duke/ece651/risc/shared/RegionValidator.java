@@ -1,44 +1,96 @@
-package edu.duke.ece651.risc.shared;
+// package edu.duke.ece651.risc.shared;
 
-import java.util.*;
+// import java.util.*;
 
-public class RegionValidator implements ValidatorInterface {
-  private boolean isConnected(Region start, Region end){
-    //find a path of connected nodes from start to end
-    for(Region neighbor: start.getAdjRegions()){
-      if(neighbor == end){
-        return true;
-      }
-      return isConnected(neighbor, end);
-    }
-    
-    return false;
-  }
-	@Override
-	public boolean isValidMove(MoveOrder m, Board b) {
-    //owned by the same person
-  //  List<Region> ownedRegions=b.getPlayerToRegionMap().get(m.getSource().getOwner());
-//    for(Region region: ownedRegions){
-  //    if(region==m.getDestination()){//destination is in source owner's list of regions
-    //    if(isConnected(m.getSource(), m.getDestination())){
-           //and have path to get there via adjacent regions
-      //    return true;
-        //}
-      //}
-    //}
-    return false;
-	}
+// public class RegionValidator implements ValidatorInterface {
+//   private boolean hasValidPath(Region start, Region end, Set<Region> visited) {
+//     // helper method
+//     // find a path of connected nodes from start to end
+//     // Set<Region> visited = new HashSet<Region>();
+//     visited.add(start);
+//     for (Region neighbor : start.getAdjRegions()) {
+//       if (visited.contains(neighbor)) {
+//         continue;// check if already visited
+//       }
+//       visited.add(neighbor);
+//       if (start.getOwner().getName().equals(neighbor.getOwner().getName())) {// owned by the same player
+//         if (neighbor == end) {
+//           return true;
+//         }
+//         return hasValidPath(neighbor, end, visited);
+//       }
+//     }
+//     return false;
+//   }
 
-	@Override
-	public boolean isValidPlacement(PlacementOrder p, AbstractPlayer player, Board b) {
-		//check that player ownd the regions they are placing units in
-  //   List<Region> ownedRegions=b.getPlayerToRegionMap().get(p.getDestination().getOwner()player);
-  //   for(Region region: ownedRegions){
-  //     if(region == p.getDestination()){
-  //       return true;
-  //     }
-  //   }
-  	return false;
-	 }
+//   // helper method
+//   public boolean isValidMove(MoveOrder m) {
+//     // owned by the same person
+//     if (hasValidPath(m.getSource(), m.getDestination(), new HashSet<Region>())) {
+//       // and have path to get there via adjacent regions
+//      return true;
+//     }
+//     return false;
+//   }
 
-}
+//   // helper method
+//   public boolean isValidPlacement(PlacementOrder p, AbstractPlayer player) {
+//     // check that player owns the regions they are placing units in
+//     if(p.getDestination().getOwner()==player){
+//       return true;
+//     }
+//     return false;
+//   }
+
+//   // helper method
+//   public boolean isValidAttack(AttackOrder a) {
+//     // regions must be owned by different players
+//     if (a.getSource().getOwner().getName().equals(a.getDestination().getOwner().getName())) {
+//       return false;
+//     }
+//     // regions must be adjacent
+//     for (Region neighbor : a.getSource().getAdjRegions()) {
+//       if (neighbor == a.getDestination()) {
+//         return true;
+//       }
+//     }
+//     return false;
+//   }
+
+//   @Override
+//   public boolean attacksAreValid(List<AttackOrder> attackList) {
+//     for (AttackOrder attack : attackList) {
+//       if (!isValidAttack(attack)) {
+//         return false;
+//       }
+//       attack.doAction();
+//     }
+//     // if all attacks are valid
+//     return true;
+//   }
+
+//   @Override
+//   public boolean movesAreValid(List<MoveOrder> moveList) {
+//     for (MoveOrder move : moveList) {
+//       if (!isValidMove(move)) {
+//         return false;
+//       }
+//       move.doAction(); 
+//     }
+//     // if all moves are valid
+//     return true;
+//   }
+
+//   @Override
+//   public boolean placementsAreValid(List<PlacementOrder> placementList, AbstractPlayer player) {
+//     for (PlacementOrder place : placementList) {
+//       if (!isValidPlacement(place, player)) {
+//         return false;
+//       }
+//       place.doAction();
+//     }
+//     // if all placements are valid
+//     return true;
+
+//   }
+// }

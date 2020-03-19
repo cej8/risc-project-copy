@@ -13,6 +13,10 @@ public abstract class DestinationOrder implements OrderInterface {
   public Region getDestination(){
     return destination;
   }
+
+  public Unit getUnits(){
+    return units;
+  }
   
   @Override
   abstract public void doAction();

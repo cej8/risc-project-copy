@@ -9,7 +9,10 @@ import java.io.*;
 public class ParentServer {
   private final int MAX_PLAYERS = 1;
   private final int MAX_REGIONS = 12;
-  private ServerSocket serverSocket;
+  private final double START_WAIT_MINUTES = 2.5;
+  private final double TURN_WAIT_MINUTES = 1;
+  private final int DEFAULT_PORT = 12345;
+  private ServerSocket serverSocket = null;
   private List<ChildServer> children;
   private Board board;
   Map<String, List<OrderInterface>> orderMap;
@@ -34,22 +37,38 @@ public class ParentServer {
   public List<ChildServer> getChildren(){
     return children;
   }
+
+  public double getTURN_WAIT_MINUTES(){
+    return TURN_WAIT_MINUTES;
+  }
   
   public void waitingForConnections() throws IOException {
-    while (children.size() < MAX_PLAYERS) {
+    if(serverSocket == null){
+      serverSocket = new ServerSocket(DEFAULT_PORT);
+    }
+
+    long startTime = -1;
+    //Start time 2.5 minutes after first connection
+    long gameStartTime = (long)(START_WAIT_MINUTES*60*1000);
+    
+    while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
       HumanPlayer newPlayer;
       try {
         //Accept, set timeout to 60 seconds, create player
         Socket playerSocket = serverSocket.accept();
-        playerSocket.setSoTimeout(60*1000);
+        playerSocket.setSoTimeout((int)(TURN_WAIT_MINUTES*60*1000));
         newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1), playerSocket);
         //Send object to client
-        newPlayer.sendObject(newPlayer);
+        newPlayer.getConnection().sendObject(newPlayer);
       } catch (Exception e) {
         e.printStackTrace(System.out);
         continue;
       }
       System.out.println(newPlayer.getName() + " joined.");
+      //Get time of first connection
+      if(startTime == -1){
+        startTime = System.currentTimeMillis();
+      }
       //Add player to list
       children.add(new ChildServer(newPlayer, this));
     }
@@ -95,7 +114,7 @@ public class ParentServer {
   }
   public void closeAll(){
     for(ChildServer child : children){
-      child.getPlayer().closeAll();
+      child.getPlayer().getConnection().closeAll();
     }
     try{
       serverSocket.close();
@@ -103,19 +122,6 @@ public class ParentServer {
     catch(Exception e){
       e.printStackTrace(System.out);
     }
-  }
-
-  public int numAlive(){
-    //Counts unique region owners
-    int numAlive = 0;
-    Set<AbstractPlayer> players = new HashSet<AbstractPlayer>();
-    for(Region r : board.getRegions()){
-      if(!players.contains(r.getOwner())){
-        numAlive++;
-        players.add(r.getOwner());
-      }
-    }
-    return numAlive;
   }
 
   public synchronized boolean assignGroups(String groupName, AbstractPlayer player){
@@ -152,16 +158,6 @@ public class ParentServer {
 
   }
 
-  public boolean isAlive(AbstractPlayer player){
-    //Check if player still in game --> at least one region owned
-    for(Region r : board.getRegions()){
-      if(r.getOwner() == player){
-        return true;
-      }
-    }
-    return false;
-  }
-
   public Set<AbstractPlayer> playersLeft(){
     //Returns set of all players still playing
     Set<AbstractPlayer> players = new HashSet<AbstractPlayer>();
@@ -173,6 +169,15 @@ public class ParentServer {
 
   public int numPlayersLeft(){
     return playersLeft().size();
+  }
+
+  public boolean playerHasARegion(AbstractPlayer player){
+    for(Region r : board.getRegions()){
+      if(r.getOwner().getName() == player.getName()){
+        return true;
+      }
+    }
+    return false;
   }
 
   public synchronized void addOrdersToMap(List<OrderInterface> orders){
@@ -242,7 +247,7 @@ public class ParentServer {
       return;
     }
     //While regions not owned all by one player
-    while(numAlive() > 1){
+    while(numPlayersLeft() > 1){
       try{
         //Prompt users
         callThreads();
@@ -256,16 +261,18 @@ public class ParentServer {
       applyOrders();
     }
 
-    //If one player alive then create message --> send
-    AbstractPlayer winner = playersLeft().iterator().next();
-    StringMessage winnerMessage = new StringMessage(winner.getName() + " is the winner!");
+    if(numPlayersLeft() == 1){
+      //If one player alive then create message --> send
+      AbstractPlayer winner = playersLeft().iterator().next();
+      StringMessage winnerMessage = new StringMessage(winner.getName() + " is the winner!");
 
-    //Send message to all children
-    for(ChildServer child : children){
-      try{
-        child.getPlayer().sendObject(winnerMessage);
+      //Send message to all children
+      for(ChildServer child : children){
+        try{
+          child.getPlayer().getConnection().sendObject(winnerMessage);
+        }
+        catch(Exception e){}
       }
-      catch(Exception e){}
     }
     //Close all
     closeAll();
