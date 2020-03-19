@@ -46,13 +46,32 @@ public class ClientTest {
     
   }*/
   @Test
-  public void test_placement(){
+  public void test_createPlacements()throws FileNotFoundException, IOException{
     AbstractPlayer player1 = new HumanPlayer("player1");
-    Board board = getTestBoard(player1);
-    Client client = new Client(board);
+       AbstractPlayer player2 = new HumanPlayer("player2");
+    Board board = getTestBoard(player1,player2);
+    InputStream input = new FileInputStream(new File("src/test/resources/testCreatePlacements.txt"));
+
+    Client client = new Client(board, player1, input, MockTests.setupMockOutput());
+    
     client.createPlacements();
+    
   }
-  private Board getTestBoard(AbstractPlayer player1) {
+ @Test
+  public void test_createOrders()throws FileNotFoundException, IOException{
+    AbstractPlayer player1 = new HumanPlayer("player1");
+    AbstractPlayer player2 = new HumanPlayer("player2");
+    Board board = getTestBoard(player1,player2);
+    InputStream input = new FileInputStream(new File("src/test/resources/testCreateOrders.txt"));
+
+    Client client = new Client(board, player1, input, MockTests.setupMockOutput());
+    
+  
+    client.createOrders();
+    
+  }
+ 
+  private Board getTestBoard(AbstractPlayer player1, AbstractPlayer player2) {
     Unit unit = new Unit(10);
     Unit adjUnit = new Unit(15);
     Unit adjUnit2 = new Unit(20);
@@ -62,11 +81,15 @@ public class ClientTest {
     adjRegion.setName("Mars");
     Region adjRegion2 = new Region(player1, adjUnit2);
     adjRegion2.setName("Pluto");
+    Region region2 = new Region(player2, unit);
+    region2.setName("Jupiter");
     List<Region> regions = new ArrayList<Region>();
     regions.add(region);
     regions.add(adjRegion);
     regions.add(adjRegion2);
+    regions.add(region2);
     region.setAdjRegions(regions);
+    
     adjRegion.setAdjRegions(regions);
     //create board, make sure get/set works 
     Board board = new Board(regions);
