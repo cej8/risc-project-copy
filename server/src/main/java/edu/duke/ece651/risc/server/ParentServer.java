@@ -95,7 +95,7 @@ public class ParentServer {
   }
   public void closeAll(){
     for(ChildServer child : children){
-      child.getPlayer().closeAll();
+      child.getPlayer().getConnection().closeAll();
     }
     try{
       serverSocket.close();
