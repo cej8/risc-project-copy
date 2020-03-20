@@ -97,8 +97,8 @@ public class ParentServer {
     }
   }
   public void createStartingGroups(){
-    //int numPlayers = children.size();
-    int numPlayers = 5;
+    int numPlayers = children.size();
+    //int numPlayers = 5;
     List<Region> regionList = board.getRegions();
     char groupName = 'A';
     int remainder = MAX_REGIONS % numPlayers;
