@@ -32,16 +32,16 @@ public class ValidatorHelper {
     if (attackList.size()==0 && moveList.size()==0) {
           return true;
     }else if(attackList.size()==0){
-      return moveValidator.regionsAreValid(moveList);// && moveValidator.unitsAreValid(moveList);
+      return moveValidator.validateRegions(moveList) && moveValidator.validateUnits(moveList);
  
     }
     else if(moveList.size()==0){
-      return attackValidator.regionsAreValid(attackList);//&& attackValidator.unitsAreValid(attackList);
+      return attackValidator.validateRegions(attackList)&& attackValidator.validateUnits(attackList);
           
     }
     else{
-      return attackValidator.regionsAreValid(attackList) 
-        && moveValidator.regionsAreValid(moveList);// && moveValidator.unitsAreValid(moveList) && attackValidator.unitsAreValid(attackList);
+      return attackValidator.validateRegions(attackList) 
+        && moveValidator.validateRegions(moveList) && moveValidator.validateUnits(moveList) && attackValidator.validateUnits(attackList);
     }
     
    
@@ -57,7 +57,7 @@ public class ValidatorHelper {
 
     }
 
-    return placementValidator.regionsAreValid(pList) && placementValidator.unitsAreValid(pList);
+    return placementValidator.validateRegions(pList) && placementValidator.validateUnits(pList);
   }
 
 }
