@@ -11,5 +11,9 @@ public class PlacementOrder extends DestinationOrder {
   public void doAction(){
     destination.setUnits(this.units);
   }
+@Override
+public int getPriority() {
+ 	return 1;
+}
 
 }

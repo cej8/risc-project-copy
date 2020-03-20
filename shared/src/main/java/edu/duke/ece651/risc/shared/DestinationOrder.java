@@ -14,4 +14,6 @@ public Region getDestination() {
 public Unit getUnits() {
 	return units;
 }
+@Override
+abstract public int getPriority();
 }
