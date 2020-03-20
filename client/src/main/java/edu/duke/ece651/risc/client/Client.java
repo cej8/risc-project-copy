@@ -7,9 +7,10 @@ import java.util.*;
 import java.io.*;
 
 public class Client {
+  /*
   private final double START_WAIT_MINUTES = 2.5;
   private final double TURN_WAIT_MINUTES = 1;
-  private final int MAX_UNITS = 15;
+  private final int MAX_UNITS = 15;*/
   
   private Connection connection;
   Board board;
@@ -75,7 +76,7 @@ public class Client {
       connection.setSocket(socket);
       //clientOutput.displayString("Connected to " + socket.getLocalAddress().getHostName() + ":" + socket.getLocalPort());
       connection.getStreamsFromSocket();
-      socket.setSoTimeout((int)(START_WAIT_MINUTES*60*1000));
+      socket.setSoTimeout((int)(Constants.START_WAIT_MINUTES*60*1000));
     }
     catch(Exception e){
       e.printStackTrace(System.out);
@@ -100,12 +101,12 @@ public class Client {
     try{
       //Set timeout to constant, wait this long for game start
       //This will block on FIRST board = ...
-      connection.getSocket().setSoTimeout((int)(START_WAIT_MINUTES*60*1000));
+      connection.getSocket().setSoTimeout((int)(Constants.START_WAIT_MINUTES*60*1000));
       while(true){
         //Game starts with board message
         board = (Board)(connection.receiveObject());
         //Return timeout to smaller value
-        connection.getSocket().setSoTimeout((int)(TURN_WAIT_MINUTES*60*1000));
+        connection.getSocket().setSoTimeout((int)(Constants.TURN_WAIT_MINUTES*60*1000));
 
         //Output board
         clientOutput.displayBoard(board);
@@ -164,7 +165,7 @@ public class Client {
   
   public List<PlacementOrder> createPlacements(){
     // Prompt user for placements, create list of placementOrders, send to server
-     clientOutput.displayString("You are " + player.getName() + ", prepare to place " + MAX_UNITS + " units.");
+     clientOutput.displayString("You are " + player.getName() + ", prepare to place " + Constants.MAX_UNITS + " units.");
     List<PlacementOrder> placementList = new ArrayList<PlacementOrder>();
     List<Region> regionList = board.getRegions();
     Region placement;
@@ -273,7 +274,7 @@ public class Client {
       //Make initial connection, waits for server to send back player's player object
       long maxTime = (long)(connection.getSocket().getSoTimeout());
       if(maxTime == 0){
-        maxTime = (long)(TURN_WAIT_MINUTES*60*1000);
+        maxTime = (long)(Constants.TURN_WAIT_MINUTES*60*1000);
       }
       
       //Get initial player object (for name)

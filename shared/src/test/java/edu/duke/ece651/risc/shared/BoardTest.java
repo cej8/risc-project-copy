@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 //@RunWith(MockitoJUnitrunner.class) 
 
 public class BoardTest {
-  /* @Test
+  @Test
   public void test_Board() throws IOException{
     //set up mock server
     ServerSocket mockParentServer = mock(ServerSocket.class);
@@ -49,6 +49,6 @@ public class BoardTest {
     assertEquals(regions, board.getRegions());
     assertFalse(regions2 == board.getRegions());
     board.setRegions(regions2);
-    assertEquals(regions2, board.getRegions());    */
-  // }
+    assertEquals(regions2, board.getRegions());    
+   }
 }
