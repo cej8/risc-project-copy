@@ -7,16 +7,20 @@ public class ValidatorHelper {
   private ValidatorInterface<AttackOrder> attackValidator;
   private ValidatorInterface<MoveOrder> moveValidator;
   private ValidatorInterface<PlacementOrder> placementValidator;
+  private Board tempBoard; //added tempBoard field -CJ
 
-  public ValidatorHelper() {
-    this.attackValidator = new AttackValidator();
-    this.moveValidator = new MoveValidator();
+  public ValidatorHelper(Board currentBoard) { //changed constructor parameters -CJ
+    this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard); //TODO: you will need the DeepCopy.java for this to work on your branch -CJ
+    this.moveValidator = new MoveValidator(tempBoard); //TODO: you will need the updated Move/AttackValidator.java with new constructors
+    this.attackValidator = new AttackValidator(tempBoard);
   }
 
-  public ValidatorHelper(AbstractPlayer p, Unit u) {
-    this.placementValidator = new PlacementValidator(p, u);
+  public ValidatorHelper(AbstractPlayer p, Unit u, Board currentBoard) { //TODO: changed constructor parameters -CJ
+    this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard); //TODO: you will need the DeepCopy.java for this to work on your branch -CJ
+    this.placementValidator = new PlacementValidator(p, u, currentBoard);
   }
 
+    //TODO: order of what goes on in this method needs to be changed as discussed -CJ
   public boolean allOrdersValid(List<OrderInterface> orders){
     List<AttackOrder> attackList = new ArrayList<AttackOrder>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
