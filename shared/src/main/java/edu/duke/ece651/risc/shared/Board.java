@@ -22,7 +22,15 @@ public class Board implements Serializable {
     this.regions = regionList;
   }
 
- //Creates a Map of Players to a List of all their owned regions 
+  public Region getRegionByName(String name){
+    Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
+    for (Region r : this.getRegions()){
+      nameToRegionMap.put(r.getName(), r);
+    }
+    return nameToRegionMap.get(name);
+  }
+
+  //Creates a Map of Players to a List of all their owned regions 
   public Map<AbstractPlayer, List<Region>> getPlayerToRegionMap(){
     Map<AbstractPlayer, List<Region>> playerRegionMap = new HashMap<AbstractPlayer, List<Region>>();
     List<Region> allRegions = this.getRegions(); //get all the regions
@@ -51,21 +59,6 @@ public class Board implements Serializable {
     return allPlayers;
   }
   
-  
-  // public void updateClientBoard(Socket socket)  {
-  //   Board masterBoard = null;
-  //   try{
-  //     ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
-  //     masterBoard = (Board) is.readObject();
-  //     is.close();
-  //     this.setRegions(masterBoard.getRegions());
-  //   }
-  //   catch(IOException e) {
-  //     System.out.println("IOException is caught");
-  //   }
-  //   catch(ClassNotFoundException e) {
-  //     System.out.println("ClassNotFoundException is caught");
-  //   } 
   
   
 }
