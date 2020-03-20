@@ -22,6 +22,7 @@ public class AttackValidator implements ValidatorInterface<AttackOrder> {
 	public boolean validateRegions(List<AttackOrder> attackList) {
 	 for (AttackOrder attack : attackList) {
       if (!isValidAttack(attack)) {
+        System.out.println("Attack not valid");
         return false;
       }
       attack.doAction();

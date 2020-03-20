@@ -38,6 +38,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
 	public boolean validateRegions(List<MoveOrder> moveList) {
 	  for (MoveOrder move : moveList) {
       if (!isValidMove(move)) {
+        System.out.println("Move not valid");
         return false;
       }
       move.doAction(); 
