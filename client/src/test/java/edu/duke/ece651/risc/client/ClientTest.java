@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class ClientTest {
-@Test
+  /*@Test
   public void test_updateBoard() throws IOException {
     AbstractPlayer player1 = new HumanPlayer("Player 1");
     Board board = getTestBoard(player1);
@@ -46,26 +46,28 @@ public class ClientTest {
     
   }*/
   @Test
-  public void test_placement(){
+  public void test_createPlacement() throws FileNotFoundException, IOException{
     AbstractPlayer player1 = new HumanPlayer("player1");
-<<<<<<< HEAD
     AbstractPlayer player2 = new HumanPlayer("player2");
     Board board = getTestBoard(player1,player2);
     InputStream input = new FileInputStream(new File("src/test/resources/testCreatePlacements.txt"));
 
     Client client = new Client(board, player1, input, MockTests.setupMockOutput());
-    
-=======
-    Board board = getTestBoard(player1);
-    Client client = new Client(board);
->>>>>>> parent of 3e968e4... Code review edits and improved testing of createOrders and createPlacement methods in ClientTest
     client.createPlacements();
   }
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of 3e968e4... Code review edits and improved testing of createOrders and createPlacement methods in ClientTest
-  private Board getTestBoard(AbstractPlayer player1) {
+   @Test
+  public void test_createOrders() throws FileNotFoundException, IOException{
+    AbstractPlayer player1 = new HumanPlayer("player1");
+    AbstractPlayer player2 = new HumanPlayer("player2");
+    Board board = getTestBoard(player1,player2);
+    InputStream input = new FileInputStream(new File("src/test/resources/testCreateOrders.txt"));
+
+    Client client = new Client(board, player1, input, MockTests.setupMockOutput());
+    client.createOrders();
+  }
+
+  private Board getTestBoard(AbstractPlayer player1,AbstractPlayer player2) {
     Unit unit = new Unit(10);
     Unit adjUnit = new Unit(15);
     Unit adjUnit2 = new Unit(20);
@@ -75,17 +77,20 @@ public class ClientTest {
     adjRegion.setName("Mars");
     Region adjRegion2 = new Region(player1, adjUnit2);
     adjRegion2.setName("Pluto");
+    Region region2 = new Region(player2, unit);
+    region2.setName("Jupiter");
     List<Region> regions = new ArrayList<Region>();
     regions.add(region);
     regions.add(adjRegion);
     regions.add(adjRegion2);
+    regions.add(region2);
     region.setAdjRegions(regions);
     adjRegion.setAdjRegions(regions);
     //create board, make sure get/set works 
     Board board = new Board(regions);
     return board;
   }
-
+  /*
   @Test
   public void test_ClientSimple() throws IOException{
     Client client = new Client();
@@ -112,6 +117,6 @@ public class ClientTest {
       }
     }
   }
-
+  */
 
 }
