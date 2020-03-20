@@ -46,18 +46,25 @@ public class ClientTest {
     
   }*/
   @Test
-  public void test_createPlacements()throws FileNotFoundException, IOException{
+  public void test_placement(){
     AbstractPlayer player1 = new HumanPlayer("player1");
+<<<<<<< HEAD
     AbstractPlayer player2 = new HumanPlayer("player2");
     Board board = getTestBoard(player1,player2);
     InputStream input = new FileInputStream(new File("src/test/resources/testCreatePlacements.txt"));
 
     Client client = new Client(board, player1, input, MockTests.setupMockOutput());
     
+=======
+    Board board = getTestBoard(player1);
+    Client client = new Client(board);
+>>>>>>> parent of 3e968e4... Code review edits and improved testing of createOrders and createPlacement methods in ClientTest
     client.createPlacements();
-    
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 3e968e4... Code review edits and improved testing of createOrders and createPlacement methods in ClientTest
   private Board getTestBoard(AbstractPlayer player1) {
     Unit unit = new Unit(10);
     Unit adjUnit = new Unit(15);
