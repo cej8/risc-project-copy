@@ -15,7 +15,7 @@ public class Client {
   private Connection connection;
 
   public Client(Board b,AbstractPlayer p, InputStream i, OutputStream out) throws IOException{
-    clientInput = new ConsoleInput();
+    clientInput = new ConsoleInput(i);
     clientOutput = new TextDisplay();
     this.board = b;//added for testing purposes
     this.player = p;
@@ -100,7 +100,7 @@ public class Client {
       clientOutput.displayString("How many units would you like to place in " + regionName);
       while (true) {
         try {
-          Unit units = new Unit(Integer.parseInt(clientInput.readInput(System.in)));
+          Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
           PlacementOrder placementOrder = new PlacementOrder(placement, units);
           placementList.add(placementOrder);
           break;
@@ -146,16 +146,16 @@ public class Client {
     Region destination = null;
     while (source == null) {
       clientOutput.displayString("What region do you want to attack from?");
-      source = orderHelper(clientInput.readInput(System.in));
+      source = orderHelper(clientInput.readInput());
     }
     while (destination == null) {
       clientOutput.displayString("What region do you want to attack?");
-      destination = orderHelper(clientInput.readInput(System.in));
+      destination = orderHelper(clientInput.readInput());
     }
     clientOutput.displayString("How many units do you want to move?");
     while (true) {
       try {
-        Unit units = new Unit(Integer.parseInt(clientInput.readInput(System.in)));
+        Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
         AttackOrder attackOrder = new AttackOrder(source, destination, units);
         orderList.add(attackOrder);
         break;
@@ -171,16 +171,16 @@ public class Client {
     Region destination = null;
     while (source == null) {
       clientOutput.displayString("What region do you want to move units from?");
-      source = orderHelper(clientInput.readInput(System.in));
+      source = orderHelper(clientInput.readInput());
     }
     while (destination == null) {
       clientOutput.displayString("What region do you want to move units to?");
-      destination = orderHelper(clientInput.readInput(System.in));
+      destination = orderHelper(clientInput.readInput());
     }
     clientOutput.displayString("How many units do you want to move?");
     while (true) {
       try {
-        Unit units = new Unit(Integer.parseInt(clientInput.readInput(System.in)));
+        Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
         MoveOrder moveOrder = new MoveOrder(source, destination, units);
         orderList.add(moveOrder);
         break;
@@ -200,7 +200,7 @@ public class Client {
       while (orderSelect) {
         // prompt user
         clientOutput.displayString("You are " + player + ", what would you like to do?\n (M)ove\n (A)ttack\n (D)one");
-        response = clientInput.readInput(System.in);
+        response = clientInput.readInput();
         if (response == "D"){
           orderSelect = false;
           break;
