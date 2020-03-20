@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class TextDisplayTest {
-  //  @Test
-  /*  public void test_TestDisplayTest() throws IOException{
+  @Test
+  public void test_TestDisplayTest() throws IOException{
     //setup Player
     InputStream mockInputStream = mock(InputStream.class); 
     OutputStream mockOutputStream = mock(OutputStream.class); 
@@ -72,19 +72,11 @@ public class TextDisplayTest {
     
     //create board, make sure get/set works 
     Board board = new Board(allRegions);
-    ClientOutputInterface coi = new TextDisplay();
-    //TextDisplay td = new TextDisplay();
-    // Set<AbstractPlayer> allPlayers = td.playerSet(board);
-    // for (AbstractPlayer p : allPlayers){
-    //   //System.out.println(p.getName());
-    // }
-    // //make sure all players added
-    // assertTrue(allPlayers.contains(player1));
-    // assertTrue(allPlayers.contains(player2));
-    // assertTrue(allPlayers.contains(player3));
-
- 
+    ClientOutputInterface coi = new TextDisplay(); 
     coi.displayBoard(board);
-    }*/
+    coi.displayString("Test string");
+  }
+
+    
 
 }

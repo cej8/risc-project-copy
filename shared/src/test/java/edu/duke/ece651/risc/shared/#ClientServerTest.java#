@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class MessageInterfaceTest {
+public class ClientServerTest {
   @Test
-  public void test_() {
+  public void test_combined() {
 
   }
 

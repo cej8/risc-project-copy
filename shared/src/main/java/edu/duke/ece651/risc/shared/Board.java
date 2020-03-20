@@ -9,6 +9,10 @@ public class Board implements Serializable {
   private static final long serialVersionUID = 7L;
   List<Region> regions;
 
+  public Board(){
+    this.regions = new ArrayList<Region>();
+  }
+  
   public Board(List<Region> regionList){
     this.setRegions(regionList);
   }
