@@ -54,7 +54,7 @@ public class Client {
   public void setPlayer(HumanPlayer player){
     this.player = player;
   }
-  public void setSocketTimeout(int timeout){
+  public void setSocketTimeout(int timeout) throws SocketException{
     connection.getSocket().setSoTimeout(timeout);
   }
   
