@@ -5,9 +5,13 @@ import java.io.*;
 public abstract class AbstractPlayer implements Serializable{
   protected String name;
   protected boolean isPlaying;
+<<<<<<< HEAD
   protected Boolean isWatching;
   protected ObjectInputStream inputStream;
   protected ObjectOutputStream outputStream;
+=======
+  protected Connection connection;
+>>>>>>> b582c4189318889f40061f9ccd6e1d6276f5f680
   private static final long serialVersionUID = 5L;
 
   public String getName() {
@@ -22,6 +26,7 @@ public abstract class AbstractPlayer implements Serializable{
   public void setPlaying(boolean isPlaying) {
     this.isPlaying = isPlaying;
   }
+<<<<<<< HEAD
   public Boolean isWatching(){
     return isWatching;
   }
@@ -54,6 +59,12 @@ public abstract class AbstractPlayer implements Serializable{
     return outputStream;
   }
 
+=======
+public Connection getConnection() {
+	return connection;
+}
+ 
+>>>>>>> b582c4189318889f40061f9ccd6e1d6276f5f680
 
 }
 

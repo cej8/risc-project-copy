@@ -1,4 +1,5 @@
 package edu.duke.ece651.risc.client;
+
 import edu.duke.ece651.risc.shared.*;
 
 import java.net.*;
@@ -6,6 +7,7 @@ import java.util.*;
 import java.io.*;
 
 public class Client {
+<<<<<<< HEAD
   private Socket socket;
   private ObjectInputStream fromServer;
   private ObjectOutputStream toServer;
@@ -44,10 +46,47 @@ public class Client {
       clientOutput.displayString("Connected to " + address + ":" + Integer.toString(port));
     }
     catch(Exception e){
+=======
+  // private Socket socket;
+  // private ObjectInputStream fromServer;
+  // private ObjectOutputStream toServer;
+  private Connection connection;
+  private Board board;
+  private boolean isPlaying;
+
+  public Client() {
+    this.board = new Board(null);
+    this.isPlaying = true;
+    this.connection = new Connection();
+  };
+
+  // create connection from already created socket
+  public void makeConnection(Socket socket) {
+    try {
+      connection.setInputStream(new ObjectInputStream(socket.getInputStream()));
+      connection.setOutputStream(new ObjectOutputStream(socket.getOutputStream()));
+
+      System.out.println("Connected to " + socket.getLocalAddress() + ":" + socket.getLocalPort());
+    } catch (Exception e) {
       e.printStackTrace(System.out);
     }
   }
 
+  // creating connection by address and port TODO -- do we need this constructor?
+  public void makeConnection(String address, int port) {
+    try {
+      connection.setSocket(new Socket(address, port));
+      connection.setInputStream(new ObjectInputStream(connection.getSocket().getInputStream()));
+      connection.setOutputStream(new ObjectOutputStream(connection.getSocket().getOutputStream()));
+
+      System.out.println("Connected to " + address + ":" + Integer.toString(port));
+    } catch (Exception e) {
+>>>>>>> b582c4189318889f40061f9ccd6e1d6276f5f680
+      e.printStackTrace(System.out);
+    }
+  }
+
+<<<<<<< HEAD
   public Object receiveObject() throws IOException, ClassNotFoundException{
     return fromServer.readObject();
   }
@@ -74,48 +113,34 @@ public class Client {
       toServer.close();
     }
     catch(IOException e){
+=======
+  void closeAll() {
+    try {
+      connection.getSocket().close();
+      connection.closeAll();
+    } catch (IOException e) {
+>>>>>>> b582c4189318889f40061f9ccd6e1d6276f5f680
       e.printStackTrace(System.out);
     }
   }
 
-  public void updateClientBoard()  {
+  public void updateClientBoard() {
     Board masterBoard = null;
-    try{
-      masterBoard = (Board) fromServer.readObject();
-      this.setBoard(masterBoard);
+    try {
+      // masterBoard = (Board) fromServer.readObject();
+       masterBoard = (Board)connection.getInputStream().readObject();
+       this.setBoard(masterBoard);
       this.board.setRegions(masterBoard.getRegions());
-    }
-    catch(IOException e) {
+    } catch (IOException e) {
       System.out.println("IOException is caught");
-    }
-    catch(ClassNotFoundException e) {
+    } catch (ClassNotFoundException e) {
       System.out.println("ClassNotFoundException is caught");
     }
-}
-
-  public Socket getSocket() {
-    return socket;
   }
 
-  public void setSocket(Socket socket) {
-    this.socket = socket;
-  }
-
-  public ObjectInputStream getFromServer() {
-    return fromServer;
-  }
-
-  public void setFromServer(ObjectInputStream fromServer) {
-    this.fromServer = fromServer;
-  }
-
-  public ObjectOutputStream getToServer() {
-    return toServer;
-  }
-
-  public void setToServer(ObjectOutputStream toServer) {
-    this.toServer = toServer;
-  }
+  // public Socket getSocket() {
+  //   return socket;
+  // }
 
   public Board getBoard() {
     return board;
@@ -250,5 +275,9 @@ public class Client {
       return;
     }
   }
+
+public Connection getConnection() {
+	return connection;
+}
 
 }
