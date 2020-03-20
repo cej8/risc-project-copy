@@ -1,6 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ValidatorHelper {
@@ -26,19 +27,24 @@ public class ValidatorHelper {
   // }
 
   // TODO: order of what goes on in this method needs to be changed as discussed
+  
   // -CJ
   public boolean allOrdersValid(List<OrderInterface> orders) {
     List<AttackOrder> attackList = new ArrayList<AttackOrder>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
     for (OrderInterface order : orders) {
-      if (order.getPriority() == 1000) {
+      if (order.getPriority() == 5000) {
+        System.out.println("Found attack");
         attackList.add((AttackOrder) order);
-      } else if (order.getPriority() == 5000) {
+      } else if (order.getPriority() == 1000) {
         moveList.add((MoveOrder) order);
+           System.out.println("Found move");
+    
       }
     }
-
-    boolean validMoves = moveValidator.validateUnits(moveList)&&moveValidator.validateRegions(moveList);
+    //  System.out.println(/*moveValidator.validateUnits(moveList)); //&& */moveValidator.validateRegions(moveList));
+    boolean validMoves =/* moveValidator.validateUnits(moveList) && */moveValidator.validateRegions(moveList);
+    
     boolean validAttacks = attackValidator.validateRegions(attackList) && attackValidator.validateUnits(attackList);
 
     return validMoves && validAttacks; 

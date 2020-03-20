@@ -14,7 +14,7 @@ public class AttackOrder extends SourceDestinationOrder {
     }    
   @Override
   public int getPriority(){
-    return 1000;
+    return 5000;
   }
   @Override
   public void doAction() {
