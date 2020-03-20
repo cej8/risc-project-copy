@@ -9,6 +9,7 @@ import java.io.*;
 public class Client {
   private final double START_WAIT_MINUTES = 2.5;
   private final double TURN_WAIT_MINUTES = 1;
+  private final int MAX_UNITS = 15;
   
   private Connection connection;
   Board board;
@@ -17,12 +18,15 @@ public class Client {
   private ClientOutputInterface clientOutput;
   private HumanPlayer player;
 
-  public void Client(){
+  public Client(){
     clientInput = new ConsoleInput();
     clientOutput = new TextDisplay();
+    board = new Board();
+    connection = new Connection();
   }
 
-  public void Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput){
+  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput){
+    this();
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
   }
@@ -32,8 +36,26 @@ public class Client {
     this.board = board;
   }
 
+  
+  public Board getBoard() {
+    return board;
+  }
+
   public Connection getConnection() {
     return connection;
+  }
+
+  public ClientInputInterface getClientInput(){
+    return clientInput;
+  }
+  public ClientOutputInterface getClientOutput(){
+    return clientOutput;
+  }
+  public void setPlayer(HumanPlayer player){
+    this.player = player;
+  }
+  public void setSocketTimeout(int timeout){
+    connection.getSocket().setSoTimeout(timeout);
   }
   
 
@@ -48,12 +70,12 @@ public class Client {
     }
   }
 
-  public void makeConnection(Socket socket){
+  public void makeConnection(Socket socket){                           
     try{
-      socket.setSoTimeout((int)(START_WAIT_MINUTES*60*1000));
-      connection = new Connection(socket);
-      clientOutput.displayString("Connected to " + socket.getLocalAddress() + ":" + socket.getLocalPort());
+      connection.setSocket(socket);
+      //clientOutput.displayString("Connected to " + socket.getLocalAddress().getHostName() + ":" + socket.getLocalPort());
       connection.getStreamsFromSocket();
+      socket.setSoTimeout((int)(START_WAIT_MINUTES*60*1000));
     }
     catch(Exception e){
       e.printStackTrace(System.out);
@@ -74,10 +96,6 @@ public class Client {
     }
   }
 
-  public Board getBoard() {
-    return board;
-  }
-
   public void chooseRegions(){    
     try{
       //Set timeout to constant, wait this long for game start
@@ -93,29 +111,31 @@ public class Client {
         clientOutput.displayBoard(board);
         //Print prompt and get group name
         clientOutput.displayString("Please select a starting region");
-        String groupName = clientInput.readInput(System.in);
+        String groupName = clientInput.readInput();
         connection.sendObject(new StringMessage(groupName));
 
         //Wait for response
         StringMessage responseMessage = (StringMessage)(connection.receiveObject());
         String response = responseMessage.getMessage();
-        if(response.matches("^Fail:")){ continue;}
-        if(response.matches("^Success:")){ break;}
+        clientOutput.displayString(response);
+        if(response.matches("^Fail:.*$")){ continue;}
+        if(response.matches("^Success:.*$")){ break;}
       }
-
+      
       while(true){
         //Server then sends board again
         board = (Board)(connection.receiveObject());
 
         //Display and move into placements
         clientOutput.displayBoard(board);
-        createPlacements();
+        connection.sendObject(createPlacements());
 
         //Wait for response
         StringMessage responseMessage = (StringMessage)(connection.receiveObject());
         String response = responseMessage.getMessage();
-        if(response.matches("^Fail:")){ continue;}
-        if(response.matches("^Success:")){ break;}
+        clientOutput.displayString(response);
+        if(response.matches("^Fail:.*$")){ continue;}
+        if(response.matches("^Success:.*$")){ break;}
       }
     }
     catch(Exception e){
@@ -127,28 +147,28 @@ public class Client {
 
   
   public List<PlacementOrder> placementOrderHelper(List<PlacementOrder> placementList,String regionName, Region placement){
-    clientOutput.displayString("How many units would you like to place in " + regionName);
     while (true) {
       try {
-        Unit units = new Unit(Integer.parseInt(clientInput.readInput(System.in)));
+        clientOutput.displayString("How many units would you like to place in " + regionName + "?");
+        Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
         PlacementOrder placementOrder = new PlacementOrder(placement, units);
         placementList.add(placementOrder);
         break;
       } catch (NumberFormatException ne) {
-        ne.printStackTrace();
-        clientOutput.displayString("That was not an integer, please try again. How many units do you want to move?");
+        //ne.printStackTrace();
+        clientOutput.displayString("That was not an integer, please try again.");
       }
     }
     return placementList;
   }
   
-  public void createPlacements(){
+  public List<PlacementOrder> createPlacements(){
     // Prompt user for placements, create list of placementOrders, send to server
+     clientOutput.displayString("You are " + player.getName() + ", prepare to place " + MAX_UNITS + " units.");
     List<PlacementOrder> placementList = new ArrayList<PlacementOrder>();
     List<Region> regionList = board.getRegions();
     Region placement;
     String regionName;
-    try{
     for (int i = 0; i < regionList.size(); i++){
       if (player.getName() == regionList.get(i).getOwner().getName()){
         placement = regionList.get(i);
@@ -156,21 +176,17 @@ public class Client {
         placementList = placementOrderHelper(placementList,regionName,placement);
       }
     }
-    connection.sendObject(placementList);
-    }
-    catch(Exception e){
-      e.printStackTrace();
-      connection.closeAll();
-    }
+    return placementList;
   }
   
   public Region orderHelper(String response){
     List<Region> regionList = board.getRegions();
     for (int i = 0; i < regionList.size(); i++){
-      if (response == regionList.get(i).getName()){
+      if (response.equals(regionList.get(i).getName())){
         return regionList.get(i);
       }
     }
+    clientOutput.displayString("Region does not exist.");
     return null;
   }
   
@@ -179,22 +195,22 @@ public class Client {
     Region destination = null;
     while (source == null) {
       clientOutput.displayString("What region do you want to attack from?");
-      source = orderHelper(clientInput.readInput(System.in));
+      source = orderHelper(clientInput.readInput());
     }
     while (destination == null) {
       clientOutput.displayString("What region do you want to attack?");
-      destination = orderHelper(clientInput.readInput(System.in));
+      destination = orderHelper(clientInput.readInput());
     }
-    clientOutput.displayString("How many units do you want to move?");
     while (true) {
       try {
-        Unit units = new Unit(Integer.parseInt(clientInput.readInput(System.in)));
+        clientOutput.displayString("How many units do you want to attack?");
+        Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
         AttackOrder attackOrder = new AttackOrder(source, destination, units);
         orderList.add(attackOrder);
         break;
       } catch (NumberFormatException ne) {
-         ne.printStackTrace();
-         clientOutput.displayString("That was not an integer, please try again. How many units do you want to move?");
+        //ne.printStackTrace();
+         clientOutput.displayString("That was not an integer, please try again.");
       }
     }
    return orderList;
@@ -205,69 +221,65 @@ public class Client {
     Region destination = null;
     while (source == null) {
       clientOutput.displayString("What region do you want to move units from?");
-      source = orderHelper(clientInput.readInput(System.in));
+      source = orderHelper(clientInput.readInput());
     }
     while (destination == null) {
       clientOutput.displayString("What region do you want to move units to?");
-      destination = orderHelper(clientInput.readInput(System.in));
+      destination = orderHelper(clientInput.readInput());
     }
-    clientOutput.displayString("How many units do you want to move?");
     while (true) {
       try {
-        Unit units = new Unit(Integer.parseInt(clientInput.readInput(System.in)));
+        clientOutput.displayString("How many units do you want to move?");
+        Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
         MoveOrder moveOrder = new MoveOrder(source, destination, units);
         orderList.add(moveOrder);
         break;
       } catch (NumberFormatException ne) {
-         ne.printStackTrace();
-         clientOutput.displayString("That was not an integer, please try again. How many units do you want to move?");
+        //ne.printStackTrace();
+         clientOutput.displayString("That was not an integer, please try again.");
       }
     }
    return orderList;
   }
   
-  public void createOrders(){
+  public List<OrderInterface> createOrders(){
     //prompt user for orders --> create list of OrderInterface --> send to server
     List<OrderInterface> orderList = new ArrayList<OrderInterface>();
-    try {
-      String response = null;
-      boolean orderSelect = true;
-      while (orderSelect) {
-        // prompt user
-        clientOutput.displayString("You are " + player + ", what would you like to do?\n (M)ove\n (A)ttack\n (D)one");
-        response = clientInput.readInput(System.in);
-        if (response == "D"){
-          orderSelect = false;
-          break;
-        } else if (response == "M"){
-          orderList = moveOrderHelper(orderList);
-          clientOutput.displayString("You made a Move order, what else would you like to do?");
-        } else if (response == "A"){
-          orderList = attackOrderHelper(orderList);
-          clientOutput.displayString("You made an Attack order, what else would you like to do?");
-        } else {
-          clientOutput.displayString("Please select eithe M, A, or D");
-        }
-      }
-      connection.sendObject(orderList);
-    }
-    catch(Exception e){
-      e.printStackTrace();
-      connection.closeAll();
-      return;
-    }
+    
+   String response = null;
+   boolean orderSelect = true;
+   while (orderSelect) {
+     // prompt user
+     clientOutput.displayString("You are " + player.getName() + ", what would you like to do?\n (M)ove\n (A)ttack\n (D)one");
+     response = clientInput.readInput();
+     if (response.equals("D")){
+       orderSelect = false;
+       break;
+     } else if (response.equals("M")){
+       orderList = moveOrderHelper(orderList);
+       clientOutput.displayString("You made a Move order, what else would you like to do?");
+     } else if (response.equals("A")){
+       orderList = attackOrderHelper(orderList);
+       clientOutput.displayString("You made an Attack order, what else would you like to do?");
+     } else {
+       clientOutput.displayString("Please select either M, A, or D");
+     }
+   }
+   return orderList;
   }
 
-  public void playGame(String address, int port){    
+  public void playGame(){    
     try{
       //Make initial connection, waits for server to send back player's player object
-      makeConnection(address, port);
       long maxTime = (long)(connection.getSocket().getSoTimeout());
+      if(maxTime == 0){
+        maxTime = (long)(TURN_WAIT_MINUTES*60*1000);
+      }
+      
       //Get initial player object (for name)
       player = (HumanPlayer)(connection.receiveObject());
       //After which choose regions
       chooseRegions();
-      
       while(true){
         long startTime = System.currentTimeMillis();
 
@@ -279,6 +291,7 @@ public class Client {
           //If not continue then someone won --> print and exit
           clientOutput.displayString(start);
           connection.closeAll();
+          clientInput.close();
           return;
         }
         
@@ -294,7 +307,7 @@ public class Client {
           while(true){
             //Request input
             clientOutput.displayString("Would you like to keep spectating? [Y/N]");
-            String spectateResponse = clientInput.readInput(System.in);
+            String spectateResponse = clientInput.readInput();
             //If too long --> kill player
             if(System.currentTimeMillis() - startTime > maxTime){
               clientOutput.displayString("Player took too long, killing");
@@ -304,7 +317,7 @@ public class Client {
             
             spectateResponse = spectateResponse.toUpperCase();
             //If valid then do work
-            if(spectateResponse.length() != 1){            
+            if(spectateResponse.length() == 1){
               if(spectateResponse.charAt(0) == 'Y'){
                 connection.sendObject(new ConfirmationMessage(true));
                 break;
@@ -312,6 +325,7 @@ public class Client {
               else if(spectateResponse.charAt(0) == 'N'){
                 connection.sendObject(new ConfirmationMessage(false));
                 connection.closeAll();
+                clientInput.close();
                 return;
               }
             }
@@ -327,26 +341,29 @@ public class Client {
           clientOutput.displayBoard(board);
           //Client generates orders --> sends 
           if(alive){
-            createOrders();
+            connection.sendObject(createOrders());
           }
 
           //If too long --> kill player
           if(System.currentTimeMillis() - startTime > maxTime){
             clientOutput.displayString("Player took too long, killing");
             connection.closeAll();
+            clientInput.close();
             return;
           }
 
           StringMessage responseMessage = (StringMessage)(connection.receiveObject());
           String response = responseMessage.getMessage();
-          if(response.matches("^Fail:")){ continue;}
-          if(response.matches("^Success:")){ break;}
+          clientOutput.displayString(response);
+          if(response.matches("^Fail:.*$")){ continue;}
+          if(response.matches("^Success:.*$")){ break;}
         }
       }
     }
     catch(Exception e){
       e.printStackTrace();
       connection.closeAll();
+      clientInput.close();
       return;
     }
         

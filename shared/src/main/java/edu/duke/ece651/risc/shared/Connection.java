@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.io.Serializable;
 
-public class Connection {
+public class Connection implements Serializable{
+  private static final long serialVersionUID = 11L;
   //this class holds all data associated with a network connection
   private Socket socket = null;
   private ObjectInputStream inputStream = null;
@@ -41,9 +43,17 @@ public class Connection {
 
   public void closeAll() {
     try {
-      if(inputStream != null) inputStream.close();
-      if(outputStream != null) outputStream.close();
-      if(socket != null) socket.close();
+      if(inputStream != null) { inputStream.close(); }
+    } catch (IOException e) {
+      e.printStackTrace(System.out);
+    }
+    try {
+      if(outputStream != null) { outputStream.close(); }
+    } catch (IOException e) {
+      e.printStackTrace(System.out);
+    }
+    try {
+      if(socket != null) { socket.close(); }
     } catch (IOException e) {
       e.printStackTrace(System.out);
     }
@@ -66,8 +76,8 @@ public class Connection {
   }
 
   public void getStreamsFromSocket() throws IOException{
-    this.inputStream = new ObjectInputStream(socket.getInputStream());
     this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+    this.inputStream = new ObjectInputStream(socket.getInputStream());
   }
   
 }

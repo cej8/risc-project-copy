@@ -54,6 +54,9 @@ public class ParentServer {
     while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
       HumanPlayer newPlayer;
       try {
+        if(startTime != -1){
+          serverSocket.setSoTimeout((int)(gameStartTime - (System.currentTimeMillis()-startTime)));
+        }
         //Accept, set timeout to 60 seconds, create player
         Socket playerSocket = serverSocket.accept();
         playerSocket.setSoTimeout((int)(TURN_WAIT_MINUTES*60*1000));
