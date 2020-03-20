@@ -44,6 +44,18 @@ public class ClientTest {
     }
 
     
+  }*/
+  @Test
+  public void test_createPlacements()throws FileNotFoundException, IOException{
+    AbstractPlayer player1 = new HumanPlayer("player1");
+    AbstractPlayer player2 = new HumanPlayer("player2");
+    Board board = getTestBoard(player1,player2);
+    InputStream input = new FileInputStream(new File("src/test/resources/testCreatePlacements.txt"));
+
+    Client client = new Client(board, player1, input, MockTests.setupMockOutput());
+    
+    client.createPlacements();
+    
   }
 
   private Board getTestBoard(AbstractPlayer player1) {
