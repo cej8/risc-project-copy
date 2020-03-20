@@ -10,8 +10,6 @@ public class ChildServer extends Thread{
   private ParentServer parent;
   //private ValidateHelper validator
 
-  boolean firstCall = true;
-
   public ChildServer(AbstractPlayer player, ParentServer parent){
     this.player = player;
     this.parent = parent;

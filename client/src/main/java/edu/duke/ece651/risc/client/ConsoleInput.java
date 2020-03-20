@@ -5,16 +5,12 @@ import java.util.Scanner;
 
 public class ConsoleInput implements ClientInputInterface{
   //This class is responsible for reading user input from the console line by line.
-  private Scanner scanner;
-  public ConsoleInput(InputStream input){
-    scanner = new Scanner(input);
-  }
 	@Override
-	public String readInput() {
-    // Scanner scanner = new Scanner(input);
+	public String readInput(InputStream input) {
+      Scanner scanner = new Scanner(input);
       String line = scanner.nextLine();
-       return line;
+      scanner.close();
+        return line;
 	}
 
 }
-

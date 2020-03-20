@@ -5,37 +5,23 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-
 public class ParentServer {
+  private final int PORT = 12345;
   private final int MAX_PLAYERS = 1;
   private final int MAX_REGIONS = 12;
   private ServerSocket serverSocket;
   private List<ChildServer> children;
   private Board board;
-  Map<String, List<OrderInterface>> orderMap;
+  //Map<OrderInterface, List> orderList;
 
-  public ParentServer(){
-    BoardGenerator genBoard = new BoardGenerator();
-    genBoard.createBoard();
-    board = genBoard.getBoard();
-    children = new ArrayList<ChildServer>();
-    orderMap = new HashMap<String, List<OrderInterface>>();
-  }
-
-  public ParentServer(int port) throws IOException{
-    this();
-    serverSocket = new ServerSocket(port);
-  }
-
-  public void setSocket(int port) throws IOException{
-    serverSocket = new ServerSocket(port);
-  }
-  
   public List<ChildServer> getChildren(){
     return children;
   }
   
   public void waitingForConnections() throws IOException {
+    children = new ArrayList<ChildServer>();
+    serverSocket = new ServerSocket(PORT);
+
     while (children.size() < MAX_PLAYERS) {
       HumanPlayer newPlayer;
       try {
@@ -50,10 +36,9 @@ public class ParentServer {
         continue;
       }
       System.out.println(newPlayer.getName() + " joined.");
-      //Add player to list
       children.add(new ChildServer(newPlayer, this));
     }
-    
+
   }
   public Board getBoard(){
     return this.board;
@@ -76,6 +61,9 @@ public class ParentServer {
   }
   public void createStartingGroups(){
     //int numPlayers = children.size();
+    BoardGenerator genBoard = new BoardGenerator();
+    genBoard.createBoard();
+    board = genBoard.getBoard();
     int numPlayers = 5;
     List<Region> regionList = board.getRegions();
     char groupName = 'A';
