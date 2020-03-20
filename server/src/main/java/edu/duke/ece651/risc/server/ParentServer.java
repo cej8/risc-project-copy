@@ -5,55 +5,35 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-
 public class ParentServer {
+  private final int PORT = 12345;
   private final int MAX_PLAYERS = 1;
   private final int MAX_REGIONS = 12;
   private ServerSocket serverSocket;
   private List<ChildServer> children;
   private Board board;
-  Map<String, List<OrderInterface>> orderMap;
+  //Map<OrderInterface, List> orderList;
 
-  public ParentServer(){
-    BoardGenerator genBoard = new BoardGenerator();
-    genBoard.createBoard();
-    board = genBoard.getBoard();
-    children = new ArrayList<ChildServer>();
-    orderMap = new HashMap<String, List<OrderInterface>>();
-  }
-
-  public ParentServer(int port) throws IOException{
-    this();
-    serverSocket = new ServerSocket(port);
-  }
-
-  public void setSocket(int port) throws IOException{
-    serverSocket = new ServerSocket(port);
-  }
-  
   public List<ChildServer> getChildren(){
     return children;
   }
   
   public void waitingForConnections() throws IOException {
+    children = new ArrayList<ChildServer>();
+    serverSocket = new ServerSocket(PORT);
+
     while (children.size() < MAX_PLAYERS) {
       HumanPlayer newPlayer;
       try {
-        //Accept, set timeout to 60 seconds, create player
-        Socket playerSocket = serverSocket.accept();
-        playerSocket.setSoTimeout(60*1000);
-        newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1), playerSocket);
-        //Send object to client
-        newPlayer.sendObject(newPlayer);
+        newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1), serverSocket.accept());
       } catch (Exception e) {
         e.printStackTrace(System.out);
         continue;
       }
       System.out.println(newPlayer.getName() + " joined.");
-      //Add player to list
       children.add(new ChildServer(newPlayer, this));
     }
-    
+
   }
   public Board getBoard(){
     return this.board;
@@ -76,6 +56,9 @@ public class ParentServer {
   }
   public void createStartingGroups(){
     //int numPlayers = children.size();
+    BoardGenerator genBoard = new BoardGenerator();
+    genBoard.createBoard();
+    board = genBoard.getBoard();
     int numPlayers = 5;
     List<Region> regionList = board.getRegions();
     char groupName = 'A';
@@ -104,171 +87,4 @@ public class ParentServer {
       e.printStackTrace(System.out);
     }
   }
-
-  public int numAlive(){
-    //Counts unique region owners
-    int numAlive = 0;
-    Set<AbstractPlayer> players = new HashSet<AbstractPlayer>();
-    for(Region r : board.getRegions()){
-      if(!players.contains(r.getOwner())){
-        numAlive++;
-        players.add(r.getOwner());
-      }
-    }
-    return numAlive;
-  }
-
-  public synchronized boolean assignGroups(String groupName, AbstractPlayer player){
-    //Method to set initial groups (groupName must be of form "Group _" where _ is A-E)
-
-    boolean succeed = false;
-
-    //Check valid input
-    if(!groupName.matches("^Group [A-E]$")){
-      return succeed;
-    }
-    //If valid then replace all group with player
-    for(Region r : board.getRegions()){
-      if(r.getOwner().getName().equals(groupName)){
-        r.setOwner(player);
-        //Only change boolean if something replaced
-        succeed = true;
-      }
-    }
-
-    return succeed;
-  }
-
-  public void callThreads() throws InterruptedException{
-    //Method to call child threads, will prompt player and add all orders to map
-    
-    for(int i = 0; i < children.size(); i++){
-      children.get(i).start();
-    }
-
-    for(int i = 0; i < children.size(); i++){
-      children.get(i).join();
-    }
-
-  }
-
-  public boolean isAlive(AbstractPlayer player){
-    //Check if player still in game --> at least one region owned
-    for(Region r : board.getRegions()){
-      if(r.getOwner() == player){
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public Set<AbstractPlayer> playersLeft(){
-    //Returns set of all players still playing
-    Set<AbstractPlayer> players = new HashSet<AbstractPlayer>();
-    for(ChildServer child : children){
-      if(child.getPlayer().isPlaying()) players.add(child.getPlayer());
-    }
-    return players;
-  }
-
-  public int numPlayersLeft(){
-    return playersLeft().size();
-  }
-
-  public synchronized void addOrdersToMap(List<OrderInterface> orders){
-    //Method to add orders to map
-    for(OrderInterface order : orders){
-      //Not sure if better way to do casting...
-      OrderInterface castOrder;
-      if(order instanceof PlacementOrder){
-        castOrder = (PlacementOrder)(order);
-      }
-      else if(order instanceof AttackOrder){
-        castOrder = (AttackOrder)(order);
-      }
-      else if(order instanceof MoveOrder){
-        castOrder = (MoveOrder)(order);
-      }
-      else{
-        continue;
-      }
-
-      //Call conversion method to get proper regions on server's board
-      castOrder.convertOrderRegions(board);
-
-      //Add list if not present for order type
-      if(!orderMap.containsKey(castOrder.getClass().getName())){
-        orderMap.put(castOrder.getClass().getName(), new ArrayList<OrderInterface>());
-      }
-      //Add order to list
-      orderMap.get(castOrder.getClass().getName()).add(castOrder);
-    }
-  }
-
-  public void applyOrders(){
-    //Apply orders to map
-    //Mostly hardcoded due to explicit order ordering
-
-    if(orderMap.containsKey("PlacementOrder")){
-      applyOrderList(orderMap.get("PlacementOrder"));
-    }
-    if(orderMap.containsKey("MoveOrder")){
-      applyOrderList(orderMap.get("MoveOrder"));
-    }
-    if(orderMap.containsKey("AttackOrder")){
-      applyOrderList(orderMap.get("AttackOrder"));
-    }
-    
-  }
-
-  public void applyOrderList(List<OrderInterface> orders){
-    //Simply call doAction for each order
-    for(int i = 0; i < orders.size(); i++){
-      orders.get(i).doAction();
-    }
-    orders.clear();
-  }
-
-
-  public void playGame(){
-    
-    try{
-      //Wait for MAX_PLAYERS to connect
-      waitingForConnections();
-    }
-    catch(Exception e){
-      e.printStackTrace();
-      closeAll();
-      return;
-    }
-    //While regions not owned all by one player
-    while(numAlive() > 1){
-      try{
-        //Prompt users
-        callThreads();
-      }
-      catch(Exception e){
-        e.printStackTrace();
-        closeAll();
-        return;
-      }
-      //Apply orders
-      applyOrders();
-    }
-
-    //If one player alive then create message --> send
-    AbstractPlayer winner = playersLeft().iterator().next();
-    StringMessage winnerMessage = new StringMessage(winner.getName() + " is the winner!");
-
-    //Send message to all children
-    for(ChildServer child : children){
-      try{
-        child.getPlayer().sendObject(winnerMessage);
-      }
-      catch(Exception e){}
-    }
-    //Close all
-    closeAll();
-  }
-  
 }

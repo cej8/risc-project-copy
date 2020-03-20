@@ -13,11 +13,6 @@ public class TextDisplay implements ClientOutputInterface {
     System.out.println(boardText);
   }
 
-  @Override
-  public void displayString(String str){
-    System.out.println(str);
-  }
-
   //returns a String of all of the board info
   private String createBoard(Board b){
     StringBuilder boardText = new StringBuilder();
