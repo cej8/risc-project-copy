@@ -88,7 +88,7 @@ public class Client {
       System.out.println("ClassNotFoundException is caught");
     }
   }
-
+  // recieve board
   public Board getBoard() {
     return board;
   }
