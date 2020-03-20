@@ -34,4 +34,8 @@ public abstract class SourceDestinationOrder implements OrderInterface {
       }
     }
   }
+
+  public Unit getUnits() {
+    return units;
+  }
 }

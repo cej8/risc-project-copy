@@ -7,52 +7,25 @@ import java.util.*;
 import java.io.*;
 
 public class Client {
-<<<<<<< HEAD
-  private Socket socket;
-  private ObjectInputStream fromServer;
-  private ObjectOutputStream toServer;
   Board board;
   boolean isPlaying = true;
   private ClientInputInterface clientInput;
   private ClientOutputInterface clientOutput;
   private AbstractPlayer player;
-  private InputStream userInput;
+  private Connection connection;
 
   public Client(Board b, AbstractPlayer p, InputStream i, OutputStream out) throws IOException{
     clientInput = new ConsoleInput(i);
     clientOutput = new TextDisplay();
     this.board = b;//added for testing purposes
     this.player = p;
-    userInput = i;
-  
-    toServer = new ObjectOutputStream(out);
+    this.connection = new Connection();
+    connection.setOutputStream(new ObjectOutputStream(out));
   }
-  // public Client(){
-  //   clientInput = new ConsoleInput();
-  //   clientOutput = new TextDisplay();
-  //    }
-
   public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput){
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
   }
-  
-  public void makeConnection(String address, int port){
-    try{
-      socket = new Socket(address, port);
-      socket.setSoTimeout(60*1000);
-      fromServer = new ObjectInputStream(socket.getInputStream());
-      toServer = new ObjectOutputStream(socket.getOutputStream());
-      clientOutput.displayString("Connected to " + address + ":" + Integer.toString(port));
-    }
-    catch(Exception e){
-=======
-  // private Socket socket;
-  // private ObjectInputStream fromServer;
-  // private ObjectOutputStream toServer;
-  private Connection connection;
-  private Board board;
-  private boolean isPlaying;
 
   public Client() {
     this.board = new Board(null);
@@ -81,23 +54,12 @@ public class Client {
 
       System.out.println("Connected to " + address + ":" + Integer.toString(port));
     } catch (Exception e) {
->>>>>>> b582c4189318889f40061f9ccd6e1d6276f5f680
       e.printStackTrace(System.out);
     }
   }
-
-<<<<<<< HEAD
-  public Object receiveObject() throws IOException, ClassNotFoundException{
-    return fromServer.readObject();
-  }
-
-  public void sendObject(Object object) throws IOException{
-    toServer.writeObject(object);
-  }
-
   public Object receiveObjectOrClose(){
     try{
-      return fromServer.readObject();
+      return connection.getInputStream().readObject();
     }
     catch(Exception e){
       e.printStackTrace();
@@ -105,25 +67,14 @@ public class Client {
       return null;
     }
   }
-
-  public void closeAll(){
-    try{
-      socket.close();
-      fromServer.close();
-      toServer.close();
-    }
-    catch(IOException e){
-=======
   void closeAll() {
     try {
       connection.getSocket().close();
       connection.closeAll();
     } catch (IOException e) {
->>>>>>> b582c4189318889f40061f9ccd6e1d6276f5f680
       e.printStackTrace(System.out);
     }
   }
-
   public void updateClientBoard() {
     Board masterBoard = null;
     try {
@@ -137,10 +88,6 @@ public class Client {
       System.out.println("ClassNotFoundException is caught");
     }
   }
-
-  // public Socket getSocket() {
-  //   return socket;
-  // }
 
   public Board getBoard() {
     return board;
@@ -178,7 +125,7 @@ public class Client {
         placementList = placementOrderHelper(placementList,regionName,placement);
       }
     }
-  sendObject(placementList);
+  connection.sendObject(placementList);
     }
     catch(Exception e){
       e.printStackTrace();
@@ -267,7 +214,7 @@ public class Client {
           clientOutput.displayString("Please select either M, A, or D\n");
         }
       }
-      sendObject(orderList);
+      connection.sendObject(orderList);
     }
     catch(Exception e){
       e.printStackTrace();
