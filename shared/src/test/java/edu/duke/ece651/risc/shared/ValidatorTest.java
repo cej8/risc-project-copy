@@ -38,18 +38,17 @@ public class ValidatorTest {
     assertEquals(false, mv.isValidMove(moves.get(1)));
     assertEquals(true, mv.isValidMove(moves.get(2)));
     assertEquals(false, mv.isValidMove(moves.get(3)));
-    assertEquals(false, mv. validateRegions(moves));
+    assertEquals(false, mv. regionsAreValid(moves));
    
     assertEquals(true, av.isValidAttack(attacks.get(0)));
     assertEquals(false, av.isValidAttack(attacks.get(1)));
     assertEquals(false, av.isValidAttack(attacks.get(2)));
-    assertEquals(false, av.validateRegions(attacks));
+    assertEquals(false, av.regionsAreValid(attacks));
      
     assertEquals(true, pv.isValidPlacement(placements.get(0),p1));//valid
     assertEquals(false, pv.isValidPlacement(placements.get(1),p1));//invalid (does not own)
-    assertEquals(false, pv.validateRegions(placements));
+    assertEquals(false, pv.regionsAreValid(placements));
 
-    
   }
 
   private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2){

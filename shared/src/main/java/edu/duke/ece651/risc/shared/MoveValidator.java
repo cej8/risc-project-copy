@@ -35,7 +35,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     return false;
   }
 	@Override
-	public boolean validateRegions(List<MoveOrder> moveList) {
+	public boolean regionsAreValid(List<MoveOrder> moveList) {
 	  for (MoveOrder move : moveList) {
       if (!isValidMove(move)) {
         return false;
@@ -45,21 +45,30 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     // if all moves are valid
     return true;
 	}
-
-	@Override
-	public boolean validateUnits(List<MoveOrder> m) {
-    for (MoveOrder move : m) {
-      int sourceUnits = move.getSource().getUnits().getUnits();
-      int moveUnits = move.getUnits().getUnits();
-      // make sure at least 1 sourceUnit, 1 moveUnit, and sourceUnits > moveUnits
-      if ((sourceUnits > moveUnits) && (sourceUnits > 0) && (moveUnits > 0)) {
-        move.doAction();
+ private boolean sourceDestinationOrderIsValid(List<SourceDestinationOrder> o) {
+    for (SourceDestinationOrder order : o) {
+      int sourceUnits = order.getSource().getUnits().getUnits();
+      int orderUnits = order.getUnits().getUnits();
+      // make sure at least 1 sourceUnit, 1 orderUnit, and sourceUnits > orderUnits
+      if ((sourceUnits > orderUnits) && (sourceUnits > 0) && (orderUnits > 0)) {
+        order.doAction();
       } else {
-        System.out.println("Move failed: sourceUnits are " + sourceUnits + " but moveUnits are " + moveUnits); //this is just for testing
+        System.out.println("Order failed: sourceUnits are " + sourceUnits + " but orderUnits are " + orderUnits); //this is just for testing
         return false;
       }
     }
     return true;
+  }
+
+	@Override
+	public boolean unitsAreValid(List<MoveOrder> m) {
+	    // check to make sure numUnits in source < MoveOrder units
+    List<SourceDestinationOrder> orders = new ArrayList<SourceDestinationOrder>();
+    for (MoveOrder move : m) {
+      orders.add(move);
+    }
+    System.out.print("Move order: ");
+    return sourceDestinationOrderIsValid(orders);
 
 	}
 

@@ -10,6 +10,8 @@ public class ChildServer extends Thread{
   private ParentServer parent;
   //private ValidateHelper validator
 
+  boolean firstCall = true;
+
   public ChildServer(AbstractPlayer player, ParentServer parent){
     this.player = player;
     this.parent = parent;
@@ -84,7 +86,7 @@ public class ChildServer extends Thread{
           placementOrders = (List<OrderInterface>)(player.getConnection().receiveObject());
           //TODO: Validate orders --> loop if fail
           //if(placementOrders not valid){
-          //player.getConnection().sendObject(new StringMessage("Fail: placements invalid"));
+          //player.sendObject(new StringMessage("Fail: placements invalid"));
           //continue;
           //}
 
@@ -114,7 +116,7 @@ public class ChildServer extends Thread{
 
             //TODO: Validate orders --> loop if fail
             //if(orders not valid){
-            //player.getConnection().sendObject(new StringMessage("Fail: orders invalid"));
+            //player.sendObject(new StringMessage("Fail: orders invalid"));
             //continue;
             //}
             parent.addOrdersToMap(orders);

@@ -16,8 +16,7 @@ public class Client {
   boolean isPlaying = true;
   private ClientInputInterface clientInput;
   private ClientOutputInterface clientOutput;
-  private AbstractPlayer player;
-  private Connection connection;
+  private HumanPlayer player;
 
   public Client(){
     clientInput = new ConsoleInput();
@@ -82,6 +81,7 @@ public class Client {
       e.printStackTrace(System.out);
     }
   }
+
   public void updateClientBoard() {
     Board masterBoard = null;
     try {
@@ -143,7 +143,6 @@ public class Client {
       connection.closeAll();
       return;
     }
-   return orderList;
   }
 
   
@@ -360,7 +359,6 @@ public class Client {
           if(response.matches("^Success:.*$")){ break;}
         }
       }
-      connection.sendObject(orderList);
     }
     catch(Exception e){
       e.printStackTrace();
