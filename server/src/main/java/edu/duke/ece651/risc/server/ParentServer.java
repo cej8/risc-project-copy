@@ -44,7 +44,7 @@ public class ParentServer {
         playerSocket.setSoTimeout(60*1000);
         newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1), playerSocket);
         //Send object to client
-        newPlayer.sendObject(newPlayer);
+        newPlayer.getConnection().sendObject(newPlayer);
       } catch (Exception e) {
         e.printStackTrace(System.out);
         continue;
@@ -263,7 +263,7 @@ public class ParentServer {
     //Send message to all children
     for(ChildServer child : children){
       try{
-        child.getPlayer().sendObject(winnerMessage);
+        child.getPlayer().getConnection().sendObject(winnerMessage);
       }
       catch(Exception e){}
     }

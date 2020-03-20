@@ -43,32 +43,32 @@ public class ChildServer extends Thread{
         //Prompt for region
         while(true){
           //Send board
-          player.sendObject(parent.getBoard());
+          player.getConnection().sendObject(parent.getBoard());
         
           //Attempt to get groupName string
-          String groupName = (String)(player.receiveObject());
+          String groupName = (String)(player.getConnection().receiveObject());
 
           //Return failure if not assignable
           if(!parent.assignGroups(groupName, player)){
-            player.sendObject(new StringMessage("Fail: Group invalid or already taken."));
+            player.getConnection().sendObject(new StringMessage("Fail: Group invalid or already taken."));
             continue;
           }
           break;
         }
         //Otherwise succeeds
-        player.sendObject("Success: Group assigned.");
+        player.getConnection().sendObject("Success: Group assigned.");
 
         //Prompt for placement
         while(true){
           //Send board
-          player.sendObject(parent.getBoard());
+          player.getConnection().sendObject(parent.getBoard());
 
           //Retrieve orders
           List<OrderInterface> placementOrders;
-          placementOrders = (List<OrderInterface>)(player.receiveObject());
+          placementOrders = (List<OrderInterface>)(player.getConnection().receiveObject());
           //TODO: Validate orders --> loop if fail
           //if(placementOrders not valid){
-          //player.sendObject(new StringMessage("Fail: placements invalid"));
+          //player.getConnection().sendObject(new StringMessage("Fail: placements invalid"));
           //continue;
           //}
 
@@ -76,36 +76,36 @@ public class ChildServer extends Thread{
           break;
         }
         //Succeeds
-        player.sendObject(new StringMessage("Success: placements valid."));
+        player.getConnection().sendObject(new StringMessage("Success: placements valid."));
         //Prevent initial call again
         firstCall = false;
       }
       else{
         //If called then new turn --> send continue
-        player.sendObject(new StringMessage("Continue"));
+        player.getConnection().sendObject(new StringMessage("Continue"));
         //Send player alive message
-        player.sendObject(new ConfirmationMessage(parent.isAlive(player)));
+        player.getConnection().sendObject(new ConfirmationMessage(parent.isAlive(player)));
         //If alive then expecting orders
         if(parent.isAlive(player)){
           //Prompt for orders --> validate
         
           while(true){
             //Send board
-            player.sendObject(parent.getBoard());
+            player.getConnection().sendObject(parent.getBoard());
 
             //Prompt for orders
-            List<OrderInterface> orders = (List<OrderInterface>)(player.receiveObject());
+            List<OrderInterface> orders = (List<OrderInterface>)(player.getConnection().receiveObject());
 
             //TODO: Validate orders --> loop if fail
             //if(orders not valid){
-            //player.sendObject(new StringMessage("Fail: orders invalid"));
+            //player.getConnection().sendObject(new StringMessage("Fail: orders invalid"));
             //continue;
             //}
             parent.addOrdersToMap(orders);
             break;
           }
           //Otherwise succeed
-          player.sendObject(new StringMessage("Success: orders valid."));
+          player.getConnection().sendObject(new StringMessage("Success: orders valid."));
         }
       
         else{
@@ -113,15 +113,15 @@ public class ChildServer extends Thread{
           //If watching null then haven't been prompted
           if(player.isWatching() == null){
             //Get confirmation message
-            ConfirmationMessage spectateMessage = (ConfirmationMessage)(player.receiveObject());
+            ConfirmationMessage spectateMessage = (ConfirmationMessage)(player.getConnection().receiveObject());
             //Set watching boolean
             player.setWatching(new Boolean(spectateMessage.getMessage()));
           }
           //If watching then send board (otherwise client disconnected)
           if(player.isWatching()){
             //Send board and success
-            player.sendObject(parent.getBoard());
-            player.sendObject(new StringMessage("Success: spectate"));
+            player.getConnection().sendObject(parent.getBoard());
+            player.getConnection().sendObject(new StringMessage("Success: spectate"));
           }
         }
       }
@@ -130,7 +130,7 @@ public class ChildServer extends Thread{
       //If anything fails then kill player
       e.printStackTrace();
       player.setPlaying(false);
-      player.closeAll();
+      player.getConnection().closeAll();
       return;
     }
   }
