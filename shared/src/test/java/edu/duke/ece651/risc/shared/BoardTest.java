@@ -43,8 +43,11 @@ public class BoardTest {
     Unit adjUnit = new Unit(15);
     Unit adjUnit2 = new Unit(20);
     Region region = new Region(player1, unit);
+    region.setName("Earth");
     Region adjRegion = new Region(player1, adjUnit);
+    adjRegion.setName("Wind");
     Region adjRegion2 = new Region(player1, adjUnit2);
+    adjRegion2.setName("Fire");
     List<Region> regions = new ArrayList<Region>();
     regions.add(adjRegion);
     regions.add(adjRegion2);
@@ -52,6 +55,8 @@ public class BoardTest {
     regions.add(region); //add all regions to regionlist for board
     Board board = new Board(regions);
     assertEquals(regions, board.getRegions());
+    assertEquals(null, board.getRegionByName("Mars"));
+    assertEquals(region, board.getRegionByName("Earth"));
     return board;
   }
 }
