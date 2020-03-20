@@ -27,7 +27,7 @@ public abstract class SourceDestinationOrder implements OrderInterface {
 	@Override
   abstract public void doAction();
 
-  @Override
+  //@Override
   public void convertOrderRegions(Board board){
     for(Region r : board.getRegions()){
       if(r.getName().equals(this.getDestination().getName())){
@@ -38,5 +38,11 @@ public abstract class SourceDestinationOrder implements OrderInterface {
       }
     }
   }
+    public void setSource(Region s){
+     this.source =s;   
+    }
+     public void setDestination(Region d){
+     this.destination =d;   
+    }
 
 }

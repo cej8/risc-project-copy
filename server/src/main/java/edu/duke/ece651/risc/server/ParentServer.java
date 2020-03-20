@@ -5,8 +5,8 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-
 public class ParentServer {
+  private final int PORT = 12345;
   private final int MAX_PLAYERS = 1;
   private final int MAX_REGIONS = 12;
   private final double START_WAIT_MINUTES = 2.5;
@@ -15,25 +15,8 @@ public class ParentServer {
   private ServerSocket serverSocket = null;
   private List<ChildServer> children;
   private Board board;
-  Map<String, List<OrderInterface>> orderMap;
+  //Map<OrderInterface, List> orderList;
 
-  public ParentServer(){
-    BoardGenerator genBoard = new BoardGenerator();
-    genBoard.createBoard();
-    board = genBoard.getBoard();
-    children = new ArrayList<ChildServer>();
-    orderMap = new HashMap<String, List<OrderInterface>>();
-  }
-
-  public ParentServer(int port) throws IOException{
-    this();
-    serverSocket = new ServerSocket(port);
-  }
-
-  public void setSocket(int port) throws IOException{
-    serverSocket = new ServerSocket(port);
-  }
-  
   public List<ChildServer> getChildren(){
     return children;
   }
@@ -75,7 +58,7 @@ public class ParentServer {
       //Add player to list
       children.add(new ChildServer(newPlayer, this));
     }
-    
+
   }
   public Board getBoard(){
     return this.board;
