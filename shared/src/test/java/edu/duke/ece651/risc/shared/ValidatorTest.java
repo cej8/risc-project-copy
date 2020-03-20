@@ -23,9 +23,9 @@ public class ValidatorTest {
     List<Region> regions = getRegionList(p1, p2);
     Board b = new Board(regions);
 
-    MoveValidator mv = new MoveValidator();
-    AttackValidator av = new AttackValidator();
-    PlacementValidator pv = new PlacementValidator(p2, new Unit(15));
+    MoveValidator mv = new MoveValidator(b);
+    AttackValidator av = new AttackValidator(b);
+    PlacementValidator pv = new PlacementValidator(p2, new Unit(15), b);
    
     
     List<MoveOrder> moves = getMoveOrders(regions);
