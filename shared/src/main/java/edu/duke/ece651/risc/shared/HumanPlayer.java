@@ -35,15 +35,15 @@ public HumanPlayer(String name, Socket s) throws IOException{
     this.connection.setInputStream( new ObjectInputStream(in));
   }
 
-  @Override
-  public void closeAll(){
-    super.closeAll();
-    try{
-      socket.close();
-    }
-    catch(Exception e){
-      e.printStackTrace();
-    }
-  }
+  // @Override
+  // public void closeAll(){
+  //   super.closeAll();
+  //   try{
+  //     socket.close();
+  //   }
+  //   catch(Exception e){
+  //     e.printStackTrace();
+  //   }
+  // }
   
 }
