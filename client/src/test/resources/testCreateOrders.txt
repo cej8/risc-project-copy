@@ -1,0 +1,12 @@
+Y
+M
+Earth
+Mars
+f
+3
+a
+Mars
+Jupiter
+wrong
+4
+d
