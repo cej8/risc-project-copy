@@ -11,27 +11,17 @@ public class Client {
   boolean isPlaying = true;
   private ClientInputInterface clientInput;
   private ClientOutputInterface clientOutput;
-<<<<<<< HEAD
   private AbstractPlayer player;
   private Connection connection;
-=======
-  private HumanPlayer player;
->>>>>>> parent of 3e968e4... Code review edits and improved testing of createOrders and createPlacement methods in ClientTest
 
-  public Client(Board b){
+  public Client(Board b,AbstractPlayer p, InputStream i, OutputStream out) throws IOException{
     clientInput = new ConsoleInput();
     clientOutput = new TextDisplay();
-<<<<<<< HEAD
     this.board = b;//added for testing purposes
     this.player = p;
     this.connection = new Connection();
     connection.setOutputStream(new ObjectOutputStream(out));
   }
-=======
-    this.board = b;
-  }
-
->>>>>>> parent of 3e968e4... Code review edits and improved testing of createOrders and createPlacement methods in ClientTest
   public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput){
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
@@ -98,11 +88,7 @@ public class Client {
       System.out.println("ClassNotFoundException is caught");
     }
   }
-
-  // public Socket getSocket() {
-  //   return socket;
-  // }
-
+  // recieve board
   public Board getBoard() {
     return board;
   }
@@ -110,51 +96,6 @@ public class Client {
   public void setBoard(Board board) {
     this.board = board;
   }
-  /*  public void chooseRegions(){    
-    try{
-      //Set timeout to 5 minutes, wait this long for game start
-      socket.setSoTimeout(5*60*1000);
-      while(true){
-        //Game starts with board message
-        board = (Board)(receiveObject());
-        //Return timeout to smaller value
-        socket.setSoTimeout(60*1000);
-
-        //Output board
-        clientOutput.displayBoard(board);
-        //Print prompt and get group name
-        clientOutput.displayString("Please select a starting region");
-        String groupName = clientInput.readInput(System.in);
-        sendObject(new StringMessage(groupName));
-
-        //Wait for response
-        StringMessage responseMessage = (StringMessage)(receiveObject());
-        String response = responseMessage.getMessage();
-        if(response.matches("^Fail:")){ continue;}
-        if(response.matches("^Success:")){ break;}
-      }
-
-      while(true){
-        //Server then sends board again
-        board = (Board)(receiveObject());
-
-        //Display and move into placements
-        clientOutput.displayBoard(board);
-        createPlacements();
-
-        //Wait for response
-        StringMessage responseMessage = (StringMessage)(receiveObject());
-        String response = responseMessage.getMessage();
-        if(response.matches("^Fail:")){ continue;}
-        if(response.matches("^Success:")){ break;}
-      }
-    }
-    catch(Exception e){
-      e.printStackTrace();
-      closeAll();
-      return;
-    }
-    }*/
   public List<PlacementOrder> placementOrderHelper(List<PlacementOrder> placementList,String regionName, Region placement){
       clientOutput.displayString("How many units would you like to place in " + regionName);
       while (true) {
@@ -281,87 +222,7 @@ public class Client {
       return;
     }
   }
-
-<<<<<<< HEAD
 public Connection getConnection() {
 	return connection;
 }
-
-=======
-  /*
-  public void playGame(String address, int port){
-    try{
-      //Make initial connection, waits for server to send back player's player object
-      makeConnection(address, port);
-      player = (HumanPlayer)(receiveObject());
-      //After which choose regions
-      chooseRegions();
-      
-      while(true){
-        //Start of each turn will have continue message if game still going
-        //Otherwise is winner message
-        StringMessage startMessage = (StringMessage)(receiveObject());
-        String start = startMessage.getMessage();
-        if(!start.equals("Continue")){
-          //If not continue then someone won --> print and exit
-          clientOutput.displayString(start);
-          return;
-        }
-        
-        //Next is alive status for player
-        ConfirmationMessage isAlive = (ConfirmationMessage)(receiveObject());
-        //If null then something wrong
-        if(isAlive == null){ return;}
-        //Get primitive
-        boolean alive = isAlive.getMessage();
-        //If not same then player died on previous turn --> get spectate message
-        if(alive != isPlaying){
-          //Continue prompting until valid input (server closes after 60s)
-          while(true){
-            //Request input
-            clientOutput.displayString("Would you like to keep spectating? [Y/N]");
-            String spectateResponse = clientInput.readInput(System.in);
-            spectateResponse = spectateResponse.toUpperCase();
-            //If valid then do work
-            if(spectateResponse.length() != 1){            
-              if(spectateResponse.charAt(0) == 'Y'){
-                sendObject(new ConfirmationMessage(true));
-                break;
-              }
-              else if(spectateResponse.charAt(0) == 'N'){
-                sendObject(new ConfirmationMessage(false));
-                closeAll();
-                return;
-              }
-            }
-            //Otherwise repeat
-            clientOutput.displayString("Invalid input.");
-          }
-        }
-
-        while(true){
-          //Next server sends board
-          board = (Board)(receiveObject());
-          //Display board
-          clientOutput.displayBoard(board);
-          //Client generates orders --> sends 
-          if(alive){
-            createOrders();
-          }
-
-          StringMessage responseMessage = (StringMessage)(receiveObject());
-          String response = responseMessage.getMessage();
-          if(response.matches("^Fail:")){ continue;}
-          if(response.matches("^Success:")){ break;}
-        }
-      }
-    }
-    catch(Exception e){
-      e.printStackTrace();
-      closeAll();
-      return;
-    }
-        
-    }*/
->>>>>>> parent of 3e968e4... Code review edits and improved testing of createOrders and createPlacement methods in ClientTest
 }
