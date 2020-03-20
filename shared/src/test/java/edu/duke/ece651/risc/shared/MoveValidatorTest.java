@@ -11,7 +11,8 @@ public class MoveValidatorTest {
   @Test
   public void Move_UnitTest() {
     List<Region> regions = getRegions();
-    ValidatorInterface mv = new MoveValidator();
+    Board board = new Board(regions);
+    ValidatorInterface<MoveOrder> mv = new MoveValidator(board);
     //Moves using all but one of sourceUnits
     List<Unit> allButOneUnit = get6UnitList(4, 9, 14, 19, 24, 29); //true: moving all but one unit
     List<MoveOrder> moveAllButOneUnit = getMovesDependent(regions, allButOneUnit);
@@ -26,7 +27,8 @@ public class MoveValidatorTest {
   @Test
   public void test_UnitMoves() {
     List<Region> regions = getRegions();
-    ValidatorInterface mv = new MoveValidator();
+    Board board = new Board(regions);
+    ValidatorInterface<MoveOrder> mv = new MoveValidator(board);
 
     //Orders using all units
     List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);

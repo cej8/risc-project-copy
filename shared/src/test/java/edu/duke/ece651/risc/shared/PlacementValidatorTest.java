@@ -14,9 +14,9 @@ public class PlacementValidatorTest {
     AbstractPlayer player = new HumanPlayer("Player 1");
     int totalUnits = 18; //validUnits.size() * 3;
     Unit playerUnits = new Unit(totalUnits);
-    ValidatorInterface pv = new PlacementValidator(player, playerUnits);
     List<Region> regions = getRegions(player);
-
+    Board board = new Board(regions);
+    ValidatorInterface<PlacementOrder> pv = new PlacementValidator(player, playerUnits, board);
     //true: valid units
     List<Unit> validUnits = get6UnitList(3, 3, 3, 3, 3, 3);
     List<PlacementOrder> validPlacements = getPlacements(regions, validUnits);
