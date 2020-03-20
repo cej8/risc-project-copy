@@ -7,11 +7,12 @@ import java.io.*;
 
 
 public class ParentServer {
-  private final int MAX_PLAYERS = 1;
+  /* private final int MAX_PLAYERS = 1;
   private final int MAX_REGIONS = 12;
   private final double START_WAIT_MINUTES = 2.5;
   private final double TURN_WAIT_MINUTES = 1;
   private final int DEFAULT_PORT = 12345;
+  */
   private ServerSocket serverSocket = null;
   private List<ChildServer> children;
   private Board board;
@@ -39,19 +40,19 @@ public class ParentServer {
   }
 
   public double getTURN_WAIT_MINUTES(){
-    return TURN_WAIT_MINUTES;
+    return Constants.TURN_WAIT_MINUTES;
   }
   
   public void waitingForConnections() throws IOException {
     if(serverSocket == null){
-      serverSocket = new ServerSocket(DEFAULT_PORT);
+      serverSocket = new ServerSocket(Constants.DEFAULT_PORT);
     }
 
     long startTime = -1;
     //Start time 2.5 minutes after first connection
-    long gameStartTime = (long)(START_WAIT_MINUTES*60*1000);
+    long gameStartTime = (long)(Constants.START_WAIT_MINUTES*60*1000);
     
-    while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
+    while (children.size() < Constants.MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
       HumanPlayer newPlayer;
       try {
         if(startTime != -1){
@@ -59,7 +60,7 @@ public class ParentServer {
         }
         //Accept, set timeout to 60 seconds, create player
         Socket playerSocket = serverSocket.accept();
-        playerSocket.setSoTimeout((int)(TURN_WAIT_MINUTES*60*1000));
+        playerSocket.setSoTimeout((int)(Constants.TURN_WAIT_MINUTES*60*1000));
         newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1), playerSocket);
         //Send object to client
         newPlayer.getConnection().sendObject(newPlayer);
@@ -101,8 +102,8 @@ public class ParentServer {
     //int numPlayers = 5;
     List<Region> regionList = board.getRegions();
     char groupName = 'A';
-    int remainder = MAX_REGIONS % numPlayers;
-    int placementRegions = MAX_REGIONS - remainder;
+    int remainder = Constants.MAX_REGIONS % numPlayers;
+    int placementRegions = Constants.MAX_REGIONS - remainder;
     int groupSize = placementRegions / numPlayers;
     int numGroups;
     if (numPlayers == 5){
