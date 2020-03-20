@@ -20,6 +20,12 @@ public abstract class SourceDestinationOrder implements OrderInterface {
       }
     }
   }
+    public void setSource(Region s){
+     this.source =s;   
+    }
+     public void setDestination(Region d){
+     this.destination =d;   
+    }
 
 	public Region getSource() {
 		return source;
