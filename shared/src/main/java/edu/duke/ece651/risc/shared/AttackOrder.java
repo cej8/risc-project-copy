@@ -5,13 +5,17 @@ import java.util.Random;
 public class AttackOrder extends SourceDestinationOrder {
   // this class defines how to execute an attack order operation on the board
   private static final long serialVersionUID = 12L;
+  
 
   public AttackOrder(Region attacker, Region defender, Unit attackingUnits){
       this.source = attacker;
       this.destination = defender;
       this.units = attackingUnits;
     }    
-  
+  @Override
+  public int getPriority(){
+    return 1000;
+  }
   @Override
   public void doAction() {
     // remove units from source (source location)

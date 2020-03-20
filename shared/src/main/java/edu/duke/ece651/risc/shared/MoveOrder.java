@@ -9,6 +9,10 @@ public class MoveOrder extends SourceDestinationOrder {
     this.destination = d;
     this.units = u;
   }
+  @Override
+  public int getPriority(){
+    return 5000;
+  }
 	@Override
   public void doAction() {
     //remove units from source region and add them to the destination region
