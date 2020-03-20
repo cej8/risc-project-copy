@@ -8,8 +8,18 @@ public class PlacementOrder extends DestinationOrder {
     this.units = u;
   }
   @Override
-  public void doAction(){
+  public void doAction() {
+    doAction(destination, units); 
     destination.setUnits(this.units);
   }
+
+  public void doAction(Region d, Unit u) {
+    d.setUnits(u);
+  }
+// @Override
+// public void validateAction(Board temp) {
+// 	// TODO Auto-generated method stub
+	
+// }
 
 }

@@ -1,11 +1,17 @@
 package edu.duke.ece651.risc.shared;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class MoveValidator implements ValidatorInterface<MoveOrder> {
+  private Board tempBoard;
+  
+  public MoveValidator(Board boardCopy) {
+    this.tempBoard = boardCopy;
+  }
+  
   private boolean hasValidPath(Region start, Region end, Set<Region> visited) {
     // helper method
     // find a path of connected nodes from start to end
@@ -34,13 +40,21 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     }
     return false;
   }
+
+@Override
+  public boolean validateOrders(List<MoveOrder> moveList){
+    boolean validRegions = validateRegions(moveList);
+    boolean validUnits = validateUnits(moveList);
+    return validRegions && validUnits;
+  }
+  
 	@Override
 	public boolean validateRegions(List<MoveOrder> moveList) {
 	  for (MoveOrder move : moveList) {
       if (!isValidMove(move)) {
         return false;
       }
-      move.doAction(); 
+      //move.doAction(); 
     }
     // if all moves are valid
     return true;
@@ -49,13 +63,15 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
 	@Override
 	public boolean validateUnits(List<MoveOrder> m) {
     for (MoveOrder move : m) {
-      int sourceUnits = move.getSource().getUnits().getUnits();
-      int moveUnits = move.getUnits().getUnits();
+      Region tempSource = tempBoard.getRegionByName(move.getSource().getName());
+      Region tempDest = tempBoard.getRegionByName(move.getDestination().getName());
+      Unit sourceUnits = tempSource.getUnits();
+      Unit moveUnits = new Unit(move.getUnits().getUnits());
       // make sure at least 1 sourceUnit, 1 moveUnit, and sourceUnits > moveUnits
-      if ((sourceUnits > moveUnits) && (sourceUnits > 0) && (moveUnits > 0)) {
-        move.doAction();
+      if ((sourceUnits.getUnits() > moveUnits.getUnits()) && (sourceUnits.getUnits() > 0) && (moveUnits.getUnits() > 0)) {
+        move.doAction(tempSource, tempDest, moveUnits);
       } else {
-        System.out.println("Move failed: sourceUnits are " + sourceUnits + " but moveUnits are " + moveUnits); //this is just for testing
+        System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); //this is just for testing
         return false;
       }
     }

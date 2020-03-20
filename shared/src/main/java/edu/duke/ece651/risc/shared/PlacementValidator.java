@@ -6,9 +6,11 @@ import java.util.List;
 public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
   private AbstractPlayer player;
   private Unit playerUnits;
-  public PlacementValidator(AbstractPlayer p, Unit u){
+  private Board tempBoard;
+  public PlacementValidator(AbstractPlayer p, Unit u, Board boardCopy){
     this.player=p;
-    this.playerUnits=u;
+    this.playerUnits = u;
+    this.tempBoard = boardCopy;
   }
     // helper method
   public boolean isValidPlacement(PlacementOrder p, AbstractPlayer ap) {
@@ -19,29 +21,37 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
     return false;
   }
   	@Override
-	public boolean validateRegions(List<PlacementOrder> placementList) {
-	 for (PlacementOrder place : placementList) {
-      if (!isValidPlacement(place, this.player)) {
-        return false;
+    public boolean validateRegions(List<PlacementOrder> placementList) {
+      for (PlacementOrder place : placementList) {
+        if (!isValidPlacement(place, this.player)) {
+          return false;
+        }
+        //place.doAction();
       }
-      place.doAction();
+      // if all placements are valid
+      return true;
     }
-    // if all placements are valid
-    return true;
-  }
+
+    @Override
+    public boolean validateOrders(List<PlacementOrder> orders) {
+      boolean validRegions = validateRegions(orders);
+      boolean validUnits = validateUnits(orders);
+      return validRegions && validUnits;
+    }
 	
 	@Override
     public boolean validateUnits(List<PlacementOrder> orders) {
     int totalUnits = this.playerUnits.getUnits();
     for (PlacementOrder p : orders) {
-      int placementUnits = p.getUnits().getUnits();
+      Region tempDest = tempBoard.getRegionByName(p.getDestination().getName());
+      Unit placementUnits =  new Unit(p.getUnits().getUnits());
       // make sure at least 1 placementUnit and totalUnits > 0 and placementUnits < totalUnits
-      if ((placementUnits <= totalUnits) && (placementUnits > 0) && (totalUnits > 0)) {
-        p.doAction();
-        totalUnits -= placementUnits;
+      if ((placementUnits.getUnits() <= totalUnits) && (placementUnits.getUnits() > 0) && (totalUnits > 0)) {
+        p.doAction(tempDest, placementUnits);
+        totalUnits -= placementUnits.getUnits();
       } else {
         System.out
-            .println("Placement failed: placementUnits are " + placementUnits + " but totalUnits are " + totalUnits); //this is just for testing
+            .println("Placement failed: placementUnits are " + placementUnits.getUnits() + " but totalUnits are " + totalUnits); //this is just for testing
         return false;
       }
     }
