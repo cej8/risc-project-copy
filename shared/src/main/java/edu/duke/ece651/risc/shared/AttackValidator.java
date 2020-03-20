@@ -37,7 +37,7 @@ public class AttackValidator implements ValidatorInterface<AttackOrder> {
       if ((sourceUnits > orderUnits) && (sourceUnits > 0) && (orderUnits > 0)) {
         order.doAction();
       } else {
-        System.out.println("Order failed: sourceUnits are " + sourceUnits + " but orderUnits are " + orderUnits); //this is just for testing
+        //   System.out.println("Order failed: sourceUnits are " + sourceUnits + " but orderUnits are " + orderUnits); //this is just for testing
         return false;
       }
     }
@@ -50,7 +50,7 @@ public class AttackValidator implements ValidatorInterface<AttackOrder> {
     for (AttackOrder attack : a) {
       orders.add(attack);
     }
-    System.out.print("Attack order: ");
+    //   System.out.print("Attack order: ");
     return sourceDestinationOrderIsValid(orders);  
 	}
 

@@ -33,6 +33,7 @@ public class ValidatorTest {
 
     List<Region> pRegions = getRegionsForPlacement(p1, p2);
     List<PlacementOrder> placements = getPlacementList(p1, p2);
+
     
     assertEquals(true, mv.isValidMove(moves.get(0)));
     assertEquals(false, mv.isValidMove(moves.get(1)));
@@ -143,6 +144,46 @@ public class ValidatorTest {
     pRegions.add(region2);
     return pRegions;
   }
+@Test
+public void test_validatorHelper(){
+ AbstractPlayer p1 = new HumanPlayer("player 1");
+    AbstractPlayer p2 = new HumanPlayer("player 2");
+    List<Region> regions = getRegionList(p1, p2);
+    Board b = new Board(regions);
 
+    List<OrderInterface> orders = new ArrayList<OrderInterface>();
+     List<OrderInterface> ordersValid = new ArrayList<OrderInterface>();
+
+  OrderInterface  attack13 = new AttackOrder(regions.get(0), regions.get(3), new Unit(4));// valid adjacent
+   OrderInterface attack23 = new AttackOrder(regions.get(1), regions.get(3), new Unit(3));// invalid not adjacent
+    OrderInterface attack36 = new AttackOrder(regions.get(3), regions.get(5), new Unit(2));// invalid same owner
+    orders.add(attack13);
+    orders.add(attack23);
+    orders.add(attack36);
+     OrderInterface move12 = new MoveOrder(regions.get(0), regions.get(1), new Unit(5));// valid adjacent
+    OrderInterface move23 = new MoveOrder(regions.get(1), regions.get(3), new Unit(2));// invalid (diff owner)
+    OrderInterface  move14 = new MoveOrder(regions.get(0), regions.get(2), new Unit(3));// valid not adjacent
+    OrderInterface move15 = new MoveOrder(regions.get(0), regions.get(4), new Unit(1));// invalid no path
+    
+    orders.add(move12);
+    orders.add(move23);
+    orders.add(move14);
+    orders.add(move15);
+    
+    //TODO: create valid regions and units test
+      OrderInterface move42 = new MoveOrder(regions.get(3), regions.get(1), new Unit(2));// valid units
+    OrderInterface move65 = new MoveOrder(regions.get(5), regions.get(4), new Unit(3));//valid
+    OrderInterface attack61 = new AttackOrder(regions.get(5), regions.get(0), new Unit(2));// invalid same owner
+  
+       ordersValid.add(attack61);
+       ordersValid.add(move42);
+    // ordersValid.add(move65);
+    ValidatorHelper vh = new ValidatorHelper();
+    assertEquals(false, vh.allOrdersValid(orders));
+    assertEquals(true, vh.allOrdersValid(ordersValid));
+   
+
+
+}
   
 }
