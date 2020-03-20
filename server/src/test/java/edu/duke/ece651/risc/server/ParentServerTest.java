@@ -10,9 +10,6 @@ import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.PlacementOrder;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.Unit;
-import edu.duke.ece651.risc.shared.AbstractPlayer;
-import edu.duke.ece651.risc.shared.HumanPlayer;
-
 public class ParentServerTest {
   /* @Test
   public void test_createStartingGroups(){
@@ -36,12 +33,6 @@ public class ParentServerTest {
   public void test_startingGroups(){
     ParentServer ps = new ParentServer();
     //ps.createBoard();
-    HumanPlayer player = new HumanPlayer("player1");
-    HumanPlayer player2 = new HumanPlayer("player2");
-    ChildServer cs = new ChildServer(player,ps);
-    ChildServer cs2 = new ChildServer(player2, ps);
-    ps.addPlayer(cs);
-    ps.addPlayer(cs2);
     ps.createStartingGroups();
     Board board = ps.getBoard();
     List<Region> regions = board.getRegions();
@@ -59,12 +50,6 @@ public class ParentServerTest {
    @Test
   public void test_placementOrder() {
     ParentServer ps = new ParentServer();
-    HumanPlayer player = new HumanPlayer("player1");
-    HumanPlayer player2 = new HumanPlayer("player2");
-    ChildServer cs = new ChildServer(player,ps);
-    ChildServer cs2 = new ChildServer(player2, ps);
-    ps.addPlayer(cs);
-    ps.addPlayer(cs2);
     ps.createStartingGroups();
     Board board = ps.getBoard();
     List<Region> regions = board.getRegions();
