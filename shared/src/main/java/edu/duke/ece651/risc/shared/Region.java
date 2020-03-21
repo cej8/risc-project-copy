@@ -19,11 +19,13 @@ public class Region implements Serializable {
     setName(n);
     setOwner(null);
     setUnits(null);
+    this.adjRegions = new ArrayList<Region>();
   }
   
   public Region(AbstractPlayer p, Unit u){// will need to be modified
     setOwner(p);
     setUnits(u);
+    this.adjRegions = new ArrayList<Region>();
   }
 
   public void assignRegion(AbstractPlayer p, Unit u) {
