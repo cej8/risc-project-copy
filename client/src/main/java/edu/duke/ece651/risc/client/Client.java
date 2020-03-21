@@ -25,14 +25,10 @@ public class Client {
     this();
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
-  }
-
-  
+  }  
   public void setBoard(Board board) {
     this.board = board;
-  }
-
-  
+  }  
   public Board getBoard() {
     return board;
   }
@@ -54,7 +50,6 @@ public class Client {
     connection.getSocket().setSoTimeout(timeout);
   }
   
-
   public void makeConnection(String address, int port){
     Socket socket;
     try{
@@ -77,7 +72,15 @@ public class Client {
       e.printStackTrace(System.out);
     }
   }
-
+  public void closeAll(){
+    try {
+      connection.getSocket().close();
+      connection.closeAll();
+      System.out.println("Local connection closed");
+    } catch (IOException e){
+      e.printStackTrace(System.out);
+    }
+  }
   public void updateClientBoard() {
     Board masterBoard = null;
     try {

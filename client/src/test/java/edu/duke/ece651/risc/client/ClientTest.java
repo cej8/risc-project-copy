@@ -9,7 +9,25 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class ClientTest {
-@Test
+  /* @Test
+  public void test_timeout() throws IOException{
+    AbstractPlayer p1 = new HumanPlayer("Player 1");
+    Board board = getTestBoard(p1);
+    ArrayList<Object> inputs = new ArrayList<Object>();
+    inputs.add(board);
+    Socket mockSocket = MockTests.setupMockSocket(inputs);
+    Client client = new Client();
+    client.makeConnection(mockSocket);
+    // setSocketTimeout
+    int timeout = (int) Constants.START_WAIT_MINUTES;
+    client.setSocketTimeout(timeout*60*1000);
+    try {
+      Thread.sleep((timeout+1)*1000*60);
+    } catch (InterruptedException ex){
+      Thread.currentThread().interrupt();
+    }
+  }*/
+  @Test
   public void test_updateBoard() throws IOException {
     AbstractPlayer player1 = new HumanPlayer("Player 1");
     Board board = getTestBoard(player1);
@@ -41,9 +59,7 @@ public class ClientTest {
       } catch (Exception e) {
         e.printStackTrace(System.out);
       }
-    }
-
-    
+    }    
   }
   
   private Board getTestBoard(AbstractPlayer player1) {
@@ -127,7 +143,7 @@ public class ClientTest {
     }
   }
   
-  @Test
+  /*  @Test
   public void test_assorted(){
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput();
@@ -156,7 +172,7 @@ public class ClientTest {
     localConnection.getConnection().closeAll();
     localConnection.getClientInput().close();
   }
-
+  */
 
   @Test
   public void test_createPlacements() throws IOException{

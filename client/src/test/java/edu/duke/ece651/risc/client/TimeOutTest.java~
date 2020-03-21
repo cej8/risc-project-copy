@@ -1,0 +1,69 @@
+package edu.duke.ece651.risc.client;
+import edu.duke.ece651.risc.shared.*;
+import java.util.*;
+import java.io.*;
+import java.net.*;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class TimeOutTest {
+  /* @Test
+  public void test_createPlacementsTimeout() throws IOException{
+    InputStream input = new FileInputStream(new File("src/test/resources/testCreatePlacements.txt"));
+    TextDisplay td = new TextDisplay();
+    ConsoleInput ci = new ConsoleInput(input);
+    Client client = new Client(ci, td);
+    // TESTING TIMEOUT??
+    int timeout = (int) Constants.START_WAIT_MINUTES;
+    //  client.setSocketTimeout(timeout*60*1000);
+    AbstractPlayer player1 = new HumanPlayer("Player 1");
+    AbstractPlayer player2 = new HumanPlayer("Player 2");
+    Board board = getTestBoardTwo(player1, player2);
+    client.setBoard(board);
+    try {
+      System.out.println("Timeout started");
+      Thread.sleep((timeout+1)*1000*60);
+      System.out.println("Timeout ended");
+    } catch (InterruptedException ex){
+      Thread.currentThread().interrupt();
+    }
+    List<PlacementOrder> client.createPlacements();
+    System.out.println("Placements created");
+  }*/
+  @Test
+  public void test_timeout() {
+    int port = 9090;
+    fakeServer(port);
+    fakeClient(port, "localhost");
+  }
+  private void fakeClient(int port, String hostname){
+    try (Socket socket = new Socket(hostname, port)){
+      InputStream input = socket.getInputStream();
+      BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+      // put file stuff here?
+      String time = reader.readLine();
+      System.out.println(time);
+    } catch(UnknownHostException ex){
+      System.out.println("Server not found: " + ex.getMessage());
+    } catch(IOException ex) {
+      System.out.println("IO error: " + ex.getMessage());
+    }
+  }
+  private void fakeServer(int port){
+    try(ServerSocket serverSocket = new ServerSocket(port)){
+      System.out.println("Server is listening on port " + port);
+      while(true){
+        Socket socket = serverSocket.accept();
+        System.out.println("New client connected");
+        OutputStream output = socket.getOutputStream();
+        PrintWriter writer = new PrintWriter(output, true);
+        writer.println(new Date().toString());
+      }
+    } catch (IOException ex) {
+      System.out.println("Server exception: " + ex.getMessage());
+      ex.printStackTrace();
+    }
+  }
+}
