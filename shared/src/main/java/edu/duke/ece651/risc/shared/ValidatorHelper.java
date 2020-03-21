@@ -27,12 +27,11 @@ public class ValidatorHelper {
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
     for (OrderInterface order : orders) {
       if (order.getPriority() == Constants.ATTACK_PRIORITY) {
-        System.out.println("Found attack");
+        //  System.out.println("Found attack");
         attackList.add((AttackOrder) order);
       } else if (order.getPriority() == Constants.MOVE_PRIORITY) {
         moveList.add((MoveOrder) order);
-        System.out.println("Found move");
-
+        //  System.out.println("Found move");
       }
     }
     boolean validMoves = moveValidator.validateOrders(moveList);
