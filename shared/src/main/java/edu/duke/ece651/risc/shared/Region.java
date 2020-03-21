@@ -1,7 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 // Class to handle keeping track of region owner, unit numbers, and adjacent regions
 public class Region implements Serializable {
