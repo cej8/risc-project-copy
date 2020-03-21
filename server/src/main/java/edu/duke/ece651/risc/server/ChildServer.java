@@ -5,10 +5,9 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-public class ChildServer extends Thread{
+public class ChildServer implements Runnable{
   private AbstractPlayer player;  
   private ParentServer parent;
-  //private ValidateHelper validator
 
   boolean firstCall = true;
 
@@ -28,7 +27,6 @@ public class ChildServer extends Thread{
     return player;
   }
 
-
   @Override
   public void run(){
     long startTime = System.currentTimeMillis();
@@ -39,6 +37,8 @@ public class ChildServer extends Thread{
     if(!player.isPlaying() || !player.isWatching()){
       return;
     }
+
+    ValidatorHelper validator;
     
     try{
       if(firstCall){
@@ -68,7 +68,7 @@ public class ChildServer extends Thread{
         }
         //Otherwise succeeds
         player.getConnection().sendObject("Success: Group assigned.");
-
+        int startUnits = Constants.UNIT_START_MULTIPLIER*parent.getBoard().getNumRegionsOwned(player);
         //Prompt for placement
         while(true){
           //If too long --> kill player
@@ -84,11 +84,12 @@ public class ChildServer extends Thread{
           //Retrieve orders
           List<OrderInterface> placementOrders;
           placementOrders = (List<OrderInterface>)(player.getConnection().receiveObject());
+          validator = new ValidatorHelper(player, new Unit(startUnits), parent.getBoard());
           //TODO: Validate orders --> loop if fail
-          //if(placementOrders not valid){
-          //player.sendObject(new StringMessage("Fail: placements invalid"));
-          //continue;
-          //}
+          if(validator.allPlacementsValid(placementOrders)){
+            player.getConnection().sendObject(new StringMessage("Fail: placements invalid"));
+            continue;
+          }
 
           parent.addOrdersToMap(placementOrders);
           break;
@@ -113,12 +114,12 @@ public class ChildServer extends Thread{
 
             //Prompt for orders
             List<OrderInterface> orders = (List<OrderInterface>)(player.getConnection().receiveObject());
-
+            validator = new ValidatorHelper(parent.getBoard());
             //TODO: Validate orders --> loop if fail
-            //if(orders not valid){
-            //player.sendObject(new StringMessage("Fail: orders invalid"));
-            //continue;
-            //}
+            if(validator.allOrdersValid(orders)){
+              player.getConnection().sendObject(new StringMessage("Fail: orders invalid"));
+              continue;
+            }
             parent.addOrdersToMap(orders);
             break;
           }

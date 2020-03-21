@@ -162,10 +162,11 @@ public class Client {
     }
     return placementList;
   }
-  
+
   public List<PlacementOrder> createPlacements(){
     // Prompt user for placements, create list of placementOrders, send to server
-     clientOutput.displayString("You are " + player.getName() + ", prepare to place " + Constants.MAX_UNITS + " units.");
+    int startUnits = Constants.UNIT_START_MULTIPLIER*board.getNumRegionsOwned(player);
+     clientOutput.displayString("You are " + player.getName() + ", prepare to place " + startUnits + " units.");
     List<PlacementOrder> placementList = new ArrayList<PlacementOrder>();
     List<Region> regionList = board.getRegions();
     Region placement;

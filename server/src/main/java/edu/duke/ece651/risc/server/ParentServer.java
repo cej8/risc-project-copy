@@ -4,9 +4,10 @@ import edu.duke.ece651.risc.shared.*;
 import java.net.*;
 import java.util.*;
 import java.io.*;
+import java.util.concurrent.*;
 
 
-public class ParentServer {
+public class ParentServer implements Runnable{
   /* private final int MAX_PLAYERS = 1;
   private final int MAX_REGIONS = 12;
   private final double START_WAIT_MINUTES = 2.5;
@@ -17,6 +18,10 @@ public class ParentServer {
   private List<ChildServer> children;
   private Board board;
   Map<String, List<OrderInterface>> orderMap;
+  ExecutorService threads = Executors.newFixedThreadPool(Constants.MAX_PLAYERS);
+  private int MAX_PLAYERS = Constants.MAX_PLAYERS;
+  private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
+  private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
 
   public ParentServer(){
     BoardGenerator genBoard = new BoardGenerator();
@@ -42,6 +47,23 @@ public class ParentServer {
   public double getTURN_WAIT_MINUTES(){
     return Constants.TURN_WAIT_MINUTES;
   }
+
+  //set's for testing
+  public void setMAX_PLAYERS(int MAX_PLAYERS){
+    this.MAX_PLAYERS = MAX_PLAYERS;
+    try{
+      threads = Executors.newFixedThreadPool(this.MAX_PLAYERS);
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
+  }
+  public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
+    this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
+  }
+  public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES){
+    this.START_WAIT_MINUTES = START_WAIT_MINUTES;
+  }
   
   public void waitingForConnections() throws IOException {
     if(serverSocket == null){
@@ -50,9 +72,9 @@ public class ParentServer {
 
     long startTime = -1;
     //Start time 2.5 minutes after first connection
-    long gameStartTime = (long)(Constants.START_WAIT_MINUTES*60*1000);
+    long gameStartTime = (long)(START_WAIT_MINUTES*60*1000);
     
-    while (children.size() < Constants.MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
+    while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
       HumanPlayer newPlayer;
       try {
         if(startTime != -1){
@@ -60,7 +82,7 @@ public class ParentServer {
         }
         //Accept, set timeout to 60 seconds, create player
         Socket playerSocket = serverSocket.accept();
-        playerSocket.setSoTimeout((int)(Constants.TURN_WAIT_MINUTES*60*1000));
+        playerSocket.setSoTimeout((int)(TURN_WAIT_MINUTES*60*1000));
         newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1), playerSocket);
         //Send object to client
         newPlayer.getConnection().sendObject(newPlayer);
@@ -131,34 +153,30 @@ public class ParentServer {
   public synchronized boolean assignGroups(String groupName, AbstractPlayer player){
     //Method to set initial groups (groupName must be of form "Group _" where _ is A-E)
 
-    boolean succeed = false;
-
     //Check valid input
     if(!groupName.matches("^Group [A-F]$")){
-      return succeed;
+      return false;
     }
     //If valid then replace all group with player
     for(Region r : board.getRegions()){
       if(r.getOwner().getName().equals(groupName)){
         r.setOwner(player);
         //Only change boolean if something replaced
-        succeed = true;
+        return true;
       }
     }
 
-    return succeed;
+    return false;
   }
 
   public void callThreads() throws InterruptedException{
     //Method to call child threads, will prompt player and add all orders to map
-    
-    for(int i = 0; i < children.size(); i++){
-      children.get(i).start();
-    }
 
+    List<Callable<Object>> todo = new ArrayList<Callable<Object>>(children.size());
     for(int i = 0; i < children.size(); i++){
-      children.get(i).join();
+      todo.add(Executors.callable(children.get(i)));
     }
+    threads.invokeAll(todo);
 
   }
 
@@ -238,11 +256,17 @@ public class ParentServer {
     orders.clear();
   }
 
+  public void growUnits(){
+    for(Region r : board.getRegions()){
+      r.setUnits(new Unit(r.getUnits().getUnits()+1));
+    }
+  }
+
 
   public void playGame(){
     
     try{
-      //Wait for MAX_PLAYERS to connect
+      //Wait for MAX_PLAYERS to connect or timeout
       waitingForConnections();
     }
     catch(Exception e){
@@ -251,6 +275,9 @@ public class ParentServer {
       return;
     }
     //While regions not owned all by one player
+
+    boolean notFirstCall = false;
+    
     while(numPlayersLeft() > 1){
       try{
         //Prompt users
@@ -263,6 +290,10 @@ public class ParentServer {
       }
       //Apply orders
       applyOrders();
+      if(notFirstCall){
+        growUnits();
+      }
+      notFirstCall = true;
     }
 
     if(numPlayersLeft() == 1){
@@ -280,6 +311,11 @@ public class ParentServer {
     }
     //Close all
     closeAll();
+  }
+
+  @Override
+  public void run(){
+    playGame();
   }
   
 }

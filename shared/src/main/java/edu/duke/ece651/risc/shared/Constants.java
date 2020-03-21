@@ -7,9 +7,9 @@ public final class Constants {
   // time to wait between turns
   public static final double TURN_WAIT_MINUTES = 1;
   // max number of units per player
-  public static final int MAX_UNITS = 15;
+  public static final int UNIT_START_MULTIPLIER = 3;
   // max number of players at a given time
-  public static final int MAX_PLAYERS = 1;
+  public static final int MAX_PLAYERS = 5;
   // max number of regions in board
   public static final int MAX_REGIONS = 12;
   // default port number
