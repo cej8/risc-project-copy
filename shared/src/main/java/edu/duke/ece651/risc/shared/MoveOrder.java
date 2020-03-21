@@ -9,11 +9,20 @@ public class MoveOrder extends SourceDestinationOrder {
     this.destination = d;
     this.units = u;
   }
+  @Override
+  public int getPriority(){
+    return Constants.MOVE_PRIORITY;
+  }
 	@Override
   public void doAction() {
     //remove units from source region and add them to the destination region
     source.setUnits(new Unit(source.getUnits().getUnits() - this.units.getUnits()));
     destination.setUnits(new Unit(destination.getUnits().getUnits()+this.units.getUnits()));
 	}
+ public void doAction(Region s, Region d, Unit u) {
+    s.setUnits(new Unit(s.getUnits().getUnits() - u.getUnits()));
+    d.setUnits(new Unit(d.getUnits().getUnits()+u.getUnits()));
+  }
+
 
 }

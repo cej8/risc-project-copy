@@ -20,7 +20,7 @@ public class MoveOrderTest {
     OrderInterface move1 = new MoveOrder(r1, r2, new Unit(5));
     OrderInterface move2 = new MoveOrder(r2, r3, new Unit(2));
     OrderInterface move3 = new MoveOrder(r3, r1, new Unit(3));
- List<OrderInterface> moves = new ArrayList<OrderInterface>();
+    List<OrderInterface> moves = new ArrayList<OrderInterface>();
     moves.add(move1);
     moves.add(move2);
     moves.add(move3);
@@ -35,8 +35,7 @@ public class MoveOrderTest {
     assertEquals(8, r2.getUnits().getUnits());
     assertEquals(7, r3.getUnits().getUnits());
    
-    
-    
+    assertEquals(Constants.MOVE_PRIORITY, move1.getPriority());
     
 
   }

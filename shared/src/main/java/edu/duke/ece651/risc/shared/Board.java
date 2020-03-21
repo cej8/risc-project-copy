@@ -26,6 +26,14 @@ public class Board implements Serializable {
     this.regions = regionList;
   }
 
+  public Region getRegionByName(String name){
+    Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
+    for (Region r : this.getRegions()){
+      nameToRegionMap.put(r.getName(), r);
+    }
+    return nameToRegionMap.get(name);
+  }
+
  //Creates a Map of Players to a List of all their owned regions 
   public Map<AbstractPlayer, List<Region>> getPlayerToRegionMap(){
     Map<AbstractPlayer, List<Region>> playerRegionMap = new HashMap<AbstractPlayer, List<Region>>();

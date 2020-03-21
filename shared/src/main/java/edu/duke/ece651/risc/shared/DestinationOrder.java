@@ -21,6 +21,10 @@ public abstract class DestinationOrder implements OrderInterface {
   @Override
   abstract public void doAction();
 
+@Override
+abstract public int getPriority();
+
+
   @Override
   public void convertOrderRegions(Board board){
     for(Region r : board.getRegions()){
@@ -29,4 +33,5 @@ public abstract class DestinationOrder implements OrderInterface {
       }
     }
   }
+
 }

@@ -23,9 +23,11 @@ public abstract class SourceDestinationOrder implements OrderInterface {
   public Unit getUnits(){
     return units;
   }
-
-	@Override
+@Override
   abstract public void doAction();
+
+  @Override
+  abstract public int getPriority();
 
   @Override
   public void convertOrderRegions(Board board){

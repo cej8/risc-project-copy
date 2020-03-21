@@ -38,6 +38,7 @@ public class AttackOrderTest {
     Unit u = new Unit(numAttackUnits);
     // attack
     AttackOrder ao = new AttackOrder(s, d, u);
+    assertEquals(Constants.ATTACK_PRIORITY, ao.getPriority());
     ao.doAction();
   }
 

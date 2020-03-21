@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Set;
 
 public class MoveValidator implements ValidatorInterface<MoveOrder> {
+ private Board tempBoard;
+  
+  public MoveValidator(Board boardCopy) {
+    this.tempBoard = boardCopy;
+  }
+
   private boolean hasValidPath(Region start, Region end, Set<Region> visited) {
     // helper method
     // find a path of connected nodes from start to end
@@ -17,7 +23,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
       }
       visited.add(neighbor);
       if (start.getOwner().getName().equals(neighbor.getOwner().getName())) {// owned by the same player
-        if (neighbor == end) {
+        if (neighbor.getName().equals(end.getName())) {
           return true;
         }
         return hasValidPath(neighbor, end, visited);
@@ -34,42 +40,44 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     }
     return false;
   }
-	@Override
-	public boolean regionsAreValid(List<MoveOrder> moveList) {
+@Override
+  public boolean validateOrders(List<MoveOrder> moveList){
+    boolean validRegions = validateRegions(moveList);
+    boolean validUnits = validateUnits(moveList);
+    return validRegions && validUnits;
+  }
+
+  	@Override
+	public boolean validateRegions(List<MoveOrder> moveList) {
 	  for (MoveOrder move : moveList) {
       if (!isValidMove(move)) {
+        System.out.println("Move not valid");
         return false;
       }
-      move.doAction(); 
+      //move.doAction(); 
     }
     // if all moves are valid
     return true;
 	}
- private boolean sourceDestinationOrderIsValid(List<SourceDestinationOrder> o) {
-    for (SourceDestinationOrder order : o) {
-      int sourceUnits = order.getSource().getUnits().getUnits();
-      int orderUnits = order.getUnits().getUnits();
-      // make sure at least 1 sourceUnit, 1 orderUnit, and sourceUnits > orderUnits
-      if ((sourceUnits > orderUnits) && (sourceUnits > 0) && (orderUnits > 0)) {
-        order.doAction();
+
+  	@Override
+	public boolean validateUnits(List<MoveOrder> m) {
+    for (MoveOrder move : m) {
+      Region tempSource = tempBoard.getRegionByName(move.getSource().getName());
+      Region tempDest = tempBoard.getRegionByName(move.getDestination().getName());
+      Unit sourceUnits = tempSource.getUnits();
+      Unit moveUnits = new Unit(move.getUnits().getUnits());
+      // make sure at least 1 sourceUnit, 1 moveUnit, and sourceUnits > moveUnits
+      if ((sourceUnits.getUnits() > moveUnits.getUnits()) && (sourceUnits.getUnits() > 0) && (moveUnits.getUnits() > 0)) {
+        move.doAction(tempSource, tempDest, moveUnits);
       } else {
-        System.out.println("Order failed: sourceUnits are " + sourceUnits + " but orderUnits are " + orderUnits); //this is just for testing
+        System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); //this is just for testing
         return false;
       }
     }
     return true;
-  }
-
-	@Override
-	public boolean unitsAreValid(List<MoveOrder> m) {
-	    // check to make sure numUnits in source < MoveOrder units
-    List<SourceDestinationOrder> orders = new ArrayList<SourceDestinationOrder>();
-    for (MoveOrder move : m) {
-      orders.add(move);
-    }
-    System.out.print("Move order: ");
-    return sourceDestinationOrderIsValid(orders);
 
 	}
+
 
 }

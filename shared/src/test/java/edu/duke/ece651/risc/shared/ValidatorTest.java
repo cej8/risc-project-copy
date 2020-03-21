@@ -23,41 +23,46 @@ public class ValidatorTest {
     List<Region> regions = getRegionList(p1, p2);
     Board b = new Board(regions);
 
-    MoveValidator mv = new MoveValidator();
-    AttackValidator av = new AttackValidator();
-    PlacementValidator pv = new PlacementValidator(p2, new Unit(15));
-   
-    
+    MoveValidator mv = new MoveValidator(b);
+    AttackValidator av = new AttackValidator(b);
+    PlacementValidator pv = new PlacementValidator(p2, new Unit(15), b);
+
     List<MoveOrder> moves = getMoveOrders(regions);
     List<AttackOrder> attacks = getAttackList(regions);
 
     List<Region> pRegions = getRegionsForPlacement(p1, p2);
     List<PlacementOrder> placements = getPlacementList(p1, p2);
-    
+
     assertEquals(true, mv.isValidMove(moves.get(0)));
     assertEquals(false, mv.isValidMove(moves.get(1)));
     assertEquals(true, mv.isValidMove(moves.get(2)));
     assertEquals(false, mv.isValidMove(moves.get(3)));
-    assertEquals(false, mv. regionsAreValid(moves));
-   
+    assertEquals(false, mv.validateRegions(moves));
+
     assertEquals(true, av.isValidAttack(attacks.get(0)));
     assertEquals(false, av.isValidAttack(attacks.get(1)));
     assertEquals(false, av.isValidAttack(attacks.get(2)));
-    assertEquals(false, av.regionsAreValid(attacks));
-     
-    assertEquals(true, pv.isValidPlacement(placements.get(0),p1));//valid
-    assertEquals(false, pv.isValidPlacement(placements.get(1),p1));//invalid (does not own)
-    assertEquals(false, pv.regionsAreValid(placements));
+    assertEquals(false, av.validateRegions(attacks));
+
+    assertEquals(true, pv.isValidPlacement(placements.get(0), p1));// valid
+    assertEquals(false, pv.isValidPlacement(placements.get(1), p1));// invalid (does not own)
+    assertEquals(false, pv.validateRegions(placements));
 
   }
 
-  private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2){
+  private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2) {
     Region r1 = new Region(p1, new Unit(1));
+    r1.setName("r1");
     Region r2 = new Region(p1, new Unit(2));
+    r2.setName("r2");
     Region r4 = new Region(p1, new Unit(4));
+    r4.setName("r4");
     Region r5 = new Region(p1, new Unit(5));
+    r5.setName("r5");
     Region r3 = new Region(p2, new Unit(3));
+    r3.setName("r6");
     Region r6 = new Region(p2, new Unit(6));
+    r6.setName("r6");
 
     List<Region> regions = new ArrayList<Region>();
     regions.add(r1);
@@ -68,6 +73,7 @@ public class ValidatorTest {
     regions.add(r6);
 
     List<Region> adj1 = new ArrayList<Region>();
+
     adj1.add(r2);
     adj1.add(r3);
     r1.setAdjRegions(adj1);
@@ -144,5 +150,44 @@ public class ValidatorTest {
     return pRegions;
   }
 
-  
+  @Test
+  public void test_validatorHelper() {
+    AbstractPlayer p1 = new HumanPlayer("player 1");
+    AbstractPlayer p2 = new HumanPlayer("player 2");
+    List<Region> regions = getRegionList(p1, p2);
+    Board b = new Board(regions);
+
+    List<OrderInterface> orders = new ArrayList<OrderInterface>();
+    List<OrderInterface> ordersValid = new ArrayList<OrderInterface>();
+
+    OrderInterface attack13 = new AttackOrder(regions.get(0), regions.get(3), new Unit(4));// valid adjacent
+    OrderInterface attack23 = new AttackOrder(regions.get(1), regions.get(3), new Unit(3));// invalid not adjacent
+    OrderInterface attack36 = new AttackOrder(regions.get(3), regions.get(5), new Unit(2));// invalid same owner
+    orders.add(attack13);
+    orders.add(attack23);
+    orders.add(attack36);
+    OrderInterface move12 = new MoveOrder(regions.get(0), regions.get(1), new Unit(5));// valid adjacent
+    OrderInterface move23 = new MoveOrder(regions.get(1), regions.get(3), new Unit(2));// invalid (diff owner)
+    OrderInterface move14 = new MoveOrder(regions.get(0), regions.get(2), new Unit(3));// valid not adjacent
+    OrderInterface move15 = new MoveOrder(regions.get(0), regions.get(4), new Unit(1));// invalid no path
+
+    orders.add(move12);
+    orders.add(move23);
+    orders.add(move14);
+    orders.add(move15);
+
+    // TODO: create valid regions and units test
+    OrderInterface move21 = new MoveOrder(regions.get(1), regions.get(0), new Unit(1));// valid units
+    OrderInterface move41 = new MoveOrder(regions.get(2), regions.get(0), new Unit(2));// valid
+    OrderInterface attack31 = new AttackOrder(regions.get(4), regions.get(0), new Unit(1));// invalid same owner
+
+    // ordersValid.add(attack31);
+    ordersValid.add(move21);
+    ordersValid.add(move41);
+    ValidatorHelper vh = new ValidatorHelper(b);
+    assertEquals(false, vh.allOrdersValid(orders));
+    assertEquals(true, vh.allOrdersValid(ordersValid));
+
+  }
+
 }
