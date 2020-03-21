@@ -26,5 +26,21 @@ public class HumanPlayerTest {
     
     
   }
+  @Test
+  public void test_rxObject() throws IOException, ClassNotFoundException{
+   ArrayList<Object> obj= new ArrayList<Object>();
+    String test = "Test";
+    obj.add(test);
+    //  Socket s = MockTests.setupMockSocket(obj);
+    AbstractPlayer ap = new HumanPlayer("P1",MockTests.setupMockInput(obj),MockTests.setupMockOutput());
+   
+    String receive=ap.getConnection().receiveObject();
+    assertEquals("Test", receive);
+
+    ap.getConnection().sendObject(obj);
+    
+   
+    
+  }
 
 }

@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 public class MessageInterfaceTest {
   @Test
   public void test_Messages() {
-    ConfirmationMessage c = new ConfirmationMessage(true);
-    StringMessage s = new StringMessage("test");
-    assertEquals(true, c.getMessage());
-    assertEquals("test", s.getMessage());
+    MessageInterface c = new ConfirmationMessage(true);
+    MessageInterface s = new StringMessage("test");
+    assertEquals(true, c.unpacker());
+    assertEquals("test", s.unpacker());
     
 
   }

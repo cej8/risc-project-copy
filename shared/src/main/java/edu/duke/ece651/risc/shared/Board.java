@@ -9,6 +9,10 @@ public class Board implements Serializable {
   private static final long serialVersionUID = 7L;
   List<Region> regions;
 
+  public Board(){
+    this.regions = new ArrayList<Region>();
+  }
+  
   public Board(List<Region> regionList){
     this.setRegions(regionList);
   }
@@ -20,6 +24,14 @@ public class Board implements Serializable {
 
  public void setRegions(List<Region> regionList){
     this.regions = regionList;
+  }
+
+  public Region getRegionByName(String name){
+    Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
+    for (Region r : this.getRegions()){
+      nameToRegionMap.put(r.getName(), r);
+    }
+    return nameToRegionMap.get(name);
   }
 
  //Creates a Map of Players to a List of all their owned regions 

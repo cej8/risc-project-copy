@@ -12,43 +12,51 @@ import org.junit.jupiter.api.Test;
 //@RunWith(MockitoJUnitrunner.class) 
 
 public class BoardTest {
-  /* @Test
-  public void test_Board() throws IOException{
+  @Test
+  public void test_Board() throws IOException {
     //set up mock server
-    ServerSocket mockParentServer = mock(ServerSocket.class);
-    Socket mockClientSocket = mock(Socket.class);
-    InputStream mockInputStream = mock(InputStream.class); 
-    OutputStream mockOutputStream = mock(OutputStream.class); 
-    
-    //Socket socket = new Socket(mockParentServer.getInetAddress, 0);
-    when(mockParentServer.accept()).thenReturn(mockClientSocket);
-    // AbstractPlayer player1 = new HumanPlayer("Player 1", mockClientSocket);
     AbstractPlayer player1 = new HumanPlayer("Player 1");
-  
-    when(mockClientSocket.getInputStream()).thenReturn(mockInputStream);
-    when(mockClientSocket.getOutputStream()).thenReturn(mockOutputStream);
+    Board board = getBoard(player1);
+    // ArrayList<Object> objs = new ArrayList<Object>();
+    // objs.add(board);
+    // Socket mockClientSocket = MockTests.setupMockSocket(objs);    
+    List<Region> regions2 = new ArrayList<Region>();
+    board.setRegions(regions2);
+    assertEquals(regions2, board.getRegions());
+    // }
+  }
 
+  @Test void test_BoardMethods(){
+    AbstractPlayer player1 = new HumanPlayer("Player 1");
+    AbstractPlayer player2 = new HumanPlayer("Player 1");
+    Board board = getBoard(player1);
+    Map<AbstractPlayer, List<Region>> map = board.getPlayerToRegionMap();
+    assertEquals(map.get(player1), board.getRegions());
+    Set<AbstractPlayer> set = board.getPlayerSet();
+    assertEquals(true, set.contains(player1));
+    assertEquals(false, set.contains(player2));
+    
+  }
+   public Board getBoard(AbstractPlayer player1) {
     //set up units/regions/adjancies
     Unit unit = new Unit(10);
-    Unit adjUnit = new Unit(15); 
+    Unit adjUnit = new Unit(15);
     Unit adjUnit2 = new Unit(20);
     Region region = new Region(player1, unit);
+    region.setName("Earth");
     Region adjRegion = new Region(player1, adjUnit);
+    adjRegion.setName("Wind");
     Region adjRegion2 = new Region(player1, adjUnit2);
+    adjRegion2.setName("Fire");
     List<Region> regions = new ArrayList<Region>();
-    regions.add(region);
     regions.add(adjRegion);
-    region.setAdjRegions(regions);
-    adjRegion.setAdjRegions(regions);
-    //create board, make sure get/set works 
+    regions.add(adjRegion2);
+    region.setAdjRegions(regions); //set region's adjacentRegions
+    regions.add(region); //add all regions to regionlist for board
     Board board = new Board(regions);
-    List<Region> regions2 = new ArrayList<Region>();
-    regions2.add(region);
-    regions2.add(adjRegion);
-    regions2.add(adjRegion2); 
     assertEquals(regions, board.getRegions());
-    assertFalse(regions2 == board.getRegions());
-    board.setRegions(regions2);
-    assertEquals(regions2, board.getRegions());    */
-  // }
+    assertEquals(null, board.getRegionByName("Mars"));
+    assertEquals(region, board.getRegionByName("Earth"));
+    return board;
+  }
 }

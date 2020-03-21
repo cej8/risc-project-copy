@@ -1,23 +1,59 @@
 package edu.duke.ece651.risc.shared;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 public class ValidatorHelper {
-  // this class will create a validator helper interface for any arbitrary
-  // validator that is needed
-  private ValidatorInterface regionValidator;
-  private ValidatorInterface unitValidator;
+  private ValidatorInterface<AttackOrder> attackValidator;
+  private ValidatorInterface<MoveOrder> moveValidator;
+  private ValidatorInterface<PlacementOrder> placementValidator;
+  private Board tempBoard;
 
-  ValidatorHelper() {
-    regionValidator = new RegionValidator();
-    //TODO:uncomment when other validator is written
-    // unitValidator = new UnitValidator();
+  public ValidatorHelper(Board currentBoard) {
+    this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
+    this.moveValidator = new MoveValidator(tempBoard);
+    this.attackValidator = new AttackValidator(tempBoard);
   }
 
-  public ValidatorInterface getRegionValidator() {
-    return regionValidator;
+  public ValidatorHelper(AbstractPlayer p, Unit u, Board currentBoard) {
+
+    this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
+    this.placementValidator = new PlacementValidator(p, u, currentBoard);
   }
 
-  public ValidatorInterface getUnitValidator() {
-    return unitValidator;
+  public boolean allOrdersValid(List<OrderInterface> orders) {
+    List<AttackOrder> attackList = new ArrayList<AttackOrder>();
+    List<MoveOrder> moveList = new ArrayList<MoveOrder>();
+    for (OrderInterface order : orders) {
+      if (order.getPriority() == Constants.ATTACK_PRIORITY) {
+        //  System.out.println("Found attack");
+        attackList.add((AttackOrder) order);
+      } else if (order.getPriority() == Constants.MOVE_PRIORITY) {
+        moveList.add((MoveOrder) order);
+        //  System.out.println("Found move");
+      }
+    }
+    boolean validMoves = moveValidator.validateOrders(moveList);
+    System.out.println(validMoves);
+
+    boolean validAttacks = attackValidator.validateOrders(attackList);
+    System.out.println(validAttacks);
+
+    return validMoves && validAttacks;
+
+  }
+
+  public boolean allPlacementsValid(List<OrderInterface> placements) {
+    List<PlacementOrder> pList = new ArrayList<PlacementOrder>();
+    for (OrderInterface order : placements) {
+      if (order.getPriority() == Constants.PLACEMENT_PRIORITY) {
+        pList.add((PlacementOrder) order);
+      }
+
+    }
+
+    return placementValidator.validateOrders(pList);
   }
 
 }

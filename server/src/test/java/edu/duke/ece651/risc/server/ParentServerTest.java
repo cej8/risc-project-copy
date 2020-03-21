@@ -10,28 +10,8 @@ import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.PlacementOrder;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.Unit;
+import edu.duke.ece651.risc.shared.*;
 public class ParentServerTest {
-  /*@Test
-  public void test_ServerSimple() {
-    /*    ParentServer ps = new ParentServer();
-    try{
-      System.out.println("Waiting for connection");
-      ps.waitingForConnections();
-    }
-    catch(Exception e){
-      e.printStackTrace(System.out);
-      return;
-    }
-    ChildServer child = ps.getChildren().get(0);
-    StringMessage message = new StringMessage("I am testing networking");
-    try{
-      child.getPlayer().sendObject(message);
-    }
-    catch(Exception e){
-      e.printStackTrace(System.out);
-    }
-    ps.closeAll();
-    }*/
   /* @Test
   public void test_createStartingGroups(){
     ParentServer ps = new ParentServer();
@@ -54,6 +34,13 @@ public class ParentServerTest {
   public void test_startingGroups(){
     ParentServer ps = new ParentServer();
     //ps.createBoard();
+    HumanPlayer player = new HumanPlayer("player1");
+    HumanPlayer player2 = new HumanPlayer("player2");
+    ChildServer cs = new ChildServer(player,ps);
+    ChildServer cs2 = new ChildServer(player2, ps);
+    ps.addPlayer(cs);
+    ps.addPlayer(cs2);
+
     ps.createStartingGroups();
     Board board = ps.getBoard();
     List<Region> regions = board.getRegions();
@@ -71,6 +58,13 @@ public class ParentServerTest {
    @Test
   public void test_placementOrder() {
     ParentServer ps = new ParentServer();
+    HumanPlayer player = new HumanPlayer("player1");
+    HumanPlayer player2 = new HumanPlayer("player2");
+    ChildServer cs = new ChildServer(player,ps);
+    ChildServer cs2 = new ChildServer(player2, ps);
+    ps.addPlayer(cs);
+    ps.addPlayer(cs2);
+
     ps.createStartingGroups();
     Board board = ps.getBoard();
     List<Region> regions = board.getRegions();

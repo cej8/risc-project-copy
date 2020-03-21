@@ -5,8 +5,9 @@ import java.io.*;
 public abstract class AbstractPlayer implements Serializable{
   protected String name;
   protected boolean isPlaying;
-  protected ObjectInputStream inputStream;
-  protected ObjectOutputStream outputStream;
+  protected Boolean isWatching;
+  protected Connection connection;
+  
   private static final long serialVersionUID = 5L;
 
   public String getName() {
@@ -21,30 +22,16 @@ public abstract class AbstractPlayer implements Serializable{
   public void setPlaying(boolean isPlaying) {
     this.isPlaying = isPlaying;
   }
-
-  public void closeAll(){
-    try{
-      inputStream.close();
-      outputStream.close();
-    }
-    catch(IOException e){
-      e.printStackTrace(System.out);
-    }
+  public Boolean isWatching(){
+    return isWatching;
   }
-  public void sendObject(Object object) throws IOException{
-    outputStream.writeObject(object);
-  }
-  public Object receiveObject() throws IOException, ClassNotFoundException{
-    return inputStream.readObject();
+  public void setWatching(boolean isWatching){
+    this.isWatching = new Boolean(isWatching);
   }
 
-  public ObjectInputStream getInputStream(){
-    return inputStream;
+  public Connection getConnection() {
+    return connection;
   }
-  public ObjectOutputStream getOutputStream(){
-    return outputStream;
-  }
-
 
 }
 
