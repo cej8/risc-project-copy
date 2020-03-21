@@ -24,7 +24,7 @@ private Board tempBoard;
     }
     return false;
   }
-	@Override
+   @Override
 	public boolean validateRegions(List<AttackOrder> attackList) {
 	 for (AttackOrder attack : attackList) {
       if (!isValidAttack(attack)) {
@@ -45,7 +45,7 @@ private Board tempBoard;
   
 
 
-	@Override
+  	@Override
 	public boolean validateUnits(List<AttackOrder> a) {
 	 // check to make sure numUnits in source < attackOrder units
      for (AttackOrder attack : a) {

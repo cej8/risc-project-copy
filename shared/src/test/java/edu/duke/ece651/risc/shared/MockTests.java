@@ -2,6 +2,8 @@ package edu.duke.ece651.risc.shared;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.doNothing;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,6 +15,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.net.InetAddress;
 
 
 public class MockTests {
@@ -60,6 +63,10 @@ public class MockTests {
     OutputStream out = setupMockOutput();
     when(mockClientSocket.getInputStream()).thenReturn(inp);
     when(mockClientSocket.getOutputStream()).thenReturn(out);
+    when(mockClientSocket.getSoTimeout()).thenReturn(60*1000);
+    doNothing().when(mockClientSocket).setSoTimeout(anyInt());
+    when(mockParentServer.getSoTimeout()).thenReturn(60*1000);
+    doNothing().when(mockParentServer).setSoTimeout(anyInt());
    
     return mockClientSocket;
   }

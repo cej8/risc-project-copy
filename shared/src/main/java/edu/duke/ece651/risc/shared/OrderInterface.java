@@ -9,5 +9,6 @@ public interface OrderInterface extends Serializable{
   public int getPriority();
   public void doAction();
 
+  public void convertOrderRegions(Board board);
 
 }

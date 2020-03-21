@@ -47,7 +47,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     return validRegions && validUnits;
   }
 
-	@Override
+  	@Override
 	public boolean validateRegions(List<MoveOrder> moveList) {
 	  for (MoveOrder move : moveList) {
       if (!isValidMove(move)) {
@@ -60,7 +60,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     return true;
 	}
 
-	@Override
+  	@Override
 	public boolean validateUnits(List<MoveOrder> m) {
     for (MoveOrder move : m) {
       Region tempSource = tempBoard.getRegionByName(move.getSource().getName());

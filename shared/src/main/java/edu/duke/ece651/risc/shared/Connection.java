@@ -4,12 +4,26 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.io.Serializable;
 
-public class Connection {
+public class Connection implements Serializable{
+  private static final long serialVersionUID = 11L;
   //this class holds all data associated with a network connection
-  private Socket socket;
-  private ObjectInputStream inputStream;
-  private ObjectOutputStream outputStream;
+  private Socket socket = null;
+  private ObjectInputStream inputStream = null;
+  private ObjectOutputStream outputStream = null;
+
+  public Connection(){
+  }
+  
+  public Connection(Socket socket){
+    this.socket = socket;
+  }
+
+  public Connection(ObjectInputStream inputStream, ObjectOutputStream outputStream){
+    this.inputStream = inputStream;
+    this.outputStream = outputStream;
+  }
 
   public <T> void sendObject(T object) throws IOException {
     outputStream.writeObject(object);
@@ -29,8 +43,17 @@ public class Connection {
 
   public void closeAll() {
     try {
-      inputStream.close();
-      outputStream.close();
+      if(inputStream != null) { inputStream.close(); }
+    } catch (IOException e) {
+      e.printStackTrace(System.out);
+    }
+    try {
+      if(outputStream != null) { outputStream.close(); }
+    } catch (IOException e) {
+      e.printStackTrace(System.out);
+    }
+    try {
+      if(socket != null) { socket.close(); }
     } catch (IOException e) {
       e.printStackTrace(System.out);
     }
@@ -50,6 +73,11 @@ public class Connection {
 
   public void setSocket(Socket socket) {
     this.socket = socket;
+  }
+
+  public void getStreamsFromSocket() throws IOException{
+    this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+    this.inputStream = new ObjectInputStream(socket.getInputStream());
   }
   
 }

@@ -8,16 +8,16 @@ public class ValidatorHelper {
   private ValidatorInterface<AttackOrder> attackValidator;
   private ValidatorInterface<MoveOrder> moveValidator;
   private ValidatorInterface<PlacementOrder> placementValidator;
-  private Board tempBoard; // added tempBoard field -CJ
+  private Board tempBoard; 
 
-  public ValidatorHelper(Board currentBoard) { //changed constructor parameters
+  public ValidatorHelper(Board currentBoard) { 
     this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard); 
   this.moveValidator = new MoveValidator(tempBoard); 
   this.attackValidator = new AttackValidator(tempBoard);
   }
 
   public ValidatorHelper(AbstractPlayer p, Unit u, Board currentBoard) {
-  //TODO: changed constructor parameters -CJ
+
   this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard); 
   this.placementValidator = new PlacementValidator(p, u, currentBoard);
   }
@@ -35,7 +35,6 @@ public class ValidatorHelper {
     
       }
     }
-    //  System.out.println(/*moveValidator.validateUnits(moveList)); //&& */moveValidator.validateRegions(moveList));
     boolean validMoves = moveValidator.validateOrders(moveList);
     System.out.println(validMoves);
     

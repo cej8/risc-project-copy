@@ -17,33 +17,18 @@ public class HumanPlayer extends AbstractPlayer {
   
 public HumanPlayer(String name, Socket s) throws IOException{
     //SHOULD BE DEPRECATED to decouple socket from inputstream and outputstream
-    this.connection = new Connection();
     this.name = name;
-    this.connection.setSocket(s);
+    this.connection = new Connection(s);
+    this.connection.getStreamsFromSocket();
     this.isPlaying = true;
-    this.connection.setOutputStream(new ObjectOutputStream(s.getOutputStream()));
-    this.connection.setInputStream(new ObjectInputStream(s.getInputStream()));
   }
 
 
 
   public HumanPlayer(String name, InputStream in, OutputStream out) throws IOException{
-    this.connection = new Connection();
     this.name = name;
     this.isPlaying = true;
-    this.connection.setOutputStream (new ObjectOutputStream(out));
-    this.connection.setInputStream( new ObjectInputStream(in));
+    this.connection = new Connection(new ObjectInputStream(in), new ObjectOutputStream(out));
   }
-
-  // @Override
-  // public void closeAll(){
-  //   super.closeAll();
-  //   try{
-  //     socket.close();
-  //   }
-  //   catch(Exception e){
-  //     e.printStackTrace();
-  //   }
-  // }
   
 }

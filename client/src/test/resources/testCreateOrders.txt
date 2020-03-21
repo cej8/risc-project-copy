@@ -1,13 +1,18 @@
-Y
+bad input
+m
 M
-Earth
-Mars
-f
-3
-a
-Mars
-Jupiter
-wrong
-4
-d
+q
+A
+b
+B
 
+1.
+.2
+3.4
+5
+A
+A
+C
+3.
+3
+D

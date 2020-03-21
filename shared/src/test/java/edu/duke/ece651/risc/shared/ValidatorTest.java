@@ -50,7 +50,6 @@ public class ValidatorTest {
     assertEquals(false, pv.isValidPlacement(placements.get(1),p1));//invalid (does not own)
     assertEquals(false, pv.validateRegions(placements));
 
-    
   }
 
   private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2){

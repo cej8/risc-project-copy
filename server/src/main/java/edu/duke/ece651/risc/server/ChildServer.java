@@ -10,6 +10,8 @@ public class ChildServer extends Thread{
   private ParentServer parent;
   //private ValidateHelper validator
 
+  boolean firstCall = true;
+
   public ChildServer(AbstractPlayer player, ParentServer parent){
     this.player = player;
     this.parent = parent;
@@ -29,6 +31,10 @@ public class ChildServer extends Thread{
 
   @Override
   public void run(){
+    long startTime = System.currentTimeMillis();
+    //Timeout is Socket's timeout
+    long maxTime = (long)(parent.getTURN_WAIT_MINUTES()*60*1000);
+    
     //If player isn't playing or isn't watching then skip
     if(!player.isPlaying() || !player.isWatching()){
       return;
@@ -40,6 +46,13 @@ public class ChildServer extends Thread{
         
         //Prompt for region
         while(true){
+          //If too long --> kill player
+          if(System.currentTimeMillis() - startTime > maxTime){
+            player.setPlaying(false);
+            player.getConnection().closeAll();
+            return;
+          }
+          
           //Send board
           player.getConnection().sendObject(parent.getBoard());
         
@@ -58,6 +71,13 @@ public class ChildServer extends Thread{
 
         //Prompt for placement
         while(true){
+          //If too long --> kill player
+          if(System.currentTimeMillis() - startTime > maxTime){
+            player.setPlaying(false);
+            player.getConnection().closeAll();
+            return;
+          }
+          
           //Send board
           player.getConnection().sendObject(parent.getBoard());
 
@@ -66,7 +86,7 @@ public class ChildServer extends Thread{
           placementOrders = (List<OrderInterface>)(player.getConnection().receiveObject());
           //TODO: Validate orders --> loop if fail
           //if(placementOrders not valid){
-          //player.getConnection().sendObject(new StringMessage("Fail: placements invalid"));
+          //player.sendObject(new StringMessage("Fail: placements invalid"));
           //continue;
           //}
 
@@ -82,9 +102,9 @@ public class ChildServer extends Thread{
         //If called then new turn --> send continue
         player.getConnection().sendObject(new StringMessage("Continue"));
         //Send player alive message
-        player.getConnection().sendObject(new ConfirmationMessage(parent.isAlive(player)));
+        player.getConnection().sendObject(new ConfirmationMessage(parent.playerHasARegion(player)));
         //If alive then expecting orders
-        if(parent.isAlive(player)){
+        if(parent.playerHasARegion(player)){
           //Prompt for orders --> validate
         
           while(true){
@@ -96,7 +116,7 @@ public class ChildServer extends Thread{
 
             //TODO: Validate orders --> loop if fail
             //if(orders not valid){
-            //player.getConnection().sendObject(new StringMessage("Fail: orders invalid"));
+            //player.sendObject(new StringMessage("Fail: orders invalid"));
             //continue;
             //}
             parent.addOrdersToMap(orders);
