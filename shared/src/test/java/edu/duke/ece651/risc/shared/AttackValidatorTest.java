@@ -49,6 +49,17 @@ public class AttackValidatorTest {
   }
   }
 
+  @Test
+  public void test_UnitsandRegions() {
+    List<Region> regions = getRegions();
+    Board board = new Board(regions);
+    ValidatorInterface<AttackOrder> av = new AttackValidator(board);
+    AttackOrder mercuryAttackSaturn = new AttackOrder(regions.get(3), regions.get(4), new Unit(5));
+    List<AttackOrder> attacks = new ArrayList<AttackOrder>();
+    attacks.add(mercuryAttackSaturn);
+    assertEquals(true, av.validateOrders(attacks));
+  }
+
   private List<Region> getRegions(){
     AbstractPlayer p1 = new HumanPlayer("Player 1");
     AbstractPlayer p2 = new HumanPlayer("Player 2");
