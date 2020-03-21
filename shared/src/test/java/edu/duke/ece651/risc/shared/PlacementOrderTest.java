@@ -14,19 +14,23 @@ public class PlacementOrderTest {
     Region r1= new Region(p1, new Unit(10));
     Region r2 = new Region(p1, new Unit(5));
     Region r3 = new Region(p1, new Unit(8));
+    Board board = new Board();
     List<Region> regions = new ArrayList<Region>();
     regions.add(r1);
     regions.add(r2);
     regions.add(r3);
-    Board board = new Board(regions);
+    board.setRegions(regions);
     for(int i = 0; i < regions.size(); i++) {
       OrderInterface placement = new PlacementOrder(regions.get(i),new Unit(i + 5));
       placement.doAction();
+      assertEquals(Constants.PLACEMENT_PRIORITY, placement.getPriority());
       System.out.println("Placement number: " + (i + 5));
     }
     assertEquals(5,regions.get(0).getUnits().getUnits());
     assertEquals(6,regions.get(1).getUnits().getUnits());
-    assertEquals(7,regions.get(2).getUnits().getUnits());
+    assertEquals(7, regions.get(2).getUnits().getUnits());
+
+
   }
 
 }
