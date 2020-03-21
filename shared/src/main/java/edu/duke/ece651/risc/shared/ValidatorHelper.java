@@ -10,25 +10,18 @@ public class ValidatorHelper {
   private ValidatorInterface<PlacementOrder> placementValidator;
   private Board tempBoard; // added tempBoard field -CJ
 
-  // public ValidatorHelper(Board currentBoard) { //changed constructor parameters
-  // -CJ
-  // this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard); //TODO: you will
-  // need the DeepCopy.java for this to work on your branch -CJ
-  // this.moveValidator = new MoveValidator(tempBoard); //TODO: you will need the
-  // updated Move/AttackValidator.java with new constructors
-  // this.attackValidator = new AttackValidator(tempBoard);
-  // }
+  public ValidatorHelper(Board currentBoard) { //changed constructor parameters
+    this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard); 
+  this.moveValidator = new MoveValidator(tempBoard); 
+  this.attackValidator = new AttackValidator(tempBoard);
+  }
 
-  // public ValidatorHelper(AbstractPlayer p, Unit u, Board currentBoard) {
-  // //TODO: changed constructor parameters -CJ
-  // this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard); //TODO: you will
-  // need the DeepCopy.java for this to work on your branch -CJ
-  // this.placementValidator = new PlacementValidator(p, u, currentBoard);
-  // }
+  public ValidatorHelper(AbstractPlayer p, Unit u, Board currentBoard) {
+  //TODO: changed constructor parameters -CJ
+  this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard); 
+  this.placementValidator = new PlacementValidator(p, u, currentBoard);
+  }
 
-  // TODO: order of what goes on in this method needs to be changed as discussed
-  
-  // -CJ
   public boolean allOrdersValid(List<OrderInterface> orders) {
     List<AttackOrder> attackList = new ArrayList<AttackOrder>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
@@ -43,10 +36,12 @@ public class ValidatorHelper {
       }
     }
     //  System.out.println(/*moveValidator.validateUnits(moveList)); //&& */moveValidator.validateRegions(moveList));
-    boolean validMoves =/* moveValidator.validateUnits(moveList) && */moveValidator.validateRegions(moveList);
+    boolean validMoves = moveValidator.validateOrders(moveList);
+    System.out.println(validMoves);
     
-    boolean validAttacks = attackValidator.validateRegions(attackList) && attackValidator.validateUnits(attackList);
-
+    boolean validAttacks = attackValidator.validateOrders(attackList);
+    System.out.println(validAttacks);
+    
     return validMoves && validAttacks; 
 
   }
@@ -54,13 +49,13 @@ public class ValidatorHelper {
   public boolean allPlacementsValid(List<OrderInterface> placements) {
     List<PlacementOrder> pList = new ArrayList<PlacementOrder>();
     for (OrderInterface order : placements) {
-      if (order instanceof PlacementOrder) {
+      if (order.getPriority()==1) {
         pList.add((PlacementOrder) order);
       }
 
     }
 
-    return placementValidator.validateRegions(pList) && placementValidator.validateUnits(pList);
+    return placementValidator.validateOrders(pList);
   }
 
 }

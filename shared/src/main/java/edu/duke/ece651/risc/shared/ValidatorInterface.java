@@ -6,7 +6,7 @@ public interface ValidatorInterface<T> {
   // public boolean movesAreValid(List <MoveOrder> m);
   // public boolean attacksAreValid(List <AttackOrder> a);
   //public boolean placementsAreValid(List <PlacementOrder> p, AbstractPlayer player);
-
+	public boolean validateOrders(List<T> orders);
   public boolean validateUnits(List<T> orders);
   public boolean validateRegions(List<T> orders);
                              

@@ -14,9 +14,9 @@ public class PlacementValidatorTest {
     AbstractPlayer player = new HumanPlayer("Player 1");
     int totalUnits = 18; //validUnits.size() * 3;
     Unit playerUnits = new Unit(totalUnits);
-    ValidatorInterface pv = new PlacementValidator(player, playerUnits);
     List<Region> regions = getRegions(player);
-
+    Board board = new Board(regions);
+    ValidatorInterface<PlacementOrder> pv = new PlacementValidator(player, playerUnits, board);
     //true: valid units
     List<Unit> validUnits = get6UnitList(3, 3, 3, 3, 3, 3);
     List<PlacementOrder> validPlacements = getPlacements(regions, validUnits);
@@ -39,7 +39,29 @@ public class PlacementValidatorTest {
 
     //true: regions for placement are valid
     assertEquals(true, pv.validateRegions(validPlacements));
+
+     AbstractPlayer playerP = new HumanPlayer("Player P");
+     List<Region> regionsP = getRegions(playerP);
+     Board boardp = new Board(regionsP);
     
+     ValidatorHelper ph = new ValidatorHelper(playerP, new Unit(18), boardp);
+     //   OrderInterface p1= getPlacements(regions, validUnits).get(0);
+     // OrderInterface p2=new PlacementOrder(regionsP.get(0), new Unit(3));
+     List<OrderInterface> plist = getVHPlacements(regionsP, validUnits);
+     //  plist.add(p1);
+     // plist.add(p2);
+     assertEquals(true,ph.allPlacementsValid(plist));
+
+    
+  }
+
+  private List<OrderInterface> getVHPlacements(List<Region> regions, List<Unit> units) {
+    assertEquals(regions.size(), units.size());
+    List<OrderInterface> placements = new ArrayList<OrderInterface>();
+    for (int i = 0; i < regions.size(); i++){
+      placements.add(new PlacementOrder(regions.get(i), units.get(i)));
+    }
+    return placements;
   }
 
   private List<PlacementOrder> getPlacements(List<Region> regions, List<Unit> units) {

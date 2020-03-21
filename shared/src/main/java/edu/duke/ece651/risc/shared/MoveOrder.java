@@ -19,5 +19,10 @@ public class MoveOrder extends SourceDestinationOrder {
     source.setUnits(new Unit(source.getUnits().getUnits() - this.units.getUnits()));
     destination.setUnits(new Unit(destination.getUnits().getUnits()+this.units.getUnits()));
 	}
+ public void doAction(Region s, Region d, Unit u) {
+    s.setUnits(new Unit(s.getUnits().getUnits() - u.getUnits()));
+    d.setUnits(new Unit(d.getUnits().getUnits()+u.getUnits()));
+  }
+
 
 }
