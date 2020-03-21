@@ -1,7 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 // Class to handle keeping track of region owner, unit numbers, and adjacent regions
 public class Region implements Serializable {
@@ -19,11 +19,13 @@ public class Region implements Serializable {
     setName(n);
     setOwner(null);
     setUnits(null);
+    this.adjRegions = new ArrayList<Region>();
   }
   
   public Region(AbstractPlayer p, Unit u){// will need to be modified
     setOwner(p);
     setUnits(u);
+    this.adjRegions = new ArrayList<Region>();
   }
 
   public void assignRegion(AbstractPlayer p, Unit u) {
