@@ -11,7 +11,7 @@ public class MoveOrder extends SourceDestinationOrder {
   }
   @Override
   public int getPriority(){
-    return 1000;
+    return Constants.MOVE_PRIORITY;
   }
 	@Override
   public void doAction() {

@@ -17,7 +17,7 @@ public void doAction(Region d, Unit u) {
 
 @Override
 public int getPriority() {
- 	return 1;
+ 	return Constants.PLACEMENT_PRIORITY;
 }
 
 }
