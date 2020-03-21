@@ -7,11 +7,6 @@ import java.util.*;
 import java.io.*;
 
 public class Client {
-  /*
-  private final double START_WAIT_MINUTES = 2.5;
-  private final double TURN_WAIT_MINUTES = 1;
-  private final int MAX_UNITS = 15;*/
-  
   private Connection connection;
   Board board;
   boolean isPlaying = true;
