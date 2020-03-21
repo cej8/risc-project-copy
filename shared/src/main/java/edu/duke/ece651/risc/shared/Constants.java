@@ -15,4 +15,8 @@ public final class Constants {
   // default port number
   public static final int DEFAULT_PORT = 12345;
 
+  //priorities for ordering moves 
+  public static final int ATTACK_PRIORITY = 5000;
+  public static final int MOVE_PRIORITY = 1000;
+  public static final int PLACEMENT_PRIORITY = 1;
 }

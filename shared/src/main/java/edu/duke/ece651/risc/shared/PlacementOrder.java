@@ -11,13 +11,13 @@ public class PlacementOrder extends DestinationOrder {
   public void doAction(){
     destination.setUnits(this.units);
   }
-public void doAction(Region d, Unit u) {
+  public void doAction(Region d, Unit u) {
     d.setUnits(u);
   }
 
-@Override
-public int getPriority() {
- 	return 1;
+  @Override
+  public int getPriority() {
+    return Constants.PLACEMENT_PRIORITY;
 }
 
 }

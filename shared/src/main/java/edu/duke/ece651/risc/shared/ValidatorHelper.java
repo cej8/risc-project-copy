@@ -8,47 +8,47 @@ public class ValidatorHelper {
   private ValidatorInterface<AttackOrder> attackValidator;
   private ValidatorInterface<MoveOrder> moveValidator;
   private ValidatorInterface<PlacementOrder> placementValidator;
-  private Board tempBoard; 
+  private Board tempBoard;
 
-  public ValidatorHelper(Board currentBoard) { 
-    this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard); 
-  this.moveValidator = new MoveValidator(tempBoard); 
-  this.attackValidator = new AttackValidator(tempBoard);
+  public ValidatorHelper(Board currentBoard) {
+    this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
+    this.moveValidator = new MoveValidator(tempBoard);
+    this.attackValidator = new AttackValidator(tempBoard);
   }
 
   public ValidatorHelper(AbstractPlayer p, Unit u, Board currentBoard) {
 
-  this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard); 
-  this.placementValidator = new PlacementValidator(p, u, currentBoard);
+    this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
+    this.placementValidator = new PlacementValidator(p, u, currentBoard);
   }
 
   public boolean allOrdersValid(List<OrderInterface> orders) {
     List<AttackOrder> attackList = new ArrayList<AttackOrder>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
     for (OrderInterface order : orders) {
-      if (order.getPriority() == 5000) {
+      if (order.getPriority() == Constants.ATTACK_PRIORITY) {
         System.out.println("Found attack");
         attackList.add((AttackOrder) order);
-      } else if (order.getPriority() == 1000) {
+      } else if (order.getPriority() == Constants.MOVE_PRIORITY) {
         moveList.add((MoveOrder) order);
-           System.out.println("Found move");
-    
+        System.out.println("Found move");
+
       }
     }
     boolean validMoves = moveValidator.validateOrders(moveList);
     System.out.println(validMoves);
-    
+
     boolean validAttacks = attackValidator.validateOrders(attackList);
     System.out.println(validAttacks);
-    
-    return validMoves && validAttacks; 
+
+    return validMoves && validAttacks;
 
   }
 
   public boolean allPlacementsValid(List<OrderInterface> placements) {
     List<PlacementOrder> pList = new ArrayList<PlacementOrder>();
     for (OrderInterface order : placements) {
-      if (order.getPriority()==1) {
+      if (order.getPriority() == Constants.PLACEMENT_PRIORITY) {
         pList.add((PlacementOrder) order);
       }
 
