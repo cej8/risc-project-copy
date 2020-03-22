@@ -55,7 +55,7 @@ public class ParentServerTest {
       System.out.println();
     }
   }
-  // @Test
+  @Test
    public void test_placementOrder(){
     ParentServer ps = new ParentServer();
     HumanPlayer player = new HumanPlayer("player1");

@@ -62,6 +62,7 @@ public class ChildServer implements Runnable{
         while(true){
           //If too long --> kill player
           if(System.currentTimeMillis() - startTime > maxTime){
+            System.out.println(player.getName() + " took too long, killing connection");
             player.setPlaying(false);
             playerConnection.closeAll();
             return;
@@ -85,6 +86,7 @@ public class ChildServer implements Runnable{
         while(true){
           //If too long --> kill player
           if(System.currentTimeMillis() - startTime > maxTime){
+            System.out.println(player.getName() + " took too long, killing connection");
             player.setPlaying(false);
             playerConnection.closeAll();
             return;
@@ -93,7 +95,7 @@ public class ChildServer implements Runnable{
           playerConnection.sendObject(parent.getBoard());
           //Retrieve orders
           List<OrderInterface> placementOrders;
-          placementOrders = (List<OrderInterface>)(playerConnection.receiveObject());
+          placementOrders = (ArrayList<OrderInterface>)(playerConnection.receiveObject());
           for(int i = 0; i < placementOrders.size(); i++){
             placementOrders.get(i).convertOrderRegions(parent.getBoard());
           }
@@ -124,7 +126,7 @@ public class ChildServer implements Runnable{
             playerConnection.sendObject(parent.getBoard());
 
             //Prompt for orders
-            List<OrderInterface> orders = (List<OrderInterface>)(playerConnection.receiveObject());
+            List<OrderInterface> orders = (ArrayList<OrderInterface>)(playerConnection.receiveObject());
             for(int i = 0; i < orders.size(); i++){
               orders.get(i).convertOrderRegions(parent.getBoard());
             }
@@ -161,11 +163,12 @@ public class ChildServer implements Runnable{
     }
     catch(Exception e){
       //If anything fails then kill player
+      System.out.println(player.getName() + " killing connection");
       e.printStackTrace();
       player.setPlaying(false);
       playerConnection.closeAll();
       return;
     }
-    System.out.println(player.getName() + " exiting thread");
+    System.out.println(player.getName() + " exiting thread gracefully");
   }
 }
