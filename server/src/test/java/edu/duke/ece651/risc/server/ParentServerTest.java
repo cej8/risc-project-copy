@@ -326,7 +326,8 @@ public class ParentServerTest {
     TextDisplay cout = new TextDisplay();
 
     //Set to 2 players so we don't have to wait forever...
-    ParentServer server = new ParentServer();
+    int port = 12347;
+    ParentServer server = new ParentServer(port);
     server.setMAX_PLAYERS(2);
     //Set max turn time to 10 seconds...
     server.setTURN_WAIT_MINUTES(10.0/60);
@@ -335,11 +336,11 @@ public class ParentServerTest {
     
     Thread.sleep(1000);
     //Headless sockets connect
-    Socket c1 = new Socket("localhost", Constants.DEFAULT_PORT);
+    Socket c1 = new Socket("localhost", port);
     ObjectInputStream c1in = new ObjectInputStream(c1.getInputStream());
     ObjectOutputStream c1out = new ObjectOutputStream(c1.getOutputStream());
     Thread.sleep(5000);
-    Socket c2 = new Socket("localhost", Constants.DEFAULT_PORT);
+    Socket c2 = new Socket("localhost", port);
     ObjectInputStream c2in = new ObjectInputStream(c2.getInputStream());
     ObjectOutputStream c2out = new ObjectOutputStream(c2.getOutputStream());
 

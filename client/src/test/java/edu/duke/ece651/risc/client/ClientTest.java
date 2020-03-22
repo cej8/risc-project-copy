@@ -101,6 +101,7 @@ public class ClientTest {
     public Socket socket;
     public ObjectOutputStream oos;
     public ObjectInputStream ois;
+    public boolean spin = true;
 
     public dummyServerSocket(int port){
       try{
@@ -122,8 +123,16 @@ public class ClientTest {
           return;
         }
       }
-
-      while(true){ /* spin */}
+      try{
+        Thread.sleep(500);
+        serverSocket.close();
+        ois.close();
+        oos.close();
+      }
+      catch(Exception e){
+        e.printStackTrace();
+      }
+    
     }
   }
   
@@ -139,7 +148,7 @@ public class ClientTest {
     inputClient.getConnection().closeAll();
 
     String addr = "127.0.0.1";
-    int port = 12345;
+    int port = 12346;
     Client localConnection = new Client();
     try{
       Thread t = new Thread(new dummyServerSocket(port));
@@ -148,7 +157,7 @@ public class ClientTest {
       localConnection.makeConnection(addr, port);
       assertEquals(localConnection.getConnection().getSocket().getInetAddress().getHostAddress(), addr);
       assertEquals(localConnection.getConnection().getSocket().getPort(), port);
-      t.stop();
+      
     }
     catch(Exception e){
       e.printStackTrace(System.out);
