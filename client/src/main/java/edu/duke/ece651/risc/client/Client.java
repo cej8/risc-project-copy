@@ -40,6 +40,10 @@ public class Client {
   public ClientInputInterface getClientInput(){
     return clientInput;
   }
+  public void setClientInput(ClientInputInterface clientInput){
+    this.clientInput.close();
+    this.clientInput = clientInput;
+  }
   public ClientOutputInterface getClientOutput(){
     return clientOutput;
   }
@@ -69,15 +73,6 @@ public class Client {
       socket.setSoTimeout((int)(Constants.START_WAIT_MINUTES*60*1000));
     }
     catch(Exception e){
-      e.printStackTrace(System.out);
-    }
-  }
-  public void closeAll(){
-    try {
-      connection.getSocket().close();
-      connection.closeAll();
-      System.out.println("Local connection closed");
-    } catch (IOException e){
       e.printStackTrace(System.out);
     }
   }
@@ -119,8 +114,7 @@ public class Client {
         clientOutput.displayString(response);
         if(response.matches("^Fail:.*$")){ continue;}
         if(response.matches("^Success:.*$")){ break;}
-      }
-      
+      }      
       while(true){
         //Server then sends board again
         board = (Board)(connection.receiveObject());
@@ -151,6 +145,7 @@ public class Client {
         clientOutput.displayString("How many units would you like to place in " + regionName + "?");
         Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
         PlacementOrder placementOrder = new PlacementOrder(placement, units);
+        System.out.println(units.getUnits());
         placementList.add(placementOrder);
         break;
       } catch (NumberFormatException ne) {
@@ -160,16 +155,17 @@ public class Client {
     }
     return placementList;
   }
-  
+
   public List<PlacementOrder> createPlacements(){
     // Prompt user for placements, create list of placementOrders, send to server
-     clientOutput.displayString("You are " + player.getName() + ", prepare to place " + Constants.MAX_UNITS + " units.");
+    int startUnits = Constants.UNIT_START_MULTIPLIER*board.getNumRegionsOwned(player);
+     clientOutput.displayString("You are " + player.getName() + ", prepare to place " + startUnits + " units.");
     List<PlacementOrder> placementList = new ArrayList<PlacementOrder>();
     List<Region> regionList = board.getRegions();
     Region placement;
     String regionName;
     for (int i = 0; i < regionList.size(); i++){
-      if (player.getName() == regionList.get(i).getOwner().getName()){
+      if (player.getName().equals(regionList.get(i).getOwner().getName())){
         placement = regionList.get(i);
         regionName = regionList.get(i).getName();
         placementList = placementOrderHelper(placementList,regionName,placement);
@@ -188,51 +184,31 @@ public class Client {
     clientOutput.displayString("Region does not exist.");
     return null;
   }
-  
-  public List<OrderInterface> attackOrderHelper(List<OrderInterface> orderList){
+  // Helper method to create MoveOrder or AttackOrder
+  public List<OrderInterface> moveAttackHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord, String unitKeyWord){
     Region source = null;
     Region destination = null;
     while (source == null) {
-      clientOutput.displayString("What region do you want to attack from?");
+      clientOutput.displayString("What region do you want to " + sourceKeyWord + " from?");
       source = orderHelper(clientInput.readInput());
     }
     while (destination == null) {
-      clientOutput.displayString("What region do you want to attack?");
+      clientOutput.displayString("What region do you want to " + destKeyWord + "?");
       destination = orderHelper(clientInput.readInput());
     }
     while (true) {
       try {
-        clientOutput.displayString("How many units do you want to attack?");
+        clientOutput.displayString("How many units do you want to " + unitKeyWord + "?");
         Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
-        AttackOrder attackOrder = new AttackOrder(source, destination, units);
-        orderList.add(attackOrder);
-        break;
-      } catch (NumberFormatException ne) {
-        //ne.printStackTrace();
-         clientOutput.displayString("That was not an integer, please try again.");
-      }
-    }
-   return orderList;
-  }
-  
-  public List<OrderInterface> moveOrderHelper(List<OrderInterface> orderList){
-    Region source = null;
-    Region destination = null;
-    while (source == null) {
-      clientOutput.displayString("What region do you want to move units from?");
-      source = orderHelper(clientInput.readInput());
-    }
-    while (destination == null) {
-      clientOutput.displayString("What region do you want to move units to?");
-      destination = orderHelper(clientInput.readInput());
-    }
-    while (true) {
-      try {
-        clientOutput.displayString("How many units do you want to move?");
-        Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
-        MoveOrder moveOrder = new MoveOrder(source, destination, units);
-        orderList.add(moveOrder);
-        break;
+        if (unitKeyWord.equals("move")){
+          MoveOrder moveOrder = new MoveOrder(source, destination, units);
+          orderList.add(moveOrder);
+          break;
+        } else {
+          AttackOrder attackOrder = new AttackOrder(source, destination, units);
+          orderList.add(attackOrder);
+          break;
+        }
       } catch (NumberFormatException ne) {
         //ne.printStackTrace();
          clientOutput.displayString("That was not an integer, please try again.");
@@ -243,8 +219,7 @@ public class Client {
   
   public List<OrderInterface> createOrders(){
     //prompt user for orders --> create list of OrderInterface --> send to server
-    List<OrderInterface> orderList = new ArrayList<OrderInterface>();
-    
+    List<OrderInterface> orderList = new ArrayList<OrderInterface>();    
    String response = null;
    boolean orderSelect = true;
    while (orderSelect) {
@@ -255,10 +230,12 @@ public class Client {
        orderSelect = false;
        break;
      } else if (response.equals("M")){
-       orderList = moveOrderHelper(orderList);
+       //orderList = moveOrderHelper(orderList);
+       orderList = moveAttackHelper(orderList,"move units","move units to","move");
        clientOutput.displayString("You made a Move order, what else would you like to do?");
      } else if (response.equals("A")){
-       orderList = attackOrderHelper(orderList);
+       //orderList = attackOrderHelper(orderList);
+       orderList = moveAttackHelper(orderList,"attack from","attack","attack");
        clientOutput.displayString("You made an Attack order, what else would you like to do?");
      } else {
        clientOutput.displayString("Please select either M, A, or D");

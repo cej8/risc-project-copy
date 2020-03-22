@@ -1,12 +1,11 @@
 package edu.duke.ece651.risc.shared;
 
 import java.io.*;
-
-public abstract class AbstractPlayer implements Serializable{
+// Abstract class to handle Player specifc methods 
+public abstract class AbstractPlayer implements Serializable, Comparable<AbstractPlayer>{
   protected String name;
   protected boolean isPlaying;
   protected Boolean isWatching;
-  protected Connection connection;
   
   private static final long serialVersionUID = 5L;
 
@@ -26,11 +25,11 @@ public abstract class AbstractPlayer implements Serializable{
     return isWatching;
   }
   public void setWatching(boolean isWatching){
-    this.isWatching = new Boolean(isWatching);
+    this.isWatching = Boolean.valueOf(isWatching); //new Boolean(isWatching);
   }
-
-  public Connection getConnection() {
-    return connection;
+  @Override
+  public int compareTo(AbstractPlayer p){
+    return this.name.compareTo(p.getName());
   }
 
 }

@@ -4,13 +4,18 @@ import edu.duke.ece651.risc.shared.*;
 import java.net.*;
 import java.util.*;
 import java.io.*;
+import java.util.concurrent.*;
 
-
-public class ParentServer {
+// Class handles all server side implmentation including ChildServer handling
+public class ParentServer implements Runnable{
   private ServerSocket serverSocket = null;
   private List<ChildServer> children;
   private Board board;
   Map<String, List<OrderInterface>> orderMap;
+  ExecutorService threads = Executors.newFixedThreadPool(Constants.MAX_PLAYERS);
+  private int MAX_PLAYERS = Constants.MAX_PLAYERS;
+  private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
+  private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
 
   public ParentServer(){
     BoardGenerator genBoard = new BoardGenerator();
@@ -28,6 +33,10 @@ public class ParentServer {
   public void setSocket(int port) throws IOException{
     serverSocket = new ServerSocket(port);
   }
+
+  public ServerSocket getServerSocket(){
+    return serverSocket;
+  }
   
   public List<ChildServer> getChildren(){
     return children;
@@ -35,6 +44,24 @@ public class ParentServer {
 
   public double getTURN_WAIT_MINUTES(){
     return Constants.TURN_WAIT_MINUTES;
+  }
+
+  //set's for testing
+  public void setMAX_PLAYERS(int MAX_PLAYERS){
+    this.MAX_PLAYERS = MAX_PLAYERS;
+    try{
+      threads = Executors.newFixedThreadPool(this.MAX_PLAYERS);
+    }
+    //For debug --> assume we won't put negative
+    catch(Exception e){
+      e.printStackTrace();
+    }
+  }
+  public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
+    this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
+  }
+  public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES){
+    this.START_WAIT_MINUTES = START_WAIT_MINUTES;
   }
   
   public void waitingForConnections() throws IOException {
@@ -44,20 +71,23 @@ public class ParentServer {
 
     long startTime = -1;
     //Start time 2.5 minutes after first connection
-    long gameStartTime = (long)(Constants.START_WAIT_MINUTES*60*1000);
+    long gameStartTime = (long)(START_WAIT_MINUTES*60*1000);
     
-    while (children.size() < Constants.MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
+    while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
       HumanPlayer newPlayer;
+      Connection newPlayerConnection;
       try {
         if(startTime != -1){
           serverSocket.setSoTimeout((int)(gameStartTime - (System.currentTimeMillis()-startTime)));
         }
         //Accept, set timeout to 60 seconds, create player
         Socket playerSocket = serverSocket.accept();
-        playerSocket.setSoTimeout((int)(Constants.TURN_WAIT_MINUTES*60*1000));
-        newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1), playerSocket);
+        playerSocket.setSoTimeout((int)(TURN_WAIT_MINUTES*60*1000));
+        newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1));
+        newPlayerConnection = new Connection(playerSocket);
+        newPlayerConnection.getStreamsFromSocket();
         //Send object to client
-        newPlayer.getConnection().sendObject(newPlayer);
+        newPlayerConnection.sendObject(newPlayer);
       } catch (Exception e) {
         e.printStackTrace(System.out);
         continue;
@@ -68,12 +98,18 @@ public class ParentServer {
         startTime = System.currentTimeMillis();
       }
       //Add player to list
-      children.add(new ChildServer(newPlayer, this));
+      children.add(new ChildServer(newPlayer, newPlayerConnection, this));
     }
-    
+    System.out.println("All players or time limit, proceeding");
   }
   public Board getBoard(){
     return this.board;
+  }
+  public void setBoard(Board board){
+    this.board = board;
+  }
+  public Map<String, List<OrderInterface>> getOrderMap(){
+    return orderMap;
   }
   // Helper method to add player to global player list - children
   public void addPlayer(ChildServer c){
@@ -91,6 +127,7 @@ public class ParentServer {
       r.assignRegion(player,u);
     }
   }
+  // method to create starting groups for game based on number of players
   public void createStartingGroups(){
     int numPlayers = children.size();
     //int numPlayers = 5;
@@ -110,50 +147,51 @@ public class ParentServer {
       groupName++;
     }
   }
+  // Close serverSocket for all children
   public void closeAll(){
     for(ChildServer child : children){
-      child.getPlayer().getConnection().closeAll();
+      if(child.getPlayerConnection() != null){ child.getPlayerConnection().closeAll(); }
     }
-    try{
-      serverSocket.close();
-    }
-    catch(Exception e){
-      e.printStackTrace(System.out);
+    if(serverSocket != null){
+      try{
+        serverSocket.close();
+      }
+      catch(Exception e){
+        e.printStackTrace(System.out);
+      }
     }
   }
 
   public synchronized boolean assignGroups(String groupName, AbstractPlayer player){
     //Method to set initial groups (groupName must be of form "Group _" where _ is A-E)
 
-    boolean succeed = false;
-
     //Check valid input
     if(!groupName.matches("^Group [A-F]$")){
-      return succeed;
+      return false;
     }
-    //If valid then replace all group with player
+
+    boolean foundRegion = false;
+    //If valid then replaceb all group with player
     for(Region r : board.getRegions()){
       if(r.getOwner().getName().equals(groupName)){
         r.setOwner(player);
         //Only change boolean if something replaced
-        succeed = true;
+        foundRegion = true;
       }
     }
 
-    return succeed;
+    return foundRegion;
   }
 
   public void callThreads() throws InterruptedException{
     //Method to call child threads, will prompt player and add all orders to map
-    
+    System.out.println("Calling threads");
+    List<Callable<Object>> todo = new ArrayList<Callable<Object>>(children.size());
     for(int i = 0; i < children.size(); i++){
-      children.get(i).start();
+      todo.add(Executors.callable(children.get(i)));
     }
-
-    for(int i = 0; i < children.size(); i++){
-      children.get(i).join();
-    }
-
+    threads.invokeAll(todo);
+    System.out.println("Threads finished");
   }
 
   public Set<AbstractPlayer> playersLeft(){
@@ -164,11 +202,11 @@ public class ParentServer {
     }
     return players;
   }
-
+  // return number of players left 'alive' in game
   public int numPlayersLeft(){
     return playersLeft().size();
   }
-
+  // returns boolean true if player owns a region
   public boolean playerHasARegion(AbstractPlayer player){
     for(Region r : board.getRegions()){
       if(r.getOwner().getName() == player.getName()){
@@ -196,15 +234,15 @@ public class ParentServer {
         continue;
       }
 
-      //Call conversion method to get proper regions on server's board
-      castOrder.convertOrderRegions(board);
-
+      String className = castOrder.getClass().getName();
+      className = className.substring(className.lastIndexOf('.') + 1);
+      
       //Add list if not present for order type
-      if(!orderMap.containsKey(castOrder.getClass().getName())){
-        orderMap.put(castOrder.getClass().getName(), new ArrayList<OrderInterface>());
+      if(!orderMap.containsKey(className)){
+        orderMap.put(className, new ArrayList<OrderInterface>());
       }
       //Add order to list
-      orderMap.get(castOrder.getClass().getName()).add(castOrder);
+      orderMap.get(className).add(castOrder);
     }
   }
 
@@ -212,6 +250,11 @@ public class ParentServer {
     //Apply orders to map
     //Mostly hardcoded due to explicit order ordering
 
+    //Reshuffle all subLists
+    for(String key : orderMap.keySet()){
+      List<OrderInterface> orders = orderMap.get(key);
+      Collections.shuffle(orders);
+    }
     if(orderMap.containsKey("PlacementOrder")){
       applyOrderList(orderMap.get("PlacementOrder"));
     }
@@ -220,8 +263,7 @@ public class ParentServer {
     }
     if(orderMap.containsKey("AttackOrder")){
       applyOrderList(orderMap.get("AttackOrder"));
-    }
-    
+    }    
   }
 
   public void applyOrderList(List<OrderInterface> orders){
@@ -231,12 +273,16 @@ public class ParentServer {
     }
     orders.clear();
   }
-
-
+  // method to add additional unit after round complete to all regions on board
+  public void growUnits(){
+    for(Region r : board.getRegions()){
+      r.setUnits(new Unit(r.getUnits().getUnits()+1));
+    }
+  }
+  // method that controls game play
   public void playGame(){
-    
     try{
-      //Wait for MAX_PLAYERS to connect
+      //Wait for MAX_PLAYERS to connect or timeout
       waitingForConnections();
     }
     catch(Exception e){
@@ -245,6 +291,8 @@ public class ParentServer {
       return;
     }
     //While regions not owned all by one player
+    createStartingGroups();
+    boolean notFirstCall = false;
     while(numPlayersLeft() > 1){
       try{
         //Prompt users
@@ -257,17 +305,19 @@ public class ParentServer {
       }
       //Apply orders
       applyOrders();
+      if(notFirstCall){
+        growUnits();
+      }
+      notFirstCall = true;
     }
-
     if(numPlayersLeft() == 1){
       //If one player alive then create message --> send
       AbstractPlayer winner = playersLeft().iterator().next();
       StringMessage winnerMessage = new StringMessage(winner.getName() + " is the winner!");
-
       //Send message to all children
       for(ChildServer child : children){
         try{
-          child.getPlayer().getConnection().sendObject(winnerMessage);
+          child.getPlayerConnection().sendObject(winnerMessage);
         }
         catch(Exception e){}
       }
@@ -275,5 +325,13 @@ public class ParentServer {
     //Close all
     closeAll();
   }
-  
+  // enables game to be runnable
+  @Override
+  public void run(){
+    System.out.println("MAX_PLAYERS: " + MAX_PLAYERS);
+    System.out.println("TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
+    System.out.println("START_WAIT_MINUTES:" + START_WAIT_MINUTES);
+    playGame();
+    System.out.println("~~~GAMEOVER~~~");
+  }
 }

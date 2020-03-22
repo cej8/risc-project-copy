@@ -3,25 +3,27 @@ package edu.duke.ece651.risc.shared;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
+// Helper class to validate orders and placements (game play) 
 public class ValidatorHelper {
   private ValidatorInterface<AttackOrder> attackValidator;
   private ValidatorInterface<MoveOrder> moveValidator;
   private ValidatorInterface<PlacementOrder> placementValidator;
   private Board tempBoard;
+  private AbstractPlayer player;
 
-  public ValidatorHelper(Board currentBoard) {
+  public ValidatorHelper(AbstractPlayer player, Board currentBoard) {
     this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
-    this.moveValidator = new MoveValidator(tempBoard);
-    this.attackValidator = new AttackValidator(tempBoard);
+    this.player = player;
+    this.moveValidator = new MoveValidator(player, tempBoard);
+    this.attackValidator = new AttackValidator(player, tempBoard);
   }
 
-  public ValidatorHelper(AbstractPlayer p, Unit u, Board currentBoard) {
-
+  public ValidatorHelper(AbstractPlayer player, Unit u, Board currentBoard) {
+    this.player = player;
     this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
-    this.placementValidator = new PlacementValidator(p, u, currentBoard);
+    this.placementValidator = new PlacementValidator(player, u, currentBoard);
   }
-
+  // check all orders are valid for round per player
   public boolean allOrdersValid(List<OrderInterface> orders) {
     List<AttackOrder> attackList = new ArrayList<AttackOrder>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
@@ -43,7 +45,7 @@ public class ValidatorHelper {
     return validMoves && validAttacks;
 
   }
-
+  // checks all placement are valid per player
   public boolean allPlacementsValid(List<OrderInterface> placements) {
     List<PlacementOrder> pList = new ArrayList<PlacementOrder>();
     for (OrderInterface order : placements) {
