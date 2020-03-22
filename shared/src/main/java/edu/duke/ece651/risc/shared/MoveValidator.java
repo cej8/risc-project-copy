@@ -1,13 +1,13 @@
 package edu.duke.ece651.risc.shared;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class MoveValidator implements ValidatorInterface<MoveOrder> {
  private Board tempBoard;
-  
+
   public MoveValidator(Board boardCopy) {
     this.tempBoard = boardCopy;
   }
@@ -40,14 +40,15 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     }
     return false;
   }
-@Override
+
+  @Override
   public boolean validateOrders(List<MoveOrder> moveList){
     boolean validRegions = validateRegions(moveList);
     boolean validUnits = validateUnits(moveList);
     return validRegions && validUnits;
   }
 
-  	@Override
+  @Override
 	public boolean validateRegions(List<MoveOrder> moveList) {
 	  for (MoveOrder move : moveList) {
       if (!isValidMove(move)) {

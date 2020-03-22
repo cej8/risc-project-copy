@@ -26,7 +26,8 @@ public class ValidatorTest {
     MoveValidator mv = new MoveValidator(b);
     AttackValidator av = new AttackValidator(b);
     PlacementValidator pv = new PlacementValidator(p2, new Unit(15), b);
-
+   
+    
     List<MoveOrder> moves = getMoveOrders(regions);
     List<AttackOrder> attacks = getAttackList(regions);
 

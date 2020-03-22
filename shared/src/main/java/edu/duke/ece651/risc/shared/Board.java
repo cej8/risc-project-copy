@@ -64,21 +64,6 @@ public class Board implements Serializable {
   }
   
   
-  // public void updateClientBoard(Socket socket)  {
-  //   Board masterBoard = null;
-  //   try{
-  //     ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
-  //     masterBoard = (Board) is.readObject();
-  //     is.close();
-  //     this.setRegions(masterBoard.getRegions());
-  //   }
-  //   catch(IOException e) {
-  //     System.out.println("IOException is caught");
-  //   }
-  //   catch(ClassNotFoundException e) {
-  //     System.out.println("ClassNotFoundException is caught");
-  //   } 
-  
   
 }
 

@@ -54,6 +54,7 @@ public class ValidatorHelper {
     }
 
     return placementValidator.validateOrders(pList);
+
   }
 
 }

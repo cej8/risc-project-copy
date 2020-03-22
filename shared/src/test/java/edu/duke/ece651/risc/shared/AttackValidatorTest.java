@@ -31,7 +31,7 @@ public class AttackValidatorTest {
 
 
   @Test
-  public void Attack_UnitTest(){
+  public void Attack_UnitTest() {
     List<Region> regions = getRegions();
     Board board = new Board(regions);
     ValidatorInterface<AttackOrder> av = new AttackValidator(board);
@@ -39,16 +39,16 @@ public class AttackValidatorTest {
     //TODO -- mock randomness of attack to predetermine winner to test more attacks
     //would AttackOrder.rollHelper have to be public?
     List<Unit> smallAttacks = get6UnitList(1, 1, 1, 1, 1, 1); //probably true: attacking with 1 unit
-       for (Region r : regions){
+    for (Region r : regions) {
       System.out.println(r.getName() + " has " + r.getUnits().getUnits());
-  }
+    }
     List<AttackOrder> attackOneUnit = getAttacksDependent(regions, smallAttacks);
     assertEquals(true, av.validateUnits(attackOneUnit));
-    for (Region r : regions){
+    for (Region r : regions) {
       System.out.println(r.getName() + " now has " + r.getUnits().getUnits());
+    }
   }
-  }
-
+  
   @Test
   public void test_UnitsandRegions() {
     List<Region> regions = getRegions();

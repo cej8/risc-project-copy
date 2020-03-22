@@ -22,12 +22,12 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
     return false;
   }
   	@Override
-	public boolean validateRegions(List<PlacementOrder> placementList) {
-	 for (PlacementOrder place : placementList) {
-      if (!isValidPlacement(place, this.player)) {
-        return false;
-      }
-      //place.doAction();
+    public boolean validateRegions(List<PlacementOrder> placementList) {
+      for (PlacementOrder place : placementList) {
+        if (!isValidPlacement(place, this.player)) {
+          return false;
+        }
+        //place.doAction();
     }
     // if all placements are valid
     return true;
