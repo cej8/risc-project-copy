@@ -7,15 +7,22 @@ import java.util.Set;
 
 public class MoveValidator implements ValidatorInterface<MoveOrder> {
  private Board tempBoard;
-
-  public MoveValidator(Board boardCopy) {
+  private AbstractPlayer player;
+  
+  public MoveValidator(AbstractPlayer player, Board boardCopy) {
     this.tempBoard = boardCopy;
+    this.player = player;
   }
 
   private boolean hasValidPath(Region start, Region end, Set<Region> visited) {
     // helper method
     // find a path of connected nodes from start to end
     // Set<Region> visited = new HashSet<Region>();
+    if(!start.getOwner().getName().equals(player.getName())
+       || !start.getOwner().getName().equals(player.getName())){
+      return false;
+    }
+    
     visited.add(start);
     for (Region neighbor : start.getAdjRegions()) {
       if (visited.contains(neighbor)) {
@@ -40,16 +47,15 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     }
     return false;
   }
-
-  @Override
-  public boolean validateOrders(List<MoveOrder> moveList){
-    boolean validRegions = validateRegions(moveList);
+@Override
+public boolean validateOrders(List<MoveOrder> moveList){
+  boolean validRegions = validateRegions(moveList);
     boolean validUnits = validateUnits(moveList);
     return validRegions && validUnits;
   }
 
-  @Override
-	public boolean validateRegions(List<MoveOrder> moveList) {
+  	@Override
+    public boolean validateRegions(List<MoveOrder> moveList) {
 	  for (MoveOrder move : moveList) {
       if (!isValidMove(move)) {
         System.out.println("Move not valid");

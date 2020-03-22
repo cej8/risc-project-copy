@@ -16,7 +16,7 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
     // helper method
   public boolean isValidPlacement(PlacementOrder p, AbstractPlayer ap) {
     // check that player owns the regions they are placing units in
-    if(p.getDestination().getOwner()==ap){
+    if(p.getDestination().getOwner().getName().equals(ap.getName())){
       return true;
     }
     return false;
@@ -33,8 +33,8 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
     return true;
   }
 	 @Override
-    public boolean validateOrders(List<PlacementOrder> orders) {
-      boolean validRegions = validateRegions(orders);
+   public boolean validateOrders(List<PlacementOrder> orders) {
+     boolean validRegions = validateRegions(orders);
       boolean validUnits = validateUnits(orders);
       return validRegions && validUnits;
     }
