@@ -39,6 +39,10 @@ public class ParentServer implements Runnable{
   public void setSocket(int port) throws IOException{
     serverSocket = new ServerSocket(port);
   }
+
+  public ServerSocket getServerSocket(){
+    return serverSocket;
+  }
   
   public List<ChildServer> getChildren(){
     return children;
@@ -54,6 +58,7 @@ public class ParentServer implements Runnable{
     try{
       threads = Executors.newFixedThreadPool(this.MAX_PLAYERS);
     }
+    //For debug --> assume we won't put negative
     catch(Exception e){
       e.printStackTrace();
     }
@@ -76,6 +81,7 @@ public class ParentServer implements Runnable{
     
     while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
       HumanPlayer newPlayer;
+      Connection newPlayerConnection;
       try {
         if(startTime != -1){
           serverSocket.setSoTimeout((int)(gameStartTime - (System.currentTimeMillis()-startTime)));
@@ -83,9 +89,11 @@ public class ParentServer implements Runnable{
         //Accept, set timeout to 60 seconds, create player
         Socket playerSocket = serverSocket.accept();
         playerSocket.setSoTimeout((int)(TURN_WAIT_MINUTES*60*1000));
-        newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1), playerSocket);
+        newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1));
+        newPlayerConnection = new Connection(playerSocket);
+        newPlayerConnection.getStreamsFromSocket();
         //Send object to client
-        newPlayer.getConnection().sendObject(newPlayer);
+        newPlayerConnection.sendObject(newPlayer);
       } catch (Exception e) {
         e.printStackTrace(System.out);
         continue;
@@ -96,12 +104,18 @@ public class ParentServer implements Runnable{
         startTime = System.currentTimeMillis();
       }
       //Add player to list
-      children.add(new ChildServer(newPlayer, this));
+      children.add(new ChildServer(newPlayer, newPlayerConnection, this));
     }
     
   }
   public Board getBoard(){
     return this.board;
+  }
+  public void setBoard(Board board){
+    this.board = board;
+  }
+  public Map<String, List<OrderInterface>> getOrderMap(){
+    return orderMap;
   }
   // Helper method to add player to global player list - children
   public void addPlayer(ChildServer c){
@@ -140,13 +154,15 @@ public class ParentServer implements Runnable{
   }
   public void closeAll(){
     for(ChildServer child : children){
-      child.getPlayer().getConnection().closeAll();
+      if(child.getPlayerConnection() != null){ child.getPlayerConnection().closeAll(); }
     }
-    try{
-      serverSocket.close();
-    }
-    catch(Exception e){
-      e.printStackTrace(System.out);
+    if(serverSocket != null){
+      try{
+        serverSocket.close();
+      }
+      catch(Exception e){
+        e.printStackTrace(System.out);
+      }
     }
   }
 
@@ -157,16 +173,18 @@ public class ParentServer implements Runnable{
     if(!groupName.matches("^Group [A-F]$")){
       return false;
     }
+
+    boolean foundRegion = false;
     //If valid then replace all group with player
     for(Region r : board.getRegions()){
       if(r.getOwner().getName().equals(groupName)){
         r.setOwner(player);
         //Only change boolean if something replaced
-        return true;
+        foundRegion = true;
       }
     }
 
-    return false;
+    return foundRegion;
   }
 
   public void callThreads() throws InterruptedException{
@@ -220,21 +238,27 @@ public class ParentServer implements Runnable{
         continue;
       }
 
-      //Call conversion method to get proper regions on server's board
-      castOrder.convertOrderRegions(board);
-
+      String className = castOrder.getClass().getName();
+      className = className.substring(className.lastIndexOf('.') + 1);
+      
       //Add list if not present for order type
-      if(!orderMap.containsKey(castOrder.getClass().getName())){
-        orderMap.put(castOrder.getClass().getName(), new ArrayList<OrderInterface>());
+      if(!orderMap.containsKey(className)){
+        orderMap.put(className, new ArrayList<OrderInterface>());
       }
       //Add order to list
-      orderMap.get(castOrder.getClass().getName()).add(castOrder);
+      orderMap.get(className).add(castOrder);
     }
   }
 
   public void applyOrders(){
     //Apply orders to map
     //Mostly hardcoded due to explicit order ordering
+
+    //Reshuffle all subLists
+    for(String key : orderMap.keySet()){
+      List<OrderInterface> orders = orderMap.get(key);
+      Collections.shuffle(orders);
+    }
 
     if(orderMap.containsKey("PlacementOrder")){
       applyOrderList(orderMap.get("PlacementOrder"));
@@ -304,7 +328,7 @@ public class ParentServer implements Runnable{
       //Send message to all children
       for(ChildServer child : children){
         try{
-          child.getPlayer().getConnection().sendObject(winnerMessage);
+          child.getPlayerConnection().sendObject(winnerMessage);
         }
         catch(Exception e){}
       }
@@ -315,6 +339,9 @@ public class ParentServer implements Runnable{
 
   @Override
   public void run(){
+    System.out.println("MAX_PLAYERS: " + MAX_PLAYERS);
+    System.out.println("TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
+    System.out.println("START_WAIT_MINUTES:" + START_WAIT_MINUTES);
     playGame();
   }
   

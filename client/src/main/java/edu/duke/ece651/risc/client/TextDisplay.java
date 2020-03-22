@@ -38,12 +38,14 @@ public class TextDisplay implements ClientOutputInterface {
   }
 
   //returns a String of all of the board info
-  private String createBoard(Board b){
+  public String createBoard(Board b){
     StringBuilder boardText = new StringBuilder();
     Map<AbstractPlayer, List<Region>> playerRegionMap = b.getPlayerToRegionMap();
-    for(Map.Entry<AbstractPlayer, List<Region>>  entry : playerRegionMap.entrySet()) { //for each entry in the map
-      boardText.append(entry.getKey().getName() + ": \n---------\n"); //append player name
-      for (Region r : entry.getValue()){ //for each region the player has
+    List<AbstractPlayer> players = new ArrayList<AbstractPlayer>(playerRegionMap.keySet());
+    Collections.sort(players);
+    for(AbstractPlayer player : players) { //for each entry in the map
+      boardText.append(player.getName() + ": \n---------\n"); //append player name
+      for (Region r : playerRegionMap.get(player)){ //for each region the player has
         boardText.append(this.printRegionInfo(r)); //add its info to board
       }
       boardText.append("\n");
