@@ -7,12 +7,6 @@ import java.io.*;
 
 
 public class ParentServer {
-  /* private final int MAX_PLAYERS = 1;
-  private final int MAX_REGIONS = 12;
-  private final double START_WAIT_MINUTES = 2.5;
-  private final double TURN_WAIT_MINUTES = 1;
-  private final int DEFAULT_PORT = 12345;
-  */
   private ServerSocket serverSocket = null;
   private List<ChildServer> children;
   private Board board;

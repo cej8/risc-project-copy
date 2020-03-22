@@ -133,17 +133,24 @@ public class ClientTest {
           socket = serverSocket.accept();
           oos = new ObjectOutputStream(socket.getOutputStream());
           ois = new ObjectInputStream(socket.getInputStream());
+          oos.close();
+          ois.close();
+          socket.close();
         }
         catch(Exception e){
           return;
         }
       }
-
+      try{
+        serverSocket.close();
+      } catch (IOException ex){
+        ex.printStackTrace();
+      }
       while(true){ /* spin */}
     }
   }
-  
-  /*  @Test
+  /*
+  @Test
   public void test_assorted(){
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput();
@@ -171,8 +178,8 @@ public class ClientTest {
     }
     localConnection.getConnection().closeAll();
     localConnection.getClientInput().close();
-  }
-  */
+    }*/
+  
 
   @Test
   public void test_createPlacements() throws IOException{
