@@ -17,16 +17,8 @@ public class DeepCopy {
       ois = new ObjectInputStream(bin);
       copy = ois.readObject();   // return the new object
     }
-<<<<<<< HEAD
     catch(Exception e){
       throw new DeepCopyFailureException(e);
-=======
-    catch(IOException e){
-      e.printStackTrace();
-    }
-    catch (ClassNotFoundException e) {
-      e.printStackTrace();
->>>>>>> 5c35b677619b559629b0419e04b7b23b3dec524e
     }
     finally{
       if (oos != null && ois != null) {

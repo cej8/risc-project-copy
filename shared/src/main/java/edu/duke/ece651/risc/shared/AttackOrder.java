@@ -68,11 +68,4 @@ public class AttackOrder extends SourceDestinationOrder {
     }
 
 
-<<<<<<< HEAD
-=======
-
-// @Override
-// public void validateAction(Board temp) {	
-// }
->>>>>>> 5c35b677619b559629b0419e04b7b23b3dec524e
 }
