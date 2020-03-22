@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,23 +13,19 @@ public class MoveValidatorTest {
   public void Move_UnitTest() {
     List<Region> regions = getRegions();
     Board board = new Board(regions);
-    ValidatorInterface<MoveOrder> mv = new MoveValidator(board);
+    ValidatorInterface<MoveOrder> mv  = new MoveValidator(new HumanPlayer("Player 1"), board);
     //Moves using all but one of sourceUnits
     List<Unit> allButOneUnit = get6UnitList(4, 9, 14, 19, 24, 29); //true: moving all but one unit
     List<MoveOrder> moveAllButOneUnit = getMovesDependent(regions, allButOneUnit);
-    assertEquals(true, mv.validateUnits(moveAllButOneUnit));
-
-    //Cumulative move orders
-    List<Unit> moveSumPrevMove = get6UnitList(29, 33, 42, 56, 75, 99); //true: moving units gained from previous moves to region
-    List<MoveOrder> dependentMoves = getMovesDependent(regions, moveSumPrevMove);
-    assertEquals(true, mv.validateUnits(dependentMoves));
+    assertEquals(true, mv .validateUnits(moveAllButOneUnit));
+    
   }
 
   @Test
   public void test_UnitMoves() {
     List<Region> regions = getRegions();
     Board board = new Board(regions);
-    ValidatorInterface<MoveOrder> mv = new MoveValidator(board);
+    ValidatorInterface<MoveOrder> mv = new MoveValidator(new HumanPlayer("Player 1"), board);
 
     //Orders using all units
     List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);
@@ -81,9 +78,9 @@ public class MoveValidatorTest {
     r2.setName("Venus");
     Region r3 = new Region(p1, units.get(3));
     r3.setName("Mercury");
-    Region r4 = new Region(p2, units.get(4));
+    Region r4 = new Region(p1, units.get(4));
     r4.setName("Saturn");
-    Region r5 = new Region(p2, units.get(5));
+    Region r5 = new Region(p1, units.get(5));
     r5.setName("Uranus");
 
     List<Region> regions = new ArrayList<Region>();

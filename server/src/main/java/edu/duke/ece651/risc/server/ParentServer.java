@@ -106,7 +106,7 @@ public class ParentServer implements Runnable{
       //Add player to list
       children.add(new ChildServer(newPlayer, newPlayerConnection, this));
     }
-    
+    System.out.println("All players or time limit, proceeding");
   }
   public Board getBoard(){
     return this.board;
@@ -175,7 +175,7 @@ public class ParentServer implements Runnable{
     }
 
     boolean foundRegion = false;
-    //If valid then replace all group with player
+    //If valid then replaceb all group with player
     for(Region r : board.getRegions()){
       if(r.getOwner().getName().equals(groupName)){
         r.setOwner(player);
@@ -189,13 +189,13 @@ public class ParentServer implements Runnable{
 
   public void callThreads() throws InterruptedException{
     //Method to call child threads, will prompt player and add all orders to map
-
+    System.out.println("Calling threads");
     List<Callable<Object>> todo = new ArrayList<Callable<Object>>(children.size());
     for(int i = 0; i < children.size(); i++){
       todo.add(Executors.callable(children.get(i)));
     }
     threads.invokeAll(todo);
-
+    System.out.println("Threads finished");
   }
 
   public Set<AbstractPlayer> playersLeft(){
@@ -300,6 +300,8 @@ public class ParentServer implements Runnable{
     }
     //While regions not owned all by one player
 
+    createStartingGroups();
+
     boolean notFirstCall = false;
     
     while(numPlayersLeft() > 1){
@@ -343,6 +345,7 @@ public class ParentServer implements Runnable{
     System.out.println("TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
     System.out.println("START_WAIT_MINUTES:" + START_WAIT_MINUTES);
     playGame();
+    System.out.println("~~~GAMEOVER~~~");
   }
   
 }

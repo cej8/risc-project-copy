@@ -49,6 +49,10 @@ public class Client {
   public ClientInputInterface getClientInput(){
     return clientInput;
   }
+  public void setClientInput(ClientInputInterface clientInput){
+    this.clientInput.close();
+    this.clientInput = clientInput;
+  }
   public ClientOutputInterface getClientOutput(){
     return clientOutput;
   }
@@ -153,6 +157,7 @@ public class Client {
         clientOutput.displayString("How many units would you like to place in " + regionName + "?");
         Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
         PlacementOrder placementOrder = new PlacementOrder(placement, units);
+        System.out.println(units.getUnits());
         placementList.add(placementOrder);
         break;
       } catch (NumberFormatException ne) {
@@ -172,7 +177,7 @@ public class Client {
     Region placement;
     String regionName;
     for (int i = 0; i < regionList.size(); i++){
-      if (player.getName() == regionList.get(i).getOwner().getName()){
+      if (player.getName().equals(regionList.get(i).getOwner().getName())){
         placement = regionList.get(i);
         regionName = regionList.get(i).getName();
         placementList = placementOrderHelper(placementList,regionName,placement);

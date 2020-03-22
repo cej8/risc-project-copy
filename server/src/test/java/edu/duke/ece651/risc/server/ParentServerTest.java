@@ -55,7 +55,7 @@ public class ParentServerTest {
       System.out.println();
     }
   }
-   @Test
+  // @Test
    public void test_placementOrder(){
     ParentServer ps = new ParentServer();
     HumanPlayer player = new HumanPlayer("player1");
@@ -317,12 +317,11 @@ public class ParentServerTest {
   }
   
 
-  public void setInputStream(InputStream stream, String str) throws IOException{
-    stream.close();
-    stream = new ByteArrayInputStream(str.getBytes());
+  public ClientInputInterface getClientIn(String str){
+    return new ConsoleInput(new ByteArrayInputStream(str.getBytes()));
   }
   
-  //@Test
+  @Test
   public void test_fakeClients()  throws IOException, ClassNotFoundException, InterruptedException{
     TextDisplay cout = new TextDisplay();
 
@@ -352,8 +351,12 @@ public class ParentServerTest {
     //After connection should send HumanPlayer for the child
     //c2 waits 5 seconds, should be second
     player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
     assertEquals("Player 1", player.getName());
     player = (HumanPlayer)(c2in.readObject());
+    cout.displayString("c2 player");
+    cout.displayString(player.getName());
     assertEquals("Player 2", player.getName());
 
     //Next firstCall of run()
@@ -361,7 +364,7 @@ public class ParentServerTest {
     board = (Board)(c1in.readObject());
     cout.displayString("c1 board initial");
     cout.displayBoard(board);
-    board = (Board)(c1in.readObject());
+    board = (Board)(c2in.readObject());
     cout.displayString("c2 board initial");
     cout.displayBoard(board);
 
@@ -392,23 +395,25 @@ public class ParentServerTest {
     cout.displayString("c1 response expected success");
     cout.displayString(string.unpacker());
     //Server sends board
-    board = (Board)(c2in.readObject());
+    board = (Board)(c1in.readObject());
     cout.displayString("c1 board after take group a");
     cout.displayBoard(board);
-    if(true) return;
+    
     //Now both players would be creating placement orders...
     //Create disconnected client object for generating order lists...
-    InputStream fakeClientIS = new ByteArrayInputStream("".getBytes());
-    ClientInputInterface clientIn = new ConsoleInput(fakeClientIS);
+    ClientInputInterface clientIn = getClientIn("");
     ClientOutputInterface writeToNothing = new TextDisplay(new PrintWriter(new PrintStream(new ByteArrayOutputStream())));
     Client fakeClient = new Client(clientIn, writeToNothing);
 
     //Both clients asked create placements...
     //Player 1 will place 3 on all
+    //Need to set board/player for client placements
+    fakeClient.setBoard(board);
+    fakeClient.setPlayer(new HumanPlayer("Player 1"));
     String placements;
     List<PlacementOrder> initialPlacements;
     placements = "3\n".repeat(6);
-    setInputStream(fakeClientIS, placements);
+    fakeClient.setClientInput(getClientIn(placements));
     initialPlacements = fakeClient.createPlacements();
     c1out.writeObject(initialPlacements);
     //Player 1 will get success
@@ -417,8 +422,10 @@ public class ParentServerTest {
     cout.displayString(string.unpacker());
 
     //Player 2 will place 4 on all (invalid)
+    //Need to set player (board is same)
+    fakeClient.setPlayer(new HumanPlayer("Player 2"));
     placements = "4\n".repeat(6);
-    setInputStream(fakeClientIS, placements);
+    fakeClient.setClientInput(getClientIn(placements));
     initialPlacements = fakeClient.createPlacements();
     c2out.writeObject(initialPlacements);
     //Player 2 will get fail
@@ -426,17 +433,20 @@ public class ParentServerTest {
     cout.displayString("c2 placements expected fail");
     cout.displayString(string.unpacker());
     //Try again but now 2,3,4,2,3,4
+    //First get board again (now see C1 placements)
+    board = (Board)(c2in.readObject());
+    cout.displayBoard(board);
     placements = "2\n3\n4\n".repeat(2);
-    setInputStream(fakeClientIS, placements);
+    fakeClient.setClientInput(getClientIn(placements));
     initialPlacements = fakeClient.createPlacements();
     c2out.writeObject(initialPlacements);
     //Player 2 will get success
     string = (StringMessage)(c2in.readObject());
     cout.displayString("c2 placements expected success");
     cout.displayString(string.unpacker());
-
+    
     //Parent should wait --> apply all
-    //Now should be in main game loop
+    //Now should be in main game loop (past this point client doesn't care about board/player)
     //Both should get "Continue", true alive message, and board
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn start");
@@ -465,7 +475,7 @@ public class ParentServerTest {
     //P2 owns G-L (2,3,4,2,3,4)
     cout.displayString("P1 moves 2 from B to A then attacks from A to L with 4 (orders backwards on input)");
     String p1move = "A\nA\nL\n4\n" + "M\nB\nA\n2\n" + "D\n";
-    setInputStream(fakeClientIS, p1move);
+    fakeClient.setClientInput(getClientIn(p1move));
     orders = fakeClient.createOrders();
     c1out.writeObject(orders);
     string = (StringMessage)(c1in.readObject());
@@ -474,18 +484,21 @@ public class ParentServerTest {
 
     cout.displayString("P2 tries to move 10 from G to L (invalid)");
     String p2move = "M\nG\nL\n10\n" + "D\n";
-    setInputStream(fakeClientIS, p2move);
+    fakeClient.setClientInput(getClientIn(p2move));
     orders = fakeClient.createOrders();
     c2out.writeObject(orders);
     string = (StringMessage)(c2in.readObject());
     cout.displayString("c2 order expected fail");
     cout.displayString(string.unpacker());
-    
+
+        
     cout.displayString("P2 tries to move 1 from K to L");
-    p2move = "M\nK\nL\n1\n" + "D\n";
-    setInputStream(fakeClientIS, p2move);
+    p2move = "M\nG\nL\n1\n" + "D\n";
+    fakeClient.setClientInput(getClientIn(p2move));
     orders = fakeClient.createOrders();
     c2out.writeObject(orders);
+    board = (Board)(c2in.readObject());
+    cout.displayBoard(board);
     string = (StringMessage)(c2in.readObject());
     cout.displayString("c2 order expected success");
     cout.displayString(string.unpacker());
@@ -520,7 +533,7 @@ public class ParentServerTest {
     //P2 does nothing
     cout.displayString("P2 does nothing");
     p2move = "D\n";
-    setInputStream(fakeClientIS, p2move);
+    fakeClient.setClientInput(getClientIn(p2move));
     orders = fakeClient.createOrders();
     c2out.writeObject(orders);
     string = (StringMessage)(c2in.readObject());
@@ -530,7 +543,7 @@ public class ParentServerTest {
     //P1 attacks F->G, E->H, D->I with 3 each
     cout.displayString("P1 attacks F->G, E->H, D->I with 3 each");
     p1move = "A\nF\nG\n3\n" + "A\nE\nH\n3\n" + "A\nD\nI\n3\n" +"D\n";
-    setInputStream(fakeClientIS, p1move);
+    fakeClient.setClientInput(getClientIn(p1move));
     orders = fakeClient.createOrders();
     c1out.writeObject(orders);
     string = (StringMessage)(c1in.readObject());
@@ -570,18 +583,17 @@ public class ParentServerTest {
     //P2 does nothing
     cout.displayString("P2 does nothing");
     p2move = "D\n";
-    setInputStream(fakeClientIS, p2move);
+    fakeClient.setClientInput(getClientIn(p2move));
     orders = fakeClient.createOrders();
     c2out.writeObject(orders);
     string = (StringMessage)(c2in.readObject());
     cout.displayString("c2 order expected success");
     cout.displayString(string.unpacker());
-
     
     //P1 does nothing
     cout.displayString("P1 does nothing");
     p1move = "D\n";
-    setInputStream(fakeClientIS, p1move);
+    fakeClient.setClientInput(getClientIn(p1move));
     orders = fakeClient.createOrders();
     c1out.writeObject(orders);
     string = (StringMessage)(c1in.readObject());
@@ -592,11 +604,21 @@ public class ParentServerTest {
     cout.displayString("Parent now applies orders...");
     cout.displayString("Should be same as last but all regions + 1");
 
+    //P1 does start turn
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c1in.readObject());
+    cout.displayString("c1 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c1in.readObject());
+    cout.displayString("c1 board");
+    cout.displayBoard(board);
     
     //P1 does nothing
     cout.displayString("P1 moves does nothing");
     p1move = "D\n";
-    setInputStream(fakeClientIS, p1move);
+    fakeClient.setClientInput(getClientIn(p1move));
     orders = fakeClient.createOrders();
     c1out.writeObject(orders);
     string = (StringMessage)(c1in.readObject());
@@ -605,6 +627,7 @@ public class ParentServerTest {
 
     //P2 suddenly closes
     cout.displayString("P2 suddenly closes");
+    cout.displayString("We expect two stacktraces here.\n One will be for the childserver of connection reset. This is the thread realizing the socket is dead. Look for ThreadPoolExecutor near end.\n Two will be for the ParentServer of socket closed. This is when it is closing everything and it tries to close the pre-closed childserver connection.\n");
     c2.close();
 
     cout.displayString("After waiting for timeout moves will be applied");
@@ -613,7 +636,8 @@ public class ParentServerTest {
     string = (StringMessage)(c1in.readObject());
     cout.displayString(string.unpacker());
 
-    assert(!serverThread.isAlive());
+    Thread.sleep(500);
+
     assert(c1.getInputStream().read() == -1);
 
     c1.close();

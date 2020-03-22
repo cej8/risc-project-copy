@@ -23,8 +23,8 @@ public class ValidatorTest {
     List<Region> regions = getRegionList(p1, p2);
     Board b = new Board(regions);
 
-    MoveValidator mv = new MoveValidator(b);
-    AttackValidator av = new AttackValidator(b);
+    MoveValidator mv = new MoveValidator(p1, b);
+    AttackValidator av = new AttackValidator(p1, b);
     PlacementValidator pv = new PlacementValidator(p2, new Unit(15), b);
 
     List<MoveOrder> moves = getMoveOrders(regions);
@@ -182,9 +182,7 @@ public class ValidatorTest {
     OrderInterface attack31 = new AttackOrder(regions.get(4), regions.get(0), new Unit(1));// invalid same owner
 
     // ordersValid.add(attack31);
-    ordersValid.add(move21);
-    ordersValid.add(move41);
-    ValidatorHelper vh = new ValidatorHelper(b);
+    ValidatorHelper vh = new ValidatorHelper(new HumanPlayer("Player 1"), b);
     assertEquals(false, vh.allOrdersValid(orders));
     assertEquals(true, vh.allOrdersValid(ordersValid));
 

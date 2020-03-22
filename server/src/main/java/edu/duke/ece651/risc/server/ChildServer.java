@@ -48,10 +48,12 @@ public class ChildServer implements Runnable{
     long maxTime = (long)(parent.getTURN_WAIT_MINUTES()*60*1000);
     
     //If player isn't playing or isn't watching then skip
-    if(!player.isPlaying() || !player.isWatching()){
-      return;
+    if(!player.isPlaying()){
+      if(!player.isWatching()){
+        return;
+      }
     }
-
+    System.out.println(player.getName() + " enter thread");
     ValidatorHelper validator;
     
     try{
@@ -66,13 +68,13 @@ public class ChildServer implements Runnable{
             playerConnection.closeAll();
             return;
           }
-          
           //Send board
           playerConnection.sendObject(parent.getBoard());
         
           //Attempt to get groupName string
-          String groupName = (String)(playerConnection.receiveObject());
-
+          StringMessage groupNameMessage = (StringMessage)(playerConnection.receiveObject());
+          String groupName = groupNameMessage.unpacker();
+          
           //Return failure if not assignable
           if(!parent.assignGroups(groupName, player)){
             playerConnection.sendObject(new StringMessage("Fail: Group invalid or already taken."));
@@ -81,7 +83,7 @@ public class ChildServer implements Runnable{
           break;
         }
         //Otherwise succeeds
-        playerConnection.sendObject("Success: Group assigned.");
+        playerConnection.sendObject(new StringMessage("Success: Group assigned."));
         int startUnits = Constants.UNIT_START_MULTIPLIER*parent.getBoard().getNumRegionsOwned(player);
         //Prompt for placement
         while(true){
@@ -91,7 +93,6 @@ public class ChildServer implements Runnable{
             playerConnection.closeAll();
             return;
           }
-          
           //Send board
           playerConnection.sendObject(parent.getBoard());
 
@@ -103,7 +104,7 @@ public class ChildServer implements Runnable{
           }
           validator = new ValidatorHelper(player, new Unit(startUnits), parent.getBoard());
           //TODO: Validate orders --> loop if fail
-          if(validator.allPlacementsValid(placementOrders)){
+          if(!validator.allPlacementsValid(placementOrders)){
             playerConnection.sendObject(new StringMessage("Fail: placements invalid"));
             continue;
           }
@@ -134,9 +135,9 @@ public class ChildServer implements Runnable{
             for(int i = 0; i < orders.size(); i++){
               orders.get(i).convertOrderRegions(parent.getBoard());
             }
-            validator = new ValidatorHelper(parent.getBoard());
+            validator = new ValidatorHelper(player, parent.getBoard());
             //TODO: Validate orders --> loop if fail
-            if(validator.allOrdersValid(orders)){
+            if(!validator.allOrdersValid(orders)){
               playerConnection.sendObject(new StringMessage("Fail: orders invalid"));
               continue;
             }
@@ -172,5 +173,7 @@ public class ChildServer implements Runnable{
       playerConnection.closeAll();
       return;
     }
+
+    System.out.println(player.getName() + " exiting thread");
   }
 }

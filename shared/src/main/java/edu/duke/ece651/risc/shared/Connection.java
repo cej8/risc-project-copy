@@ -26,6 +26,7 @@ public class Connection implements Serializable{
   }
 
   public <T> void sendObject(T object) throws IOException {
+    outputStream.reset();
     outputStream.writeObject(object);
   }
 
