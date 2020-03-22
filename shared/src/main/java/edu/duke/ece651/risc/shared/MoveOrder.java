@@ -23,19 +23,5 @@ public class MoveOrder extends SourceDestinationOrder {
     d.setUnits(new Unit(d.getUnits().getUnits()+u.getUnits()));
     System.out.println(u.getUnits() + ":" + s.getName() +"->" + d.getName());
   }
-
-
-  public void doAction(Region s, Region d, Unit u) {
-    s.setUnits(new Unit(s.getUnits().getUnits() - u.getUnits()));
-    d.setUnits(new Unit(d.getUnits().getUnits()+u.getUnits()));
-  }
-  
-  // @Override //pass in copy of board 
-  // public void validateAction(Board temp) {
-  //   Region tSource = temp.getRegionByName(source.getName());
-  //   Region tDestination = temp.getRegionByName(destination.getName());
-  //    tSource.setUnits(new Unit(tSource.getUnits().getUnits() - this.units.getUnits()));
-  //   tDestination.setUnits(new Unit(tDestination.getUnits().getUnits()+this.units.getUnits()));
-  // }
 }
-//TODO -- between orders, how make sure all get same copy of board?
+

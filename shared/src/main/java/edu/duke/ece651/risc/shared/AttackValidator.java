@@ -4,12 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AttackValidator implements ValidatorInterface<AttackOrder> {
-   private Board tempBoard;
-  
-  public AttackValidator(Board boardCopy) {
-    this.tempBoard = boardCopy;
-  }
- // helper method
 private Board tempBoard;
   private AbstractPlayer player;
   
