@@ -6,39 +6,51 @@ import java.util.List;
 public class AttackValidator implements ValidatorInterface<AttackOrder> {
  // helper method
 private Board tempBoard;
+  private AbstractPlayer player;
   
-  public AttackValidator(Board boardCopy) {
+  public AttackValidator(AbstractPlayer player, Board boardCopy) {
     this.tempBoard = boardCopy;
+    this.player = player;
   }
 
   public boolean isValidAttack(AttackOrder a) {
     // regions must be owned by different players
-    if (a.getSource().getOwner().getName().equals(a.getDestination().getOwner().getName())) {
+    //starting must be owned by player
+    if(!a.getSource().getOwner().getName().equals(player.getName())){
+      System.out.println("player does not own source");
       return false;
+      
     }
+    
+    if (a.getDestination().getOwner().getName().equals(player.getName())) {
+       System.out.println("player cannot own destionation");
+     return false;
+     }
     // regions must be adjacent
     for (Region neighbor : a.getSource().getAdjRegions()) {
-      if (neighbor == a.getDestination()) {
+      if (neighbor.getName().equals(a.getDestination().getName())) {
         return true;
       }
     }
+  System.out.println("regions are not adjdacent");
     return false;
   }
    @Override
-	public boolean validateRegions(List<AttackOrder> attackList) {
+   public boolean validateRegions(List<AttackOrder> attackList) {
 	 for (AttackOrder attack : attackList) {
-      if (!isValidAttack(attack)) {
+     if (!isValidAttack(attack)) {
         System.out.println("Attack not valid");
         return false;
       }
       //attack.doAction();
     }
-    // if all attacks are valid
+
+  // if all attacks are valid
     return true;
 	}
 @Override
-  public boolean validateOrders(List<AttackOrder> attackList) {
-    boolean validRegions = validateRegions(attackList);
+public boolean validateOrders(List<AttackOrder> attackList) {
+  boolean validRegions = validateRegions(attackList);
     boolean validUnits = validateUnits(attackList);
     return validRegions && validUnits;
   }

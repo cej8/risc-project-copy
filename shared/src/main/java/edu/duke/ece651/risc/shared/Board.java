@@ -34,6 +34,16 @@ public class Board implements Serializable {
     return nameToRegionMap.get(name);
   }
 
+  public int getNumRegionsOwned(AbstractPlayer player){
+    int total = 0;
+    for(Region r : regions){
+      if(player.getName().equals(r.getOwner().getName())){
+          total++;
+        }
+    }
+    return total;      
+  }
+  
  //Creates a Map of Players to a List of all their owned regions 
   public Map<AbstractPlayer, List<Region>> getPlayerToRegionMap(){
     Map<AbstractPlayer, List<Region>> playerRegionMap = new HashMap<AbstractPlayer, List<Region>>();

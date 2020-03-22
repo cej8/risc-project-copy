@@ -9,17 +9,19 @@ public class ValidatorHelper {
   private ValidatorInterface<MoveOrder> moveValidator;
   private ValidatorInterface<PlacementOrder> placementValidator;
   private Board tempBoard;
+  private AbstractPlayer player;
 
-  public ValidatorHelper(Board currentBoard) {
+  public ValidatorHelper(AbstractPlayer player, Board currentBoard) {
     this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
-    this.moveValidator = new MoveValidator(tempBoard);
-    this.attackValidator = new AttackValidator(tempBoard);
+    this.player = player;
+    this.moveValidator = new MoveValidator(player, tempBoard);
+    this.attackValidator = new AttackValidator(player, tempBoard);
   }
 
-  public ValidatorHelper(AbstractPlayer p, Unit u, Board currentBoard) {
-
+  public ValidatorHelper(AbstractPlayer player, Unit u, Board currentBoard) {
+    this.player = player;
     this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
-    this.placementValidator = new PlacementValidator(p, u, currentBoard);
+    this.placementValidator = new PlacementValidator(player, u, currentBoard);
   }
 
   public boolean allOrdersValid(List<OrderInterface> orders) {
