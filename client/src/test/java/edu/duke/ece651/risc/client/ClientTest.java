@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class ClientTest {
-@Test
+  @Test
   public void test_updateBoard() throws IOException {
     AbstractPlayer player1 = new HumanPlayer("Player 1");
     Board board = getTestBoard(player1);
@@ -41,9 +41,7 @@ public class ClientTest {
       } catch (Exception e) {
         e.printStackTrace(System.out);
       }
-    }
-
-    
+    }    
   }
   
   private Board getTestBoard(AbstractPlayer player1) {
@@ -118,6 +116,9 @@ public class ClientTest {
           socket = serverSocket.accept();
           oos = new ObjectOutputStream(socket.getOutputStream());
           ois = new ObjectInputStream(socket.getInputStream());
+          oos.close();
+          ois.close();
+          socket.close();
         }
         catch(Exception e){
           return;
@@ -132,8 +133,7 @@ public class ClientTest {
       catch(Exception e){
         e.printStackTrace();
       }
-    
-    }
+     }
   }
   
   @Test
@@ -164,8 +164,8 @@ public class ClientTest {
     }
     localConnection.getConnection().closeAll();
     localConnection.getClientInput().close();
-  }
-
+    }
+  
 
   @Test
   public void test_createPlacements() throws IOException{

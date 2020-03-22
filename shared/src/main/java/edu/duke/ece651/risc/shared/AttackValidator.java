@@ -3,6 +3,7 @@ package edu.duke.ece651.risc.shared;
 import java.util.ArrayList;
 import java.util.List;
 
+// Class to check / validate that an attack order is allowed based on game conditions
 public class AttackValidator implements ValidatorInterface<AttackOrder> {
  // helper method
 private Board tempBoard;
@@ -12,14 +13,13 @@ private Board tempBoard;
     this.tempBoard = boardCopy;
     this.player = player;
   }
-
+  // Checks if attack is valid given conditions
   public boolean isValidAttack(AttackOrder a) {
     // regions must be owned by different players
     //starting must be owned by player
     if(!a.getSource().getOwner().getName().equals(player.getName())){
       System.out.println("player does not own source");
       return false;
-      
     }
     
     if (a.getDestination().getOwner().getName().equals(player.getName())) {
@@ -54,9 +54,7 @@ public boolean validateOrders(List<AttackOrder> attackList) {
     boolean validUnits = validateUnits(attackList);
     return validRegions && validUnits;
   }
-  
-
-
+  // Method to validate corrent units in each region
   	@Override
 	public boolean validateUnits(List<AttackOrder> a) {
 	 // check to make sure numUnits in source < attackOrder units

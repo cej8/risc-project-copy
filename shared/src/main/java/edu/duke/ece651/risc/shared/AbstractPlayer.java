@@ -1,7 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 import java.io.*;
-
+// Abstract class to handle Player specifc methods 
 public abstract class AbstractPlayer implements Serializable, Comparable<AbstractPlayer>{
   protected String name;
   protected boolean isPlaying;
@@ -25,9 +25,8 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
     return isWatching;
   }
   public void setWatching(boolean isWatching){
-    this.isWatching = new Boolean(isWatching);
+    this.isWatching = Boolean.valueOf(isWatching); //new Boolean(isWatching);
   }
-
   @Override
   public int compareTo(AbstractPlayer p){
     return this.name.compareTo(p.getName());

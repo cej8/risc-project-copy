@@ -2,7 +2,7 @@ package edu.duke.ece651.risc.shared;
 
 import java.net.*;
 import java.io.*;
-
+// Class to create a human player (client)
 public class HumanPlayer extends AbstractPlayer {
   private static final long serialVersionUID = 6L;
   public HumanPlayer(){
