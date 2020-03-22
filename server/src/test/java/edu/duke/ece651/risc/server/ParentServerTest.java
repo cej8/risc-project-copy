@@ -90,7 +90,6 @@ public class ParentServerTest {
   @Test
   public void test_assorted(){
     //Tests some random Parent/Child functionality
-
     //Default constructor
     ParentServer ps = new ParentServer();
     assertEquals(ps.getServerSocket(), null);

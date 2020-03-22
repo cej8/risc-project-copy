@@ -6,14 +6,8 @@ import java.util.*;
 import java.io.*;
 import java.util.concurrent.*;
 
-
+// Class handles all server side implmentation including ChildServer handling
 public class ParentServer implements Runnable{
-  /* private final int MAX_PLAYERS = 1;
-  private final int MAX_REGIONS = 12;
-  private final double START_WAIT_MINUTES = 2.5;
-  private final double TURN_WAIT_MINUTES = 1;
-  private final int DEFAULT_PORT = 12345;
-  */
   private ServerSocket serverSocket = null;
   private List<ChildServer> children;
   private Board board;
@@ -133,6 +127,7 @@ public class ParentServer implements Runnable{
       r.assignRegion(player,u);
     }
   }
+  // method to create starting groups for game based on number of players
   public void createStartingGroups(){
     int numPlayers = children.size();
     //int numPlayers = 5;
@@ -152,6 +147,7 @@ public class ParentServer implements Runnable{
       groupName++;
     }
   }
+  // Close serverSocket for all children
   public void closeAll(){
     for(ChildServer child : children){
       if(child.getPlayerConnection() != null){ child.getPlayerConnection().closeAll(); }
@@ -206,11 +202,11 @@ public class ParentServer implements Runnable{
     }
     return players;
   }
-
+  // return number of players left 'alive' in game
   public int numPlayersLeft(){
     return playersLeft().size();
   }
-
+  // returns boolean true if player owns a region
   public boolean playerHasARegion(AbstractPlayer player){
     for(Region r : board.getRegions()){
       if(r.getOwner().getName() == player.getName()){
@@ -259,7 +255,6 @@ public class ParentServer implements Runnable{
       List<OrderInterface> orders = orderMap.get(key);
       Collections.shuffle(orders);
     }
-
     if(orderMap.containsKey("PlacementOrder")){
       applyOrderList(orderMap.get("PlacementOrder"));
     }
@@ -268,8 +263,7 @@ public class ParentServer implements Runnable{
     }
     if(orderMap.containsKey("AttackOrder")){
       applyOrderList(orderMap.get("AttackOrder"));
-    }
-    
+    }    
   }
 
   public void applyOrderList(List<OrderInterface> orders){
@@ -279,16 +273,14 @@ public class ParentServer implements Runnable{
     }
     orders.clear();
   }
-
+  // method to add additional unit after round complete to all regions on board
   public void growUnits(){
     for(Region r : board.getRegions()){
       r.setUnits(new Unit(r.getUnits().getUnits()+1));
     }
   }
-
-
+  // method that controls game play
   public void playGame(){
-    
     try{
       //Wait for MAX_PLAYERS to connect or timeout
       waitingForConnections();
@@ -299,11 +291,8 @@ public class ParentServer implements Runnable{
       return;
     }
     //While regions not owned all by one player
-
     createStartingGroups();
-
     boolean notFirstCall = false;
-    
     while(numPlayersLeft() > 1){
       try{
         //Prompt users
@@ -321,12 +310,10 @@ public class ParentServer implements Runnable{
       }
       notFirstCall = true;
     }
-
     if(numPlayersLeft() == 1){
       //If one player alive then create message --> send
       AbstractPlayer winner = playersLeft().iterator().next();
       StringMessage winnerMessage = new StringMessage(winner.getName() + " is the winner!");
-
       //Send message to all children
       for(ChildServer child : children){
         try{
@@ -338,7 +325,7 @@ public class ParentServer implements Runnable{
     //Close all
     closeAll();
   }
-
+  // enables game to be runnable
   @Override
   public void run(){
     System.out.println("MAX_PLAYERS: " + MAX_PLAYERS);
@@ -347,5 +334,4 @@ public class ParentServer implements Runnable{
     playGame();
     System.out.println("~~~GAMEOVER~~~");
   }
-  
 }
