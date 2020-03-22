@@ -17,18 +17,22 @@ private Board tempBoard;
     // regions must be owned by different players
     //starting must be owned by player
     if(!a.getSource().getOwner().getName().equals(player.getName())){
+      System.out.println("player does not own source");
       return false;
+      
     }
     
-    if (a.getSource().getOwner().getName().equals(a.getDestination().getOwner().getName())) {
-      return false;
-    }
+    if (a.getDestination().getOwner().getName().equals(player.getName())) {
+       System.out.println("player cannot own destionation");
+     return false;
+     }
     // regions must be adjacent
     for (Region neighbor : a.getSource().getAdjRegions()) {
-      if (neighbor == a.getDestination()) {
+      if (neighbor.getName().equals(a.getDestination().getName())) {
         return true;
       }
     }
+  System.out.println("regions are not adjdacent");
     return false;
   }
    @Override
@@ -40,7 +44,8 @@ private Board tempBoard;
       }
       //attack.doAction();
     }
-    // if all attacks are valid
+
+  // if all attacks are valid
     return true;
 	}
 @Override

@@ -30,8 +30,7 @@ public class ValidatorTest {
     List<MoveOrder> moves = getMoveOrders(regions);
     List<AttackOrder> attacks = getAttackList(regions);
 
-    List<Region> pRegions = getRegionsForPlacement(p1, p2);
-    List<PlacementOrder> placements = getPlacementList(p1, p2);
+     List<PlacementOrder> placements = getPlacementList(p1, p2);
 
     assertEquals(true, mv.isValidMove(moves.get(0)));
     assertEquals(false, mv.isValidMove(moves.get(1)));
@@ -179,10 +178,12 @@ public class ValidatorTest {
     // TODO: create valid regions and units test
     OrderInterface move21 = new MoveOrder(regions.get(1), regions.get(0), new Unit(1));// valid units
     OrderInterface move41 = new MoveOrder(regions.get(2), regions.get(0), new Unit(2));// valid
-    OrderInterface attack31 = new AttackOrder(regions.get(4), regions.get(0), new Unit(1));// invalid same owner
+    OrderInterface attack35 = new AttackOrder(regions.get(4), regions.get(3), new Unit(1));// invalid same owner
 
-    // ordersValid.add(attack31);
-    ValidatorHelper vh = new ValidatorHelper(new HumanPlayer("Player 1"), b);
+    ordersValid.add(attack35);
+    ordersValid.add(move21);
+    ordersValid.add(move41);
+    ValidatorHelper vh = new ValidatorHelper(p1, b);
     assertEquals(false, vh.allOrdersValid(orders));
     assertEquals(true, vh.allOrdersValid(ordersValid));
 
