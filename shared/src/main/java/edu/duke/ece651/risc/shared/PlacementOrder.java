@@ -6,9 +6,9 @@ public class PlacementOrder extends DestinationOrder {
   public PlacementOrder(Region d, Unit u){
     this.destination = d;
     this.units = u;
-  }
+  }  
   @Override
-  public void doAction(){
+  public void doDestinationAction(){
     destination.setUnits(this.units);
   }
   public void doAction(Region d, Unit u) {

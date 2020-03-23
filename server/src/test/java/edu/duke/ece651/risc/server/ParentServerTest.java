@@ -70,7 +70,8 @@ public class ParentServerTest {
     List<Region> regions = board.getRegions();
     for(int i = 0; i < regions.size(); i++) {
       OrderInterface placement = new PlacementOrder(regions.get(i),new Unit(i + 5));
-      placement.doAction();
+      placement.doSourceAction();
+      placement.doDestinationAction();
       System.out.println("Placement number: " + (i + 5));
     }
     assertEquals(5,regions.get(0).getUnits().getUnits());
@@ -277,6 +278,12 @@ public class ParentServerTest {
     String attackEnd;
 
     for(int j = 0; j < 5; j++){
+      System.out.println(j);
+      //Remove and reapply attack (since attacks interact with unit object)
+      orders.remove(orders.size()-1);
+      orders.remove(orders.size()-1);
+      orders.add(new AttackOrder(regions.get(2), regions.get(1), new Unit(25)));
+      orders.add(new AttackOrder(regions.get(4), regions.get(1), new Unit(25)));
     
       ps.setBoard((Board)DeepCopy.deepCopy(originalBoard));
 
@@ -299,7 +306,7 @@ public class ParentServerTest {
       ps.applyOrders();
       //System.out.println("Board after adding 1 to all regions");
       attackEnd = out.createBoard(ps.getBoard());
-      //out.displayBoard(ps.getBoard());
+      out.displayBoard(ps.getBoard());
 
       //Check negatives make sense
       assert(ps.getBoard().getRegions().get(2).getUnits().getUnits() == -23);

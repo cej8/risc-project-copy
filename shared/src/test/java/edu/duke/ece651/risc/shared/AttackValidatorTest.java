@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
+import edu.duke.ece651.risc.shared.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,26 +14,31 @@ public class AttackValidatorTest {
   public void test_AttackUnits() {
    List<Region> regions = getRegions();
     Board board = new Board(regions);
-    ValidatorInterface<AttackOrder> av1 = new AttackValidator(new HumanPlayer("Player 1"),board);
-    ValidatorInterface<AttackOrder> av2 = new AttackValidator(new HumanPlayer("Player 2"),board);
+    ValidatorInterface<AttackOrder> av1 = new AttackValidator(new HumanPlayer("Player 1"),(Board)DeepCopy.deepCopy(board));
+    ValidatorInterface<AttackOrder> av2 = new AttackValidator(new HumanPlayer("Player 2"),(Board)DeepCopy.deepCopy(board));
     //Orders using all units
     List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);
     List<AttackOrder> attackAllUnits = getAttacksIndependent(regions, regionUnits); //false: attacking w  all units 
     assertEquals(false, av1.validateUnits(attackAllUnits.subList(0,2)));
     assertEquals(false, av2.validateUnits(attackAllUnits.subList(2,3)));
     
-
+    //Need new to refresh map...
+    av1 = new AttackValidator(new HumanPlayer("Player 1"),(Board)DeepCopy.deepCopy(board));
+    av2 = new AttackValidator(new HumanPlayer("Player 2"),(Board)DeepCopy.deepCopy(board));
     //Orders using 0 units
     List<Unit> invalidUnits = get6UnitList(0, 9, 14, 19, 24, 29); //false: moving 0 units
     List<AttackOrder> attackInvalidUnits = getAttacksDependent(regions, invalidUnits); //false: attacking w 0 units
     assertEquals(false, av1.validateUnits(attackInvalidUnits.subList(0,4)));
-    assertEquals(false, av2.validateUnits(attackInvalidUnits.subList(4,6)));
+    assertEquals(true, av2.validateUnits(attackInvalidUnits.subList(4,6)));
 
+    //Need new to refresh map...
+    av1 = new AttackValidator(new HumanPlayer("Player 1"),(Board)DeepCopy.deepCopy(board));
+    av2 = new AttackValidator(new HumanPlayer("Player 2"),(Board)DeepCopy.deepCopy(board));
     //Orders for which sourceUnits < order Units
     List<Unit> tooManyUnits = get6UnitList(100, 9, 14, 19, 24, 29);
     List<AttackOrder> attackWithTooManyUnits = getAttacksDependent(regions, tooManyUnits); //false: attacking w too many units
     assertEquals(false, av1.validateUnits(attackWithTooManyUnits.subList(0,4)));
-    assertEquals(false, av2.validateUnits(attackWithTooManyUnits.subList(4,6)));
+    assertEquals(true, av2.validateUnits(attackWithTooManyUnits.subList(4,6)));
   }
 
 

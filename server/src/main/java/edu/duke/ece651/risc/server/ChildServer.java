@@ -39,6 +39,7 @@ public class ChildServer implements Runnable{
   public AbstractPlayer getPlayer(){
     return player;
   }
+  
   // end of getters & setters
   // enables ChildServer to be runnable
   @Override
@@ -53,20 +54,18 @@ public class ChildServer implements Runnable{
         return;
       }
     }
-    System.out.println(player.getName() + " enter thread");
+    
     ValidatorHelper validator;
     try{
+      System.out.println(player.getName() + " enter thread");
+      playerConnection.getSocket().setSoTimeout((int)maxTime);
       if(firstCall){
         //Prompt for region --> placement
         //Prompt for region
         while(true){
-          //If too long --> kill player
-          if(System.currentTimeMillis() - startTime > maxTime){
-            System.out.println(player.getName() + " took too long, killing connection");
-            player.setPlaying(false);
-            playerConnection.closeAll();
-            return;
-          }
+          //Decrease timeout to maxTime-(current-start)
+          //Ensures will time out at maxTime after start
+          playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));
           //Send board to player
           playerConnection.sendObject(parent.getBoard());
           //Attempt to get groupName string
@@ -82,15 +81,12 @@ public class ChildServer implements Runnable{
         //Otherwise succeeds
         playerConnection.sendObject(new StringMessage("Success: Group assigned."));
         int startUnits = Constants.UNIT_START_MULTIPLIER*parent.getBoard().getNumRegionsOwned(player);
+        
         //Prompt for placement
         while(true){
-          //If too long --> kill player
-          if(System.currentTimeMillis() - startTime > maxTime){
-            System.out.println(player.getName() + " took too long, killing connection");
-            player.setPlaying(false);
-            playerConnection.closeAll();
-            return;
-          }
+          //Decrease timeout to maxTime-(current-start)
+          //Ensures will time out at maxTime after start
+          playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));     
           //Send board
           playerConnection.sendObject(parent.getBoard());
           //Retrieve orders
@@ -122,6 +118,10 @@ public class ChildServer implements Runnable{
         if(parent.playerHasARegion(player)){
           //Prompt for orders --> validate
           while(true){
+            //Decrease timeout to maxTime-(current-start)
+            //Ensures will time out at maxTime after start
+            playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));
+            
             //Send board
             playerConnection.sendObject(parent.getBoard());
 
@@ -146,6 +146,8 @@ public class ChildServer implements Runnable{
           //If not alive --> check if watching
           //If watching null then haven't been prompted
           if(player.isWatching() == null){
+            //Only valid Y/N send from player --> no need for timeout loop
+            
             //Get confirmation message
             ConfirmationMessage spectateMessage = (ConfirmationMessage)(playerConnection.receiveObject());
             //Set watching boolean
@@ -163,8 +165,10 @@ public class ChildServer implements Runnable{
     }
     catch(Exception e){
       //If anything fails then kill player
-      System.out.println(player.getName() + " killing connection");
-      e.printStackTrace();
+      //Server only so actually not huge concern the readability of this
+      //TODO: make this more human readable
+      System.out.println(player.getName() + " exception encountered, killing connection");
+      //e.printStackTrace();
       player.setPlaying(false);
       playerConnection.closeAll();
       return;

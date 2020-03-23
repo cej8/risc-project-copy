@@ -14,9 +14,14 @@ public class MoveOrder extends SourceDestinationOrder {
     return Constants.MOVE_PRIORITY;
   }
 	@Override
-  public void doAction() {
-    //remove units from source region and add them to the destination region
+  public void doSourceAction() {
+    //remove units from source region
     source.setUnits(new Unit(source.getUnits().getUnits() - this.units.getUnits()));
+  }
+
+  @Override
+  public void doDestinationAction(){
+    //add units to destination region
     destination.setUnits(new Unit(destination.getUnits().getUnits()+this.units.getUnits()));
 	}
  public void doAction(Region s, Region d, Unit u) {
