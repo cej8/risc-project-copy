@@ -308,6 +308,7 @@ public class Client extends Thread{
       // Get initial player object (for name)
       player = (HumanPlayer) (connection.receiveObject());
       clientOutput.displayString("Successfully connected, you are named: " + player.getName());
+      clientOutput.displayString("Please wait for more players to connect");
       // After which choose regions
       if(!chooseRegions()) {return; }
       while (true) {
@@ -317,6 +318,10 @@ public class Client extends Thread{
         if (maxTime == 0) {
           maxTime = (long) (Constants.TURN_WAIT_MINUTES * 60 * 1000);
         }
+
+        StringMessage turnMessage = (StringMessage) (connection.receiveObject());
+        String turn = turnMessage.getMessage();
+        clientOutput.displayString(turn);
 
         // Start of each turn will have continue message if game still going
         // Otherwise is winner message

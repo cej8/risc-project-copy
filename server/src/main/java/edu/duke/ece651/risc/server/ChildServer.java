@@ -10,6 +10,7 @@ public class ChildServer implements Runnable{
   private AbstractPlayer player;  
   private ParentServer parent;
   private Connection playerConnection;
+  private String turnMessage = "";
 
   boolean firstCall = true;
 
@@ -23,6 +24,11 @@ public class ChildServer implements Runnable{
     this.playerConnection = playerConnection;
     this.parent = parent;
   }
+
+  public void setTurnMessage(String turnMessage){
+    this.turnMessage = turnMessage;
+  }
+  
   // Getters & setters
   public Connection getPlayerConnection(){
     return playerConnection;
@@ -92,24 +98,28 @@ public class ChildServer implements Runnable{
           //Retrieve orders
           List<OrderInterface> placementOrders;
           placementOrders = (ArrayList<OrderInterface>)(playerConnection.receiveObject());
-          for(int i = 0; i < placementOrders.size(); i++){
-            placementOrders.get(i).convertOrderRegions(parent.getBoard());
-          }
           validator = new ValidatorHelper(player, new Unit(startUnits), parent.getBoard());
           //TODO: Validate orders --> loop if fail
           if(!validator.allPlacementsValid(placementOrders)){
             playerConnection.sendObject(new StringMessage("Fail: placements invalid"));
             continue;
           }
+          
+          //Convert to parent's board
+          for(int i = 0; i < placementOrders.size(); i++){
+            placementOrders.get(i).convertOrderRegions(parent.getBoard());
+          }
           parent.addOrdersToMap(placementOrders);
+          //Succeeds
+          playerConnection.sendObject(new StringMessage("Success: placements valid."));
           break;
         }
-        //Succeeds
-        playerConnection.sendObject(new StringMessage("Success: placements valid."));
         //Prevent initial call again
         firstCall = false;
       }
       else{
+        //Send turn message
+        playerConnection.sendObject(new StringMessage(turnMessage));
         //If called then new turn --> send continue
         playerConnection.sendObject(new StringMessage("Continue"));
         //Send player alive message
@@ -127,20 +137,22 @@ public class ChildServer implements Runnable{
 
             //Prompt for orders
             List<OrderInterface> orders = (ArrayList<OrderInterface>)(playerConnection.receiveObject());
-            for(int i = 0; i < orders.size(); i++){
-              orders.get(i).convertOrderRegions(parent.getBoard());
-            }
             validator = new ValidatorHelper(player, parent.getBoard());
             //TODO: Validate orders --> loop if fail
             if(!validator.allOrdersValid(orders)){
               playerConnection.sendObject(new StringMessage("Fail: orders invalid"));
               continue;
             }
+            
+            //Convert to parent's board
+            for(int i = 0; i < orders.size(); i++){
+              orders.get(i).convertOrderRegions(parent.getBoard());
+            }
             parent.addOrdersToMap(orders);
+            //Otherwise succeeds
+            playerConnection.sendObject(new StringMessage("Success: orders valid."));
             break;
           }
-          //Otherwise succeed
-          playerConnection.sendObject(new StringMessage("Success: orders valid."));
         }
         else{
           //If not alive --> check if watching
