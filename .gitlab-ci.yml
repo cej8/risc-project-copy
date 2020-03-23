@@ -9,8 +9,8 @@ stages:
    - build
    - test
    - coverage
-  # - deploy
-  # - test-deployment
+   - deploy
+   - test-deployment
    
 build:
   tags:
@@ -39,16 +39,16 @@ pages:
    paths:
      - public
 
-#deploy:
- #tags:
-  # - host-server
- #stage: deploy
- #script: ./scripts/redeploy.sh  
+deploy:
+  tags:
+   - host-server
+ stage: deploy
+ script: ./scripts/redeploy.sh  
 
-#test-deployment:
- #tags:
-   #- host-server
- #stage: test-deployment
- #dependencies:
-  # - deploy
- #script: ./scripts/test-deployment.sh
+test-deployment:
+ tags:
+   - host-server
+ stage: test-deployment
+ dependencies:
+   - deploy
+ script: ./scripts/test-deployment.sh
