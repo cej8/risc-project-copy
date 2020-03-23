@@ -147,7 +147,7 @@ public class Client extends Thread{
         // Output board
         clientOutput.displayBoard(board);
         // Print prompt and get group name
-        clientOutput.displayString("Please select a starting region");
+        clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
         String groupName = clientInput.readInput();
         if(timeOut(startTime, maxTime)) { return false; }
         connection.sendObject(new StringMessage(groupName));
@@ -197,7 +197,7 @@ public class Client extends Thread{
       Region placement) {
     while (true) {
       try {
-        clientOutput.displayString("How many units would you like to place in " + regionName + "?");
+        clientOutput.displayString("How many units would you like to place in " + regionName + "? (please enter a number)");
         Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
         PlacementOrder placementOrder = new PlacementOrder(placement, units);
         System.out.println(units.getUnits());
@@ -246,11 +246,11 @@ public class Client extends Thread{
     Region source = null;
     Region destination = null;
     while (source == null) {
-      clientOutput.displayString("What region do you want to " + sourceKeyWord + " from?");
+      clientOutput.displayString("What region do you want to " + sourceKeyWord + " from? (please type a region name, i.e. 'A')");
       source = orderHelper(clientInput.readInput());
     }
     while (destination == null) {
-      clientOutput.displayString("What region do you want to " + destKeyWord + "?");
+      clientOutput.displayString("What region do you want to " + destKeyWord + "? (please type a region name, i.e. 'A')");
       destination = orderHelper(clientInput.readInput());
     }
     while (true) {
@@ -296,7 +296,7 @@ public class Client extends Thread{
         orderList = moveAttackHelper(orderList, "attack from", "attack", "attack");
         clientOutput.displayString("You made an Attack order, what else would you like to do?");
       } else {
-        clientOutput.displayString("Please select either M, A, or D");
+        clientOutput.displayString("Please select either M, A, or D (make sure it is a capital letter)");
       }
     }
     return orderList;
