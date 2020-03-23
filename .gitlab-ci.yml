@@ -41,7 +41,7 @@ pages:
 
 deploy:
  tags:
-   - ece-651
+   - ece651
  stage: deploy
  script: ./scripts/redeploy.sh  
 
