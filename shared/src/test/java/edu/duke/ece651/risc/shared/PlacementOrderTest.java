@@ -22,7 +22,8 @@ public class PlacementOrderTest {
     board.setRegions(regions);
     for(int i = 0; i < regions.size(); i++) {
       OrderInterface placement = new PlacementOrder(regions.get(i),new Unit(i + 5));
-      placement.doAction();
+      placement.doSourceAction();
+      placement.doDestinationAction();
       assertEquals(Constants.PLACEMENT_PRIORITY, placement.getPriority());
       System.out.println("Placement number: " + (i + 5));
     }

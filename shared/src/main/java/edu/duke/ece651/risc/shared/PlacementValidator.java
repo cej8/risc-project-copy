@@ -45,9 +45,10 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
     for (PlacementOrder p : orders) {
       Region tempDest = tempBoard.getRegionByName(p.getDestination().getName());
       Unit placementUnits =  new Unit(p.getUnits().getUnits());
+      PlacementOrder placementCopy = new PlacementOrder(tempDest, placementUnits);
       // make sure at least 1 placementUnit and totalUnits > 0 and placementUnits < totalUnits
       if ((placementUnits.getUnits() <= totalUnits) && (placementUnits.getUnits() > 0) && (totalUnits > 0)) {
-        p.doAction(tempDest, placementUnits);
+        p.doDestinationAction();
         totalUnits -= placementUnits.getUnits();
       } else {
         System.out

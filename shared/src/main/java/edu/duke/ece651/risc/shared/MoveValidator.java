@@ -3,7 +3,7 @@ package edu.duke.ece651.risc.shared;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.*;
 // Class to validate if a move is allowed based on game rules
 public class MoveValidator implements ValidatorInterface<MoveOrder> {
  private Board tempBoard;
@@ -14,38 +14,47 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     this.player = player;
   }
   // method to check if there is a valid path from one region to another (player must own all regions they move through / to)
-  private boolean hasValidPath(Region start, Region end, Set<Region> visited) {
-    // helper method
-    // find a path of connected nodes from start to end
-    // Set<Region> visited = new HashSet<Region>();
-    if(!start.getOwner().getName().equals(player.getName())
-       || !start.getOwner().getName().equals(player.getName())){
-      return false;
-    }
-    
-    visited.add(start);
-    for (Region neighbor : start.getAdjRegions()) {
-      if (visited.contains(neighbor)) {
-        continue;// check if already visited
-      }
-      visited.add(neighbor);
-      if (start.getOwner().getName().equals(neighbor.getOwner().getName())) {// owned by the same player
-        if (neighbor.getName().equals(end.getName())) {
+  private boolean hasValidPath(Region start, Region end) {
+
+    //Maintains set of visited nodes (owned by player)
+    Set<Region> visited = new HashSet<Region>();
+    //Queue of regions to search
+    Queue<Region> pq = new ArrayDeque<Region>();
+    pq.add(start);
+
+    Region currentRegion;    
+
+    //While there is still a region to search
+    while((currentRegion = pq.poll()) != null){
+      //Add to visited set
+      visited.add(currentRegion);
+      //For adjacent
+      for(Region adj : currentRegion.getAdjRegions()){
+        //If not owner then ignore
+        if(!adj.getOwner().getName().equals(player.getName())){
+          continue;
+        }
+        //If adjacent is endpoint
+        if(adj == end){
           return true;
         }
-        return hasValidPath(neighbor, end, visited);
+        //Otherwise if not already visited add to queue
+        if(!visited.contains(adj)){
+          pq.add(adj);
+        }
       }
     }
+    //If nothing left in queue all have been searched --> can't be done
     return false;
   }
   // helper method
   public boolean isValidMove(MoveOrder m) {
-    // owned by the same person
-    if (hasValidPath(m.getSource(), m.getDestination(), new HashSet<Region>())) {
-      // and have path to get there via adjacent regions
-     return true;
+    if(!m.getSource().getOwner().getName().equals(player.getName())
+       || !m.getDestination().getOwner().getName().equals(player.getName())){
+      return false;
     }
-    return false;
+    // owned by the same person
+    return hasValidPath(m.getSource(), m.getDestination());
   }
   // Validate the order is acceptable
 @Override
@@ -75,9 +84,11 @@ public boolean validateOrders(List<MoveOrder> moveList){
       Region tempDest = tempBoard.getRegionByName(move.getDestination().getName());
       Unit sourceUnits = tempSource.getUnits();
       Unit moveUnits = new Unit(move.getUnits().getUnits());
+      MoveOrder moveCopy = new MoveOrder(tempSource, tempDest, moveUnits);
       // make sure at least 1 sourceUnit, 1 moveUnit, and sourceUnits > moveUnits
       if ((sourceUnits.getUnits() > moveUnits.getUnits()) && (sourceUnits.getUnits() > 0) && (moveUnits.getUnits() > 0)) {
-        move.doAction(tempSource, tempDest, moveUnits);
+        moveCopy.doSourceAction();
+        moveCopy.doDestinationAction();
       } else {
         System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); //this is just for testing
         return false;

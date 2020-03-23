@@ -6,13 +6,16 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-public class Client {
+public class Client extends Thread{
   private Connection connection;
   private Board board;
   private boolean isPlaying = true;
   private ClientInputInterface clientInput;
   private ClientOutputInterface clientOutput;
   private HumanPlayer player;
+  
+  private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
+  private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
 
   public Client() {
     clientInput = new ConsoleInput();
@@ -25,6 +28,14 @@ public class Client {
     this();
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
+  }
+
+  
+  public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
+    this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
+  }
+  public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES){
+    this.START_WAIT_MINUTES = START_WAIT_MINUTES;
   }
 
   public void setBoard(Board board) {
@@ -80,6 +91,17 @@ public class Client {
     }
   }
 
+  public boolean timeOut(long startTime, long maxTime){
+    // If too long --> kill player (prevent trying to write to closed pipe)
+    if (System.currentTimeMillis() - startTime > maxTime) {
+      clientOutput.displayString("Player took too long, killing connection");
+      connection.closeAll();
+      clientInput.close();
+      return true;
+    }
+    return false;
+  }
+
   public void updateClientBoard() {
     Board masterBoard = null;
     try {
@@ -94,7 +116,12 @@ public class Client {
     }
   }
 
-  public void chooseRegions() {
+  public boolean chooseRegions() {
+
+    //Initial to -1 for timers, don't set until turn actually starts
+    long startTime = -1;
+    long maxTime = -1;
+      
     try {
       // Set timeout to constant, wait this long for game start
       // This will block on FIRST board = ...
@@ -105,11 +132,24 @@ public class Client {
         // Return timeout to smaller value
         connection.getSocket().setSoTimeout((int) (Constants.TURN_WAIT_MINUTES * 60 * 1000));
 
+        //Set max/start first time board received (start of turn)
+        if(maxTime == -1){
+          maxTime = (long) (connection.getSocket().getSoTimeout());
+          //Catch case for issues in testing, should never really happen
+          if (maxTime == 0) {
+            maxTime = (long) (Constants.TURN_WAIT_MINUTES * 60 * 1000);
+          }
+        }
+        if(startTime == -1){
+          startTime = System.currentTimeMillis();
+        }
+        
         // Output board
         clientOutput.displayBoard(board);
         // Print prompt and get group name
         clientOutput.displayString("Please select a starting region");
         String groupName = clientInput.readInput();
+        if(timeOut(startTime, maxTime)) { return false; }
         connection.sendObject(new StringMessage(groupName));
 
         // Wait for response
@@ -129,7 +169,9 @@ public class Client {
 
         // Display and move into placements
         clientOutput.displayBoard(board);
-        connection.sendObject(createPlacements());
+        List<PlacementOrder> placementOrders = createPlacements();
+        if(timeOut(startTime, maxTime)) { return false; }
+        connection.sendObject(placementOrders);
 
         // Wait for response
         StringMessage responseMessage = (StringMessage) (connection.receiveObject());
@@ -145,8 +187,10 @@ public class Client {
     } catch (Exception e) {
       e.printStackTrace();
       connection.closeAll();
-      return;
+      return false;
     }
+
+    return true;
   }
 
   public List<PlacementOrder> placementOrderHelper(List<PlacementOrder> placementList, String regionName,
@@ -261,17 +305,18 @@ public class Client {
   public void playGame() {
     try {
       // Make initial connection, waits for server to send back player's player object
-      long maxTime = (long) (connection.getSocket().getSoTimeout());
-      if (maxTime == 0) {
-        maxTime = (long) (Constants.TURN_WAIT_MINUTES * 60 * 1000);
-      }
-
       // Get initial player object (for name)
       player = (HumanPlayer) (connection.receiveObject());
+      clientOutput.displayString("Successfully connected, you are named: " + player.getName());
       // After which choose regions
-      chooseRegions();
+      if(!chooseRegions()) {return; }
       while (true) {
         long startTime = System.currentTimeMillis();
+        long maxTime = (long) (connection.getSocket().getSoTimeout());
+        //Catch case for issues in testing, should never really happen
+        if (maxTime == 0) {
+          maxTime = (long) (Constants.TURN_WAIT_MINUTES * 60 * 1000);
+        }
 
         // Start of each turn will have continue message if game still going
         // Otherwise is winner message
@@ -295,17 +340,15 @@ public class Client {
         boolean alive = isAlive.getMessage();
         // If not same then player died on previous turn --> get spectate message
         if (alive != isPlaying) {
+          isPlaying = alive;
           // Continue prompting until valid input (server closes after 60s)
           while (true) {
             // Request input
             clientOutput.displayString("Would you like to keep spectating? [Y/N]");
             String spectateResponse = clientInput.readInput();
+            
             // If too long --> kill player
-            if (System.currentTimeMillis() - startTime > maxTime) {
-              clientOutput.displayString("Player took too long, killing");
-              connection.closeAll();
-              return;
-            }
+            if(timeOut(startTime, maxTime)){ return; }
 
             spectateResponse = spectateResponse.toUpperCase();
             // If valid then do work
@@ -332,15 +375,10 @@ public class Client {
           clientOutput.displayBoard(board);
           // Client generates orders --> sends
           if (alive) {
-            connection.sendObject(createOrders());
-          }
-
-          // If too long --> kill player
-          if (System.currentTimeMillis() - startTime > maxTime) {
-            clientOutput.displayString("Player took too long, killing");
-            connection.closeAll();
-            clientInput.close();
-            return;
+            List<OrderInterface> orders = createOrders();
+            //If too long --> kill player
+            if(timeOut(startTime, maxTime)){ return;}
+            connection.sendObject(orders);
           }
 
           StringMessage responseMessage = (StringMessage) (connection.receiveObject());
@@ -360,6 +398,10 @@ public class Client {
       clientInput.close();
       return;
     }
+  }
 
+  @Override
+  public void run(){
+    playGame();
   }
 }
