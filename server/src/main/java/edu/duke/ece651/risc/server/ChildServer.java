@@ -12,7 +12,7 @@ public class ChildServer implements Runnable{
   private Connection playerConnection;
   private String turnMessage = "";
 
-  boolean firstCall = true;
+  private boolean firstCall = true;
 
   public ChildServer(AbstractPlayer player, ParentServer parent){
     this.player = player;
