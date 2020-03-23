@@ -17,12 +17,16 @@ public class ParentServer implements Runnable{
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
 
+  private StringBuilder turnResults;
+  private int turnNumber = 1;
+
   public ParentServer(){
     BoardGenerator genBoard = new BoardGenerator();
     genBoard.createBoard();
     board = genBoard.getBoard();
     children = new ArrayList<ChildServer>();
     orderMap = new HashMap<String, List<OrderInterface>>();
+    turnResults = new StringBuilder("Turn 0: Start of game\n");
   }
 
   public ParentServer(int port) throws IOException{
@@ -190,6 +194,8 @@ public class ParentServer implements Runnable{
     List<Callable<Object>> todo = new ArrayList<Callable<Object>>(children.size());
     for(int i = 0; i < children.size(); i++){
       todo.add(Executors.callable(children.get(i)));
+      //Insert message into children
+      children.get(i).setTurnMessage(turnResults.toString());
     }
     threads.invokeAll(todo);
     System.out.println("Threads finished");
@@ -251,6 +257,8 @@ public class ParentServer implements Runnable{
     //Apply orders to map
     //Mostly hardcoded due to explicit order ordering
 
+    turnResults = new StringBuilder("Turn " + turnNumber + ":\n");
+
     //Reshuffle all subLists
     for(String key : orderMap.keySet()){
       List<OrderInterface> orders = orderMap.get(key);
@@ -270,10 +278,10 @@ public class ParentServer implements Runnable{
   public void applyOrderList(List<OrderInterface> orders){
     //Simply call doAction for each order
     for(int i = 0; i < orders.size(); i++){
-      orders.get(i).doSourceAction();
+      turnResults.append(orders.get(i).doSourceAction());
     }
     for(int i = 0; i < orders.size(); i++){
-      orders.get(i).doDestinationAction();
+      turnResults.append(orders.get(i).doDestinationAction());
     }
     orders.clear();
   }
@@ -309,10 +317,10 @@ public class ParentServer implements Runnable{
       }
       //Apply orders
       applyOrders();
-      if(notFirstCall){
+      if(turnNumber > 1){
         growUnits();
       }
-      notFirstCall = true;
+      turnNumber++;
     }
     if(numPlayersLeft() == 1){
       //If one player alive then create message --> send
@@ -321,6 +329,7 @@ public class ParentServer implements Runnable{
       //Send message to all children
       for(ChildServer child : children){
         try{
+          child.getPlayerConnection().sendObject(new StringMessage(turnResults.toString()));
           child.getPlayerConnection().sendObject(winnerMessage);
         }
         catch(Exception e){}

@@ -456,6 +456,9 @@ public class ParentServerTest {
     //Now should be in main game loop (past this point client doesn't care about board/player)
     //Both should get "Continue", true alive message, and board
     string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn start");
     cout.displayString(string.unpacker());
     confirmation = (ConfirmationMessage)(c1in.readObject());
@@ -465,6 +468,9 @@ public class ParentServerTest {
     cout.displayString("c1 board");
     cout.displayBoard(board);
     
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 turn message");
+    cout.displayString(string.unpacker());
     string = (StringMessage)(c2in.readObject());
     cout.displayString("c2 turn start");
     cout.displayString(string.unpacker());
@@ -518,6 +524,9 @@ public class ParentServerTest {
     
     //Start turn stuff
     string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn start");
     cout.displayString(string.unpacker());
     confirmation = (ConfirmationMessage)(c1in.readObject());
@@ -527,6 +536,9 @@ public class ParentServerTest {
     cout.displayString("c1 board");
     cout.displayBoard(board);
     
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 turn message");
+    cout.displayString(string.unpacker());
     string = (StringMessage)(c2in.readObject());
     cout.displayString("c2 turn start");
     cout.displayString(string.unpacker());
@@ -567,6 +579,9 @@ public class ParentServerTest {
     
     //Start turn stuff
     string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn start");
     cout.displayString(string.unpacker());
     confirmation = (ConfirmationMessage)(c1in.readObject());
@@ -576,6 +591,9 @@ public class ParentServerTest {
     cout.displayString("c1 board");
     cout.displayBoard(board);
     
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 turn message");
+    cout.displayString(string.unpacker());
     string = (StringMessage)(c2in.readObject());
     cout.displayString("c2 turn start");
     cout.displayString(string.unpacker());
@@ -613,6 +631,9 @@ public class ParentServerTest {
 
     //P1 does start turn
     string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn start");
     cout.displayString(string.unpacker());
     confirmation = (ConfirmationMessage)(c1in.readObject());
@@ -640,6 +661,9 @@ public class ParentServerTest {
     cout.displayString("After waiting for timeout moves will be applied");
     cout.displayString("Server should then inform player 1 that they won and close socket");
 
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
     string = (StringMessage)(c1in.readObject());
     cout.displayString(string.unpacker());
 
