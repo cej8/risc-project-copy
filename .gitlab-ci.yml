@@ -41,13 +41,13 @@ pages:
 
 #deploy:
  #tags:
-  # - ece651
+  # - host-server
  #stage: deploy
  #script: ./scripts/redeploy.sh  
 
 #test-deployment:
  #tags:
-   #- ece651
+   #- host-server
  #stage: test-deployment
  #dependencies:
   # - deploy
