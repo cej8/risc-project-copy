@@ -11,8 +11,8 @@ public class ParentServer implements Runnable{
   private ServerSocket serverSocket = null;
   private List<ChildServer> children;
   private Board board;
-  Map<String, List<OrderInterface>> orderMap;
-  ExecutorService threads = Executors.newFixedThreadPool(Constants.MAX_PLAYERS);
+  private Map<String, List<OrderInterface>> orderMap;
+  private ExecutorService threads = Executors.newFixedThreadPool(Constants.MAX_PLAYERS);
   private int MAX_PLAYERS = Constants.MAX_PLAYERS;
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
