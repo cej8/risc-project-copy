@@ -6,9 +6,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.io.Serializable;
 
+// Class holds all data associated with a network connection
 public class Connection implements Serializable{
   private static final long serialVersionUID = 11L;
-  //this class holds all data associated with a network connection
   private Socket socket = null;
   private ObjectInputStream inputStream = null;
   private ObjectOutputStream outputStream = null;
@@ -24,12 +24,12 @@ public class Connection implements Serializable{
     this.inputStream = inputStream;
     this.outputStream = outputStream;
   }
-
+  // Send generic object
   public <T> void sendObject(T object) throws IOException {
     outputStream.reset();
     outputStream.writeObject(object);
   }
-
+  // Recieve generic object
   public <T> T receiveObject() throws IOException, ClassNotFoundException {
     return (T) inputStream.readObject();
   }
@@ -41,7 +41,7 @@ public class Connection implements Serializable{
   public ObjectOutputStream getOutputStream() {
     return outputStream;
   }
-
+  // Close inputStream, outputStream, and socket 
   public void closeAll() {
     try {
       if(inputStream != null) { inputStream.close(); }

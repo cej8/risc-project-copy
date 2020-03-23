@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+// Class to validate if a move is allowed based on game rules
 public class MoveValidator implements ValidatorInterface<MoveOrder> {
  private Board tempBoard;
   private AbstractPlayer player;
@@ -13,7 +13,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     this.tempBoard = boardCopy;
     this.player = player;
   }
-
+  // method to check if there is a valid path from one region to another (player must own all regions they move through / to)
   private boolean hasValidPath(Region start, Region end, Set<Region> visited) {
     // helper method
     // find a path of connected nodes from start to end
@@ -47,6 +47,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     }
     return false;
   }
+  // Validate the order is acceptable
 @Override
 public boolean validateOrders(List<MoveOrder> moveList){
   boolean validRegions = validateRegions(moveList);
@@ -66,7 +67,7 @@ public boolean validateOrders(List<MoveOrder> moveList){
     // if all moves are valid
     return true;
 	}
-
+  // Ensure at least one unit is left behind in region moving from (based on game rules)
   	@Override
 	public boolean validateUnits(List<MoveOrder> m) {
     for (MoveOrder move : m) {

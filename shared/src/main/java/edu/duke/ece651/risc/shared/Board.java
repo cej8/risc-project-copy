@@ -5,6 +5,7 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 
+// Class to keep track of game board, including associated regions
 public class Board implements Serializable {
   private static final long serialVersionUID = 7L;
   List<Region> regions;
@@ -59,10 +60,8 @@ public class Board implements Serializable {
       playerRegionMap.put(p, playerRegions); //add this <p, list<r>> to the map
       }
     return playerRegionMap;
+
   }
-
-
-
   //Creates a Set of all Players on the Board 
   public Set<AbstractPlayer> getPlayerSet(){
     List<Region> allRegions = this.getRegions();
