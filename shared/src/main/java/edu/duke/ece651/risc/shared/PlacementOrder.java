@@ -8,12 +8,11 @@ public class PlacementOrder extends DestinationOrder {
     this.units = u;
   }  
   @Override
-  public void doDestinationAction(){
+  public String doDestinationAction(){
     destination.setUnits(this.units);
+    return (destination.getOwner().getName() + " placed " + units.getUnits() + " units at " + destination.getName() + "\n");
   }
-  public void doAction(Region d, Unit u) {
-    d.setUnits(u);
-  }
+  
   @Override
   public int getPriority() {
     return Constants.PLACEMENT_PRIORITY;

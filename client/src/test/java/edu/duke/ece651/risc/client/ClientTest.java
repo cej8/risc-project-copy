@@ -456,6 +456,8 @@ public class ClientTest {
     //Client does placements (2 on B, 1 on C), assume 3 on A
     objs.add(board2);
     objs.add(new StringMessage("Success: good placement"));
+    //Turn message
+    objs.add(new StringMessage("Turn 1: placements"));
     //Client enters loop --> send continue
     objs.add(new StringMessage("Continue"));
     //Send alive
@@ -469,6 +471,8 @@ public class ClientTest {
     //Assume good
     objs.add(board3);
     objs.add(new StringMessage("Success: good orders"));
+    //Turn message
+    objs.add(new StringMessage("Turn 2: first orders"));
     //Assume player somehow died
     objs.add(new StringMessage("Continue"));
     objs.add(new ConfirmationMessage(false));
@@ -477,6 +481,8 @@ public class ClientTest {
     //Shouldn't prompt for moves this time...
     objs.add(new StringMessage("Success: spectate"));
     //Now player 2 wins
+    //Turn message
+    objs.add(new StringMessage("Turn 3: final"));
     objs.add(new StringMessage("Player 2 wins or something"));
     //Game ends
 

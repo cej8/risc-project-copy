@@ -14,21 +14,18 @@ public class MoveOrder extends SourceDestinationOrder {
     return Constants.MOVE_PRIORITY;
   }
 	@Override
-  public void doSourceAction() {
+  public String doSourceAction() {
     //remove units from source region
     source.setUnits(new Unit(source.getUnits().getUnits() - this.units.getUnits()));
+    return "";
   }
 
   @Override
-  public void doDestinationAction(){
+  public String doDestinationAction(){
     //add units to destination region
     destination.setUnits(new Unit(destination.getUnits().getUnits()+this.units.getUnits()));
+    return (destination.getOwner().getName() + " moved " + units.getUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n");
 	}
- public void doAction(Region s, Region d, Unit u) {
-    s.setUnits(new Unit(s.getUnits().getUnits() - u.getUnits()));
-    d.setUnits(new Unit(d.getUnits().getUnits()+u.getUnits()));
-    System.out.println(u.getUnits() + ":" + s.getName() +"->" + d.getName());
-  }
 
 
 }

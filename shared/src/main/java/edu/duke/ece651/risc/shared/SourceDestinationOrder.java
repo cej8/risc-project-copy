@@ -24,10 +24,10 @@ public abstract class SourceDestinationOrder implements OrderInterface {
     return units;
   }
 @Override
-  abstract public void doSourceAction();
+  abstract public String doSourceAction();
 
   @Override
-  abstract public void doDestinationAction();
+  abstract public String doDestinationAction();
 
   @Override
   abstract public int getPriority();

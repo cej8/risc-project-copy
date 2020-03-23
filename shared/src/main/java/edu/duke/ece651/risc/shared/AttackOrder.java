@@ -18,13 +18,13 @@ public class AttackOrder extends SourceDestinationOrder {
   }
 
   @Override
-  public void doSourceAction() {
+  public String doSourceAction() {
     // remove units from source (source location)
-    System.out.println(source.getOwner().getName() + " is attacking " + destination.getOwner().getName() + "'s " + destination.getName() + " region with " + units.getUnits() + " units!"); //I just added this in for clarity but if these messages aren't going to the user then obivously not necessary
     source.setUnits(new Unit(source.getUnits().getUnits() - units.getUnits()));
+    return (source.getOwner().getName() + " is attacking " + destination.getOwner().getName() + "'s " + destination.getName() + " region with " + units.getUnits() + " units!\n"); 
   }
   @Override
-  public void doDestinationAction(){
+  public String doDestinationAction(){
     // Continue executing attack until one player has no more units left in region or attack group
     while (!isWinner(source, destination, units)) {
       // loseUnits represents which player will lose a unit (aka they lost the roll)
@@ -36,6 +36,18 @@ public class AttackOrder extends SourceDestinationOrder {
       }
       System.out.println("Defending units remaining: " + destination.getUnits().getUnits() + "; Attacking units remaining: " + units.getUnits());
     }
+
+    String returnString;
+    
+    if (units.getUnits() == 0) {
+      returnString = (destination.getOwner().getName() + " (defender) retains their region ");
+    }
+    else{
+     returnString = (source.getOwner().getName() + " (attacker) takes over the region ");
+    }
+    returnString += destination.getName() + ", " + destination.getUnits().getUnits() + " units survived!\n";
+    return returnString;
+    
   }
   
   // method to check if a player has won attack round

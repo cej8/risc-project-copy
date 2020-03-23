@@ -1,8 +1,6 @@
 package edu.duke.ece651.risc.shared;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 // Helper class to validate orders and placements (game play) 
 public class ValidatorHelper {
   private ValidatorInterface<AttackOrder> attackValidator;
@@ -25,6 +23,9 @@ public class ValidatorHelper {
   }
   // check all orders are valid for round per player
   public boolean allOrdersValid(List<OrderInterface> orders) {
+    for(int i = 0; i < orders.size(); i++){
+      orders.get(i).convertOrderRegions(tempBoard);
+    }
     List<AttackOrder> attackList = new ArrayList<AttackOrder>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
     for (OrderInterface order : orders) {
@@ -47,6 +48,9 @@ public class ValidatorHelper {
   }
   // checks all placement are valid per player
   public boolean allPlacementsValid(List<OrderInterface> placements) {
+    for(int i = 0; i < placements.size(); i++){
+      placements.get(i).convertOrderRegions(tempBoard);
+    }
     List<PlacementOrder> pList = new ArrayList<PlacementOrder>();
     for (OrderInterface order : placements) {
       if (order.getPriority() == Constants.PLACEMENT_PRIORITY) {
