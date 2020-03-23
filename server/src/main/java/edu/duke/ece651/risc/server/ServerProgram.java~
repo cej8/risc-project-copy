@@ -6,13 +6,21 @@ public class ServerProgram {
 
   public static void main(String[] args){
     int port = Constants.DEFAULT_PORT;
+    if(args.length == 2){
+      try{
+        port = Integer.parseInt(args[1]);
+      }
+      catch(NumberFormatException ne){
+        System.out.println("Invalid input, using default port: " + port);
+      }
+    }
     while(true){
       System.out.println("~~~~~~");
       try{
         ParentServer ps = new ParentServer(port);
-        //ps.setTURN_WAIT_MINUTES(10.0/60);
-        //ps.setSTART_WAIT_MINUTES(15.0/60);
-        //ps.setMAX_PLAYERS(3);
+        ps.setTURN_WAIT_MINUTES(10.0/60);
+        ps.setSTART_WAIT_MINUTES(15.0/60);
+        ps.setMAX_PLAYERS(3);
         ps.run();
       }
       catch(Exception e){

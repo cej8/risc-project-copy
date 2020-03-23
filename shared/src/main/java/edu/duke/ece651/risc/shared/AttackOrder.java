@@ -16,29 +16,28 @@ public class AttackOrder extends SourceDestinationOrder {
   public int getPriority(){
     return Constants.ATTACK_PRIORITY;
   }
- @Override
-    public void doAction() {
-      doAction(source, destination, units); 
-    }
 
-  
-  public void doAction(Region s, Region d, Unit u) {
+  @Override
+  public void doSourceAction() {
     // remove units from source (source location)
-    System.out.println(s.getOwner().getName() + " is attacking " + d.getOwner().getName() + "'s "
-                       + d.getName() + " region with " + u.getUnits() + " units!"); //I just added this in for clarity but if these messages aren't going to the user then obivously not necessary
-    s.setUnits(new Unit(s.getUnits().getUnits() - u.getUnits()));
+    System.out.println(source.getOwner().getName() + " is attacking " + destination.getOwner().getName() + "'s " + destination.getName() + " region with " + units.getUnits() + " units!"); //I just added this in for clarity but if these messages aren't going to the user then obivously not necessary
+    source.setUnits(new Unit(source.getUnits().getUnits() - units.getUnits()));
+  }
+  @Override
+  public void doDestinationAction(){
     // Continue executing attack until one player has no more units left in region or attack group
-    while (!isWinner(s, d, u)) {
+    while (!isWinner(source, destination, units)) {
       // loseUnits represents which player will lose a unit (aka they lost the roll)
-      Region loseUnits = rollHelper(s, d);
-      if (loseUnits == d) {
-        d.setUnits(new Unit(d.getUnits().getUnits() - 1));
+      Region loseUnits = rollHelper(source, destination);
+      if (loseUnits == destination) {
+        destination.setUnits(new Unit(destination.getUnits().getUnits() - 1));
       } else {
-        u = new Unit(u.getUnits() - 1);
+        units = new Unit(units.getUnits() - 1);
       }
-      System.out.println("Defending units remaining: " + d.getUnits().getUnits() + "; Attacking units remaining: " + u.getUnits());
+      System.out.println("Defending units remaining: " + destination.getUnits().getUnits() + "; Attacking units remaining: " + units.getUnits());
     }
   }
+  
   // method to check if a player has won attack round
   private boolean isWinner(Region s, Region d, Unit u) {
     if (u.getUnits() == 0) {

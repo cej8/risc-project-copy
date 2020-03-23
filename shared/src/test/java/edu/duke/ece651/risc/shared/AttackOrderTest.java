@@ -39,7 +39,8 @@ public class AttackOrderTest {
     // attack
     AttackOrder ao = new AttackOrder(s, d, u);
     assertEquals(Constants.ATTACK_PRIORITY, ao.getPriority());
-    ao.doAction();
+    ao.doSourceAction();
+    ao.doDestinationAction();
   }
 
 }

@@ -77,6 +77,7 @@ public class ParentServer implements Runnable{
       HumanPlayer newPlayer;
       Connection newPlayerConnection;
       try {
+        //Decrease socket timeout so max waiting of gameStartTime
         if(startTime != -1){
           serverSocket.setSoTimeout((int)(gameStartTime - (System.currentTimeMillis()-startTime)));
         }
@@ -269,7 +270,10 @@ public class ParentServer implements Runnable{
   public void applyOrderList(List<OrderInterface> orders){
     //Simply call doAction for each order
     for(int i = 0; i < orders.size(); i++){
-      orders.get(i).doAction();
+      orders.get(i).doSourceAction();
+    }
+    for(int i = 0; i < orders.size(); i++){
+      orders.get(i).doDestinationAction();
     }
     orders.clear();
   }
