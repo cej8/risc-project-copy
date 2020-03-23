@@ -11,22 +11,16 @@ public class DeepCopyFailureExceptionTest {
   @Test
   public void test_DCFE() {
     
-    Exception ex = new ClassNotFoundException();
-    DeepCopyFailureException e = new DeepCopyFailureException(ex);
-    assertEquals(ex, e.getCause());
-    assertEquals(ex, e.exn);    
+    Exception cnf = new ClassNotFoundException();
+    DeepCopyFailureException ecnf = new DeepCopyFailureException(cnf);
+    assertEquals(cnf, ecnf.getCause());
+    assertEquals(cnf, ecnf.exn);    
+
+    Exception io = new IOException();
+    DeepCopyFailureException eio = new DeepCopyFailureException(io);
+    assertEquals(io, eio.getCause());
+    assertEquals(io, eio.exn);
+
+  
   }
-
-  // public void testDeepCopyException(){
-  //   Region region = new Region("Earth");
-  //   List<Region> regions = new ArrayList<Region>();
-  //   regions.add(region);
-  //   Board board = new Board(regions);
-  //   Board exceptionBoard = mock(Board.class);//new Board(regions);
-    
-  //   //   doThrow(ex).when(DeepCopy.deepCopy(exceptionBoard));
-  //   Board copy = (Board) DeepCopy.deepCopy(board);
-  //   Board copyException = (Board) DeepCopy.deepCopy(exceptionBoard);
-
-  // }
 }
