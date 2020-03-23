@@ -26,8 +26,8 @@ public class DeepCopy {
           oos.close();
           ois.close();
         }
-        catch(IOException e){
-          e.printStackTrace();
+        catch (Exception e) {
+          throw new DeepCopyFailureException(e);
         }
       }
     }
