@@ -5,7 +5,7 @@
 ECE 651: RISC Evolution 1
 ======================================
 
-Final commit ID:
+Final commit ID: 805837b8
 
 Hosting server can be done with './gradlew run-server' in highest level of repository. This will open server on the machine with the default post of 12345.
 
