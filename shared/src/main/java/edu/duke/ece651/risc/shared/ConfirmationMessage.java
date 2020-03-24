@@ -7,13 +7,13 @@ public class ConfirmationMessage implements MessageInterface<Boolean>{
   public ConfirmationMessage(boolean m){
     this.message = m;
   }
-	@Override
-	public Boolean unpacker() {
-		return getMessage();
-	}
+  @Override
+  public Boolean unpacker() {
+	return getMessage();
+  }
 
-	public boolean getMessage() {
-		return message;
-	}
+  public boolean getMessage() {
+	return message;
+  }
 
 }
