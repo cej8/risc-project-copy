@@ -7,14 +7,14 @@ public class StringMessage implements MessageInterface<String> {
     this.message = m;
   }
   
-	@Override
-	public String unpacker() {
+  @Override
+  public String unpacker() {
     return message;
-	}
+  }
 
-	public String getMessage() {
-		return message;
-	}
+  public String getMessage() {
+	return message;
+  }
 
 
 }
