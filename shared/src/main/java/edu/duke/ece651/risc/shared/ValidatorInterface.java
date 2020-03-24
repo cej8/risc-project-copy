@@ -5,8 +5,8 @@ import java.util.List;
 public interface ValidatorInterface<T> {
   //this interface will be used to validate moves on regions and units are valid
   
-	public boolean validateOrders(List<T> orders);
-   public boolean validateUnits(List<T> orders);
+  public boolean validateOrders(List<T> orders);
+  public boolean validateUnits(List<T> orders);
   public boolean validateRegions(List<T> orders);
 
                              
