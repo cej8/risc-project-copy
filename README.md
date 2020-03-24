@@ -17,6 +17,8 @@ Between each turn, the server waits 3 minutes to recieve a valid turn. After 3 m
 
 Validation of placements and moves are happening on the server side, meaning if a player enters multiple orders (attack and move) in a turn, but one order is considered invalid due to project constraints then the player is reprompted to enter all moves for that turn. Some minimum validation is done on the client side regarding players entering things that are not numbers for units or selecting regions that do not exist.
 
+When attacking or moving, at least one unit must be left behind in your region (i.e. you cannot abandon a region).
+
 UML diagrams can be found in top level of repository or on OneNote.
 
 ## Coverage
