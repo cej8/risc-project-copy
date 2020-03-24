@@ -5,7 +5,6 @@ import java.util.List;
 
 // Class to check / validate that an attack order is allowed based on game conditions
 public class AttackValidator implements ValidatorInterface<AttackOrder> {
- // helper method
 private Board tempBoard;
   private AbstractPlayer player;
   

@@ -18,5 +18,4 @@ public class PlacementOrder extends DestinationOrder {
     return Constants.PLACEMENT_PRIORITY;
 
 }
-
 }
