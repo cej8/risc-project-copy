@@ -15,10 +15,10 @@ public class ConsoleInput implements ClientInputInterface{
     this.input = new Scanner(input);
   }
   
-	@Override
-	public String readInput() {
-      return input.nextLine();
-	}
+  @Override
+  public String readInput() {
+    return input.nextLine();
+  }
 
   @Override
   public void close(){
