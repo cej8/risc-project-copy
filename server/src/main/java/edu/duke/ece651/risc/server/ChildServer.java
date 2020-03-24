@@ -155,6 +155,8 @@ public class ChildServer implements Runnable{
           }
         }
         else{
+          //If here then no regions left --> mark not playing
+          player.setPlaying(false);
           //If not alive --> check if watching
           //If watching null then haven't been prompted
           if(player.isWatching() == null){
