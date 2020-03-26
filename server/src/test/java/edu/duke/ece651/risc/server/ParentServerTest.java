@@ -54,6 +54,12 @@ public class ParentServerTest {
       }
       System.out.println();
     }
+    assertEquals(1,regions.get(0).getSize());
+    assertEquals(1,regions.get(0).getFoodProduction());
+    assertEquals(1,regions.get(0).getTechProduction());
+    assertEquals(1,regions.get(6).getSize());
+    assertEquals(1,regions.get(6).getFoodProduction());
+    assertEquals(1,regions.get(6).getTechProduction());
   }
   // @Test
   //  public void test_placementOrder(){

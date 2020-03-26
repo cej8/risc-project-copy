@@ -14,121 +14,86 @@ public class BoardGenerator {
   
   // Generate static board - generate tree to represent board
   public void createBoard(){
-    List<Region> adjRegion = new ArrayList<Region>();
+    List<Region> adjRegion = null;
     List<Region> regionList = new ArrayList<Region>();
-    Region regionA = new Region();
-    regionA.setName("A");
-    Region regionB = new Region();
-    regionB.setName("B");
-    Region regionC = new Region();
-    regionC.setName("C");
-    Region regionD = new Region();
-    regionD.setName("D");
-    Region regionE = new Region();
-    regionE.setName("E");
-    Region regionF = new Region();
-    regionF.setName("F");
-    Region regionG = new Region();
-    regionG.setName("G");
-    Region regionH = new Region();
-    regionH.setName("H");
-    Region regionI = new Region();
-    regionI.setName("I");
-    Region regionJ = new Region();
-    regionJ.setName("J");
-    Region regionK = new Region();
-    regionK.setName("K");
-    Region regionL = new Region();
-    regionL.setName("L");
+
+    Region regionA = createRegion("A");
+    Region regionB = createRegion("B");
+    Region regionC = createRegion("C");
+    Region regionD = createRegion("D");
+    Region regionE = createRegion("E");
+    Region regionF = createRegion("F");
+    Region regionG = createRegion("G");
+    Region regionH = createRegion("H");
+    Region regionI = createRegion("I");
+    Region regionJ = createRegion("J");
+    Region regionK = createRegion("K");
+    Region regionL = createRegion("L");
     // A
-    adjRegion.add(regionB);
-    adjRegion.add(regionL);
-    adjRegion.add(regionF);
-    regionA.setAdjRegions(adjRegion);
-    regionList.add(regionA);
-    // B
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionA);
-    adjRegion.add(regionF);
-    adjRegion.add(regionC);
-    regionB.setAdjRegions(adjRegion);
-    regionList.add(regionB);
-    // C
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionB);
-    adjRegion.add(regionE);
-    adjRegion.add(regionD);
-    regionC.setAdjRegions(adjRegion);
-    regionList.add(regionC);
-    // D
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionC);
-    adjRegion.add(regionE);
-    adjRegion.add(regionI);
-    regionD.setAdjRegions(adjRegion);
-    regionList.add(regionD);
-    // E
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionF);
-    adjRegion.add(regionC);
-    adjRegion.add(regionD);
+    adjRegion = createAdjRegions(regionB, regionF, regionL);
+    addToRegionList(adjRegion, regionList, regionA);
+    //B
+    adjRegion = createAdjRegions(regionA, regionC, regionF);
+    addToRegionList(adjRegion, regionList, regionB);
+    //C
+    adjRegion = createAdjRegions(regionB, regionD, regionE);
+    addToRegionList(adjRegion, regionList, regionC);
+    //D
+    adjRegion = createAdjRegions(regionC, regionI, regionE);
+    addToRegionList(adjRegion, regionList, regionD);
+    //E
+    adjRegion = createAdjRegions(regionF, regionD, regionC);
     adjRegion.add(regionH);
-    regionE.setAdjRegions(adjRegion);
-    regionList.add(regionE);
-    // F
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionA);
-    adjRegion.add(regionB);
-    adjRegion.add(regionE);
+    addToRegionList(adjRegion, regionList, regionE);
+    //F
+    adjRegion = createAdjRegions(regionA, regionE, regionB);
     adjRegion.add(regionG);
-    regionF.setAdjRegions(adjRegion);
-    regionList.add(regionF);
-    // G
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionH);
-    adjRegion.add(regionF);
-    adjRegion.add(regionK);
+    addToRegionList(adjRegion, regionList, regionF);
+    //G
+    adjRegion = createAdjRegions(regionH, regionK, regionF);
     adjRegion.add(regionL); 
-    regionG.setAdjRegions(adjRegion);
-    regionList.add(regionG);
-    // H
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionG);
-    adjRegion.add(regionE);
-    adjRegion.add(regionI);
+    addToRegionList(adjRegion, regionList, regionG);
+    //H
+    adjRegion = createAdjRegions(regionG, regionI, regionE);
     adjRegion.add(regionJ);
-    regionH.setAdjRegions(adjRegion);
-    regionList.add(regionH);
-    // I
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionD);
-    adjRegion.add(regionH);
-    adjRegion.add(regionJ);
-    regionI.setAdjRegions(adjRegion);
-    regionList.add(regionI);
-    // J
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionI);
-    adjRegion.add(regionK);
-    adjRegion.add(regionH);
-    regionJ.setAdjRegions(adjRegion);
-    regionList.add(regionJ);
-    // K
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionG);
-    adjRegion.add(regionL);
-    adjRegion.add(regionJ);
-    regionK.setAdjRegions(adjRegion);
-    regionList.add(regionK);
-    // L
-    adjRegion = new ArrayList<Region>();
-    adjRegion.add(regionG);
-    adjRegion.add(regionK);
-    adjRegion.add(regionA);
-    regionL.setAdjRegions(adjRegion);
-    regionList.add(regionL);
+    addToRegionList(adjRegion, regionList, regionH);
+    //I
+    adjRegion = createAdjRegions(regionD, regionJ, regionH);
+    addToRegionList(adjRegion, regionList, regionI);
+    //J
+    adjRegion = createAdjRegions(regionI, regionH, regionK);
+    addToRegionList(adjRegion, regionList, regionJ);
+    //K
+    adjRegion = createAdjRegions(regionG, regionJ, regionL);
+    addToRegionList(adjRegion, regionList, regionK);
+    //L
+    adjRegion = createAdjRegions(regionG, regionA, regionK);
+    addToRegionList(adjRegion, regionList, regionL);
     // Add to board
     this.board = new Board(regionList);
+  }
+
+  private void addToRegionList(List<Region> adjRegion, List<Region> regionList, Region regionA) {
+    regionA.setAdjRegions(adjRegion);
+    regionList.add(regionA);
+  }
+
+  private List<Region> createAdjRegions(Region regionB, Region regionF, Region regionL) {
+    List<Region> adjRegion;
+    adjRegion = new ArrayList<Region>();
+    adjRegion.add(regionB);
+    adjRegion.add(regionL);
+    adjRegion.add(regionF);
+    return adjRegion;
+  }
+
+  private Region createRegion(String name) {
+    Region regionA = new Region();
+    regionA.setName(name);
+    regionA.setSize(1);
+    regionA.setFoodProduction(1);
+    regionA.setTechProduction(1);
+    return regionA;
   }
 
 }
