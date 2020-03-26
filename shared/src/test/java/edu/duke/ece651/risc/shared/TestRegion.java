@@ -42,8 +42,7 @@ public class TestRegion {
     assertEquals(5, regionList.get(0).getSize());
     assertEquals(7, regionList.get(0).getFoodProduction());
     assertEquals(2, regionList.get(0).getTechProduction());
-    Region region3= new Region(p,u);
-
+    
     regionList.get(0).setFoodProduction(1222222);
     assertEquals(1222222, regionList.get(0).getFoodProduction()); 
     regionList.get(0).setTechProduction(9506);
