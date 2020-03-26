@@ -10,7 +10,10 @@ public class Region implements Serializable {
   private String name;
   private Unit units;
   private List<Region> adjRegions;
-
+  private int regionSize;
+  private int foodProduction;
+  private int technologyProduction;
+  
   public Region(){
   }
 
@@ -46,7 +49,25 @@ public class Region implements Serializable {
   public void setName(String n){
     this.name = n;
   }
+  public void setSize(int s){
+    this.regionSize = s;
+  }
+  public void setFoodProduction(int f){
+    this.foodProduction = f;
+  }
+  public void setTechProduction(int t){
+    this.technologyProduction = t;
+  }
   //Getters
+  public int getTechProduction(){
+    return technologyProduction;
+  }
+  public int getFoodProduction(){
+    return foodProduction;
+  }
+  public int getSize(){
+    return regionSize;
+  }
   public AbstractPlayer getOwner(){
     return owner;
   }
