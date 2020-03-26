@@ -19,13 +19,18 @@ public class Unit implements Serializable {
   }
   
   public Unit() {
+    units = new ArrayList<Integer>();
   }
 
   //Initialize numUnits units all with bonus 0
   public Unit(Integer numUnits){
     units = new ArrayList<Integer>();
-    for (Integer i = 0; i < numUnits; i++){
-      units.add(0);
+    this.addUnits(numUnits, 0);
+  }
+
+  public void addUnits(int numUnits, int tech){ 
+    for (Integer i = 0; i < numUnits; i++) {
+      units.add(tech);
     }
   }
 
@@ -68,5 +73,6 @@ public class Unit implements Serializable {
   public Integer getBonusFromTech(Integer tech){
     return techToBonusMap.get(tech);
   }
-  
+
+
 }
