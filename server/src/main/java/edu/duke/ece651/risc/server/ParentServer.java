@@ -124,7 +124,7 @@ public class ParentServer implements Runnable{
   public void createStartingGroupsHelper(char groupName, int iStart, int iEnd, List<Region> regionList){
     HumanPlayer player;
     Unit u = new Unit();
-    u.setUnits(0);
+    //u.setUnits(0);
     player = new HumanPlayer();
     player.setName("Group " + groupName);
     for (int i = iStart; i < iEnd; i++){
@@ -262,6 +262,7 @@ public class ParentServer implements Runnable{
     //Reshuffle all subLists
     for(String key : orderMap.keySet()){
       List<OrderInterface> orders = orderMap.get(key);
+
       Collections.shuffle(orders);
     }
     if(orderMap.containsKey("PlacementOrder")){
@@ -286,9 +287,14 @@ public class ParentServer implements Runnable{
     orders.clear();
   }
   // method to add additional unit after round complete to all regions on board
-  public void growUnits(){
-    for(Region r : board.getRegions()){
-      r.setUnits(new Unit(r.getUnits().getUnits()+1));
+
+  //TODO -- needs to be changed and tested to add a unit of bonus 0 to already existing list
+  public void growUnits() {
+    // for(Region r : board.getRegions()){
+    //   r.setUnits(new Unit(r.getUnits().getUnits()+1));
+    // }
+    for (Region r: board.getRegions()){
+      r.getUnits().addUnits(1, 0); //add 1 unit of tech 0 to each region
     }
   }
   // method that controls game play
