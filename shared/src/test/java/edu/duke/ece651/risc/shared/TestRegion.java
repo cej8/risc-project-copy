@@ -16,16 +16,20 @@ public class TestRegion {
     p.setName("test");
     region.setOwner(p);
     Unit u = new Unit(3);
-    //  u.setUnits(3);
     region.setUnits(u);
+    region.setSize(5);
+    region.setFoodProduction(7);
+    region.setTechProduction(2);
     // region 2
     Region region2 = new Region();
     AbstractPlayer p2 = new HumanPlayer();
     p2.setName("test");
     region2.setOwner(p2);
     Unit u2 = new Unit(2);
-    // u2.setUnits(3);
     region2.setUnits(u2);
+    region2.setSize(2);
+    region2.setFoodProduction(3);
+    region2.setTechProduction(4);
     ArrayList<Region> regionList = new ArrayList<Region>();
     regionList.add(region);
     regionList.add(region2);
@@ -34,6 +38,10 @@ public class TestRegion {
     assertEquals(u,region.getUnits());
     assertEquals(regionList, region.getAdjRegions());
 
+    // resources check
+    assertEquals(5, regionList.get(0).getSize());
+    assertEquals(7, regionList.get(0).getFoodProduction());
+    assertEquals(2, regionList.get(0).getTechProduction());
     Region region3= new Region(p,u);
   }
 
