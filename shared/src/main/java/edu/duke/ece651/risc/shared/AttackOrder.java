@@ -20,7 +20,8 @@ public class AttackOrder extends SourceDestinationOrder {
   @Override
   public String doSourceAction() {
     // remove units from source (source location)
-    source.setUnits(new Unit(source.getUnits().getUnits() - units.getUnits()));
+    //TODO --WARNING: this line will erase all bonuses
+    // source.setUnits(new Unit(source.getUnits().getUnits() - units.getUnits()));
     return (source.getOwner().getName() + " is attacking " + destination.getOwner().getName() + "'s " + destination.getName() + " region with " + units.getUnits() + " units!\n"); 
   }
   @Override
@@ -30,9 +31,11 @@ public class AttackOrder extends SourceDestinationOrder {
       // loseUnits represents which player will lose a unit (aka they lost the roll)
       Region loseUnits = rollHelper(source, destination);
       if (loseUnits == destination) {
-        destination.setUnits(new Unit(destination.getUnits().getUnits() - 1));
-      } else {
-        units = new Unit(units.getUnits() - 1);
+            //TODO --WARNING: this line will erase all bonuses
+        //    destination.setUnits(new Unit(destination.getUnits().getUnits() - 1));
+          } else {
+         //TODO --WARNING: this line will erase all bonuses
+        //units = new Unit(units.getUnits() - 1);
       }
       System.out.println("Defending units remaining: " + destination.getUnits().getUnits() + "; Attacking units remaining: " + units.getUnits());
     }

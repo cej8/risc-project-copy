@@ -13,18 +13,22 @@ public class MoveOrder extends SourceDestinationOrder {
   public int getPriority(){
     return Constants.MOVE_PRIORITY;
   }
+
   @Override
+  //TODO -- this should not return a new Unit bc that would clear all bonuses 
   public String doSourceAction() {
     //remove units from source region
-    source.setUnits(new Unit(source.getUnits().getUnits() - this.units.getUnits()));
+    //  source.setUnits(new Unit(source.getUnits().getUnits() - this.units.getUnits()));
     return "";
   }
 
   @Override
   public String doDestinationAction(){
     //add units to destination region
-    destination.setUnits(new Unit(destination.getUnits().getUnits()+this.units.getUnits()));
+    //TODO --WARNING: this line will erase all bonuses
+    // destination.setUnits(new Unit(destination.getUnits().getUnits()+this.units.getUnits()));
     return (destination.getOwner().getName() + " moved " + units.getUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n");
+ 
   }
 
 

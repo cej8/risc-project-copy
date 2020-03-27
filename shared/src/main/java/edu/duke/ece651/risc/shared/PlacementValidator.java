@@ -44,7 +44,8 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
     int totalUnits = this.playerUnits.getUnits();
     for (PlacementOrder p : orders) {
       Region tempDest = tempBoard.getRegionByName(p.getDestination().getName());
-      Unit placementUnits =  new Unit(p.getUnits().getUnits());
+
+      Unit placementUnits =  new Unit(p.getUnits().getUnits()); //TODO this is fine? bc placing new units?
       PlacementOrder placementCopy = new PlacementOrder(tempDest, placementUnits);
       // make sure at least 1 placementUnit and totalUnits > 0 and placementUnits < totalUnits
       if ((placementUnits.getUnits() <= totalUnits) && (placementUnits.getUnits() > 0) && (totalUnits > 0)) {

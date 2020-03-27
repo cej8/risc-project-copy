@@ -83,16 +83,19 @@ public boolean validateOrders(List<MoveOrder> moveList){
       Region tempSource = tempBoard.getRegionByName(move.getSource().getName());
       Region tempDest = tempBoard.getRegionByName(move.getDestination().getName());
       Unit sourceUnits = tempSource.getUnits();
-      Unit moveUnits = new Unit(move.getUnits().getUnits());
-      MoveOrder moveCopy = new MoveOrder(tempSource, tempDest, moveUnits);
-      // make sure at least 1 sourceUnit, 1 moveUnit, and sourceUnits > moveUnits
-      if ((sourceUnits.getUnits() > moveUnits.getUnits()) && (sourceUnits.getUnits() > 0) && (moveUnits.getUnits() > 0)) {
-        moveCopy.doSourceAction();
-        moveCopy.doDestinationAction();
-      } else {
-        System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); //this is just for testing
-        return false;
-      }
+      //TODO: WARNING the following line will clear all bonues 
+      //Unit moveUnits = new Unit(move.getUnits().getUnits());
+
+      //TODO: commented out the rest of the code for compliation 
+     //  MoveOrder moveCopy = new MoveOrder(tempSource, tempDest, moveUnits);
+  //     // make sure at least 1 sourceUnit, 1 moveUnit, and sourceUnits > moveUnits
+  //     if ((sourceUnits.getUnits() > moveUnits.getUnits()) && (sourceUnits.getUnits() > 0) && (moveUnits.getUnits() > 0)) {
+  //       moveCopy.doSourceAction();
+  //       moveCopy.doDestinationAction();
+  //     } else {
+  //       System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); //this is just for testing
+  //       return false;
+  //     }
     }
     return true;
 
