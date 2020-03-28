@@ -67,6 +67,10 @@ public class Client extends Thread{
     this.player = player;
   }
 
+  public HumanPlayer getPlayer() {
+    return this.player;
+  }
+  
   public void setSocketTimeout(int timeout) throws SocketException {
     connection.getSocket().setSoTimeout(timeout);
   }
@@ -229,79 +233,7 @@ public class Client extends Thread{
     return placementList;
   }
 
-  public Region orderHelper(String response) {
-    List<Region> regionList = board.getRegions();
-    for (int i = 0; i < regionList.size(); i++) {
-      if (response.equals(regionList.get(i).getName())) {
-        return regionList.get(i);
-      }
-    }
-    clientOutput.displayString("Region does not exist.");
-    return null;
-  }
-
-  // Helper method to create MoveOrder or AttackOrder
-  public List<OrderInterface> moveAttackHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord,
-      String unitKeyWord) {
-    Region source = null;
-    Region destination = null;
-    while (source == null) {
-      clientOutput.displayString("What region do you want to " + sourceKeyWord + " from? (please type a region name, i.e. 'A')");
-      source = orderHelper(clientInput.readInput());
-    }
-    while (destination == null) {
-      clientOutput.displayString("What region do you want to " + destKeyWord + "? (please type a region name, i.e. 'A')");
-      destination = orderHelper(clientInput.readInput());
-    }
-    while (true) {
-      try {
-        clientOutput.displayString("How many units do you want to " + unitKeyWord + "?");
-        Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
-        if (unitKeyWord.equals("move")) {
-          MoveOrder moveOrder = new MoveOrder(source, destination, units);
-          orderList.add(moveOrder);
-          break;
-        } else {
-          AttackOrder attackOrder = new AttackOrder(source, destination, units);
-          orderList.add(attackOrder);
-          break;
-        }
-      } catch (NumberFormatException ne) {
-        // ne.printStackTrace();
-        clientOutput.displayString("That was not an integer, please try again.");
-      }
-    }
-    return orderList;
-  }
-
-  public List<OrderInterface> createOrders() {
-    // prompt user for orders --> create list of OrderInterface --> send to server
-    List<OrderInterface> orderList = new ArrayList<OrderInterface>();
-    String response = null;
-    boolean orderSelect = true;
-    while (orderSelect) {
-      // prompt user
-      clientOutput
-          .displayString("You are " + player.getName() + ", what would you like to do?\n (M)ove\n (A)ttack\n (D)one");
-      response = clientInput.readInput();
-      if (response.equals("D")) {
-        orderSelect = false;
-        break;
-      } else if (response.equals("M")) {
-        // orderList = moveOrderHelper(orderList);
-        orderList = moveAttackHelper(orderList, "move units", "move units to", "move");
-        clientOutput.displayString("You made a Move order, what else would you like to do?");
-      } else if (response.equals("A")) {
-        // orderList = attackOrderHelper(orderList);
-        orderList = moveAttackHelper(orderList, "attack from", "attack", "attack");
-        clientOutput.displayString("You made an Attack order, what else would you like to do?");
-      } else {
-        clientOutput.displayString("Please select either M, A, or D (make sure it is a capital letter)");
-      }
-    }
-    return orderList;
-  }
-
+ 
   public void playGame() {
     try {
       // Make initial connection, waits for server to send back player's player object
@@ -380,7 +312,8 @@ public class Client extends Thread{
           clientOutput.displayBoard(board);
           // Client generates orders --> sends
           if (alive) {
-            List<OrderInterface> orders = createOrders();
+            SDOrderCreator createOrders = new SDOrderCreator(this);
+            List<OrderInterface> orders = createOrders.createOrders();
             //If too long --> kill player
             if(timeOut(startTime, maxTime)){ return;}
             connection.sendObject(orders);

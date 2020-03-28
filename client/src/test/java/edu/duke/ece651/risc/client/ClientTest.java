@@ -301,7 +301,8 @@ public class ClientTest {
     client.setBoard(board);
 
     client.setPlayer(player1);
-    List<OrderInterface> out = client.createOrders();
+    SDOrderCreator oc = new SDOrderCreator(client);
+    List<OrderInterface> out = oc.createOrders();
 
     //Expect following:
     //Prompt move type, bad input
