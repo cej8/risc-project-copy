@@ -21,4 +21,6 @@ public final class Constants {
   public static final int PLACEMENT_PRIORITY = 1;
   // cost to attack - food 
   public static final int ATTACK_COST = 1;
+  public static final int STARTING_FOOD = 10;
+  public static final int STARTING_TECH = 10;
 }
