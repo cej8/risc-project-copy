@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+// S(ource)D(estination)OrderCreator abstracted class from Client.java to make orders more extensible and manageable as code grows. Class handles all orders associated with game
+
 public class SDOrderCreator {
   private Client client;
 
@@ -111,7 +113,7 @@ public class SDOrderCreator {
     while (orderSelect) {
       // prompt user
       client.getClientOutput()
-        .displayString("You are " + client.getPlayer().getName() + ", what would you like to do?\n (M)ove\n (A)ttack\n (D)one");
+        .displayString("You are " + client.getPlayer().getName() + ", what would you like to do?\n (M)ove\n (A)ttack\n (D)one\n (U)pgrade");
       response = client.getClientInput().readInput();
       orderSelect = getOrderList(orderList, orderSelect, response);
     }
