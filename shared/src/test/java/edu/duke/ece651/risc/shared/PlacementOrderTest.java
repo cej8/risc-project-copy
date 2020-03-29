@@ -27,9 +27,9 @@ public class PlacementOrderTest {
       assertEquals(Constants.PLACEMENT_PRIORITY, placement.getPriority());
       System.out.println("Placement number: " + (i + 5));
     }
-    assertEquals(5,regions.get(0).getUnits().getUnits());
-    assertEquals(6,regions.get(1).getUnits().getUnits());
-    assertEquals(7, regions.get(2).getUnits().getUnits());
+    assertEquals(5,regions.get(0).getUnits().getTotalUnits());
+    assertEquals(6,regions.get(1).getUnits().getTotalUnits());
+    assertEquals(7, regions.get(2).getUnits().getTotalUnits());
 
 
   }

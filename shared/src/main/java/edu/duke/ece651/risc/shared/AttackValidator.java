@@ -61,13 +61,13 @@ public boolean validateOrders(List<AttackOrder> attackList) {
       Region tempSource = tempBoard.getRegionByName(attack.getSource().getName());
       Region tempDest = tempBoard.getRegionByName(attack.getDestination().getName());
       Unit sourceUnits = tempSource.getUnits();
-      Unit attackUnits = new Unit(attack.getUnits().getUnits());
+      Unit attackUnits = new Unit(attack.getUnits().getTotalUnits());
       AttackOrder attackCopy = new AttackOrder(tempSource, tempDest, attackUnits);
       // make sure at least 1 sourceUnit, 1 attackUnit, and sourceUnits > attackUnits
-      if ((sourceUnits.getUnits() > attackUnits.getUnits()) && (sourceUnits.getUnits() > 0) && (attackUnits.getUnits() > 0)) {
+      if ((sourceUnits.getTotalUnits() > attackUnits.getTotalUnits()) && (sourceUnits.getTotalUnits() > 0) && (attackUnits.getTotalUnits() > 0)) {
         attackCopy.doSourceAction();
       } else {
-        System.out.println("Attack failed: sourceUnits are " + sourceUnits.getUnits() + " but attackUnits are " + attackUnits.getUnits()); //this is just for testing
+        System.out.println("Attack failed: sourceUnits are " + sourceUnits.getTotalUnits() + " but attackUnits are " + attackUnits.getTotalUnits()); //this is just for testing
         return false;
       }
     }
