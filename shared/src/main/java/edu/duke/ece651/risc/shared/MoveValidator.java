@@ -13,8 +13,10 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     this.tempBoard = boardCopy;
     this.player = player;
   }
-  // method to check if there is a valid path from one region to another (player must own all regions they move through / to)
-  private boolean hasValidPath(Region start, Region end) {
+ 
+                                                         
+  //  method to check if there is a valid path from one region to another (player must own all regions they move through / to)
+  private boolean hasValidRegionPath(Region start, Region end) {
 
     //Maintains set of visited nodes (owned by player)
     Set<Region> visited = new HashSet<Region>();
@@ -54,7 +56,14 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
       return false;
     }
     // owned by the same person
-    return hasValidPath(m.getSource(), m.getDestination());
+    
+    //  if(hasValidRegionPath(m.getSource(), m.getDestination())){
+    //  if(player.getFoodStash()>=m.getSource().findShortestPath(m.getDestination()).getTotalCost()){
+    //     return true;
+    // }
+    // return false;
+    //  }
+    return false;
   }
   // Validate the order is acceptable
 @Override
