@@ -33,18 +33,24 @@ public class Unit implements Serializable {
   }
 
   public Unit() {
+    units = new ArrayList<Integer>();
     this.setEvenDistribution(7, 0);
   }
 
   // Initialize numUnits units all with bonus 0
   public Unit(Integer numUnits) {
+units = new ArrayList<Integer>();
     this.setEvenDistribution(7, 0);
     this.addUnits(numUnits, 0);
   }
 
+  public Unit(List<Integer> unitList){
+    units = new ArrayList<Integer>();
+    this.setUnits(unitList);
+  }
+
   //creates list of numOfTypes indices all with value numOfEach, representing an even distriubtion of bonuses
   private void setEvenDistribution(Integer numOfTypes, Integer numOfEach) {
-    units = new ArrayList<Integer>();
     for (int i = 0; i < numOfTypes; i++) {
       units.add(numOfEach);
     }
