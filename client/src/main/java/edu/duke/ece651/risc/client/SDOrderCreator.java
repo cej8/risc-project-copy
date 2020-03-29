@@ -38,8 +38,9 @@ public class SDOrderCreator {
     }
     while (true) {
       try {
-        client.getClientOutput().displayString("How many units do you want to " + unitKeyWord + "?");
-        Unit units = new Unit(Integer.parseInt(client.getClientInput().readInput()));
+        //   client.getClientOutput().displayString("How many units do you want to " + unitKeyWord + "?");
+        //        Unit units = new Unit(Integer.parseInt(client.getClientInput().readInput()));
+        Unit units = getOrderUnits(source);
         OrderInterface order = OrderFactory.getOrder(unitKeyWord, source, destination, units);
         if (order != null) {
           orderList.add(order);
@@ -53,6 +54,21 @@ public class SDOrderCreator {
     return orderList;
   }
 
+  public Unit getOrderUnits(Region source) {
+    List<String> unitTypes = source.getUnits().getListOfUnitTypes();
+    List<Integer> numOfUnitTypes = source.getUnits().getUnitList();
+    for (int i = 0; i < unitTypes.size(); i++) {
+      Integer numOfType = numOfUnitTypes.get(i);
+      client.getClientOutput().displayString("How many " + unitTypes.get(i) + " units (" + numOfType + ") do you want to select?");
+      //get number from user
+      //if 0 > and < numOrType
+      //add to index of that number's tech level
+      //else return "order was not added" 
+    }
+    return new Unit();
+  }
+
+  
   public boolean getOrderList(List<OrderInterface> orderList, boolean orderSelect, String response) {
     switch(response.toUpperCase()){
     case "D":

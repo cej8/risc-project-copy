@@ -204,7 +204,7 @@ public class Client extends Thread{
         clientOutput.displayString("How many units would you like to place in " + regionName + "? (please enter a number)");
         Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
         PlacementOrder placementOrder = new PlacementOrder(placement, units);
-        System.out.println(units.getUnits());
+        //  System.out.println(units.getTotalUnits());
         placementList.add(placementOrder);
         break;
       } catch (NumberFormatException ne) {
