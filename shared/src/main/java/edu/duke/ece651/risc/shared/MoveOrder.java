@@ -18,16 +18,19 @@ public class MoveOrder extends SourceDestinationOrder {
   //TODO -- this should not return a new Unit bc that would clear all bonuses 
   public String doSourceAction() {
     //remove units from source region
-    //  source.setUnits(new Unit(source.getUnits().getUnits() - this.units.getUnits()));
+    //  source.setUnits(new Unit(source.getUnits().getTotalUnits() - this.units.getTotalUnits()));
     return "";
   }
 
+  //player would need to know all their units and bonuses
+  //
+  
   @Override
   public String doDestinationAction(){
     //add units to destination region
     //TODO --WARNING: this line will erase all bonuses
-    // destination.setUnits(new Unit(destination.getUnits().getUnits()+this.units.getUnits()));
-    return (destination.getOwner().getName() + " moved " + units.getUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n");
+    // destination.setUnits(new Unit(destination.getUnits().getTotalUnits()+this.units.getTotalUnits()));
+    return (destination.getOwner().getName() + " moved " + units.getTotalUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n");
  
   }
 

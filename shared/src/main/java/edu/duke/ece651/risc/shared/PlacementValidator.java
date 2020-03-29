@@ -41,19 +41,19 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
 
   	@Override
     public boolean validateUnits(List<PlacementOrder> orders) {
-    int totalUnits = this.playerUnits.getUnits();
+    int totalUnits = this.playerUnits.getTotalUnits();
     for (PlacementOrder p : orders) {
       Region tempDest = tempBoard.getRegionByName(p.getDestination().getName());
 
-      Unit placementUnits =  new Unit(p.getUnits().getUnits()); //TODO this is fine? bc placing new units?
+      Unit placementUnits =  new Unit(p.getUnits().getTotalUnits()); //TODO this is fine? bc placing new units?
       PlacementOrder placementCopy = new PlacementOrder(tempDest, placementUnits);
       // make sure at least 1 placementUnit and totalUnits > 0 and placementUnits < totalUnits
-      if ((placementUnits.getUnits() <= totalUnits) && (placementUnits.getUnits() > 0) && (totalUnits > 0)) {
+      if ((placementUnits.getTotalUnits() <= totalUnits) && (placementUnits.getTotalUnits() > 0) && (totalUnits > 0)) {
         p.doDestinationAction();
-        totalUnits -= placementUnits.getUnits();
+        totalUnits -= placementUnits.getTotalUnits();
       } else {
         System.out
-            .println("Placement failed: placementUnits are " + placementUnits.getUnits() + " but totalUnits are " + totalUnits); //this is just for testing
+            .println("Placement failed: placementUnits are " + placementUnits.getTotalUnits() + " but totalUnits are " + totalUnits); //this is just for testing
         return false;
       }
     }
