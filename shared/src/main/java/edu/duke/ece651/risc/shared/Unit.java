@@ -55,7 +55,7 @@ public class Unit implements Serializable {
     units.set(tech, units.get(tech) + numUnits);
   }
 
-  //returns list of unit types in this list of units
+  //returns ranked from lowest to highest bonus list of unit types currently in units list 
   public List<String> getListOfUnitTypes() {
     List<String> types = new ArrayList<String>();
     for (int i = 0; i < units.size(); i++) {
@@ -65,24 +65,6 @@ public class Unit implements Serializable {
     }
     return types;
   }
-
-  //  //returns set of unit types in this list of units
-  //   public Set<String> getSetOfUnitTypes() { 
-  //   Set<String> set = new HashSet<String>();
-  // for (int i = 0; i < units.size(); i++){
-  //     set.add(this.getUnitTypeFromTech(i));
-  //   }
-  //   return set;
-  // }
-  //  //returns map of unit types to num of unit types 
-  //   public Map<String, Integer> getTypetoNumMap()  {
-  //   Map<String, Integer> unitNumTypeMap = new HashMap<String, Integer>();
-  //     for (int i = 0; i < units.size(); i++){
-  //     String key = techToTypeMap.get(i);
-  //       unitNumTypeMap.put(key, units.get(i));
-  //   }
-  //   return unitNumTypeMap;
-  // } 
 
   // return total number of units 
   public Integer getTotalUnits() {
@@ -100,7 +82,7 @@ public class Unit implements Serializable {
   public void setUnits(List<Integer> u) {
     this.units = u;
   }
-  
+  //returns a list of the actual units (e.g. if 1 unit of each type [0, 1, 2, 3, 4, 5, 6] vs [1, 1, 1, 1, 1, 1]
   public List<Integer> getUnitList() {
     List<Integer> allUnits = new ArrayList<Integer>();
     for (int i = 0; i < this.units.size(); i++) {
@@ -127,5 +109,24 @@ public class Unit implements Serializable {
     units.set(tech + increase, units.get(tech + increase) + 1); // add one to numOfType you're upgrading
   }
 
+   //  //returns set of unit types in this list of units
+  //   public Set<String> getSetOfUnitTypes() { 
+  //   Set<String> set = new HashSet<String>();
+  // for (int i = 0; i < units.size(); i++){
+  //     set.add(this.getUnitTypeFromTech(i));
+  //   }
+  //   return set;
+  // }
+  //  //returns map of unit types to num of unit types 
+  //   public Map<String, Integer> getTypetoNumMap()  {
+  //   Map<String, Integer> unitNumTypeMap = new HashMap<String, Integer>();
+  //     for (int i = 0; i < units.size(); i++){
+  //     String key = techToTypeMap.get(i);
+  //       unitNumTypeMap.put(key, units.get(i));
+  //   }
+  //   return unitNumTypeMap;
+  // } 
+
+  
   
 }
