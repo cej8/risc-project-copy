@@ -54,18 +54,30 @@ public class SDOrderCreator {
     return orderList;
   }
 
+  //TODO -- WIP
   public Unit getOrderUnits(Region source) {
-    List<String> unitTypes = source.getUnits().getListOfUnitTypes();
-    List<Integer> numOfUnitTypes = source.getUnits().getUnitList();
-    for (int i = 0; i < unitTypes.size(); i++) {
-      Integer numOfType = numOfUnitTypes.get(i);
-      client.getClientOutput().displayString("How many " + unitTypes.get(i) + " units (" + numOfType + ") do you want to select?");
-      //get number from user
-      //if 0 > and < numOrType
-      //add to index of that number's tech level
-      //else return "order was not added" 
+    Unit sourceUnits = (Unit) DeepCopy.deepCopy(source.getUnits().getUnits());
+    List<Integer> orderUnits = new ArrayList<Integer>();
+    int i = 0;
+    while (i < sourceUnits.getUnits().size()) {
+      if (sourceUnits.getUnits().get(i) > 0) {
+        client.getClientOutput().displayString("How many " + sourceUnits.getTypeFromTech(i) + " units ("
+            + sourceUnits.getUnits() + ") do you want to select?");
+        //get number from user
+        Integer input = Integer.parseInt(client.getClientInput().readInput());
+        //if 0 > and < numOrType
+        if ((input >= 0) && (input < source.getUnits().getTotalUnits())) {
+          orderUnits.add(input);
+          i++;
+        } else {
+          client.getClientOutput().displayString("Invalid input (" + input + ") please try again");
+        }
+      }
+    else{
+      i++;
     }
-    return new Unit();
+    }
+    return new Unit(orderUnits);
   }
 
   
