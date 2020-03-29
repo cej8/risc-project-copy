@@ -12,15 +12,22 @@ public class TestMovePathFinder {
     AbstractPlayer p1 = new HumanPlayer("player 1");
     AbstractPlayer p2 = new HumanPlayer("player 2");
     List<Region> regions = getRegionList(p1, p2);
-   Path sp14 = regions.get(0).findShortestPath(regions.get(2));
+    Path sp14 = regions.get(0).findShortestPath(regions.get(2));//valid not adjacent
     System.out.println("R1 to R4");
     printPath(sp14);
-     Path sp12 = regions.get(0).findShortestPath(regions.get(1));
+    Path sp12 = regions.get(0).findShortestPath(regions.get(1));//valid adjacent
       System.out.println("R1 to R2");
      printPath(sp12);
+      Path sp26 = regions.get(1).findShortestPath(regions.get(5));//valid adjacent
+      System.out.println("R2 to R6");
+     printPath(sp26);
+  
     Path sp16 = regions.get(0).findShortestPath(regions.get(5));
      System.out.println("R1 to R6");
       printPath(sp16);
+      Path sp18 = regions.get(0).findShortestPath(regions.get(7));//invalid
+     System.out.println("R1 to R8");
+      printPath(sp18);
  
    
   }
@@ -32,13 +39,6 @@ public class TestMovePathFinder {
   }
   // @Test
   public void test_moveValidator() {
-  // Test Board Setup
-  // r1 - r2
-  // |     |
-  // r3 -  r4
-  // |     |
-  // r5 - r6
-  // P1 owns all
     AbstractPlayer p1 = new HumanPlayer("player 1");
     AbstractPlayer p2 = new HumanPlayer("player 2");
     List<Region> regions = getRegionList(p1, p2);
@@ -70,7 +70,7 @@ public class TestMovePathFinder {
     r5.setSize(10);
     r5.setFoodProduction(100);
   
-    Region r3 = new Region(p2, new Unit(3));
+    Region r3 = new Region(p1, new Unit(3));
     r3.setName("r3");
     r3.setSize(10);
     r3.setFoodProduction(100);
@@ -85,7 +85,7 @@ public class TestMovePathFinder {
     r7.setSize(5);
     r7.setFoodProduction(100);
     
-     Region r8 = new Region(p2, new Unit(8));
+     Region r8 = new Region(p1, new Unit(8));
     r8.setName("r8");
     r8.setSize(5);
     r8.setFoodProduction(100);

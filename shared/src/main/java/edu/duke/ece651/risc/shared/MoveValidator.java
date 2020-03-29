@@ -55,10 +55,12 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
        || !m.getDestination().getOwner().getName().equals(player.getName())){
       return false;
     }
-    // owned by the same person
+    //can we get there through regions owned?
     
     //  if(hasValidRegionPath(m.getSource(), m.getDestination())){
+    
     //  if(player.getFoodStash()>=m.getSource().findShortestPath(m.getDestination()).getTotalCost()){
+    //do we have enough food resources to travel shortest path?
     //     return true;
     // }
     // return false;
