@@ -34,38 +34,38 @@ public class AttackOrder extends SourceDestinationOrder {
       Region loseUnits = rollHelper(source, destination);
       if (loseUnits == destination) {
             //TODO --WARNING: this line will erase all bonuses
-        //    destination.setUnits(new Unit(destination.getUnits().getUnits() - 1));
+        //    destination.setUnits(new Unit(destination.getUnits().getTotalUnits() - 1));
           } else {
          //TODO --WARNING: this line will erase all bonuses
-        //units = new Unit(units.getUnits() - 1);
+        //units = new Unit(units.getTotalUnits() - 1);
       }
-      System.out.println("Defending units remaining: " + destination.getUnits().getUnits() + "; Attacking units remaining: " + units.getUnits());
+      System.out.println("Defending units remaining: " + destination.getUnits().getTotalUnits() + "; Attacking units remaining: " + units.getTotalUnits());
     }
 
     String returnString;
     
-    if (units.getUnits() == 0) {
+    if (units.getTotalUnits() == 0) {
       returnString = (destination.getOwner().getName() + " (defender) retains their region ");
     }
     else{
      returnString = (source.getOwner().getName() + " (attacker) takes over the region ");
     }
-    returnString += destination.getName() + ", " + destination.getUnits().getUnits() + " units survived!\n";
+    returnString += destination.getName() + ", " + destination.getUnits().getTotalUnits() + " units survived!\n";
     return returnString;
     
   }
   
   // method to check if a player has won attack round
   private boolean isWinner(Region s, Region d, Unit u) {
-    if (u.getUnits() == 0) {
+    if (u.getTotalUnits() == 0) {
       System.out
           .println(d.getOwner().getName() + " (defender) retains their region " + d.getName());
       return true;
-    } else if (d.getUnits().getUnits() == 0) {
+    } else if (d.getUnits().getTotalUnits() == 0) {
       System.out.println(s.getOwner().getName() + " (attacker) takes over the region " + d.getName());
       d.assignRegion(s.getOwner(), u);
       System.out.println("Updated " + d.getName() + " region: " + d.getOwner().getName()
-          + " now owns " + d.getName() + " with " + d.getUnits().getUnits() + " unit(s)");
+          + " now owns " + d.getName() + " with " + d.getUnits().getTotalUnits() + " unit(s)");
       return true;
     } else {
       return false;

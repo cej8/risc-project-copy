@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 
 public class MoveOrderTest {
-  /* @Test
+   @Test
   public void test_moveFood(){
     AbstractPlayer p1 = new HumanPlayer("player 1");
     int food = p1.getFood();
@@ -17,8 +17,10 @@ public class MoveOrderTest {
     assertEquals(10,food);
     assertEquals(10, tech);
     Region r1 = new Region(p1, new Unit(5));
+    r1.setSize(1);
     Region r2 = new Region(p1, new Unit (2));
-     assertEquals(5,r1.getUnits());
+    r2.setSize(1);
+    assertEquals(5,r1.getUnits().getTotalUnits());
     List<Region> regions = new ArrayList<Region>();
     regions.add(r1);
     regions.add(r2);
@@ -28,7 +30,7 @@ public class MoveOrderTest {
     int r1Size = r1.getSize();
     int r2Size = r2.getSize();
     assertEquals(8,p1.getFood());
-  }*/
+  }
   // @Test
   // public void test_moveOrder() {
   //   AbstractPlayer p1 = new HumanPlayer("player 1");

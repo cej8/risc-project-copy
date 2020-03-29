@@ -55,7 +55,7 @@ public class TextDisplay implements ClientOutputInterface {
 
  //returns String w board info for a given region
   private String printRegionInfo(Region r){
-    int numUnits = r.getUnits().getUnits();
+    int numUnits = r.getUnits().getTotalUnits();
     String name = r.getName();
     StringBuilder sb = new StringBuilder(numUnits + " units in " + name); //add info on num units in region
     sb.append(this.printRegionAdjacencies(r)); //add adj info

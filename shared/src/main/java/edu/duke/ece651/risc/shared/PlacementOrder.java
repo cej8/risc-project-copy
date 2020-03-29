@@ -10,7 +10,7 @@ public class PlacementOrder extends DestinationOrder {
   @Override
   public String doDestinationAction(){
     destination.setUnits(this.units);
-    return (destination.getOwner().getName() + " placed " + units.getUnits() + " units at " + destination.getName() + "\n");
+    return (destination.getOwner().getName() + " placed " + units.getTotalUnits() + " units at " + destination.getName() + "\n");
   }
   
   @Override

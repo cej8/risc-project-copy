@@ -1,10 +1,34 @@
 package edu.duke.ece651.risc.shared;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class AttackOrderTest {
+  @Test
+  public void test_attackFood(){
+    AbstractPlayer p1 = new HumanPlayer("player 1");
+    int food = p1.getFood();
+    int tech = p1.getTech();
+    assertEquals(10,food);
+    assertEquals(10, tech);
+    AbstractPlayer p2 = new HumanPlayer("player 2");
+    Region r1 = new Region(p1, new Unit(5));
+    r1.setSize(1);
+    Region r2 = new Region(p2, new Unit (2));
+    r2.setSize(1);
+    assertEquals(5,r1.getUnits().getTotalUnits());
+    List<Region> regions = new ArrayList<Region>();
+    regions.add(r1);
+    regions.add(r2);
+    Board b = new Board(regions);
+    OrderInterface attack1 = new AttackOrder(r1,r2,new Unit(2));
+    attack1.doSourceAction();
+    int r1Size = r1.getSize();
+    int r2Size = r2.getSize();
+    assertEquals(9,p1.getFood());
+  }
   // @Test
   // public void test_attack() {
   //   setupTestAttack(10, 5, 5);
