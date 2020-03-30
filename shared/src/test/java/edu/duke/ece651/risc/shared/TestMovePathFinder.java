@@ -32,52 +32,64 @@ public class TestMovePathFinder {
    
   }
   private void printPath(Path shortestPath){
+    if(shortestPath==null){
+      System.out.println("No path exists");
+      return;
+    }
     for(Region r: shortestPath.getPath()){
       System.out.println(r.getName());
     }
     
   }
-  // @Test
+   @Test
   public void test_moveValidator() {
     AbstractPlayer p1 = new HumanPlayer("player 1");
+    
     AbstractPlayer p2 = new HumanPlayer("player 2");
     List<Region> regions = getRegionList(p1, p2);
     Board b = new Board(regions);
 
     MoveValidator mv = new MoveValidator(p1, b);
+    MoveOrder move1 = new MoveOrder(regions.get(6), regions.get(1), new Unit(2));//valid
+    assertEquals(true,mv.isValidMove(move1));
+    MoveOrder move2 = new MoveOrder(regions.get(6), regions.get(4),new Unit(2));//invalid, not enough resources
+    assertEquals(false, mv.isValidMove(move2));
+    MoveOrder move3 = new MoveOrder(regions.get(3), regions.get(7), new Unit(2));//no valid path of adjacent regions
+    assertEquals(false, mv.isValidMove(move3));
+    
     
 
   }
   private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2) {
     Region r1 = new Region(p1, new Unit(1));
     r1.setName("r1");
-    r1.setSize(10);
+    r1.setSize(1);
     r1.setFoodProduction(100);
     
     Region r2 = new Region(p1, new Unit(2));
     r2.setName("r2");
-    r2.setSize(20);
+    r2.setSize(2);
     r2.setFoodProduction(100);
   
     Region r4 = new Region(p1, new Unit(4));
     r4.setName("r4");
-    r4.setSize(40);
+    r4.setSize(4);
     r4.setFoodProduction(100);
     
     
     Region r5 = new Region(p1, new Unit(5));
     r5.setName("r5");
-    r5.setSize(10);
+    r5.setSize(1);
     r5.setFoodProduction(100);
   
-    Region r3 = new Region(p1, new Unit(3));
+    Region r3 = new Region(p2, new Unit(3));
     r3.setName("r3");
-    r3.setSize(10);
+    r3.setSize(1);
     r3.setFoodProduction(100);
   
     Region r6 = new Region(p1, new Unit(6));
     r6.setName("r6");
-    r6.setSize(60);
+    r6.setSize(6);
     r1.setFoodProduction(100);
     
      Region r7 = new Region(p1, new Unit(7));
@@ -85,7 +97,7 @@ public class TestMovePathFinder {
     r7.setSize(5);
     r7.setFoodProduction(100);
     
-     Region r8 = new Region(p1, new Unit(8));
+     Region r8 = new Region(p2, new Unit(8));
     r8.setName("r8");
     r8.setSize(5);
     r8.setFoodProduction(100);
