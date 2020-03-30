@@ -21,8 +21,10 @@ public class AttackOrder extends SourceDestinationOrder {
   public String doSourceAction() {
     // remove units from source (source location)
     //TODO --WARNING: this line will erase all bonuses
-    // source.setUnits(new Unit(source.getUnits().getUnits() - units.getTotalUnits()));
-    return (source.getOwner().getName() + " is attacking " + destination.getOwner().getName() + "'s " + destination.getName() + " region with " + units.getTotalUnits() + " units!\n"); 
+    // source.setUnits(new Unit(source.getUnits().getUnits() - units.getUnits()));
+    source.getOwner().useFood(Constants.ATTACK_COST);
+    return (source.getOwner().getName() + " is attacking " + destination.getOwner().getName() + "'s "
+        + destination.getName() + " region with " + units.getUnits() + " units!\n");
   }
   @Override
   public String doDestinationAction(){
