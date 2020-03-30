@@ -29,9 +29,12 @@ public class MoveOrder extends SourceDestinationOrder {
   public String doDestinationAction(){
     //add units to destination region
     //TODO --WARNING: this line will erase all bonuses
-    // destination.setUnits(new Unit(destination.getUnits().getTotalUnits()+this.units.getTotalUnits()));
-    return (destination.getOwner().getName() + " moved " + units.getTotalUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n");
- 
+    // destination.setUnits(new Unit(destination.getUnits().getUnits()+this.units.getUnits()));
+    // TODO: will need to change units.getUnits() to number of units moved
+    int cost = destination.getSize() * units.getTotalUnits();
+    // updates player to food cost
+    destination.getOwner().useFood(cost);
+    return (destination.getOwner().getName() + " moved " + units.getUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n"); 
   }
 
 
