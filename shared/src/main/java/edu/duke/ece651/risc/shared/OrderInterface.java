@@ -7,7 +7,7 @@ public interface OrderInterface extends Serializable{
     //precondition: regions and orders have been validated before calling this method
   //postcondition: board will be in a valid state upon return from the method 
   public int getPriority();
- 
+  public void findValuesInBoard(Board board);
   public String doAction();
 
 

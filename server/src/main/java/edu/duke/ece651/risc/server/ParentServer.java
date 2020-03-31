@@ -231,9 +231,13 @@ public class ParentServer implements Runnable{
       if(order instanceof PlacementOrder){
         castOrder = (PlacementOrder)(order);
       }
-      else if(order instanceof AttackOrder){
-        castOrder = (AttackOrder)(order);
+      else if(order instanceof AttackMove){
+        castOrder = (AttackMove)(order);
       }
+      else if(order instanceof AttackCombat){
+        castOrder = (AttackCombat) (order);
+      }
+    
       else if(order instanceof MoveOrder){
         castOrder = (MoveOrder)(order);
       }
@@ -279,11 +283,11 @@ public class ParentServer implements Runnable{
   public void applyOrderList(List<OrderInterface> orders){
     //Simply call doAction for each order
     for(int i = 0; i < orders.size(); i++){
-      turnResults.append(orders.get(i).doSourceAction());
+      turnResults.append(orders.get(i).doAction());
     }
-    for(int i = 0; i < orders.size(); i++){
-      turnResults.append(orders.get(i).doDestinationAction());
-    }
+    // for(int i = 0; i < orders.size(); i++){
+    // turnResults.append(orders.get(i).doDestinationAction());
+    //  }
     orders.clear();
   }
   // method to add additional unit after round complete to all regions on board
