@@ -8,8 +8,8 @@ public class TechnologyLevel implements Serializable {
   private int maxTechLevel;
   private int costToUpgrade;
   public TechnologyLevel(){
-    this.maxTechLevel = 1;
-    this.costToUpgrade = 50;
+    this.maxTechLevel = Constants.STARTING_TECH_LEVEL;
+    this.costToUpgrade = Constants.STARTING_UPGRADE_COST;
   }
 public int getMaxTechLevel() {
 	return maxTechLevel;

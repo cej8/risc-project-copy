@@ -27,5 +27,7 @@ public final class Constants {
   public static final int STARTING_TECH = 15;
   //board values
   public static final int REGION_SIZE = 10;
-  
+  // Technology Defaults
+  public static final int STARTING_TECH_LEVEL = 1;
+  public static final int STARTING_UPGRADE_COST = 50;
 }
