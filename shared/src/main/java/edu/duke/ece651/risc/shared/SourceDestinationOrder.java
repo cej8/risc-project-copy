@@ -23,11 +23,11 @@ public abstract class SourceDestinationOrder implements RegionOrder {
   public Unit getUnits(){
     return units;
   }
-@Override
-abstract public String doSourceAction();
+  //@Override
+  //abstract public String doSourceAction();
 
-  @Override
-  abstract public String doDestinationAction();
+  //@Override
+  //abstract public String doDestinationAction();
 
   @Override
   abstract public int getPriority();

@@ -17,24 +17,6 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
   public PlayerResources getResources(){
     return this.playerResource;
   }
-  /* public int getFood(){
-    return this.foodStash;
-  }
-  public int getTech(){
-    return this.techStash;
-  }
-  public void addFood(int food){
-    this.foodStash = foodStash + food;
-  }
-  public void useFood(int food){
-    this.foodStash = foodStash - food;
-  }
-  public void addTech(int tech){
-    this.techStash = techStash + tech;
-  }
-  public void useTech(int tech){
-    this.techStash = techStash - tech;
-    }*/
   public String getName() {
     return name;
   }

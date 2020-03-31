@@ -2,27 +2,24 @@ package edu.duke.ece651.risc.shared;
 
 public class TechBoost implements PlayerOrder {
   private static final long serialVersionUID = 15L;
-
-  Unit unit;
+  
   AbstractPlayer player;
   public TechBoost(AbstractPlayer p){
     this.player = p;
   }
 	@Override
 	public String doAction() {
-    //increase level
-    player.getMaxTechLevel().upgradeLevel();
     //remove technology resources
-    
-
+    player.getResources().getTechResource().useTech(player.getMaxTechLevel().getCostToUpgrade());
+      //increase level
+    player.getMaxTechLevel().upgradeLevel();
     
 		return null;
 	}
 
 	@Override
 	public int getPriority() {
-		// TODO Auto-generated method stub
-		return 0;
+    return Constants.UPGRADE_TECH_PRIORITY;
 	}
 
 }
