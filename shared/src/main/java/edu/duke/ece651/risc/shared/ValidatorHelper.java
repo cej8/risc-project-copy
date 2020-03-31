@@ -24,7 +24,7 @@ public class ValidatorHelper {
   // check all orders are valid for round per player
   public boolean allOrdersValid(List<OrderInterface> orders) {
     for(int i = 0; i < orders.size(); i++){
-      orders.get(i).convertOrderRegions(tempBoard);
+      //TODO:: UNCOMMENT   orders.get(i).convertOrderRegions(tempBoard);
     }
     List<AttackOrder> attackList = new ArrayList<AttackOrder>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
@@ -49,7 +49,7 @@ public class ValidatorHelper {
   // checks all placement are valid per player
   public boolean allPlacementsValid(List<OrderInterface> placements) {
     for(int i = 0; i < placements.size(); i++){
-      placements.get(i).convertOrderRegions(tempBoard);
+     //TODO:: UNCOMMENT placements.get(i).convertOrderRegions(tempBoard);
     }
     List<PlacementOrder> pList = new ArrayList<PlacementOrder>();
     for (OrderInterface order : placements) {

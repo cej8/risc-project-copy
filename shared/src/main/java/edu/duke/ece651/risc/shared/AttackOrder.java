@@ -17,7 +17,7 @@ public class AttackOrder extends SourceDestinationOrder {
     return Constants.ATTACK_PRIORITY;
   }
 
-  @Override
+  //  @Override
   public String doSourceAction() {
     // remove units from source (source location)
     //TODO --WARNING: this line will erase all bonuses
@@ -27,7 +27,7 @@ public class AttackOrder extends SourceDestinationOrder {
     return (source.getOwner().getName() + " is attacking " + destination.getOwner().getName() + "'s "
         + destination.getName() + " region with " + units.getUnits() + " units!\n");
   }
-  @Override
+  // @Override
   public String doDestinationAction(){
     // Continue executing attack until one player has no more units left in region or attack group
     while (!isWinner(source, destination, units)) {
@@ -83,6 +83,13 @@ public class AttackOrder extends SourceDestinationOrder {
     }
     return defRegion;
     }
+@Override
+public String doAction() {
+	// TODO Auto-generated method stub
+    doSourceAction();
+    doDestinationAction();
+	return null;
+}
 
 
 }
