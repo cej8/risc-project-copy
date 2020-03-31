@@ -31,7 +31,8 @@ public class Region implements Serializable {
     this.adjRegions = new ArrayList<Region>();
   }
 
-  public Path findShortestPath(Region end) {    Queue<Path> pq = new PriorityQueue<Path>(new PathComparator());
+  public Path findShortestPath(Region end) {
+    Queue<Path> pq = new PriorityQueue<Path>(new PathComparator());
     // pq.add(path);
 
     for (Region adj : this.getAdjRegions()) {

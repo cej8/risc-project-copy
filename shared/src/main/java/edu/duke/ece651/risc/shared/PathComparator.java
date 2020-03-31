@@ -1,7 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.*;
-
+// Defines ordering of a collection to be sorted from smallest to largest by path cost
 public class PathComparator implements Comparator<Path> {
 
 	@Override
