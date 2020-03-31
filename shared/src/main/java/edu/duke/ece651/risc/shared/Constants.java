@@ -16,7 +16,8 @@ public final class Constants {
   public static final int DEFAULT_PORT = 12345;
  
   //priorities for ordering moves 
-  public static final int ATTACK_PRIORITY = 5000;
+  public static final int ATTACK_COMBAT_PRIORITY=5000;
+  public static final int ATTACK_MOVE_PRIORITY = 3000;
   public static final int MOVE_PRIORITY = 1000;
   public static final int PLACEMENT_PRIORITY = 1;
   public static final int UPGRADE_UNITS_PRIORITY = 500;
