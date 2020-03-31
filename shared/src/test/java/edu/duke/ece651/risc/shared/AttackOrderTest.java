@@ -9,8 +9,8 @@ public class AttackOrderTest {
   @Test
   public void test_attackFood(){
     AbstractPlayer p1 = new HumanPlayer("player 1");
-    int food = p1.getFood();
-    int tech = p1.getTech();
+    int food = p1.getResources().getFoodResource().getFood();
+    int tech = p1.getResources().getTechResource().getTech();
     assertEquals(10,food);
     assertEquals(10, tech);
     AbstractPlayer p2 = new HumanPlayer("player 2");
@@ -27,7 +27,7 @@ public class AttackOrderTest {
     attack1.doSourceAction();
     int r1Size = r1.getSize();
     int r2Size = r2.getSize();
-    assertEquals(9,p1.getFood());
+    assertEquals(9,p1.getResources().getFoodResource().getFood());
   }
   // @Test
   // public void test_attack() {

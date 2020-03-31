@@ -6,13 +6,18 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
   protected String name;
   protected boolean isPlaying;
   protected Boolean isWatching;
-  protected int foodStash;
-  protected int techStash;
+
   protected TechnologyLevel maxTechLevel;
   
+
+  protected PlayerResources playerResource;
+
   private static final long serialVersionUID = 5L;
 
-  public int getFood(){
+  public PlayerResources getResources(){
+    return this.playerResource;
+  }
+  /* public int getFood(){
     return this.foodStash;
   }
   public int getTech(){
@@ -29,7 +34,7 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
   }
   public void useTech(int tech){
     this.techStash = techStash - tech;
-  }
+    }*/
   public String getName() {
     return name;
   }

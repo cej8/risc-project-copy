@@ -1,0 +1,10 @@
+package edu.duke.ece651.risc.shared;
+
+public class FoodResource{
+  private int food;
+
+  public FoodResource(){
+    
+  }
+
+}
