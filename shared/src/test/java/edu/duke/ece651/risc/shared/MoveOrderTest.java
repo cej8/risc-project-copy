@@ -23,13 +23,20 @@ public class MoveOrderTest {
     assertEquals(5,r1.getUnits().getTotalUnits());
     List<Region> regions = new ArrayList<Region>();
     regions.add(r1);
+    List<Region> adj1= new ArrayList<Region>();
+    adj1.add(r2);
+    r1.setAdjRegions(adj1);
     regions.add(r2);
+     List<Region> adj2= new ArrayList<Region>();
+    adj2.add(r1);
+    r2.setAdjRegions(adj2);
+  
     Board b = new Board(regions);
     OrderInterface move1 = new MoveOrder(r1,r2,new Unit(2));
     move1.doDestinationAction();
     int r1Size = r1.getSize();
     int r2Size = r2.getSize();
-    assertEquals(8,p1.getFood());
+    assertEquals(6,p1.getFood());
   }
   // @Test
   // public void test_moveOrder() {
