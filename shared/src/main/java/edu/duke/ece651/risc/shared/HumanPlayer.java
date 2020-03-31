@@ -14,6 +14,7 @@ public class HumanPlayer extends AbstractPlayer {
     this.name = name;
     this.foodStash = Constants.STARTING_FOOD;
     this.techStash = Constants.STARTING_TECH;
+    maxTechLevel = new TechnologyLevel();
   }
   
 }

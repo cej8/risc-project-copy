@@ -19,6 +19,8 @@ public final class Constants {
   public static final int ATTACK_PRIORITY = 5000;
   public static final int MOVE_PRIORITY = 1000;
   public static final int PLACEMENT_PRIORITY = 1;
+  public static final int UPGRADE_UNITS_PRIORITY = 500;
+  public static final int UPGRADE_TECH_PRIORITY = 100;
   // cost to attack - food 
   public static final int ATTACK_COST = 1;
   public static final int STARTING_FOOD = 10;
