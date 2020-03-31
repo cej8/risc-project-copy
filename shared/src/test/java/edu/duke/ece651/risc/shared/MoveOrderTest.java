@@ -12,8 +12,8 @@ public class MoveOrderTest {
    @Test
   public void test_moveFood(){
     AbstractPlayer p1 = new HumanPlayer("player 1");
-    int food = p1.getFood();
-    int tech = p1.getTech();
+    int food = p1.getResources().getFoodResource().getFood();
+    int tech = p1.getResources().getTechResource().getTech();
     assertEquals(10,food);
     assertEquals(10, tech);
     Region r1 = new Region(p1, new Unit(5));
@@ -36,7 +36,7 @@ public class MoveOrderTest {
     move1.doDestinationAction();
     int r1Size = r1.getSize();
     int r2Size = r2.getSize();
-    assertEquals(6,p1.getFood());
+    assertEquals(6,p1.getResources().getFoodResource().getFood());
   }
   // @Test
   // public void test_moveOrder() {

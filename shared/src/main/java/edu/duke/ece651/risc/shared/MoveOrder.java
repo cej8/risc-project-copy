@@ -33,7 +33,8 @@ public class MoveOrder extends SourceDestinationOrder {
     // TODO: will need to change units.getUnits() to number of units moved
     int cost = source.findShortestPath(destination).getTotalCost() * units.getTotalUnits();
     // updates player to food cost
-    destination.getOwner().useFood(cost);
+    //destination.getOwner().useFood(cost);
+    destination.getOwner().getResources().getFoodResource().useFood(cost);
     return (destination.getOwner().getName() + " moved " + units.getUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n"); 
   }
 
