@@ -1,6 +1,6 @@
 package edu.duke.ece651.risc.shared;
 
-public abstract class SourceDestinationOrder implements OrderInterface {
+public abstract class SourceDestinationOrder implements RegionOrder {
   //this class contains relevant fields for order operations between two regions (source and destination)
   private static final long serialVersionUID = 8L; 
   protected Region source;
@@ -24,7 +24,7 @@ public abstract class SourceDestinationOrder implements OrderInterface {
     return units;
   }
 @Override
-  abstract public String doSourceAction();
+abstract public String doSourceAction();
 
   @Override
   abstract public String doDestinationAction();
@@ -43,5 +43,8 @@ public abstract class SourceDestinationOrder implements OrderInterface {
       }
     }
   }
+@Override
+abstract public String doAction();
+
 
 }

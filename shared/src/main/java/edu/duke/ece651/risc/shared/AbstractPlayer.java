@@ -8,6 +8,7 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
   protected Boolean isWatching;
   protected int foodStash;
   protected int techStash;
+  protected TechnologyLevel maxTechLevel;
   
   private static final long serialVersionUID = 5L;
 
@@ -51,6 +52,9 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
   public int compareTo(AbstractPlayer p){
     return this.name.compareTo(p.getName());
   }
+public TechnologyLevel getMaxTechLevel() {
+	return maxTechLevel;
+}
 
 }
 

@@ -36,6 +36,11 @@ public class MoveOrder extends SourceDestinationOrder {
     destination.getOwner().useFood(cost);
     return (destination.getOwner().getName() + " moved " + units.getUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n"); 
   }
+@Override
+public String doAction() {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 
 }

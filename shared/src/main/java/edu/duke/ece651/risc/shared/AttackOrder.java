@@ -82,6 +82,11 @@ public class AttackOrder extends SourceDestinationOrder {
     }
     return defRegion;
     }
+@Override
+public String doAction() {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 
 }
