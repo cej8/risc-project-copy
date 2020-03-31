@@ -61,7 +61,8 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
 
     if (hasValidRegionPath(m.getSource(), m.getDestination())) {
 
-      if (player.getFood() >= m.getSource().findShortestPath(m.getDestination()).getTotalCost()) {
+      //if (player.getFood() >= m.getSource().findShortestPath(m.getDestination()).getTotalCost()) {
+      if (player.getResources().getFoodResource().getFood() >= m.getSource().findShortestPath(m.getDestination()).getTotalCost()) {
         // do we have enough food resources to travel shortest path?
         return true;
       }
