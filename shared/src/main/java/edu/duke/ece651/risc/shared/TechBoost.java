@@ -6,7 +6,7 @@ public class TechBoost implements PlayerOrder {
   
   AbstractPlayer player;
   public TechBoost(AbstractPlayer p){
-    this.player = p;
+    setPlayer(p);
   }
 	@Override
 	public String doAction() {

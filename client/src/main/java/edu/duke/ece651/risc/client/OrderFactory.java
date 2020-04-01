@@ -19,9 +19,12 @@ public class OrderFactory {
       order = new AttackCombat(source, destination, units);
       break;
   
-    case "upgrade":
-      // TODO: something to the effect of order = new UpgradeOrder(source);
+    case "upgrade tech":
+      order = new TechBoost(null);//TODO: how to add player?
       break;
+    case "upgrade unit":
+      order = new UnitBoost(destination, units);
+        break;
     default: //TODO: what would this be?
       break;
     }
