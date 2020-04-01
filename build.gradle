@@ -11,9 +11,12 @@ plugins {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 subprojects {
     repositories{
 =======
+=======
+>>>>>>> parent of e947766... working gradle
 //subprojects{
 project (':shared'){
     apply plugin: "java"
@@ -56,7 +59,10 @@ project (':shared'){
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of e947766... working gradle
 project (':server'){
     apply plugin: "java"
     apply plugin: "com.bmuschko.clover"
@@ -167,8 +173,11 @@ project (':server'){
 }
 project (':client'){
 <<<<<<< HEAD
+<<<<<<< HEAD
    apply plugin: 'com.android.application'
 =======
+=======
+>>>>>>> parent of e947766... working gradle
     apply plugin: 'com.android.application'
 
 >>>>>>> parent of e947766... working gradle
@@ -215,6 +224,9 @@ project (':client'){
         targetCompatibility = '1.8'
     }
     }
+<<<<<<< HEAD
+>>>>>>> parent of e947766... working gradle
+=======
 >>>>>>> parent of e947766... working gradle
 }
 
