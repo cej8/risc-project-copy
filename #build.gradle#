@@ -9,7 +9,7 @@ buildscript{
 }
 plugins {
     id 'com.bmuschko.clover' version '2.2.3'
-    id 'com.quittle.android-emulator' version '0.0.1'
+   // id 'com.quittle.android-emulator' version '0.0.1'
 }
 
 //subprojects{
