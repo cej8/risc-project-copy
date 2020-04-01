@@ -294,12 +294,15 @@ public class ParentServer implements Runnable{
 
   //TODO -- needs to be changed and tested to add a unit of bonus 0 to already existing list
   public void growUnits() {
-    // for(Region r : board.getRegions()){
-    //   r.setUnits(new Unit(r.getUnits().getUnits()+1));
+     for(Region r : board.getRegions()){
+       //increment number of basic units
+       r.getUnits().getUnits().set(0,r.getUnits().getUnits().get(0)+1);
+      
+      
+     }
+    // for (Region r: board.getRegions()){
+    // r.getUnits().addUnits(1, 0); //add 1 unit of tech 0 to each region
     // }
-    for (Region r: board.getRegions()){
-      r.getUnits().addUnits(1, 0); //add 1 unit of tech 0 to each region
-    }
   }
   // method that controls game play
   public void playGame(){
