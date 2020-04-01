@@ -66,10 +66,10 @@ public class SDOrderCreator {
   public void moveHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord) {
     Region source = promptForRegion(sourceKeyWord);
     Region destination = promptForRegion(sourceKeyWord);
-  
+
     while (true) {
       try {
-         Unit units = getOrderUnits(source);
+        Unit units = getOrderUnits(source);
 
         OrderInterface order = OrderFactory.getOrder("move", source, destination, units);
         if (order != null) {
@@ -87,8 +87,8 @@ public class SDOrderCreator {
   private Region promptForRegion(String keyWord) {
     Region r = null;
     while (r == null) {
-      client.getClientOutput().displayString(
-          "What region do you want to " + keyWord + "  (please type a region name, i.e. 'A')");
+      client.getClientOutput()
+          .displayString("What region do you want to " + keyWord + "  (please type a region name, i.e. 'A')");
       r = orderHelper(client.getClientInput().readInput());
     }
     return r;
@@ -99,18 +99,15 @@ public class SDOrderCreator {
     Region destination = promptForRegion(destKeyWord);
     while (true) {
       try {
-          Unit units = getOrderUnits(source);
-  
-            OrderInterface order1 = OrderFactory.getOrder("attack move", source, destination, units);
+        Unit units = getOrderUnits(source);
+        OrderInterface order1 = OrderFactory.getOrder("attack move", source, destination, units);
         if (order1 != null) {
-          orderList.add(order1);
           OrderInterface order2 = OrderFactory.getOrder("attack combat", source, destination, units);
           if (order2 != null) {
+            orderList.add(order1);
             orderList.add(order2);
             break;
-
           }
-
         }
       } catch (NumberFormatException ne) {
         // ne.printStackTrace();
@@ -126,24 +123,26 @@ public class SDOrderCreator {
     // List<Integer> orderUnits = new ArrayList<Integer>();
     // int i = 0;
     // while (i < sourceUnits.getUnits().size()) {
-    //   if (sourceUnits.getUnits().get(i) > 0) {
-    //     client.getClientOutput().displayString("How many " + sourceUnits.getTypeFromTech(i) + " units ("
-    //         + sourceUnits.getUnits() + ") do you want to select?");
-    //     // get number from user
-    //     Integer input = Integer.parseInt(client.getClientInput().readInput());
-    //     // if 0 > and < numOrType
-    //     if ((input >= 0) && (input < source.getUnits().getTotalUnits())) {
-    //       orderUnits.add(input);
-    //       i++;
-    //     } else {
-    //       client.getClientOutput().displayString("Invalid input (" + input + ") please try again");
-    //     }
-    //   } else {
-    //     i++;
-    //   }
+    // if (sourceUnits.getUnits().get(i) > 0) {
+    // client.getClientOutput().displayString("How many " +
+    // sourceUnits.getTypeFromTech(i) + " units ("
+    // + sourceUnits.getUnits() + ") do you want to select?");
+    // // get number from user
+    // Integer input = Integer.parseInt(client.getClientInput().readInput());
+    // // if 0 > and < numOrType
+    // if ((input >= 0) && (input < source.getUnits().getTotalUnits())) {
+    // orderUnits.add(input);
+    // i++;
+    // } else {
+    // client.getClientOutput().displayString("Invalid input (" + input + ") please
+    // try again");
     // }
-    //TODO:fix temp return value return new Unit(orderUnits);
-    return new Unit (3);
+    // } else {
+    // i++;
+    // }
+    // }
+    // TODO:fix temp return value return new Unit(orderUnits);
+    return new Unit(3);
   }
 
   public boolean getOrderList(List<OrderInterface> orderList, String response) {
@@ -161,9 +160,9 @@ public class SDOrderCreator {
         attackHelper(orderList, "attack from", "attack");
         client.getClientOutput().displayString("You made an Attack order, what else would you like to do?");
         break;
-        //  case "U":
-        // TODO: upgrade
-        //   break;
+      // case "U":
+      // TODO: upgrade
+      // break;
       default:
         client.getClientOutput().displayString("Please select either M, A, U, or D");
         break;
