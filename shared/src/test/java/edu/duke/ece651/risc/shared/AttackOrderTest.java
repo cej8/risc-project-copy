@@ -30,7 +30,7 @@ public class AttackOrderTest {
     // attackp2.doAction();
     int r1Size = r1.getSize();
     int r2Size = r2.getSize();
-    assertEquals(19,p1.getResources().getFoodResource().getFood());
+    assertEquals(18,p1.getResources().getFoodResource().getFood());
   }
   // @Test
   // public void test_attack() {
