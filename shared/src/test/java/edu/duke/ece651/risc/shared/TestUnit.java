@@ -111,7 +111,7 @@ public class TestUnit {
         sbTypeList.append(unit.getTypeFromTech(i) + ": " + unit.getUnits().get(i) + "\n");
       }
     }
-    assertEquals(0, sbSet.compareTo(sbTypeList));
+    assertEquals(0, sbSet.toString().compareTo(sbTypeList.toString()));
       //    assert both those methods produce same mapping of unit types to their count
   }
 
