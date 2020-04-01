@@ -49,7 +49,7 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
       PlacementOrder placementCopy = new PlacementOrder(tempDest, placementUnits);
       // make sure at least 1 placementUnit and totalUnits > 0 and placementUnits < totalUnits
       if ((placementUnits.getTotalUnits() <= totalUnits) && (placementUnits.getTotalUnits() > 0) && (totalUnits > 0)) {
-        p.doDestinationAction();
+        p.doAction();
         totalUnits -= placementUnits.getTotalUnits();
       } else {
         System.out

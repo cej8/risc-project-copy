@@ -1,35 +1,22 @@
 package edu.duke.ece651.risc.shared;
-
 import java.util.Random;
-
-public class AttackOrder extends SourceDestinationOrder {
-  // this class defines how to execute an attack order operation on the board
-  private static final long serialVersionUID = 12L;
-  
-
-  public AttackOrder(Region attacker, Region defender, Unit attackingUnits){
+public class AttackCombat extends SourceDestinationOrder {
+   //this class handles the actual combat resolution when an attack is issued by a player
+  //Repurposed code from doDestinationAction of AttackOrder
+ 
+  private static final long serialVersionUID=21L;
+  public AttackCombat(Region attacker, Region defender, Unit attackingUnits){
       this.source = attacker;
       this.destination = defender;
       this.units = attackingUnits;
     }    
   @Override
   public int getPriority(){
-    return Constants.ATTACK_PRIORITY;
-  }
-
-  @Override
-  public String doSourceAction() {
-    // remove units from source (source location)
-    //TODO --WARNING: this line will erase all bonuses
-    // source.setUnits(new Unit(source.getUnits().getUnits() - units.getUnits()));
-    //source.getOwner().useFood(Constants.ATTACK_COST);
-    source.getOwner().getResources().getFoodResource().useFood(Constants.ATTACK_COST);
-    return (source.getOwner().getName() + " is attacking " + destination.getOwner().getName() + "'s "
-        + destination.getName() + " region with " + units.getUnits() + " units!\n");
+    return Constants.ATTACK_COMBAT_PRIORITY;
   }
   @Override
-  public String doDestinationAction(){
-    // Continue executing attack until one player has no more units left in region or attack group
+  public String doAction(){
+ // Continue executing attack until one player has no more units left in region or attack group
     while (!isWinner(source, destination, units)) {
       // loseUnits represents which player will lose a unit (aka they lost the roll)
       Region loseUnits = rollHelper(source, destination);
@@ -84,5 +71,8 @@ public class AttackOrder extends SourceDestinationOrder {
     return defRegion;
     }
 
+  }
 
-}
+  
+  
+
