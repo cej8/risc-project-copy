@@ -23,11 +23,14 @@ public class AttackOrderTest {
     regions.add(r1);
     regions.add(r2);
     Board b = new Board(regions);
-    AttackOrder attack1 = new AttackOrder(r1,r2,new Unit(2));
-    attack1.doSourceAction();
+    // AttackOrder attack1 = new AttackOrder(r1,r2,new Unit(2));
+    OrderInterface attackp1 = new AttackMove(r1,r2,new Unit(2));
+    //   OrderInterface attackp2 = new AttackCombat(r1,r2,new Unit(2));
+    attackp1.doAction();
+    // attackp2.doAction();
     int r1Size = r1.getSize();
     int r2Size = r2.getSize();
-    assertEquals(19,p1.getResources().getFoodResource().getFood());
+    assertEquals(18,p1.getResources().getFoodResource().getFood());
   }
   // @Test
   // public void test_attack() {

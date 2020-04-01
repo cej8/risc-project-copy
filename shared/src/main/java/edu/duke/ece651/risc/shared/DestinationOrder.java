@@ -31,8 +31,8 @@ abstract public int getPriority();
 
 
   @Override
-  public void convertOrderRegions(Board board){
-    for(Region r : board.getRegions()){
+ public void findValuesInBoard(Board board){
+   for(Region r : board.getRegions()){
       if(r.getName().equals(this.getDestination().getName())){
         this.setDestination(r);
       }

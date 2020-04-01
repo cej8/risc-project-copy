@@ -12,9 +12,13 @@ public class OrderFactory {
     case "move":
       order = new MoveOrder(source, destination, units);
       break;
-     case "attack":
-      order = new AttackOrder(source, destination, units);
+     case "attack move":
+      order = new AttackMove(source, destination, units);
       break;
+       case "attack combat":
+      order = new AttackCombat(source, destination, units);
+      break;
+  
     case "upgrade":
       // TODO: something to the effect of order = new UpgradeOrder(source);
       break;

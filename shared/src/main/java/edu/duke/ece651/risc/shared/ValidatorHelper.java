@@ -3,7 +3,7 @@ package edu.duke.ece651.risc.shared;
 import java.util.*;
 // Helper class to validate orders and placements (game play) 
 public class ValidatorHelper {
-  private ValidatorInterface<AttackOrder> attackValidator;
+  private ValidatorInterface<AttackMove> attackValidator;
   private ValidatorInterface<MoveOrder> moveValidator;
   private ValidatorInterface<PlacementOrder> placementValidator;
   private Board tempBoard;
@@ -24,14 +24,14 @@ public class ValidatorHelper {
   // check all orders are valid for round per player
   public boolean allOrdersValid(List<OrderInterface> orders) {
     for(int i = 0; i < orders.size(); i++){
-      //TODO:: UNCOMMENT   orders.get(i).convertOrderRegions(tempBoard);
+       orders.get(i).findValuesInBoard(tempBoard);
     }
-    List<AttackOrder> attackList = new ArrayList<AttackOrder>();
+    List<AttackMove> attackList = new ArrayList<AttackMove>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
     for (OrderInterface order : orders) {
-      if (order.getPriority() == Constants.ATTACK_PRIORITY) {
+      if (order.getPriority() == Constants.ATTACK_MOVE_PRIORITY) {
         //  System.out.println("Found attack");
-        attackList.add((AttackOrder) order);
+        attackList.add((AttackMove) order);
       } else if (order.getPriority() == Constants.MOVE_PRIORITY) {
         moveList.add((MoveOrder) order);
         //  System.out.println("Found move");
@@ -49,7 +49,7 @@ public class ValidatorHelper {
   // checks all placement are valid per player
   public boolean allPlacementsValid(List<OrderInterface> placements) {
     for(int i = 0; i < placements.size(); i++){
-     //TODO:: UNCOMMENT placements.get(i).convertOrderRegions(tempBoard);
+     placements.get(i).findValuesInBoard(tempBoard);
     }
     List<PlacementOrder> pList = new ArrayList<PlacementOrder>();
     for (OrderInterface order : placements) {
