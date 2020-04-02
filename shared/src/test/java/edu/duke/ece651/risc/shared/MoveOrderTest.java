@@ -116,6 +116,7 @@ public class MoveOrderTest {
     OrderInterface move3 = new MoveOrder(board.getRegions().get(2), board.getRegions().get(0), new Unit(3));
     List<OrderInterface> moves = new ArrayList<OrderInterface>();
     moves.add(move1);
+    assertEquals(
     moves.add(move2);
     moves.add(move3);
 
