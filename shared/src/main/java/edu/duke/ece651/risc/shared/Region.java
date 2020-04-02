@@ -11,11 +11,11 @@ public class Region implements Serializable {
   private Unit units;
   private List<Region> adjRegions;
   private int regionSize;
-  private int foodProduction;
+  private int fuelProduction;
   private int technologyProduction;
 
-  public Region() {
-  }
+  // public Region() {
+  // }
 
   // Constructor for assigning name to region (before Players are assigned)
   public Region(String n) {
@@ -23,12 +23,19 @@ public class Region implements Serializable {
     setOwner(null);
     setUnits(null);
     this.adjRegions = new ArrayList<Region>();
+    setFuelProduction(Constants.STARTING_FUEL_PRODUCTION);
+    setTechProduction(Constants.STARTING_TECH_PRODUCTION);
+    setSize(Constants.REGION_SIZE);
   }
 
   public Region(AbstractPlayer p, Unit u) {// will need to be modified
+    setName("");
     setOwner(p);
     setUnits(u);
     this.adjRegions = new ArrayList<Region>();
+    setFuelProduction(Constants.STARTING_FUEL_PRODUCTION);
+    setTechProduction(Constants.STARTING_TECH_PRODUCTION);
+    setSize(Constants.REGION_SIZE);
   }
 
   public Path findShortestPath(Region end) {
@@ -88,9 +95,15 @@ public class Region implements Serializable {
   
   }
 
+  public Region getRegionByName(Board board, String name){
+    Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
+    for (Region r : board.getRegions()){
+      nameToRegionMap.put(r.getName(), r);
+    }
+    return nameToRegionMap.get(name);
+  }
+  
   public void assignRegion(AbstractPlayer p, Unit u) {
-    // assigns this region to Player p with Unit .. is this not just setOwner +
-    // setUnits? Do we need this?
     setOwner(p);
     setUnits(u);
   }
@@ -116,8 +129,8 @@ public class Region implements Serializable {
     this.regionSize = s;
   }
 
-  public void setFoodProduction(int f) {
-    this.foodProduction = f;
+  public void setFuelProduction(int f) {
+    this.fuelProduction = f;
   }
 
   public void setTechProduction(int t) {
@@ -129,8 +142,8 @@ public class Region implements Serializable {
     return technologyProduction;
   }
 
-  public int getFoodProduction() {
-    return foodProduction;
+  public int getFuelProduction() {
+    return fuelProduction;
   }
 
   public int getSize() {

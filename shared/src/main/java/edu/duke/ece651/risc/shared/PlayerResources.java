@@ -4,14 +4,14 @@ import java.io.*;
 
 public class PlayerResources implements Serializable {
   private static final long serialVersionUID = 17L;
-  private FoodResources foodResource;
+  private FuelResources foodResource;
   private TechResources techResource;
 
   public PlayerResources(int startingFood, int startingTech){
-    this.foodResource = new FoodResources(startingFood);
+    this.foodResource = new FuelResources(startingFood);
     this.techResource = new TechResources(startingTech);
   }
-  public FoodResources getFoodResource(){
+  public FuelResources getFuelResource(){
     return this.foodResource;
   }
   public TechResources getTechResource(){

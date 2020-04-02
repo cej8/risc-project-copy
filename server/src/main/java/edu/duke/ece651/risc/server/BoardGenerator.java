@@ -88,10 +88,9 @@ public class BoardGenerator {
   }
 
   private Region createRegion(String name) {
-    Region regionA = new Region();
-    regionA.setName(name);
+    Region regionA = new Region(name);
     regionA.setSize(1);
-    regionA.setFoodProduction(1);
+    regionA.setFuelProduction(1);
     regionA.setTechProduction(1);
     return regionA;
   }

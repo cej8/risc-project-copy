@@ -12,7 +12,7 @@ public class MoveOrderTest {
    @Test
   public void test_moveFood(){
     AbstractPlayer p1 = new HumanPlayer("player 1");
-    int food = p1.getResources().getFoodResource().getFood();
+    int food = p1.getResources().getFuelResource().getFuel();
     int tech = p1.getResources().getTechResource().getTech();
     assertEquals(20,food);
     assertEquals(15, tech);
@@ -36,7 +36,7 @@ public class MoveOrderTest {
     move1.doAction();
     int r1Size = r1.getSize();
     int r2Size = r2.getSize();
-    assertEquals(16,p1.getResources().getFoodResource().getFood());
+    assertEquals(16,p1.getResources().getFuelResource().getFuel());
   }
   // @Test
   // public void test_moveOrder() {
