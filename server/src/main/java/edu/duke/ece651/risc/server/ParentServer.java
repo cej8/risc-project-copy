@@ -231,9 +231,13 @@ public class ParentServer implements Runnable{
       if(order instanceof PlacementOrder){
         castOrder = (PlacementOrder)(order);
       }
-      else if(order instanceof AttackOrder){
-        castOrder = (AttackOrder)(order);
+      else if(order instanceof AttackMove){
+        castOrder = (AttackMove)(order);
       }
+      else if(order instanceof AttackCombat){
+        castOrder = (AttackCombat) (order);
+      }
+    
       else if(order instanceof MoveOrder){
         castOrder = (MoveOrder)(order);
       }
@@ -279,23 +283,25 @@ public class ParentServer implements Runnable{
   public void applyOrderList(List<OrderInterface> orders){
     //Simply call doAction for each order
     for(int i = 0; i < orders.size(); i++){
-      turnResults.append(orders.get(i).doSourceAction());
+      turnResults.append(orders.get(i).doAction());
     }
-    for(int i = 0; i < orders.size(); i++){
-      turnResults.append(orders.get(i).doDestinationAction());
-    }
+    // for(int i = 0; i < orders.size(); i++){
+    // turnResults.append(orders.get(i).doDestinationAction());
+    //  }
     orders.clear();
   }
   // method to add additional unit after round complete to all regions on board
 
-  //TODO -- needs to be changed and tested to add a unit of bonus 0 to already existing list
   public void growUnits() {
-    // for(Region r : board.getRegions()){
-    //   r.setUnits(new Unit(r.getUnits().getUnits()+1));
-    // }
-    for (Region r: board.getRegions()){
-      r.getUnits().addUnits(1, 0); //add 1 unit of tech 0 to each region
-    }
+     for(Region r : board.getRegions()){
+       //increment number of basic units
+       r.getOwner().getResources().getFoodResource().addFood(r.getFoodProduction());
+       r.getOwner().getResources().getTechResource().addTech(r.getTechProduction());
+       r.getUnits().getUnits().set(0,r.getUnits().getUnits().get(0)+1);
+      
+      
+     }
+  
   }
   // method that controls game play
   public void playGame(){

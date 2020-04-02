@@ -12,10 +12,9 @@ public class HumanPlayer extends AbstractPlayer {
   public HumanPlayer(String name) {//testing construcotr for tests that do no dpend on socket connection
     this.isPlaying = true;
     this.name = name;
-    //this.foodStash = Constants.STARTING_FOOD;
-    //this.techStash = Constants.STARTING_TECH;
-    // this.foodResource = new FoodResources(Constants.STARTING_FOOD);
+    maxTechLevel = new TechnologyLevel();
     this.playerResource = new PlayerResources(Constants.STARTING_FOOD, Constants.STARTING_TECH);
+
   }
   
 }

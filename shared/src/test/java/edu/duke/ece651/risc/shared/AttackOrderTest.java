@@ -11,8 +11,8 @@ public class AttackOrderTest {
     AbstractPlayer p1 = new HumanPlayer("player 1");
     int food = p1.getResources().getFoodResource().getFood();
     int tech = p1.getResources().getTechResource().getTech();
-    assertEquals(10,food);
-    assertEquals(10, tech);
+    assertEquals(20,food);
+    assertEquals(15, tech);
     AbstractPlayer p2 = new HumanPlayer("player 2");
     Region r1 = new Region(p1, new Unit(5));
     r1.setSize(1);
@@ -23,11 +23,14 @@ public class AttackOrderTest {
     regions.add(r1);
     regions.add(r2);
     Board b = new Board(regions);
-    OrderInterface attack1 = new AttackOrder(r1,r2,new Unit(2));
-    attack1.doSourceAction();
+    // AttackOrder attack1 = new AttackOrder(r1,r2,new Unit(2));
+    OrderInterface attackp1 = new AttackMove(r1,r2,new Unit(2));
+    //   OrderInterface attackp2 = new AttackCombat(r1,r2,new Unit(2));
+    attackp1.doAction();
+    // attackp2.doAction();
     int r1Size = r1.getSize();
     int r2Size = r2.getSize();
-    assertEquals(9,p1.getResources().getFoodResource().getFood());
+    assertEquals(18,p1.getResources().getFoodResource().getFood());
   }
   // @Test
   // public void test_attack() {

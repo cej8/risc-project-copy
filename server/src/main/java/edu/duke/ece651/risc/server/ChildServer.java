@@ -96,7 +96,7 @@ public class ChildServer implements Runnable{
           //Send board
           playerConnection.sendObject(parent.getBoard());
           //Retrieve orders
-          List<OrderInterface> placementOrders;
+          List<OrderInterface> placementOrders;//changed for new order interface
           placementOrders = (ArrayList<OrderInterface>)(playerConnection.receiveObject());
           validator = new ValidatorHelper(player, new Unit(startUnits), parent.getBoard());
           //TODO: Validate orders --> loop if fail
@@ -107,7 +107,7 @@ public class ChildServer implements Runnable{
           
           //Convert to parent's board
           for(int i = 0; i < placementOrders.size(); i++){
-            placementOrders.get(i).convertOrderRegions(parent.getBoard());
+            placementOrders.get(i).findValuesInBoard(parent.getBoard());
           }
           parent.addOrdersToMap(placementOrders);
           //Succeeds
@@ -146,7 +146,7 @@ public class ChildServer implements Runnable{
             
             //Convert to parent's board
             for(int i = 0; i < orders.size(); i++){
-              orders.get(i).convertOrderRegions(parent.getBoard());
+              orders.get(i).findValuesInBoard(parent.getBoard());
             }
             parent.addOrdersToMap(orders);
             //Otherwise succeeds

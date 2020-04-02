@@ -1,63 +1,44 @@
-package edu.duke.ece651.risc.shared;
+package edu.duke.ece651.risc.client;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import java.util.*;
 
+import edu.duke.ece651.risc.shared.AbstractPlayer;
+import edu.duke.ece651.risc.shared.Board;
+import edu.duke.ece651.risc.shared.Constants;
+import edu.duke.ece651.risc.shared.HumanPlayer;
+import edu.duke.ece651.risc.shared.OrderInterface;
+import edu.duke.ece651.risc.shared.Region;
+import edu.duke.ece651.risc.shared.Unit;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TestMovePathFinder {
+public class TestOrderCreator {
   @Test
-  public void test_pathFinder(){
-    AbstractPlayer p1 = new HumanPlayer("player 1");
-    AbstractPlayer p2 = new HumanPlayer("player 2");
-    List<Region> regions = getRegionList(p1, p2);
-    Path sp14 = regions.get(0).findShortestPath(regions.get(2));//valid not adjacent
-    System.out.println("R1 to R4");
-    printPath(sp14);
-    Path sp12 = regions.get(0).findShortestPath(regions.get(1));//valid adjacent
-      System.out.println("R1 to R2");
-     printPath(sp12);
-      Path sp26 = regions.get(1).findShortestPath(regions.get(5));//valid adjacent
-      System.out.println("R2 to R6");
-     printPath(sp26);
-  
-    Path sp16 = regions.get(0).findShortestPath(regions.get(5));
-     System.out.println("R1 to R6");
-      printPath(sp16);
-      Path sp18 = regions.get(0).findShortestPath(regions.get(7));//invalid
-     System.out.println("R1 to R8");
-      printPath(sp18);
+  public void test_SDCreator() throws FileNotFoundException {
+    InputStream input = new FileInputStream(new File("src/test/resources/testSDOrders.txt"));
+    TextDisplay td = new TextDisplay();
+    ConsoleInput ci = new ConsoleInput(input);
+    Client client = new Client(ci, td);
+    HumanPlayer    p1 = new HumanPlayer("player 1");
+    HumanPlayer p2 = new HumanPlayer("player 2");
+    Board b= new Board(getRegionList(p1, p2));
+    client.setBoard(b);
+    client.setPlayer(p1);
+    SDOrderCreator oc = new SDOrderCreator(client);
+    List<OrderInterface> orders = oc.createOrders();
+    assertEquals(3, orders.size());
+    assertEquals(Constants.MOVE_PRIORITY, orders.get(0).getPriority());
+    assertEquals(Constants.ATTACK_MOVE_PRIORITY, orders.get(1).getPriority());
+    assertEquals(Constants.ATTACK_COMBAT_PRIORITY, orders.get(2).getPriority());
+    
+    
  
-   
-  }
-  private void printPath(Path shortestPath){
-    if(shortestPath==null){
-      System.out.println("No path exists");
-      return;
-    }
-    for(Region r: shortestPath.getPath()){
-      System.out.println(r.getName());
-    }
-    
-  }
-   @Test
-  public void test_moveValidator() {
-    AbstractPlayer p1 = new HumanPlayer("player 1");
-    
-    AbstractPlayer p2 = new HumanPlayer("player 2");
-    List<Region> regions = getRegionList(p1, p2);
-    Board b = new Board(regions);
-
-    MoveValidator mv = new MoveValidator(p1, b);
-    MoveOrder move1 = new MoveOrder(regions.get(6), regions.get(1), new Unit(2));//valid
-    assertEquals(true,mv.isValidMove(move1));
-    MoveOrder move2 = new MoveOrder(regions.get(6), regions.get(4),new Unit(2));//invalid, not enough resources
-    // assertEquals(false, mv.isValidMove(move2));
-    MoveOrder move3 = new MoveOrder(regions.get(3), regions.get(7), new Unit(2));//no valid path of adjacent regions
-    assertEquals(false, mv.isValidMove(move3));
-    
-    
 
   }
   private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2) {
