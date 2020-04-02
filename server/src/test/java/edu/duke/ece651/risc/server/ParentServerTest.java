@@ -60,39 +60,172 @@ public class ParentServerTest {
     assertEquals(1,regions.get(6).getSize());
     assertEquals(1,regions.get(6).getFoodProduction());
     assertEquals(1,regions.get(6).getTechProduction());
+   
   }
-  // @Test
-  //  public void test_placementOrder(){
-  //   ParentServer ps = new ParentServer();
-  //   HumanPlayer player = new HumanPlayer("player1");
-  //   HumanPlayer player2 = new HumanPlayer("player2");
-  //   ChildServer cs = new ChildServer(player,ps);
-  //   ChildServer cs2 = new ChildServer(player2, ps);
-  //   ps.addPlayer(cs);
-  //   ps.addPlayer(cs2);
+  @Test
+  public void test_growUnits(){
+     ParentServer ps = new ParentServer();
+    //ps.createBoard();
+    AbstractPlayer player = new HumanPlayer("player1");
+    AbstractPlayer player2 = new HumanPlayer("player2");
+    ChildServer cs = new ChildServer(player,ps);
+    ChildServer cs2 = new ChildServer(player2, ps);
+    ps.addPlayer(cs);
+    ps.addPlayer(cs2);
+    Board b = new Board(getRegionList(player, player2));
+    ps.setBoard(b);
+    
+    assertEquals(20, player2.getResources().getFoodResource().getFood());
+    assertEquals(15, player.getResources().getTechResource().getTech());
+    assertEquals(4, b.getRegions().get(2).getUnits().getUnits().get(0));
+    ps.growUnits();
+    assertEquals(220, player2.getResources().getFoodResource().getFood()); 
+    assertEquals(115, player.getResources().getTechResource().getTech());
+    assertEquals(5, b.getRegions().get(2).getUnits().getUnits().get(0));
+   
+    
+    
 
-  //   ps.createStartingGroups();
-  //   Board board = ps.getBoard();
-  //   List<Region> regions = board.getRegions();
-  //   for(int i = 0; i < regions.size(); i++) {
-  //     OrderInterface placement = new PlacementOrder(regions.get(i),new Unit(i + 5));
-  //     placement.doSourceAction();
-  //     placement.doDestinationAction();
-  //     System.out.println("Placement number: " + (i + 5));
-  //   }
-  //   assertEquals(5,regions.get(0).getUnits().getUnits());
-  //   assertEquals(6,regions.get(1).getUnits().getUnits());
-  //   assertEquals(7,regions.get(2).getUnits().getUnits());
-  //   assertEquals(8,regions.get(3).getUnits().getUnits());
-  //   assertEquals(9,regions.get(4).getUnits().getUnits());
-  //   assertEquals(10,regions.get(5).getUnits().getUnits());
-  //   assertEquals(11,regions.get(6).getUnits().getUnits());
-  //   assertEquals(12,regions.get(7).getUnits().getUnits());
-  //   assertEquals(13,regions.get(8).getUnits().getUnits());
-  //   assertEquals(14,regions.get(9).getUnits().getUnits());
-  //   assertEquals(15,regions.get(10).getUnits().getUnits());
-  //   assertEquals(16,regions.get(11).getUnits().getUnits());
-  // }
+  }
+    private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2) {
+    Region r1 = new Region(p1, new Unit(1));
+    r1.setName("r1");
+    r1.setSize(1);
+    r1.setFoodProduction(100);
+    r1.setTechProduction(100);
+    
+    Region r2 = new Region(p1, new Unit(2));
+    r2.setName("r2");
+    r2.setSize(2);
+    r2.setFoodProduction(100);
+  
+    Region r4 = new Region(p1, new Unit(4));
+    r4.setName("r4");
+    r4.setSize(4);
+    r4.setFoodProduction(100);
+    
+    
+    Region r5 = new Region(p1, new Unit(5));
+    r5.setName("r5");
+    r5.setSize(1);
+    r5.setFoodProduction(100);
+  
+    Region r3 = new Region(p2, new Unit(3));
+    r3.setName("r3");
+    r3.setSize(1);
+    r3.setFoodProduction(100);
+  
+    Region r6 = new Region(p1, new Unit(6));
+    r6.setName("r6");
+    r6.setSize(6);
+    r1.setFoodProduction(100);
+    
+     Region r7 = new Region(p1, new Unit(7));
+    r7.setName("r7");
+    r7.setSize(5);
+    r7.setFoodProduction(100);
+    
+     Region r8 = new Region(p2, new Unit(8));
+    r8.setName("r8");
+    r8.setSize(5);
+    r8.setFoodProduction(100);
+   
+  
+
+    List<Region> regions = new ArrayList<Region>();
+    regions.add(r1);
+    regions.add(r2);
+    regions.add(r4);
+    regions.add(r3);
+    regions.add(r5);
+    regions.add(r6);
+    regions.add(r7);
+    regions.add(r8);
+
+    List<Region> adj1 = new ArrayList<Region>();
+
+    adj1.add(r2);
+    adj1.add(r3);
+     adj1.add(r7);
+
+    r1.setAdjRegions(adj1);
+
+    List<Region> adj2 = new ArrayList<Region>();
+    adj2.add(r1);
+    adj2.add(r4);
+    r2.setAdjRegions(adj2);
+
+    List<Region> adj3 = new ArrayList<Region>();
+    adj3.add(r1);
+    adj3.add(r5);
+    adj3.add(r4);
+    r3.setAdjRegions(adj3);
+
+    List<Region> adj4 = new ArrayList<Region>();
+    adj4.add(r2);
+    adj4.add(r6);
+    adj4.add(r3);
+    adj4.add(r7);
+
+    r4.setAdjRegions(adj4);
+
+    List<Region> adj5 = new ArrayList<Region>();
+    adj5.add(r3);
+    adj5.add(r6);
+    r5.setAdjRegions(adj5);
+
+    List<Region> adj6 = new ArrayList<Region>();
+    adj6.add(r4);
+    adj6.add(r5);
+    adj6.add(r8);
+
+    r6.setAdjRegions(adj6);
+
+     List<Region> adj7 = new ArrayList<Region>();
+    adj7.add(r4);
+    adj7.add(r1);
+    adj7.add(r8);
+    r7.setAdjRegions(adj7);
+
+     List<Region> adj8 = new ArrayList<Region>();
+    adj8.add(r7);
+    adj8.add(r6);
+    r8.setAdjRegions(adj8);
+    return regions;
+  }
+
+  @Test
+   public void test_placementOrder(){
+    ParentServer ps = new ParentServer();
+    HumanPlayer player = new HumanPlayer("player1");
+    HumanPlayer player2 = new HumanPlayer("player2");
+    ChildServer cs = new ChildServer(player,ps);
+    ChildServer cs2 = new ChildServer(player2, ps);
+    ps.addPlayer(cs);
+    ps.addPlayer(cs2);
+
+    ps.createStartingGroups();
+    Board board = ps.getBoard();
+    List<Region> regions = board.getRegions();
+    for(int i = 0; i < regions.size(); i++) {
+      OrderInterface placement = new PlacementOrder(regions.get(i),new Unit(i + 5));
+      placement.doAction();
+      
+      System.out.println("Placement number: " + (i + 5));
+    }
+    assertEquals(5,regions.get(0).getUnits().getUnits().get(0));
+    assertEquals(6,regions.get(1).getUnits().getUnits().get(0));
+    assertEquals(7,regions.get(2).getUnits().getUnits().get(0));
+    assertEquals(8,regions.get(3).getUnits().getUnits().get(0));
+    assertEquals(9,regions.get(4).getUnits().getUnits().get(0));
+    assertEquals(10,regions.get(5).getUnits().getUnits().get(0));
+    assertEquals(11,regions.get(6).getUnits().getUnits().get(0));
+    assertEquals(12,regions.get(7).getUnits().getUnits().get(0));
+    assertEquals(13,regions.get(8).getUnits().getUnits().get(0));
+    assertEquals(14,regions.get(9).getUnits().getUnits().get(0));
+    assertEquals(15,regions.get(10).getUnits().getUnits().get(0));
+    assertEquals(16,regions.get(11).getUnits().getUnits().get(0));
+  }
 
   // @Test
   // public void test_assorted(){
@@ -149,35 +282,35 @@ public class ParentServerTest {
   //   }    
   // }
 
-  // @Test
-  // public void test_assignGroups(){
-  //   TextDisplay out = new TextDisplay();
-  //   ParentServer ps = new ParentServer();
-  //   for(int i = 0; i < 5; i++){ ps.addPlayer(new ChildServer(new HumanPlayer(""),ps)); }
-  //   //Get 5 player map
-  //   ps.createStartingGroups();
-  //   //Set A, F to real players
-  //   assert(ps.assignGroups("Group A", new HumanPlayer("Set groups 1")));
-  //   assert(ps.assignGroups("Group F", new HumanPlayer("Set groups 2")));
-  //   //Expand D to be D+E
-  //   assert(ps.assignGroups("Group E", new HumanPlayer("Group D")));
-  //   //Bad set cases
-  //   assert(!ps.assignGroups("Group b", new HumanPlayer("Bad set 1")));
-  //   assert(!ps.assignGroups("Group A", new HumanPlayer("Bad set 2")));
-  //   assert(!ps.assignGroups("Group Q", new HumanPlayer("Bad set 3")));
-  //   assert(!ps.assignGroups("Group ", new HumanPlayer("Bad set 4")));
-  //   assert(!ps.assignGroups("", new HumanPlayer("Bad set 5")));
-  //   //Should have (A,B) as "Set groups 1" and (K,L) as "Set groups 2"
-  //   //Group D should have D+E (G,H,I,J)
-  //   out.displayBoard(ps.getBoard());
-  //   assert(ps.playerHasARegion(new HumanPlayer("Set groups 1")));
-  //   assert(ps.playerHasARegion(new HumanPlayer("Set groups 2")));
-  //   assert(ps.getBoard().getNumRegionsOwned(new HumanPlayer("Set groups 1")) == 2);
-  //   assert(ps.getBoard().getNumRegionsOwned(new HumanPlayer("Set groups 2")) == 2);
-  //   assert(ps.getBoard().getNumRegionsOwned(new HumanPlayer("Group D")) == 4);
-  //   assert(ps.getBoard().getNumRegionsOwned(new HumanPlayer("Group A")) == 0);    
+  @Test
+  public void test_assignGroups(){
+    TextDisplay out = new TextDisplay();
+    ParentServer ps = new ParentServer();
+    for(int i = 0; i < 5; i++){ ps.addPlayer(new ChildServer(new HumanPlayer(""),ps)); }
+    //Get 5 player map
+    ps.createStartingGroups();
+    //Set A, F to real players
+    assert(ps.assignGroups("Group A", new HumanPlayer("Set groups 1")));
+    assert(ps.assignGroups("Group F", new HumanPlayer("Set groups 2")));
+    //Expand D to be D+E
+    assert(ps.assignGroups("Group E", new HumanPlayer("Group D")));
+    //Bad set cases
+    assert(!ps.assignGroups("Group b", new HumanPlayer("Bad set 1")));
+    assert(!ps.assignGroups("Group A", new HumanPlayer("Bad set 2")));
+    assert(!ps.assignGroups("Group Q", new HumanPlayer("Bad set 3")));
+    assert(!ps.assignGroups("Group ", new HumanPlayer("Bad set 4")));
+    assert(!ps.assignGroups("", new HumanPlayer("Bad set 5")));
+    //Should have (A,B) as "Set groups 1" and (K,L) as "Set groups 2"
+    //Group D should have D+E (G,H,I,J)
+    out.displayBoard(ps.getBoard());
+    assert(ps.playerHasARegion(new HumanPlayer("Set groups 1")));
+    assert(ps.playerHasARegion(new HumanPlayer("Set groups 2")));
+    assert(ps.getBoard().getNumRegionsOwned(new HumanPlayer("Set groups 1")) == 2);
+    assert(ps.getBoard().getNumRegionsOwned(new HumanPlayer("Set groups 2")) == 2);
+    assert(ps.getBoard().getNumRegionsOwned(new HumanPlayer("Group D")) == 4);
+    assert(ps.getBoard().getNumRegionsOwned(new HumanPlayer("Group A")) == 0);    
     
-  // }
+  }
 
   // @Test
   // public void test_orders(){
