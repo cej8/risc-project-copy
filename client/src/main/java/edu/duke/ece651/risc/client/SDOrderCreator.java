@@ -11,9 +11,9 @@ import java.io.*;
 public class SDOrderCreator {
   private Client client;
 
-  public SDOrderCreator(Client c) {
-    this.client = c;
-  }
+   public SDOrderCreator(Client c) {
+  this.client = c;
+   }
 
   public Region orderHelper(String response) {
     List<Region> regionList = client.getBoard().getRegions();
@@ -26,43 +26,6 @@ public class SDOrderCreator {
     return null;
   }
 
-  // Helper method to create MoveOrder or AttackOrder
-  // public List<OrderInterface> moveAttackHelper(List<OrderInterface> orderList,
-  // String sourceKeyWord, String destKeyWord,
-  // String unitKeyWord) {
-  // Region source = null;
-  // Region destination = null;
-  // while (source == null) {
-  // client.getClientOutput().displayString("What region do you want to " +
-  // sourceKeyWord + " from? (please type a region name, i.e. 'A')");
-  // source = orderHelper(client.getClientInput().readInput());
-  // }
-  // while (destination == null) {
-  // client.getClientOutput().displayString("What region do you want to " +
-  // destKeyWord + "? (please type a region name, i.e. 'A')");
-  // destination = orderHelper(client.getClientInput().readInput());
-  // }
-  // while (true) {
-  // try {
-  // // client.getClientOutput().displayString("How many units do you want to " +
-  // unitKeyWord + "?");
-  // // Unit units = new
-  // Unit(Integer.parseInt(client.getClientInput().readInput()));
-  // Unit units = getOrderUnits(source);
-  // OrderInterface order = OrderFactory.getOrder(unitKeyWord, source,
-  // destination, units);
-  // if (order != null) {
-  // orderList.add(order);
-  // break;
-  // }
-  // } catch (NumberFormatException ne) {
-  // // ne.printStackTrace();
-  // client.getClientOutput().displayString("That was not an integer, please try
-  // again.");
-  // }
-  // }
-  // return orderList;
-  // }
   public void moveHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord) {
     Region source = promptForRegion(sourceKeyWord);
     Region destination = promptForRegion(sourceKeyWord);
@@ -71,7 +34,7 @@ public class SDOrderCreator {
       try {
         Unit units = getOrderUnits(source);
 
-        OrderInterface order = OrderFactory.getOrder("move", source, destination, units);
+        OrderInterface order = SourceDestOrderFactory.getOrder("move", source, destination, units);
         if (order != null) {
           orderList.add(order);
           break;
@@ -81,8 +44,7 @@ public class SDOrderCreator {
         client.getClientOutput().displayString("That was not an integer, please try again.");
       }
     }
-    // return orderList;
-  }
+   }
 
   private Region promptForRegion(String keyWord) {
     Region r = null;
@@ -100,9 +62,9 @@ public class SDOrderCreator {
     while (true) {
       try {
         Unit units = getOrderUnits(source);
-        OrderInterface order1 = OrderFactory.getOrder("attack move", source, destination, units);
+        OrderInterface order1 = SourceDestOrderFactory.getOrder("attack move", source, destination, units);
         if (order1 != null) {
-          OrderInterface order2 = OrderFactory.getOrder("attack combat", source, destination, units);
+          OrderInterface order2 = SourceDestOrderFactory.getOrder("attack combat", source, destination, units);
           if (order2 != null) {
             orderList.add(order1);
             orderList.add(order2);
@@ -114,7 +76,6 @@ public class SDOrderCreator {
         client.getClientOutput().displayString("That was not an integer, please try again.");
       }
     }
-    // return orderList;
   }
 
   // TODO -- WIP commented for testing
@@ -144,8 +105,7 @@ public class SDOrderCreator {
     // TODO:fix temp return value return new Unit(orderUnits);
     return new Unit(3);
   }
-
-  public boolean getOrderList(List<OrderInterface> orderList, String response) {
+ public boolean getOrderList(List<OrderInterface> orderList, String response) {
     switch (response.toUpperCase()) {
       case "D":
         return false;
@@ -160,11 +120,19 @@ public class SDOrderCreator {
         attackHelper(orderList, "attack from", "attack");
         client.getClientOutput().displayString("You made an Attack order, what else would you like to do?");
         break;
-      // case "U":
-      // TODO: upgrade
-      // break;
+    case "U":
+      DestOrderCreator doc = new DestOrderCreator(this.client);
+      doc.upgradeHelper(orderList, "upgrade units on");
+        client.getClientOutput().displayString("You made an Upgrade units order, what else would you like to do?");
+        break;
+    case "T":
+      PlayerOrderCreator poc = new PlayerOrderCreator(this.client);
+      poc.techBoostHelper(orderList);
+        client.getClientOutput().displayString("You made an Upgrade technology level order, this will not be active until your next turn. What else would you like to do?");
+        break;
+ 
       default:
-        client.getClientOutput().displayString("Please select either M, A, U, or D");
+        client.getClientOutput().displayString("Please select either T, M, A, U, or D");
         break;
     }
     return true;
@@ -184,5 +152,6 @@ public class SDOrderCreator {
     }
     return orderList;
   }
+
 
 }

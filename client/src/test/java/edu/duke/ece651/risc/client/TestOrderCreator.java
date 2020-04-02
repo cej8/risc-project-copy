@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestOrderCreator {
   @Test
-  public void test_SDCreator() throws FileNotFoundException {
+  public void test_Creator() throws FileNotFoundException {
     InputStream input = new FileInputStream(new File("src/test/resources/testSDOrders.txt"));
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput(input);
@@ -32,10 +32,13 @@ public class TestOrderCreator {
     client.setPlayer(p1);
     SDOrderCreator oc = new SDOrderCreator(client);
     List<OrderInterface> orders = oc.createOrders();
-    assertEquals(3, orders.size());
+    assertEquals(5, orders.size());
     assertEquals(Constants.MOVE_PRIORITY, orders.get(0).getPriority());
     assertEquals(Constants.ATTACK_MOVE_PRIORITY, orders.get(1).getPriority());
     assertEquals(Constants.ATTACK_COMBAT_PRIORITY, orders.get(2).getPriority());
+    assertEquals(Constants.UPGRADE_UNITS_PRIORITY,  orders.get(3).getPriority());
+ assertEquals(Constants.UPGRADE_TECH_PRIORITY,  orders.get(4).getPriority());
+
     
     
  
