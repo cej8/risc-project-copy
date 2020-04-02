@@ -13,7 +13,9 @@ public class Client extends Thread{
   private ClientInputInterface clientInput;
   private ClientOutputInterface clientOutput;
   private HumanPlayer player;
-  
+  private String address;
+  private int port;
+
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
 
@@ -30,6 +32,14 @@ public class Client extends Thread{
     this.clientOutput = clientOutput;
   }
 
+    // Constructor needed for Android threads
+  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,String address, int port) {
+    this();
+    this.clientInput = clientInput;
+    this.clientOutput = clientOutput;
+    this.address = address;
+    this.port = port;
+  }
   
   public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
     this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
@@ -235,6 +245,7 @@ public class Client extends Thread{
 
  
   public void playGame() {
+    makeConnection(address,port);
     try {
       // Make initial connection, waits for server to send back player's player object
       // Get initial player object (for name)
