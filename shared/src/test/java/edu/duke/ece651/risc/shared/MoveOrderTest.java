@@ -56,11 +56,27 @@ public class MoveOrderTest {
     AbstractPlayer p1 = new HumanPlayer("player 1");
     Region r1 = new Region(p1, new Unit(10));
     r1.setSize(2);
+    r1.setName("r1");
     Region r2 = new Region(p1, new Unit(5));
     r2.setSize(2);
+    r2.setName("r2");
     Region r3 = new Region(p1, new Unit(8));
     r3.setSize(2);
+    r3.setName("r3");
     List<Region> regions = new ArrayList<Region>();
+    List<Region> adj1=new ArrayList<Region>();
+    adj1.add(r2);
+    adj1.add(r3);
+    r1.setAdjRegions(adj1);
+    List<Region> adj2=new ArrayList<Region>();
+    adj2.add(r1);
+    adj2.add(r3);
+    r2.setAdjRegions(adj2);
+    List<Region> adj3=new ArrayList<Region>();
+    adj3.add(r1);
+    adj3.add(r2);
+    r3.setAdjRegions(adj3);
+
     regions.add(r1);
     regions.add(r2);
     regions.add(r3);
