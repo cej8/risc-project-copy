@@ -14,6 +14,9 @@ public final class Constants {
   public static final int MAX_REGIONS = 12;
   // default port number (port for server connection default)
   public static final int DEFAULT_PORT = 12345;
+  //Value for max missed moves allowed before killing player
+  public static final int MAX_MISSED = 1;
+  
  
   //priorities for ordering moves 
   public static final int ATTACK_COMBAT_PRIORITY=5000;

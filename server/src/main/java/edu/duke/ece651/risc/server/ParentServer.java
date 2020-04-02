@@ -8,38 +8,37 @@ import java.util.concurrent.*;
 
 // Class handles all server side implmentation including ChildServer handling
 public class ParentServer implements Runnable{
-  private ServerSocket serverSocket = null;
   private List<ChildServer> children;
+  private List<String> players;
   private Board board;
   private Map<String, List<OrderInterface>> orderMap;
   private ExecutorService threads = Executors.newFixedThreadPool(Constants.MAX_PLAYERS);
   private int MAX_PLAYERS = Constants.MAX_PLAYERS;
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
+  
+  private boolean notStarted = true;
+  private int gameID;
 
   private StringBuilder turnResults;
   private int turnNumber = 1;
+
+  private MasterServer masterServer;
 
   public ParentServer(){
     BoardGenerator genBoard = new BoardGenerator();
     genBoard.createBoard();
     board = genBoard.getBoard();
     children = new ArrayList<ChildServer>();
+    players = new ArrayList<String>();
     orderMap = new HashMap<String, List<OrderInterface>>();
     turnResults = new StringBuilder("Turn 0: Start of game\n");
   }
 
-  public ParentServer(int port) throws IOException{
+  public ParentServer(int gameID, MasterServer masterServer){
     this();
-    serverSocket = new ServerSocket(port);
-  }
-
-  public void setSocket(int port) throws IOException{
-    serverSocket = new ServerSocket(port);
-  }
-
-  public ServerSocket getServerSocket(){
-    return serverSocket;
+    this.gameID = gameID;
+    this.masterServer = masterServer;
   }
   
   public List<ChildServer> getChildren(){
@@ -48,6 +47,14 @@ public class ParentServer implements Runnable{
 
   public double getTURN_WAIT_MINUTES(){
     return Constants.TURN_WAIT_MINUTES;
+  }
+
+  public int getGameID(){
+    return gameID;
+  }
+
+  public MasterServer getMasterServer(){
+    return masterServer;
   }
 
   //set's for testing
@@ -68,44 +75,16 @@ public class ParentServer implements Runnable{
     this.START_WAIT_MINUTES = START_WAIT_MINUTES;
   }
   
-  public void waitingForConnections() throws IOException {
-    if(serverSocket == null){
-      serverSocket = new ServerSocket(Constants.DEFAULT_PORT);
-    }
+  public void waitingForPlayers() throws IOException {
 
-    long startTime = -1;
+    long startTime = System.currentTimeMillis();;
     //Start time 2.5 minutes after first connection
     long gameStartTime = (long)(START_WAIT_MINUTES*60*1000);
     
-    while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
-      HumanPlayer newPlayer;
-      Connection newPlayerConnection;
-      try {
-        //Decrease socket timeout so max waiting of gameStartTime
-        if(startTime != -1){
-          serverSocket.setSoTimeout((int)(gameStartTime - (System.currentTimeMillis()-startTime)));
-        }
-        //Accept, set timeout to 60 seconds, create player
-        Socket playerSocket = serverSocket.accept();
-        playerSocket.setSoTimeout((int)(TURN_WAIT_MINUTES*60*1000));
-        newPlayer = new HumanPlayer("Player " + Integer.toString(children.size() + 1));
-        newPlayerConnection = new Connection(playerSocket);
-        newPlayerConnection.getStreamsFromSocket();
-        //Send object to client
-        newPlayerConnection.sendObject(newPlayer);
-      } catch (Exception e) {
-        e.printStackTrace(System.out);
-        continue;
-      }
-      System.out.println(newPlayer.getName() + " joined.");
-      //Get time of first connection
-      if(startTime == -1){
-        startTime = System.currentTimeMillis();
-      }
-      //Add player to list
-      children.add(new ChildServer(newPlayer, newPlayerConnection, this));
-    }
+    while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) { }
+    Thread.sleep(1);
     System.out.println("All players or time limit, proceeding");
+    notStarted = false;
   }
   public Board getBoard(){
     return this.board;
@@ -117,9 +96,40 @@ public class ParentServer implements Runnable{
     return orderMap;
   }
   // Helper method to add player to global player list - children
-  public void addPlayer(ChildServer c){
+  public void synchronized addPlayer(ChildServer c){
     children.add(c);
   }
+
+  //Method to add username/connection to game by creating new childserver
+  public void synchronized addPlayer(String username, Connection playerConnection){
+    HumanPlayer player = new HumanPlayer(username);
+    addPlayer(new ChildServer(player, playerConnection, this));
+    players.add(username);
+  }
+
+  //Method to try to join game
+  public boolean synchronized tryJoin(String username, Connection playerConnection){
+    //If game not started then trying to join as new player
+    if(notStarted){
+      //Confirm not already in game and still space
+      if(players.contains(username) || children.size() >= MAX_PLAYERS){
+        return false;
+      }
+      //If there is then add
+      addPlayer(username, playerConnection);
+    }
+    //Otherwise game in progress and trying to rejoin
+    else{
+      //Confirm valid player
+      if(!players.contains(username)){
+        return false;
+      }
+      //If is then give proper childserver connection
+      children.get(players.indexof(username)).setPlayerConnection(playerConnection);
+      return true;
+    }
+  }
+  
   // Generate initial board, set region groups based on number of players
   public void createStartingGroupsHelper(char groupName, int iStart, int iEnd, List<Region> regionList){
     HumanPlayer player;

@@ -13,6 +13,11 @@ public class ChildServer implements Runnable{
   private String turnMessage = "";
 
   private boolean firstCall = true;
+  private boolean connectionFailed = false;
+
+  private int missedTurns = 0;
+  private long startTime;
+  private long maxTime;
 
   public ChildServer(AbstractPlayer player, ParentServer parent){
     this.player = player;
@@ -45,20 +50,19 @@ public class ChildServer implements Runnable{
   public AbstractPlayer getPlayer(){
     return player;
   }
-  
-  // end of getters & setters
-  // enables ChildServer to be runnable
-  @Override
-  public void run(){
-    long startTime = System.currentTimeMillis();
-    //Timeout is Socket's timeout
-    long maxTime = (long)(parent.getTURN_WAIT_MINUTES()*60*1000);
-    
+
+  //Method to call turn, return true if "successful"
+  //Return false if socket has exception
+  public boolean performTurn(){
     //If player isn't playing or isn't watching then skip them
     if(!player.isPlaying()){
       if(!player.isWatching()){
-        return;
+        return true;
       }
+    }
+
+    if(playerConnection == null){
+      return false;
     }
     
     ValidatorHelper validator;
@@ -178,15 +182,37 @@ public class ChildServer implements Runnable{
       }
     }
     catch(Exception e){
-      //If anything fails then kill player
-      //Server only so actually not huge concern the readability of this
-      //TODO: make this more human readable
-      System.out.println(player.getName() + " exception encountered, killing connection");
-      //e.printStackTrace();
-      player.setPlaying(false);
       playerConnection.closeAll();
-      return;
+      playerConnection = null;
+      parentServer.getMasterServer().removePlayer(player.getName(), parentServer.getGameID());
+      return false;
     }
     System.out.println(player.getName() + " exiting thread gracefully");
+    return true;
+  }
+  
+  // end of getters & setters
+  // enables ChildServer to be runnable
+  @Override
+  public void run(){
+    startTime = System.currentTimeMillis();
+    //Timeout is Socket's timeout
+    maxTime = (long)(parent.getTURN_WAIT_MINUTES()*60*1000);
+    //If turn fails --> socket failed or not connected
+    while(maxTime > (System.getCurrentTimeMillis() - startTime)){
+      if(performTurn()){
+        //If successful then decrement missed turns to zero
+        missedTurns = (missedTurns > 0) ? (missedTurns - 1) : (0);
+        return;
+      }
+      Thread.sleep(100);
+    }
+    //If exits then never successfully performTurn
+    //Increment missedTurns
+    missedTurns++;
+    //If past maximum then mark as not playing
+    if(missedTurns > Constants.MAX_MISSED){
+      player.isPlaying(false);
+    }
   }
 }
