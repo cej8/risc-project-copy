@@ -107,30 +107,56 @@ public class MoveOrderTest {
   @Test
   public void test_UnitMoves() {
     Board board = setBoard();
+    assertEquals(70, (board.getRegions().get(1).getUnits().getTotalUnits()));
+    assertEquals(70, (board.getRegions().get(1).getUnits().getTotalUnits()));
+    assertEquals(70, (board.getRegions().get(1).getUnits().getTotalUnits()));
+    assertEquals(true, board.getRegions().get(0).getAdjRegions().contains(board.getRegions().get(1)));
+    assertEquals(true, board.getRegions().get(0).getAdjRegions().contains(board.getRegions().get(2)));
+    assertEquals(true, board.getRegions().get(1).getAdjRegions().contains(board.getRegions().get(0)));
+    assertEquals(true, board.getRegions().get(1).getAdjRegions().contains(board.getRegions().get(2)));
+    assertEquals(true, board.getRegions().get(2).getAdjRegions().contains(board.getRegions().get(0)));
+    assertEquals(true, board.getRegions().get(2).getAdjRegions().contains(board.getRegions().get(1)));
     List<Integer> u2 = listOfUnitInts(2, 2, 2, 2, 2, 2, 2);
     List<Integer> u3 = listOfUnitInts(3, 3, 3, 3, 3, 3, 3);
     List<Integer> u5 = listOfUnitInts(5, 5, 5, 5, 5, 5, 5);
     List<Integer> u0 = listOfUnitInts(0, 0, 0, 0, 0, 0, 0);
-    OrderInterface move1 = new MoveOrder(board.getRegions().get(0), board.getRegions().get(1), new Unit(5));
-    OrderInterface move2 = new MoveOrder(board.getRegions().get(1), board.getRegions().get(2), new Unit(2));
-    OrderInterface move3 = new MoveOrder(board.getRegions().get(2), board.getRegions().get(0), new Unit(3));
+    OrderInterface move1 = new MoveOrder(board.getRegions().get(0), board.getRegions().get(1), new Unit(u2));
+    OrderInterface move2 = new MoveOrder(board.getRegions().get(1), board.getRegions().get(2), new Unit(u3));
+    OrderInterface move3 = new MoveOrder(board.getRegions().get(2), board.getRegions().get(0), new Unit(u5));
     List<OrderInterface> moves = new ArrayList<OrderInterface>();
     moves.add(move1);
-    assertEquals(
     moves.add(move2);
     moves.add(move3);
-
-    //TODO add asserts
+    for (OrderInterface order : moves) {
+      order.doAction();
+    }
+    // r2 should have [9,9,9,9,9,9,9]
+    assertEquals(63, (board.getRegions().get(1).getUnits().getTotalUnits())); 
+    assertEquals(9, (board.getRegions().get(1).getUnits().getUnits().get(0)));
+ //TODO add asserts
   }
 
   public Board setBoard(){
+    List<Integer> u0 = listOfUnitInts(10, 10, 10, 10, 10, 10, 10);
     AbstractPlayer p1 = new HumanPlayer("player 1");
-    Region r1 = new Region(p1, new Unit(10));
+    Region r1 = new Region(p1, new Unit(u0));
     r1.setSize(2);
-    Region r2 = new Region(p1, new Unit(10));
+    Region r2 = new Region(p1, new Unit(u0));
     r2.setSize(2);
-    Region r3 = new Region(p1, new Unit(10));
+    Region r3 = new Region(p1, new Unit(u0));
     r3.setSize(2);
+    List<Region> adj1=new ArrayList<Region>();
+    adj1.add(r2);
+    adj1.add(r3);
+    r1.setAdjRegions(adj1);
+    List<Region> adj2=new ArrayList<Region>();
+    adj2.add(r1);
+    adj2.add(r3);
+    r2.setAdjRegions(adj2);
+    List<Region> adj3=new ArrayList<Region>();
+    adj3.add(r1);
+    adj3.add(r2);
+    r3.setAdjRegions(adj3);
     List<Region> regions = new ArrayList<Region>();
     regions.add(r1);
     regions.add(r2);
