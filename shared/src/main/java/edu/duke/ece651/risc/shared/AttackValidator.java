@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Class to check / validate that an attack order is allowed based on game conditions
-public class AttackValidator implements ValidatorInterface<AttackOrder> {
+public class AttackValidator implements ValidatorInterface<AttackMove> {
 private Board tempBoard;
   private AbstractPlayer player;
   
@@ -13,7 +13,7 @@ private Board tempBoard;
     this.player = player;
   }
   // Checks if attack is valid given conditions
-  public boolean isValidAttack(AttackOrder a) {
+  public boolean isValidAttack(AttackMove a) {
     // regions must be owned by different players
     //starting must be owned by player
     if(!a.getSource().getOwner().getName().equals(player.getName())){
@@ -35,8 +35,8 @@ private Board tempBoard;
     return false;
   }
    @Override
-   public boolean validateRegions(List<AttackOrder> attackList) {
-	 for (AttackOrder attack : attackList) {
+   public boolean validateRegions(List<AttackMove> attackList) {
+	 for (AttackMove attack : attackList) {
      if (!isValidAttack(attack)) {
         System.out.println("Attack not valid");
         return false;
@@ -48,24 +48,24 @@ private Board tempBoard;
     return true;
 	}
 @Override
-public boolean validateOrders(List<AttackOrder> attackList) {
+public boolean validateOrders(List<AttackMove> attackList) {
   boolean validRegions = validateRegions(attackList);
     boolean validUnits = validateUnits(attackList);
     return validRegions && validUnits;
   }
   // Method to validate corrent units in each region
   	@Override
-	public boolean validateUnits(List<AttackOrder> a) {
+	public boolean validateUnits(List<AttackMove> a) {
 	 // check to make sure numUnits in source < attackOrder units
-     for (AttackOrder attack : a) {
+     for (AttackMove attack : a) {
       Region tempSource = tempBoard.getRegionByName(attack.getSource().getName());
       Region tempDest = tempBoard.getRegionByName(attack.getDestination().getName());
       Unit sourceUnits = tempSource.getUnits();
       Unit attackUnits = new Unit(attack.getUnits().getTotalUnits());
-      AttackOrder attackCopy = new AttackOrder(tempSource, tempDest, attackUnits);
+      AttackMove attackCopy = new AttackMove(tempSource, tempDest, attackUnits);
       // make sure at least 1 sourceUnit, 1 attackUnit, and sourceUnits > attackUnits
       if ((sourceUnits.getTotalUnits() > attackUnits.getTotalUnits()) && (sourceUnits.getTotalUnits() > 0) && (attackUnits.getTotalUnits() > 0)) {
-        attackCopy.doSourceAction();
+        attackCopy.doAction();
       } else {
         System.out.println("Attack failed: sourceUnits are " + sourceUnits.getTotalUnits() + " but attackUnits are " + attackUnits.getTotalUnits()); //this is just for testing
         return false;

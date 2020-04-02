@@ -14,7 +14,7 @@ public class MoveOrder extends SourceDestinationOrder {
     return Constants.MOVE_PRIORITY;
   }
 
-  @Override
+  // @Override
   //TODO -- this should not return a new Unit bc that would clear all bonuses 
   public String doSourceAction() {
     //remove units from source region
@@ -25,7 +25,7 @@ public class MoveOrder extends SourceDestinationOrder {
   //player would need to know all their units and bonuses
   //
   
-  @Override
+  //  @Override
   public String doDestinationAction(){
     //add units to destination region
     //TODO --WARNING: this line will erase all bonuses
@@ -37,6 +37,12 @@ public class MoveOrder extends SourceDestinationOrder {
     destination.getOwner().getResources().getFoodResource().useFood(cost);
     return (destination.getOwner().getName() + " moved " + units.getUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n"); 
   }
+@Override
+public String doAction() {
+	// TODO Auto-generated method stub
+   
+    return doSourceAction() + doDestinationAction();
+}
 
 
 }

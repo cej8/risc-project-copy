@@ -14,11 +14,11 @@ public class AttackValidatorTest {
   public void test_AttackUnits() {
    List<Region> regions = getRegions();
     Board board = new Board(regions);
-    ValidatorInterface<AttackOrder> av1 = new AttackValidator(new HumanPlayer("Player 1"),(Board)DeepCopy.deepCopy(board));
-    ValidatorInterface<AttackOrder> av2 = new AttackValidator(new HumanPlayer("Player 2"),(Board)DeepCopy.deepCopy(board));
+    ValidatorInterface<AttackMove> av1 = new AttackValidator(new HumanPlayer("Player 1"),(Board)DeepCopy.deepCopy(board));
+    ValidatorInterface<AttackMove> av2 = new AttackValidator(new HumanPlayer("Player 2"),(Board)DeepCopy.deepCopy(board));
     //Orders using all units
     List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);
-    List<AttackOrder> attackAllUnits = getAttacksIndependent(regions, regionUnits); //false: attacking w  all units 
+    List<AttackMove> attackAllUnits = getAttacksIndependent(regions, regionUnits); //false: attacking w  all units 
     assertEquals(false, av1.validateUnits(attackAllUnits.subList(0,2)));
     assertEquals(false, av2.validateUnits(attackAllUnits.subList(2,3)));
     
@@ -27,7 +27,7 @@ public class AttackValidatorTest {
     av2 = new AttackValidator(new HumanPlayer("Player 2"),(Board)DeepCopy.deepCopy(board));
     //Orders using 0 units
     List<Unit> invalidUnits = get6UnitList(0, 9, 14, 19, 24, 29); //false: moving 0 units
-    List<AttackOrder> attackInvalidUnits = getAttacksDependent(regions, invalidUnits); //false: attacking w 0 units
+    List<AttackMove> attackInvalidUnits = getAttacksDependent(regions, invalidUnits); //false: attacking w 0 units
     assertEquals(false, av1.validateUnits(attackInvalidUnits.subList(0,4)));
     assertEquals(true, av2.validateUnits(attackInvalidUnits.subList(4,6)));
 
@@ -36,7 +36,7 @@ public class AttackValidatorTest {
     av2 = new AttackValidator(new HumanPlayer("Player 2"),(Board)DeepCopy.deepCopy(board));
     //Orders for which sourceUnits < order Units
     List<Unit> tooManyUnits = get6UnitList(100, 9, 14, 19, 24, 29);
-    List<AttackOrder> attackWithTooManyUnits = getAttacksDependent(regions, tooManyUnits); //false: attacking w too many units
+    List<AttackMove> attackWithTooManyUnits = getAttacksDependent(regions, tooManyUnits); //false: attacking w too many units
     assertEquals(false, av1.validateUnits(attackWithTooManyUnits.subList(0,4)));
     assertEquals(true, av2.validateUnits(attackWithTooManyUnits.subList(4,6)));
   }
@@ -46,8 +46,8 @@ public class AttackValidatorTest {
   public void Attack_UnitTest() {
     List<Region> regions = getRegions();
     Board board = new Board(regions);
-    ValidatorInterface<AttackOrder> av1 = new AttackValidator(new HumanPlayer("Player 1"), board);
-    ValidatorInterface<AttackOrder> av2 = new AttackValidator(new HumanPlayer("Player 2"), board);
+    ValidatorInterface<AttackMove> av1 = new AttackValidator(new HumanPlayer("Player 1"), board);
+    ValidatorInterface<AttackMove> av2 = new AttackValidator(new HumanPlayer("Player 2"), board);
 
     //TODO -- mock randomness of attack to predetermine winner to test more attacks
     //would AttackOrder.rollHelper have to be public?
@@ -55,7 +55,7 @@ public class AttackValidatorTest {
     for (Region r : regions) {
       System.out.println(r.getName() + " has " + r.getUnits().getUnits());
     }
-    List<AttackOrder> attackOneUnit = getAttacksDependent(regions, smallAttacks);
+    List<AttackMove> attackOneUnit = getAttacksDependent(regions, smallAttacks);
     assertEquals(true, av1.validateUnits(attackOneUnit.subList(0,4)));
     assertEquals(true, av2.validateUnits(attackOneUnit.subList(4,6)));
     
@@ -68,9 +68,9 @@ public class AttackValidatorTest {
   public void test_UnitsandRegions() {
     List<Region> regions = getRegions();
     Board board = new Board(regions);
-    ValidatorInterface<AttackOrder> av = new AttackValidator(new HumanPlayer("Player 1"), board);
-    AttackOrder mercuryAttackSaturn = new AttackOrder(regions.get(3), regions.get(4), new Unit(5));
-    List<AttackOrder> attacks = new ArrayList<AttackOrder>();
+    ValidatorInterface<AttackMove> av = new AttackValidator(new HumanPlayer("Player 1"), board);
+    AttackMove mercuryAttackSaturn = new AttackMove(regions.get(3), regions.get(4), new Unit(5));
+    List<AttackMove> attacks = new ArrayList<AttackMove>();
     attacks.add(mercuryAttackSaturn);
     assertEquals(true, av.validateOrders(attacks));
   }
@@ -154,25 +154,25 @@ public class AttackValidatorTest {
     return regions;
   }
 
-  private List<AttackOrder> getAttacksIndependent(List<Region> regions, List<Unit> units) {
-    AttackOrder attack01 = new AttackOrder(regions.get(0), regions.get(1), units.get(0));
-    AttackOrder attack23 = new AttackOrder(regions.get(2), regions.get(5), units.get(2));
-    AttackOrder attack45 = new AttackOrder(regions.get(4), regions.get(5), units.get(4));
-    List<AttackOrder> attacks = new ArrayList<AttackOrder>();
+  private List<AttackMove> getAttacksIndependent(List<Region> regions, List<Unit> units) {
+    AttackMove attack01 = new AttackMove(regions.get(0), regions.get(1), units.get(0));
+    AttackMove attack23 = new AttackMove(regions.get(2), regions.get(5), units.get(2));
+    AttackMove attack45 = new AttackMove(regions.get(4), regions.get(5), units.get(4));
+    List<AttackMove> attacks = new ArrayList<AttackMove>();
     attacks.add(attack01);
     attacks.add(attack23);
     attacks.add(attack45);
     return attacks;
   }
 
-  private List<AttackOrder> getAttacksDependent(List<Region> regions, List<Unit> units) {
-    AttackOrder attack01 = new AttackOrder(regions.get(0), regions.get(1), units.get(0));
-    AttackOrder attack12 = new AttackOrder(regions.get(1), regions.get(2), units.get(1));
-    AttackOrder attack23 = new AttackOrder(regions.get(2), regions.get(3), units.get(2));
-    AttackOrder attack34 = new AttackOrder(regions.get(3), regions.get(4), units.get(3));
-    AttackOrder attack45 = new AttackOrder(regions.get(4), regions.get(5), units.get(4));
-    AttackOrder attack50 = new AttackOrder(regions.get(5), regions.get(0), units.get(5));
-    List<AttackOrder> attacks = new ArrayList<AttackOrder>();
+  private List<AttackMove> getAttacksDependent(List<Region> regions, List<Unit> units) {
+    AttackMove attack01 = new AttackMove(regions.get(0), regions.get(1), units.get(0));
+    AttackMove attack12 = new AttackMove(regions.get(1), regions.get(2), units.get(1));
+    AttackMove attack23 = new AttackMove(regions.get(2), regions.get(3), units.get(2));
+    AttackMove attack34 = new AttackMove(regions.get(3), regions.get(4), units.get(3));
+    AttackMove attack45 = new AttackMove(regions.get(4), regions.get(5), units.get(4));
+    AttackMove attack50 = new AttackMove(regions.get(5), regions.get(0), units.get(5));
+    List<AttackMove> attacks = new ArrayList<AttackMove>();
     attacks.add(attack01);
     attacks.add(attack12);
     attacks.add(attack23);
