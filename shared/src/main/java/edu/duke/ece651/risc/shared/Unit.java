@@ -115,6 +115,11 @@ units = new ArrayList<Integer>();
     units.set(tech + increase, units.get(tech + increase) + 1); // add one to numOfType you're upgrading
   }
 
+  public void subtractUnits(Unit subtrahend) {
+    for(int i = 0;  i < this.getUnits().size(); i++){
+     this.getUnits().set(i, this.getUnits().get(i) - subtrahend.getUnits().get(i));
+    }
+  }
    //  //returns set of unit types in this list of units
   //   public Set<String> getSetOfUnitTypes() { 
   //   Set<String> set = new HashSet<String>();
