@@ -62,7 +62,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     if (hasValidRegionPath(m.getSource(), m.getDestination())) {
 
       //if (player.getFood() >= m.getSource().findShortestPath(m.getDestination()).getTotalCost()) {
-      if (player.getResources().getFoodResource().getFood() >= m.getSource().findShortestPath(m.getDestination()).getTotalCost()) {
+      if (player.getResources().getFuelResource().getFuel() >= m.getSource().findShortestPath(m.getDestination()).getTotalCost()) {
         // do we have enough food resources to travel shortest path?
         return true;
       }
@@ -97,22 +97,22 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
   @Override
   public boolean validateUnits(List<MoveOrder> m) {
     for (MoveOrder move : m) {
-      Region tempSource = tempBoard.getRegionByName(move.getSource().getName());
-      Region tempDest = tempBoard.getRegionByName(move.getDestination().getName());
+      Region tempSource = move.getSource().getRegionByName(tempBoard, move.getSource().getName());
+      Region tempDest = move.getDestination().getRegionByName(tempBoard, move.getDestination().getName());
       Unit sourceUnits = tempSource.getUnits();
-      // TODO: WARNING the following line will clear all bonues
-      // Unit moveUnits = new Unit(move.getUnits().getUnits());
+      //     TODO: WARNING the following line will clear all bonues
+      Unit moveUnits = new Unit(move.getUnits().getUnits());
 
-      // TODO: commented out the rest of the code for compliation
-      // MoveOrder moveCopy = new MoveOrder(tempSource, tempDest, moveUnits);
-      // // make sure at least 1 sourceUnit, 1 moveUnit, and sourceUnits > moveUnits
-      // if ((sourceUnits.getUnits() > moveUnits.getUnits()) &&
-      // (sourceUnits.getUnits() > 0) && (moveUnits.getUnits() > 0)) {
-      // moveCopy.doSourceAction();
-      // moveCopy.doDestinationAction();
-      // } else {
-      // System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() +
-      // " but moveUnits are " + moveUnits.getUnits()); //this is just for testing
+      //TODO: commented out the rest of the code for compliation
+     //  MoveOrder moveCopy = new MoveOrder(tempSource, tempDest, moveUnits);
+    //   // make sure at least 1 sourceUnit, 1 moveUnit, and sourceUnits > moveUnits
+    //   if ((sourceUnits. > moveUnits.getUnits()) &&
+    //   (sourceUnits.getUnits() > 0) && (moveUnits.getUnits() > 0)) {
+    //   moveCopy.doSourceAction();
+    //   moveCopy.doDestinationAction();
+    //   } else {
+    //   System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() +
+    //   " but moveUnits are " + moveUnits.getUnits()); //this is just for testing
       // return false;
       // }
     }

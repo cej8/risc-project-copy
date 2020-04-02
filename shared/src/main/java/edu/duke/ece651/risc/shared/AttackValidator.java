@@ -31,7 +31,7 @@ private Board tempBoard;
         return true;
       }
     }
-  System.out.println("regions are not adjdacent");
+  System.out.println("regions are not adjacent");
     return false;
   }
    @Override
@@ -58,10 +58,10 @@ public boolean validateOrders(List<AttackMove> attackList) {
 	public boolean validateUnits(List<AttackMove> a) {
 	 // check to make sure numUnits in source < attackOrder units
      for (AttackMove attack : a) {
-      Region tempSource = tempBoard.getRegionByName(attack.getSource().getName());
-      Region tempDest = tempBoard.getRegionByName(attack.getDestination().getName());
+       Region tempSource = attack.getSource().getRegionByName(tempBoard, attack.getSource().getName());
+       Region tempDest = attack.getDestination().getRegionByName(tempBoard, attack.getDestination().getName());
       Unit sourceUnits = tempSource.getUnits();
-      Unit attackUnits = new Unit(attack.getUnits().getTotalUnits());
+      Unit attackUnits = new Unit(attack.getUnits().getUnits());
       AttackMove attackCopy = new AttackMove(tempSource, tempDest, attackUnits);
       // make sure at least 1 sourceUnit, 1 attackUnit, and sourceUnits > attackUnits
       if ((sourceUnits.getTotalUnits() > attackUnits.getTotalUnits()) && (sourceUnits.getTotalUnits() > 0) && (attackUnits.getTotalUnits() > 0)) {
