@@ -12,6 +12,7 @@ public class LoginServer implements Runnable{
   private Connection playerConnection;
   private String user;
   private int activeGameID;
+  private 
 
   private static final lock loginLock = new ReentrantLock();
   private static final lock registerLock = new ReentrantLock();
@@ -157,6 +158,7 @@ public class LoginServer implements Runnable{
           if(!join){
             playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
             activeGameID = gameID;
+            playerConnection.sendObject(new HumanPlayer(user));
             break;
           }
           else{
@@ -170,6 +172,7 @@ public class LoginServer implements Runnable{
         if(gameID == -1){
           int gameID = masterServer.createNewParentServer(user, playerConnection);
           playerConnection.sendObject(new StringMessage("Success: created game " + gameID));
+          playerConnection.sendObject(new HumanPlayer(user));
           break;
         }
         if(validGameID(gamesIn, gameID)){
@@ -177,6 +180,7 @@ public class LoginServer implements Runnable{
           if(!join){
             playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
             activeGameID = gameID;
+            playerConnection.sendObject(new HumanPlayer(user));
             break;
           }
           else{

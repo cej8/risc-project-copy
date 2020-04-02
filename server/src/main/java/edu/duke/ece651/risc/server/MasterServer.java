@@ -10,7 +10,7 @@ public class MasterServer {
   private ServerSocket serverSocket = null;
   private Map<String, Pair> loginMap;
   private List<LoginServer> activePlayers;
-  private List<ParentServer> parentServers;
+  private Map<Integer, ParentServer> parentServers;
   private int nextGameID = 0;
 
   public MasterServer() throws IOException, ClassNotFoundException{
@@ -104,7 +104,7 @@ public class MasterServer {
   //Method to get all games that contain a user
   public List<ParentServer> getGamesIn(String user){
     List<ParentServer> gamesIn = new ArrayList<ParentServer>();
-    for(ParentServer ps : parentServers){
+    for(ParentServer ps : parentServers.values()){
       if(ps.hasPlayer(user)){
         gamesIn.add(ps);
       }
@@ -115,7 +115,7 @@ public class MasterServer {
   //Method to get all games that haven't started yet
   public List<ParentServer> getOpenGames(){
     List<ParentServer> openGames = new ArrayList<ParentServer>();
-    for(ParentServer ps : parentServers){
+    for(ParentServer ps : parentServers.values()){
       if(ps.waitingPlayers()){
         openGames.add(ps);
       }
@@ -125,12 +125,7 @@ public class MasterServer {
 
   //Method to get specific ParentServer via ID
   public ParentServer getParentServer(int gameID){
-    for(ParentServer ps : parentServers){
-      if(ps.getGameID() == gameID){
-        return ps;
-      }
-    }
-    return null;
+    return parentServers.get(gameID);
   }
 
   //Repeated method to accept incoming connections and forward them to a LoginServer
