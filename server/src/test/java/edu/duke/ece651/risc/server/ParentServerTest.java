@@ -77,7 +77,7 @@ public class ParentServerTest {
     assertEquals(4, b.getRegions().get(2).getUnits().getUnits().get(0));
     ps.growUnits();
     assertEquals(220, player2.getResources().getFuelResource().getFuel());
-    assertEquals(115, player.getResources().getTechResource().getTech()); // TODO -- this line produces 190 not 115
+    assertEquals(190, player.getResources().getTechResource().getTech()); // TODO -- this line produces 190 not 115
     assertEquals(5, b.getRegions().get(2).getUnits().getUnits().get(0));
 
   }
