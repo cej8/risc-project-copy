@@ -5,16 +5,15 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-public class PlayerOrderFactory {
+public class PlayerOrderFactory extends AbstractOrderFactory{
   public static OrderInterface getOrder(String unitKeyWord, AbstractPlayer p){
-   OrderInterface order = null;
+    // OrderInterface order = null;
     switch (unitKeyWord) {
   
     case "tech boost":
       order = new TechBoost(p);
       break;
-     default: 
-      break;
+   
     }
     return order;   
   }
