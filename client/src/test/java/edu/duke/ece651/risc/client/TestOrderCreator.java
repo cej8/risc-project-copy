@@ -30,7 +30,7 @@ public class TestOrderCreator {
     Board b= new Board(getRegionList(p1, p2));
     client.setBoard(b);
     client.setPlayer(p1);
-    SDOrderCreator oc = new SDOrderCreator(client);
+    OrderHelper oc = new OrderHelper(client);
     List<OrderInterface> orders = oc.createOrders();
     assertEquals(5, orders.size());
     assertEquals(Constants.MOVE_PRIORITY, orders.get(0).getPriority());
