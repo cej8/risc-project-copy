@@ -5,9 +5,9 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-public class DestOrderFactory {
-  public static OrderInterface getOrder(String unitKeyWord, Region destination, Unit units){
-   OrderInterface order = null;
+public class DestOrderFactory extends AbstractOrderFactory{
+  public OrderInterface getOrder(String unitKeyWord, Region destination, Unit units){
+    // OrderInterface order = null;
     switch (unitKeyWord) {
   
     case "placement":
@@ -16,8 +16,7 @@ public class DestOrderFactory {
     case "upgrade unit":
       order = new UnitBoost(destination, units);
         break;
-    default: 
-      break;
+  
     }
     return order;   
   }

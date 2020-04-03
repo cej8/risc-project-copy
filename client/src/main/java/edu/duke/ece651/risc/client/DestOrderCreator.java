@@ -6,11 +6,12 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-public class DestOrderCreator {
-  private Client client;
-
+public class DestOrderCreator extends OrderCreator{
+  //  private Client client;
+  DestOrderFactory factory;
   public DestOrderCreator(Client c){
     this.client=c;
+    this.factory = new DestOrderFactory();
 
     }
     public void placementOrderHelper(List<OrderInterface> placementList, String regionName,
@@ -19,7 +20,7 @@ public class DestOrderCreator {
       try {
         client.getClientOutput().displayString("How many units would you like to place in " + regionName + "? (please enter a number)");
         Unit units = new Unit(Integer.parseInt(client.getClientInput().readInput()));
-        OrderInterface placementOrder = DestOrderFactory.getOrder("placement", placement, units);
+        OrderInterface placementOrder = factory.getOrder("placement", placement, units);
         placementList.add(placementOrder);
         break;
       } catch (NumberFormatException ne) {
@@ -55,7 +56,7 @@ public class DestOrderCreator {
         //TODO: Needs to be changed to reflect upgrade unit behvaior
          Unit units = getOrderUnits(destination);
 
-          OrderInterface order = DestOrderFactory.getOrder("upgrade unit", destination, units);
+          OrderInterface order = factory.getOrder("upgrade unit", destination, units);
         if (order != null) {
           orderList.add(order);
           break;
@@ -66,27 +67,6 @@ public class DestOrderCreator {
       }
     }
   }
- private Region promptForRegion(String keyWord) {
-    Region r = null;
-    while (r == null) {
-      client.getClientOutput()
-          .displayString("What region do you want to " + keyWord + "  (please type a region name, i.e. 'A')");
-      r = orderHelper(client.getClientInput().readInput());
-    }
-    return r;
-  }
-
- public Region orderHelper(String response) {
-    List<Region> regionList = client.getBoard().getRegions();
-    for (int i = 0; i < regionList.size(); i++) {
-      if (response.equals(regionList.get(i).getName())) {
-        return regionList.get(i);
-      }
-    }
-    client.getClientOutput().displayString("Region does not exist.");
-    return null;
-  }
-
  // TODO -- WIP commented for testing
   public Unit getOrderUnits(Region source) {
     // Unit sourceUnits = (Unit) DeepCopy.deepCopy(source.getUnits().getUnits());
