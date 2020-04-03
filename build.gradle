@@ -23,11 +23,13 @@ subprojects{
     repositories {
         jcenter()
         google()
+	mavenCentral()
     }
 
     dependencies {
       //  classpath 'com.android.tools.build:gradle:3.6.0'
         implementation 'com.google.guava:guava:28.0-jre'
+	implementation 'org.mindrot:jbcrypt:0.4'
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
         clover 'org.openclover:clover:4.3.1'
