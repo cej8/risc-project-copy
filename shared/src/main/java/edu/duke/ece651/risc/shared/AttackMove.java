@@ -19,7 +19,7 @@ public class AttackMove extends SourceDestinationOrder {
     // source.setUnits(new Unit(source.getUnits().getUnits() - units.getUnits()));
     //source.getOwner().useFood(Constants.ATTACK_COST);
     int cost = units.getTotalUnits() * Constants.ATTACK_COST;
-    source.getOwner().getResources().getFoodResource().useFood(cost);
+    source.getOwner().getResources().getFuelResource().useFuel(cost);
     return (source.getOwner().getName() + " is attacking " + destination.getOwner().getName() + "'s "
         + destination.getName() + " region with " + units.getUnits() + " units!\n");
 

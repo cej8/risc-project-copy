@@ -13,7 +13,7 @@ public class HumanPlayer extends AbstractPlayer {
     this.isPlaying = true;
     this.name = name;
     maxTechLevel = new TechnologyLevel();
-    this.playerResource = new PlayerResources(Constants.STARTING_FOOD, Constants.STARTING_TECH);
+    this.playerResource = new PlayerResources(Constants.STARTING_FUEL_PRODUCTION, Constants.STARTING_TECH_PRODUCTION);
 
   }
   

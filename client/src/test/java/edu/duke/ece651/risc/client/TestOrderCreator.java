@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestOrderCreator {
   @Test
-  public void test_SDCreator() throws FileNotFoundException {
+  public void test_Creator() throws FileNotFoundException {
     InputStream input = new FileInputStream(new File("src/test/resources/testSDOrders.txt"));
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput(input);
@@ -32,10 +32,13 @@ public class TestOrderCreator {
     client.setPlayer(p1);
     SDOrderCreator oc = new SDOrderCreator(client);
     List<OrderInterface> orders = oc.createOrders();
-    assertEquals(3, orders.size());
+    assertEquals(5, orders.size());
     assertEquals(Constants.MOVE_PRIORITY, orders.get(0).getPriority());
     assertEquals(Constants.ATTACK_MOVE_PRIORITY, orders.get(1).getPriority());
     assertEquals(Constants.ATTACK_COMBAT_PRIORITY, orders.get(2).getPriority());
+    assertEquals(Constants.UPGRADE_UNITS_PRIORITY,  orders.get(3).getPriority());
+ assertEquals(Constants.UPGRADE_TECH_PRIORITY,  orders.get(4).getPriority());
+
     
     
  
@@ -45,43 +48,43 @@ public class TestOrderCreator {
     Region r1 = new Region(p1, new Unit(1));
     r1.setName("r1");
     r1.setSize(1);
-    r1.setFoodProduction(100);
+    r1.setFuelProduction(100);
     
     Region r2 = new Region(p1, new Unit(2));
     r2.setName("r2");
     r2.setSize(2);
-    r2.setFoodProduction(100);
+    r2.setFuelProduction(100);
   
     Region r4 = new Region(p1, new Unit(4));
     r4.setName("r4");
     r4.setSize(4);
-    r4.setFoodProduction(100);
+    r4.setFuelProduction(100);
     
     
     Region r5 = new Region(p1, new Unit(5));
     r5.setName("r5");
     r5.setSize(1);
-    r5.setFoodProduction(100);
+    r5.setFuelProduction(100);
   
     Region r3 = new Region(p2, new Unit(3));
     r3.setName("r3");
     r3.setSize(1);
-    r3.setFoodProduction(100);
+    r3.setFuelProduction(100);
   
     Region r6 = new Region(p1, new Unit(6));
     r6.setName("r6");
     r6.setSize(6);
-    r1.setFoodProduction(100);
+    r1.setFuelProduction(100);
     
      Region r7 = new Region(p1, new Unit(7));
     r7.setName("r7");
     r7.setSize(5);
-    r7.setFoodProduction(100);
+    r7.setFuelProduction(100);
     
      Region r8 = new Region(p2, new Unit(8));
     r8.setName("r8");
     r8.setSize(5);
-    r8.setFoodProduction(100);
+    r8.setFuelProduction(100);
    
   
 
