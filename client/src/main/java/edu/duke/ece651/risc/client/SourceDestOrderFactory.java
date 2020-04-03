@@ -5,7 +5,7 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-public class OrderFactory {
+public class SourceDestOrderFactory {
   public static OrderInterface getOrder(String unitKeyWord, Region source, Region destination, Unit units){
    OrderInterface order = null;
     switch (unitKeyWord) {
@@ -19,17 +19,10 @@ public class OrderFactory {
       order = new AttackCombat(source, destination, units);
       break;
   
-    case "upgrade tech":
-      order = new TechBoost(null);//TODO: how to add player?
-      break;
-    case "upgrade unit":
-      order = new UnitBoost(destination, units);
-        break;
     default: //TODO: what would this be?
       break;
     }
     return order;   
   }
-
 
 }

@@ -24,6 +24,7 @@ public class MoveOrder extends SourceDestinationOrder {
     StringBuilder sb = new StringBuilder(destination.getOwner().getName() + " moved " + units.getTotalUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n");
     //System.out.println(sb.toString());
     return sb.toString();
+
   }
 
 }

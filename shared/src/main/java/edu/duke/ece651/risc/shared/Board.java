@@ -14,7 +14,8 @@ public class Board implements Serializable {
     this.regions = new ArrayList<Region>();
   }
   
-  public Board(List<Region> regionList){
+  public Board(List<Region> regionList) {
+    this.regions = new ArrayList<Region>();
     this.setRegions(regionList);
   }
   
@@ -27,13 +28,6 @@ public class Board implements Serializable {
     this.regions = regionList;
   }
 
-  public Region getRegionByName(String name){
-    Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
-    for (Region r : this.getRegions()){
-      nameToRegionMap.put(r.getName(), r);
-    }
-    return nameToRegionMap.get(name);
-  }
 
   public int getNumRegionsOwned(AbstractPlayer player){
     int total = 0;
