@@ -53,13 +53,13 @@ public class MoveOrderTest {
   @Test
   public void test_moveOrder() {
     AbstractPlayer p1 = new HumanPlayer("player 1");
-    Region r1 = new Region(p1, new Unit(10));
+    Region r1 = new Region(p1, new Unit(10)); //10 units of bonus 0
     r1.setSize(2);
     r1.setName("r1");
-    Region r2 = new Region(p1, new Unit(5));
+    Region r2 = new Region(p1, new Unit(5));  //5 units of bonus 0
     r2.setSize(2);
     r2.setName("r2");
-    Region r3 = new Region(p1, new Unit(8));
+    Region r3 = new Region(p1, new Unit(8)); //8 units of bonus 0
     r3.setSize(2);
     r3.setName("r3");
     List<Region> regions = new ArrayList<Region>();
@@ -88,6 +88,7 @@ public class MoveOrderTest {
     moves.add(move1);
     moves.add(move2);
     moves.add(move3);
+    //assert correct num of units before move
     assertEquals(10, r1.getUnits().getTotalUnits());
     assertEquals(5, r2.getUnits().getTotalUnits());
     assertEquals(8, r3.getUnits().getTotalUnits());
@@ -96,9 +97,9 @@ public class MoveOrderTest {
       order.doAction();
     }
 
-    assertEquals(8, r1.getUnits().getTotalUnits());
-    assertEquals(8, r2.getUnits().getTotalUnits());
-    assertEquals(7, r3.getUnits().getTotalUnits());
+    assertEquals(8, r1.getUnits().getTotalUnits()); //10 -5 + 3
+    assertEquals(8, r2.getUnits().getTotalUnits()); //5 + 5 - 2
+    assertEquals(7, r3.getUnits().getTotalUnits()); //8 + 2 - 3 
 
     assertEquals(Constants.MOVE_PRIORITY, move1.getPriority());
   }
