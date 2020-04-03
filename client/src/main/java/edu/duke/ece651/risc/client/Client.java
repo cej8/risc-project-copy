@@ -255,9 +255,9 @@ public class Client extends Thread{
   public void performLogin() throws IOException, ClassNotFoundException{
     String initalSuccess = receiveAndDisplayString();
 
-    boolean loginBoolean = queryYNAndRespond("Do you already have a login? [Y/N]");
 
     while(true){
+      boolean loginBoolean = queryYNAndRespond("Do you already have a login? [Y/N]");
       //Either way request login
       clientOutput.displayString("Username:");
       connection.sendObject(new StringMessage(clientInput.readInput()));
@@ -268,7 +268,13 @@ public class Client extends Thread{
       clientOutput.displayString("Password:");
       String password1 = clientInput.readInput();
       //Hash password
-      String hashPassword1 = BCrypt.hashpw(password1, salt);
+      String hashPassword1;
+      if(!salt.equals("")){
+        hashPassword1 = BCrypt.hashpw(password1, salt);
+      }
+      else{
+        hashPassword1 = "";
+      }
 
       //Send hashed password back
       connection.sendObject(new StringMessage(hashPassword1));
@@ -308,14 +314,17 @@ public class Client extends Thread{
       //Server then sends back list of games
       String list = receiveAndDisplayString();
       Integer gameID;
-      clientOutput.displayString("Pick a game via ID");
-      try{
-        gameID = Integer.parseInt(clientInput.readInput());
-      }
-      catch (NumberFormatException ne) {
-        // ne.printStackTrace();
-        clientOutput.displayString("That was not an integer.");
-        continue;
+      while(true){
+        clientOutput.displayString("Pick a game via ID");
+        try{
+          gameID = Integer.parseInt(clientInput.readInput());
+        }
+        catch (NumberFormatException ne) {
+          // ne.printStackTrace();
+          clientOutput.displayString("That was not an integer.");
+          continue;
+        }
+        break;
       }
       //Send ID to server
       connection.sendObject(new IntegerMessage(gameID));
@@ -358,7 +367,9 @@ public class Client extends Thread{
   
  
   public void playGame() {
-    makeConnection(address,port);
+    if(connection.getSocket() == null){
+      makeConnection(address,port);
+    }
     try {
       performLogin();
       performSelectGame();

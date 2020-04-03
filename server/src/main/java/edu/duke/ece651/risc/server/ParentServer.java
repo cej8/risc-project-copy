@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.concurrent.*;
 
 // Class handles all server side implmentation including ChildServer handling
-public class ParentServer implements Runnable{
+public class ParentServer extends Thread{
   private List<ChildServer> children;
   private List<String> players;
   private Board board;
@@ -54,6 +54,10 @@ public class ParentServer implements Runnable{
     return gameID;
   }
 
+  public void setNotStarted(boolean notStarted){
+    this.notStarted = notStarted;
+  }
+
   public MasterServer getMasterServer(){
     return masterServer;
   }
@@ -70,19 +74,20 @@ public class ParentServer implements Runnable{
     if(notStarted){
       long timeLeft = (long)(60*1000*START_WAIT_MINUTES) - (System.currentTimeMillis()-gameStart);
       return String.format("%02d:%02d", 
-    TimeUnit.MILLISECONDS.toMinutes(timeLeft) - 
-    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
-    TimeUnit.MILLISECONDS.toSeconds(timeLeft) - 
-    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft)));
+                           TimeUnit.MILLISECONDS.toMinutes(timeLeft) - 
+                           TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
+                           TimeUnit.MILLISECONDS.toSeconds(timeLeft) - 
+                           TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft)));
     }
-  else{
-    return String.format("%02d:%02d:%02d", 
-    TimeUnit.MILLISECONDS.toHours(gameStart),
-    TimeUnit.MILLISECONDS.toMinutes(gameStart) - 
-    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(gameStart)),
-    TimeUnit.MILLISECONDS.toSeconds(gameStart) - 
-    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(gameStart)));
-  }
+    else{
+      long timeStart = System.currentTimeMillis()-gameStart;
+      return String.format("%02d:%02d:%02d", 
+                           TimeUnit.MILLISECONDS.toHours(timeStart),
+                           TimeUnit.MILLISECONDS.toMinutes(timeStart) - 
+                           TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeStart)),
+                           TimeUnit.MILLISECONDS.toSeconds(timeStart) - 
+                           TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeStart)));
+    }
   }
 
   //set's for testing
@@ -111,7 +116,26 @@ public class ParentServer implements Runnable{
 
     gameStart = System.currentTimeMillis();
     
-    while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) { }
+    while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
+      //Set timeout to .5 seconds --> try to read
+      //If timeout then still there
+      for(ChildServer child : children){
+        Connection playerConnection = child.getPlayerConnection();
+        if(playerConnection != null){
+          try{
+            playerConnection.getSocket().setSoTimeout(500);
+            playerConnection.receiveObject();
+          }
+          catch(Exception e){
+            if(!(e instanceof SocketTimeoutException)){
+              playerConnection.closeAll();
+              playerConnection = null;
+              masterServer.removePlayer(child.getPlayer().getName(), gameID);
+            }
+          }
+        }
+      }
+    }
     notStarted = false;
     System.out.println("All players or time limit, proceeding");
     gameStart = System.currentTimeMillis();
@@ -142,7 +166,11 @@ public class ParentServer implements Runnable{
     //If game not started then trying to join as new player
     if(notStarted){
       //Confirm not already in game and still space
-      if(players.contains(username) || children.size() >= MAX_PLAYERS){
+      if(players.contains(username)){
+        children.get(players.indexOf(username)).setPlayerConnection(playerConnection);
+        return true;
+      }
+      if(children.size() >= MAX_PLAYERS){
         return false;
       }
       //If there is then add
@@ -159,6 +187,10 @@ public class ParentServer implements Runnable{
       children.get(players.indexOf(username)).setPlayerConnection(playerConnection);
       return true;
     }
+  }
+
+  public boolean tryJoin(LoginServer ls){
+    return tryJoin(ls.getUser(), ls.getConnection());
   }
   
   // Generate initial board, set region groups based on number of players

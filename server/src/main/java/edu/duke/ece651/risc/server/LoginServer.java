@@ -28,6 +28,14 @@ public class LoginServer extends Thread{
     return user;
   }
 
+  public Connection getConnection(){
+    return playerConnection;
+  }
+
+  public void setUser(String user){
+    this.user = user;
+  }
+
   public int getActiveGameID(){
     return activeGameID;
   }
@@ -58,7 +66,7 @@ public class LoginServer extends Thread{
         //Otherwise wait for returning hashed password
         String hashedPassword = ((StringMessage)(playerConnection.receiveObject())).unpacker();
         loginLock.lock();
-        boolean loginSuccess = masterServer.checkLogin(username, new Pair<String, String>(hashedPassword, salt));
+        boolean loginSuccess = masterServer.checkLogin(username, hashedPassword);
         if(loginSuccess){
           user = username;
           playerConnection.sendObject(new StringMessage("Success: Logged in"));
@@ -79,7 +87,6 @@ public class LoginServer extends Thread{
         
         String password1 = ((StringMessage)(playerConnection.receiveObject())).unpacker();
         String password2 = ((StringMessage)(playerConnection.receiveObject())).unpacker();
-
         //If passwords don't match then fail
         if(!password1.equals(password2)){
           playerConnection.sendObject(new StringMessage("Fail: Passwords do not match"));
@@ -89,7 +96,7 @@ public class LoginServer extends Thread{
         //Enforce lock to prevent double creation
         registerLock.lock();
         //Check if user already exists
-        if(!masterServer.checkUserExists(user)){
+        if(masterServer.checkUserExists(username)){
           playerConnection.sendObject(new StringMessage("Fail: User already exists"));
           registerLock.unlock();
           continue;
@@ -153,21 +160,22 @@ public class LoginServer extends Thread{
 
       //Wait for int return
       int gameID = ((IntegerMessage)(playerConnection.receiveObject())).unpacker().intValue();
-
+      System.out.println(gameID);
       if(oldBoolean.unpacker()){
         if(validGameID(gamesIn, gameID)){
-          boolean join = masterServer.getParentServer(gameID).tryJoin(user, playerConnection);
-          if(!join){
-            playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
-            activeGameID = gameID;
-            playerConnection.sendObject(new HumanPlayer(user));
-            return;
-          }
-          else{
-            playerConnection.sendObject(new StringMessage("Fail: Failed to join " + gameID));
-            continue;
+          ParentServer ps = masterServer.getParentServer(gameID);
+          if(ps != null){
+            boolean join = ps.tryJoin(user, playerConnection);
+            if(join){
+              playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
+              activeGameID = gameID;
+              playerConnection.sendObject(new HumanPlayer(user));
+              return;
+            }
           }
         }
+        playerConnection.sendObject(new StringMessage("Fail: Failed to join " + gameID));
+        continue;
       }
       
       else{
@@ -178,22 +186,23 @@ public class LoginServer extends Thread{
           return;
         }
         if(validGameID(gamesIn, gameID)){
-          boolean join = masterServer.getParentServer(gameID).tryJoin(user, playerConnection);
-          if(!join){
-            playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
-            activeGameID = gameID;
-            playerConnection.sendObject(new HumanPlayer(user));
-            return;
-          }
-          else{
-            playerConnection.sendObject(new StringMessage("Fail: Failed to join " + gameID));
-            continue;
+          ParentServer ps = masterServer.getParentServer(gameID);
+          if(ps != null){
+            boolean join = ps.tryJoin(user, playerConnection);
+            if(join){
+              playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
+              activeGameID = gameID;
+              playerConnection.sendObject(new HumanPlayer(user));
+              return;
+            }
           }
         }
+        playerConnection.sendObject(new StringMessage("Fail: Failed to join " + gameID));
+        continue;
       }
     }
   }
-
+  
   @Override
   public void run(){
     try{
@@ -204,7 +213,6 @@ public class LoginServer extends Thread{
       masterServer.removePlayer(this);
       playerConnection.closeAll();
     }
-    
   }
   
 }

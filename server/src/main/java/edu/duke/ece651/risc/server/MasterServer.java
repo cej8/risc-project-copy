@@ -20,12 +20,21 @@ public class MasterServer {
   public MasterServer(String loginFile) throws IOException, ClassNotFoundException{
     this.loginFile = loginFile;
     
-    ObjectInputStream ois = new ObjectInputStream(getClass().getClassLoader().getResourceAsStream(loginFile));
-    if(ois != null){
-      loginMap = (HashMap<String, Pair<String, String>>)(ois.readObject());
-    }
-    else{
-      loginMap = new HashMap<String, Pair<String, String>>();
+    loginMap = new HashMap<String, Pair<String, String>>();
+
+    if(!loginFile.equals("")){
+      try{
+        File file = new File(getClass().getClassLoader().getResource(loginFile).getFile());
+        System.out.println("Reading users at " + file.getAbsolutePath());
+        FileInputStream fis = new FileInputStream(file);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        loginMap = (HashMap<String, Pair<String, String>>)(ois.readObject());
+        ois.close();
+        fis.close();
+      }
+      catch(IOException e){
+        e.printStackTrace();
+      }
     }
 
     activePlayers = new ArrayList<LoginServer>();
@@ -45,8 +54,23 @@ public class MasterServer {
     return serverSocket;
   }
 
+  public Map<String, Pair<String, String>> getLoginMap(){
+    return loginMap;
+  }
+
+  public Map<Integer, ParentServer> getParentServers(){
+    return parentServers;
+  }
+
+  public void addLoginServer(LoginServer ls){
+    synchronized(activePlayers){
+      activePlayers.add(ls);
+    }
+  }
+
   //Method to save map to file "logins" in resources
   public synchronized void saveMap(){
+    if(loginFile.equals("")){ return; }
     try{
       File file = new File(getClass().getClassLoader().getResource(loginFile).getFile());
       FileOutputStream fos = new FileOutputStream(file);
@@ -55,6 +79,7 @@ public class MasterServer {
       oos.flush();
       oos.close();
       fos.close();
+      System.out.println("Successfully saved users at " + file.getAbsolutePath());
     }
     catch(Exception e){
       e.printStackTrace();
@@ -69,30 +94,30 @@ public class MasterServer {
   }
 
   //Method to add new username/password to map
-  public synchronized boolean addLogin(String user, Pair<String, String> hashedPassword){
+  public synchronized boolean addLogin(String user, Pair<String, String> hashedPasswordAndSalt){
     if(loginMap.containsKey(user)){
       return false;
     }
     else{
-      loginMap.put(user, hashedPassword);
+      loginMap.put(user, hashedPasswordAndSalt);
       saveMap();
       return true;
     }
   }
 
   //Method to check user login information
-  public boolean checkLogin(String user, Pair<String, String> hashedPassword){
+  public boolean checkLogin(String user, String hashedPassword){
     if(!loginMap.containsKey(user)){
       return false;
     }
     synchronized(activePlayers){
       for(LoginServer ls : activePlayers){
-        if(ls.getUser().equals(user)){
+        if(ls.getUser() != null && ls.getUser().equals(user)){
           return false;
         }
       }
     }
-    return hashedPassword.equals(loginMap.get(user));
+    return hashedPassword.equals(loginMap.get(user).getFirst());
   }
 
   //Method to get salt for user from map
@@ -148,6 +173,7 @@ public class MasterServer {
       try {
         //Accept, set timeout to 60 seconds, create player
         newPlayerSocket = serverSocket.accept();
+        System.out.println("new player incoming");
         newPlayerSocket.setSoTimeout((int)(Constants.LOGIN_WAIT_MINUTES*60*1000));
         newPlayerConnection = new Connection(newPlayerSocket);
         newPlayerConnection.getStreamsFromSocket();
@@ -169,6 +195,7 @@ public class MasterServer {
     ParentServer ps = new ParentServer(nextGameID++, this);
     ps.addPlayer(user, playerConnection);
     parentServers.put(ps.getGameID(), ps);
+    ps.start();
     return ps.getGameID();
   }
 
@@ -191,6 +218,14 @@ public class MasterServer {
 
   public void removeParentServer(Integer gameID){
     parentServers.remove(gameID);
+  }
+
+  public void addParentServer(ParentServer ps){
+    parentServers.put(ps.getGameID(), ps);
+  }
+
+  public void run() throws IOException{
+    waitingForConnections();
   }
 
 }

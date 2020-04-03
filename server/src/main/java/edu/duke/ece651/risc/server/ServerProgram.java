@@ -9,6 +9,7 @@ public class ServerProgram {
     System.out.println("~~~~~~");
     try{
       MasterServer ms = new MasterServer("logins", port);
+      ms.run();
     }
     catch(Exception e){
       System.out.println("Failed to open");
