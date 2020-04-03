@@ -94,30 +94,45 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
 
   // Ensure at least one unit is left behind in region moving from (based on game
   // rules)
-  @Override
+   @Override
   public boolean validateUnits(List<MoveOrder> m) {
     for (MoveOrder move : m) {
       Region tempSource = move.getSource().getRegionByName(tempBoard, move.getSource().getName());
       Region tempDest = move.getDestination().getRegionByName(tempBoard, move.getDestination().getName());
       Unit sourceUnits = tempSource.getUnits();
-      //     TODO: WARNING the following line will clear all bonues
       Unit moveUnits = new Unit(move.getUnits().getUnits());
 
-      //TODO: commented out the rest of the code for compliation
-     //  MoveOrder moveCopy = new MoveOrder(tempSource, tempDest, moveUnits);
-    //   // make sure at least 1 sourceUnit, 1 moveUnit, and sourceUnits > moveUnits
-    //   if ((sourceUnits. > moveUnits.getUnits()) &&
+      MoveOrder moveCopy = new MoveOrder(tempSource, tempDest, moveUnits);
+      boolean validMove = true;
+      // set validMove to false if any of these are false: at least 1 sourceUnit, 1 moveUnit, and sourceUnits > moveUnits in each index of source
+      for (int i = 0; i < sourceUnits.getUnits().size(); i++) { //for each index of the source units
+        if ((sourceUnits.getUnits().get(i) <= moveUnits.getUnits().get(i)) || (sourceUnits.getUnits().get(i) <= 0)
+            || (moveUnits.getUnits().get(i) <= 0)) {
+          validMove = false;
+        }
+      }
+      if (validMove){
+          moveCopy.doAction();
+        } else {
+          System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); //this is just for testing
+          return false;
+        }
+      }
+    //}
+    return true;
+  }
+      
+      // if ((sourceUnits.getUnits() > moveUnits.getUnits()) &&
     //   (sourceUnits.getUnits() > 0) && (moveUnits.getUnits() > 0)) {
     //   moveCopy.doSourceAction();
     //   moveCopy.doDestinationAction();
     //   } else {
     //   System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() +
     //   " but moveUnits are " + moveUnits.getUnits()); //this is just for testing
-      // return false;
-      // }
-    }
-    return true;
+    //   return false;
+    //   }
+    // }
+    // return true;
 
-  }
-
+  // }
 }

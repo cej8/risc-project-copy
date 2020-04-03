@@ -18,11 +18,10 @@ public class MoveOrder extends SourceDestinationOrder {
   @Override
   public String doAction() {
     int cost = source.findShortestPath(destination).getTotalCost() * units.getTotalUnits();
-    source.getOwner().getResources().getFoodResource().useFood(cost);
+    source.getOwner().getResources().getFuelResource().useFuel(cost);
     source.getUnits().subtractUnits(this.units);
     destination.getUnits().addUnits(this.units);
     StringBuilder sb = new StringBuilder(destination.getOwner().getName() + " moved " + units.getTotalUnits() + " units from " + source.getName() + " to " + destination.getName() + "\n");
-    //System.out.println(sb.toString());
     return sb.toString();
 
   }
