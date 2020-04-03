@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.gui;
 
+import android.app.Activity;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -12,9 +13,10 @@ import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
 
-public class GUITextDisplay implements ClientOutputInterface {
+public class GUITextDisplay extends Thread implements ClientOutputInterface {
 
     TextView outputTextView;
+    Activity activity;
 
     public GUITextDisplay(){
         try{
@@ -25,20 +27,36 @@ public class GUITextDisplay implements ClientOutputInterface {
             e.printStackTrace();
         }
     }
-    public GUITextDisplay(TextView textView) {
+    public GUITextDisplay(TextView textView, Activity act) {
         this.outputTextView = textView;
         outputTextView = outputTextView.findViewById(R.id.popUpText);
+        this.activity = act;
     }
     @Override
     //prints the board info to stdout
     public void displayBoard(Board b){
         String boardText = createBoard(b);
-        outputTextView.setText(boardText);
+        final String output = boardText;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                outputTextView.setText(output);
+            }
+        });
+        Thread.dumpStack();
+        //outputTextView.setText("test");
     }
 
     @Override
     public void displayString(String str){
-        outputTextView.setText(str);
+        final String output = str;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                outputTextView.setText(output);
+            }
+        });
+       // outputTextView.setText(str);
     }
 
     //returns a String of all of the board info

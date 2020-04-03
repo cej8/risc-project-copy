@@ -14,6 +14,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ExecuteClient executeClient = new ExecuteClient();
         outputText = findViewById(R.id.popUpText);
-        executeClient.createGame(outputText);
+        executeClient.createGame(outputText,this);
     }
 }
