@@ -24,7 +24,7 @@ public class ClientProgram {
     }
     
     
-    Client client = new Client(clientInput, clientOutput);
+    Client client = new Client(clientInput, clientOutput,addr,port);
     //client.setSTART_WAIT_MINUTES(10.0/60);
     //client.setTURN_WAIT_MINUTES(15.0/60);
     
