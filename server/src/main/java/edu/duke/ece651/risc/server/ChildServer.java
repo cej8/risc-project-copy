@@ -184,7 +184,7 @@ public class ChildServer implements Runnable{
     catch(Exception e){
       playerConnection.closeAll();
       playerConnection = null;
-      parentServer.getMasterServer().removePlayer(player.getName(), parentServer.getGameID());
+      parent.getMasterServer().removePlayer(player.getName(), parent.getGameID());
       return false;
     }
     System.out.println(player.getName() + " exiting thread gracefully");
@@ -199,20 +199,19 @@ public class ChildServer implements Runnable{
     //Timeout is Socket's timeout
     maxTime = (long)(parent.getTURN_WAIT_MINUTES()*60*1000);
     //If turn fails --> socket failed or not connected
-    while(maxTime > (System.getCurrentTimeMillis() - startTime)){
+    while(maxTime > (System.currentTimeMillis() - startTime)){
       if(performTurn()){
         //If successful then decrement missed turns to zero
         missedTurns = (missedTurns > 0) ? (missedTurns - 1) : (0);
         return;
       }
-      Thread.sleep(100);
     }
     //If exits then never successfully performTurn
     //Increment missedTurns
     missedTurns++;
     //If past maximum then mark as not playing
     if(missedTurns > Constants.MAX_MISSED){
-      player.isPlaying(false);
+      player.setPlaying(false);
     }
   }
 }

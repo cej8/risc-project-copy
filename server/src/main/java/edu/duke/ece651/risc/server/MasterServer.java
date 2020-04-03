@@ -1,5 +1,7 @@
 package edu.duke.ece651.risc.server;
 
+import edu.duke.ece651.risc.shared.*;
+
 import java.net.*;
 import java.util.*;
 import java.io.*;
@@ -8,26 +10,30 @@ import java.io.*;
 //And passes to LoginServer
 public class MasterServer {
   private ServerSocket serverSocket = null;
-  private Map<String, Pair> loginMap;
+  private Map<String, Pair<String, String>> loginMap;
   private List<LoginServer> activePlayers;
   private Map<Integer, ParentServer> parentServers;
   private int nextGameID = 0;
 
-  public MasterServer() throws IOException, ClassNotFoundException{
-    ObjectInputStream ois = new ObjectInputStream(getClass().getClassLoader().getResourceAsStream("logins"));
-    if(ois){
-      loginMap = (HashMap<String, Pair>)(ois.readObject());
+  private String loginFile;
+
+  public MasterServer(String loginFile) throws IOException, ClassNotFoundException{
+    this.loginFile = loginFile;
+    
+    ObjectInputStream ois = new ObjectInputStream(getClass().getClassLoader().getResourceAsStream(loginFile));
+    if(ois != null){
+      loginMap = (HashMap<String, Pair<String, String>>)(ois.readObject());
     }
     else{
-      loginMap = new HashMap<String, Pair>();
+      loginMap = new HashMap<String, Pair<String, String>>();
     }
 
     activePlayers = new ArrayList<LoginServer>();
-    parentServers = new ArrayList<ParentServer();
+    parentServers = new HashMap<Integer, ParentServer>();
   }
 
-  public MasterServer(int port) throws IOException, ClassNotFoundException{
-    this();
+  public MasterServer(String loginFile, int port) throws IOException, ClassNotFoundException{
+    this(loginFile);
     serverSocket = new ServerSocket(port);
   }
 
@@ -42,10 +48,10 @@ public class MasterServer {
   //Method to save map to file "logins" in resources
   public synchronized void saveMap(){
     try{
-      File file = new File(getClass().getClassLoader().getResource("logins").getFile());
+      File file = new File(getClass().getClassLoader().getResource(loginFile).getFile());
       FileOutputStream fos = new FileOutputStream(file);
       ObjectOutputStream oos = new ObjectOutputStream(fos);
-      oos.writeObject(logins);
+      oos.writeObject(loginMap);
       oos.flush();
       oos.close();
       fos.close();
@@ -64,18 +70,19 @@ public class MasterServer {
 
   //Method to add new username/password to map
   public synchronized boolean addLogin(String user, Pair<String, String> hashedPassword){
-    if(logins.containsKey(user)){
+    if(loginMap.containsKey(user)){
       return false;
     }
     else{
-      logins.put(user, hashedPassword);
+      loginMap.put(user, hashedPassword);
       saveMap();
+      return true;
     }
   }
 
   //Method to check user login information
   public boolean checkLogin(String user, Pair<String, String> hashedPassword){
-    if(!logins.containsKey(user)){
+    if(!loginMap.containsKey(user)){
       return false;
     }
     synchronized(activePlayers){
@@ -85,20 +92,20 @@ public class MasterServer {
         }
       }
     }
-    return hashedPassword.equals(map.get(user));
+    return hashedPassword.equals(loginMap.get(user));
   }
 
   //Method to get salt for user from map
   public String getSalt(String user){
-    if(!logins.containsKey(user)){
+    if(!loginMap.containsKey(user)){
       return "";
     }
-    return logins.get(user).getValue();
+    return loginMap.get(user).getSecond();
   }
 
   //Method to check if map contains username
   public boolean checkUserExists(String user){
-    return logins.containsKey(user);
+    return loginMap.containsKey(user);
   }
 
   //Method to get all games that contain a user
@@ -112,11 +119,11 @@ public class MasterServer {
     return gamesIn;
   }
 
-  //Method to get all games that haven't started yet
-  public List<ParentServer> getOpenGames(){
+  //Method to get all games that haven't started yet (and user is not in)
+  public List<ParentServer> getOpenGames(String user){
     List<ParentServer> openGames = new ArrayList<ParentServer>();
     for(ParentServer ps : parentServers.values()){
-      if(ps.waitingPlayers()){
+      if(ps.waitingPlayers() && !ps.hasPlayer(user)){
         openGames.add(ps);
       }
     }
@@ -135,21 +142,23 @@ public class MasterServer {
     }
     
     while (true) {
-      Socket newPlayerSocker;
+      Socket newPlayerSocket;
       Connection newPlayerConnection;
       LoginServer newLoginServer;
       try {
         //Accept, set timeout to 60 seconds, create player
         newPlayerSocket = serverSocket.accept();
-        newPlayerSocket.setSoTimeout((int)(TURN_WAIT_MINUTES*60*1000));
-        newPlayerConnection = new Connection(playerSocket);
+        newPlayerSocket.setSoTimeout((int)(Constants.LOGIN_WAIT_MINUTES*60*1000));
+        newPlayerConnection = new Connection(newPlayerSocket);
         newPlayerConnection.getStreamsFromSocket();
         //Send object to client
         newLoginServer = new LoginServer(this, newPlayerConnection);
         synchronized(activePlayers){
           activePlayers.add(newLoginServer);
         }
-      } catch (Exception e) {
+        newLoginServer.start();
+      }
+      catch (Exception e) {
         e.printStackTrace(System.out);
         continue;
       }
@@ -159,6 +168,8 @@ public class MasterServer {
   public synchronized int createNewParentServer(String user, Connection playerConnection){
     ParentServer ps = new ParentServer(nextGameID++, this);
     ps.addPlayer(user, playerConnection);
+    parentServers.put(ps.getGameID(), ps);
+    return ps.getGameID();
   }
 
   public void removePlayer(String username, int gameID){
@@ -170,6 +181,16 @@ public class MasterServer {
         }
       }
     }
+  }
+
+  public void removePlayer(LoginServer ls){
+    synchronized(activePlayers){
+      activePlayers.remove(ls);
+    }
+  }
+
+  public void removeParentServer(Integer gameID){
+    parentServers.remove(gameID);
   }
 
 }

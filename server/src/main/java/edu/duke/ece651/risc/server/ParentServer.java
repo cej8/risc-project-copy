@@ -24,6 +24,7 @@ public class ParentServer implements Runnable{
   private int turnNumber = 1;
 
   private MasterServer masterServer;
+  private long gameStart;
 
   public ParentServer(){
     BoardGenerator genBoard = new BoardGenerator();
@@ -57,6 +58,33 @@ public class ParentServer implements Runnable{
     return masterServer;
   }
 
+  public boolean hasPlayer(String player){
+    return players.contains(player);
+  }
+
+  public boolean waitingPlayers(){
+    return notStarted && children.size() < MAX_PLAYERS;
+  }
+
+  public String getGameTime(){
+    if(notStarted){
+      long timeLeft = (long)(60*1000*START_WAIT_MINUTES) - (System.currentTimeMillis()-gameStart);
+      return String.format("%02d:%02d", 
+    TimeUnit.MILLISECONDS.toMinutes(timeLeft) - 
+    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
+    TimeUnit.MILLISECONDS.toSeconds(timeLeft) - 
+    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft)));
+    }
+  else{
+    return String.format("%02d:%02d:%02d", 
+    TimeUnit.MILLISECONDS.toHours(gameStart),
+    TimeUnit.MILLISECONDS.toMinutes(gameStart) - 
+    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(gameStart)),
+    TimeUnit.MILLISECONDS.toSeconds(gameStart) - 
+    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(gameStart)));
+  }
+  }
+
   //set's for testing
   public void setMAX_PLAYERS(int MAX_PLAYERS){
     this.MAX_PLAYERS = MAX_PLAYERS;
@@ -75,16 +103,18 @@ public class ParentServer implements Runnable{
     this.START_WAIT_MINUTES = START_WAIT_MINUTES;
   }
   
-  public void waitingForPlayers() throws IOException {
+  public void waitingForPlayers() {
 
     long startTime = System.currentTimeMillis();;
     //Start time 2.5 minutes after first connection
     long gameStartTime = (long)(START_WAIT_MINUTES*60*1000);
+
+    gameStart = System.currentTimeMillis();
     
     while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) { }
-    Thread.sleep(1);
-    System.out.println("All players or time limit, proceeding");
     notStarted = false;
+    System.out.println("All players or time limit, proceeding");
+    gameStart = System.currentTimeMillis();
   }
   public Board getBoard(){
     return this.board;
@@ -96,19 +126,19 @@ public class ParentServer implements Runnable{
     return orderMap;
   }
   // Helper method to add player to global player list - children
-  public void synchronized addPlayer(ChildServer c){
+  public synchronized void addPlayer(ChildServer c){
     children.add(c);
   }
 
   //Method to add username/connection to game by creating new childserver
-  public void synchronized addPlayer(String username, Connection playerConnection){
+  public synchronized void addPlayer(String username, Connection playerConnection){
     HumanPlayer player = new HumanPlayer(username);
     addPlayer(new ChildServer(player, playerConnection, this));
     players.add(username);
   }
 
   //Method to try to join game
-  public boolean synchronized tryJoin(String username, Connection playerConnection){
+  public synchronized boolean tryJoin(String username, Connection playerConnection){
     //If game not started then trying to join as new player
     if(notStarted){
       //Confirm not already in game and still space
@@ -117,6 +147,7 @@ public class ParentServer implements Runnable{
       }
       //If there is then add
       addPlayer(username, playerConnection);
+      return true;
     }
     //Otherwise game in progress and trying to rejoin
     else{
@@ -125,7 +156,7 @@ public class ParentServer implements Runnable{
         return false;
       }
       //If is then give proper childserver connection
-      children.get(players.indexof(username)).setPlayerConnection(playerConnection);
+      children.get(players.indexOf(username)).setPlayerConnection(playerConnection);
       return true;
     }
   }
@@ -166,14 +197,6 @@ public class ParentServer implements Runnable{
   public void closeAll(){
     for(ChildServer child : children){
       if(child.getPlayerConnection() != null){ child.getPlayerConnection().closeAll(); }
-    }
-    if(serverSocket != null){
-      try{
-        serverSocket.close();
-      }
-      catch(Exception e){
-        e.printStackTrace(System.out);
-      }
     }
   }
 
@@ -315,15 +338,9 @@ public class ParentServer implements Runnable{
   }
   // method that controls game play
   public void playGame(){
-    try{
-      //Wait for MAX_PLAYERS to connect or timeout
-      waitingForConnections();
-    }
-    catch(Exception e){
-      e.printStackTrace();
-      closeAll();
-      return;
-    }
+    //Wait for MAX_PLAYERS to connect or timeout
+    waitingForPlayers();
+    
     //While regions not owned all by one player
     createStartingGroups();
     boolean notFirstCall = false;
@@ -359,6 +376,7 @@ public class ParentServer implements Runnable{
     }
     //Close all
     closeAll();
+    masterServer.removeParentServer(gameID);
   }
   // enables game to be runnable
   @Override

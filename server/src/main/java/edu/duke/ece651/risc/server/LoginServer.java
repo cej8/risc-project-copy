@@ -1,23 +1,25 @@
-npackage edu.duke.ece651.risc.server;
+package edu.duke.ece651.risc.server;
+
+import edu.duke.ece651.risc.shared.*;
 
 import java.net.*;
 import java.util.*;
 import java.io.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
 import org.mindrot.jbcrypt.*;
 
-public class LoginServer implements Runnable{
+public class LoginServer extends Thread{
 
   private MasterServer masterServer;
   private Connection playerConnection;
   private String user;
   private int activeGameID;
-  private 
 
-  private static final lock loginLock = new ReentrantLock();
-  private static final lock registerLock = new ReentrantLock();
+  private static final Lock loginLock = new ReentrantLock();
+  private static final Lock registerLock = new ReentrantLock();
   
-  public void LoginServer(MasterServer masterServer, Connection playerConnection){
+  public LoginServer(MasterServer masterServer, Connection playerConnection){
     this.masterServer = masterServer;
     this.playerConnection = playerConnection;
   }
@@ -41,7 +43,7 @@ public class LoginServer implements Runnable{
     while(true){
       //Then wait for login/register boolean
       //True : login, False : register
-      BooleanMessage loginBoolean = (BooleanMessage)(playerConnection.receiveObject());
+      ConfirmationMessage loginBoolean = (ConfirmationMessage)(playerConnection.receiveObject());
       
       //Either way will receive username
       String username = ((StringMessage)(playerConnection.receiveObject())).unpacker();
@@ -56,12 +58,12 @@ public class LoginServer implements Runnable{
         //Otherwise wait for returning hashed password
         String hashedPassword = ((StringMessage)(playerConnection.receiveObject())).unpacker();
         loginLock.lock();
-        boolean loginSuccess = checkLogin(username, new Pair(hashedPassword, hash));
+        boolean loginSuccess = masterServer.checkLogin(username, new Pair<String, String>(hashedPassword, salt));
         if(loginSuccess){
           user = username;
           playerConnection.sendObject(new StringMessage("Success: Logged in"));
           loginLock.unlock();
-          break;
+          return;
         }
         else{
           playerConnection.sendObject(new StringMessage("Fail: User/password incorrect"));
@@ -72,7 +74,7 @@ public class LoginServer implements Runnable{
       //If false --> expect register
       else{
         //Make new salt --> send to client
-        String salt = BCrypt.genSalt();
+        String salt = BCrypt.gensalt();
         playerConnection.sendObject(new StringMessage(salt));
         
         String password1 = ((StringMessage)(playerConnection.receiveObject())).unpacker();
@@ -87,7 +89,7 @@ public class LoginServer implements Runnable{
         //Enforce lock to prevent double creation
         registerLock.lock();
         //Check if user already exists
-        if(!master.checkUserExists(user)){
+        if(!masterServer.checkUserExists(user)){
           playerConnection.sendObject(new StringMessage("Fail: User already exists"));
           registerLock.unlock();
           continue;
@@ -97,7 +99,7 @@ public class LoginServer implements Runnable{
           masterServer.addLogin(username, new Pair(password1, salt));
           playerConnection.sendObject(new StringMessage("Success: User created"));
           registerLock.unlock();
-          break;
+          return;
         }
         
       }
@@ -128,7 +130,7 @@ public class LoginServer implements Runnable{
     while(true){
       //Wait for old/new boolean
       //True : old, False : new
-      BooleanMessage oldBoolean = (BooleanMessage)(playerConnection.receiveObject());
+      ConfirmationMessage oldBoolean = (ConfirmationMessage)(playerConnection.receiveObject());
 
       String gamesList = "";
       List<ParentServer> gamesIn;
@@ -159,7 +161,7 @@ public class LoginServer implements Runnable{
             playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
             activeGameID = gameID;
             playerConnection.sendObject(new HumanPlayer(user));
-            break;
+            return;
           }
           else{
             playerConnection.sendObject(new StringMessage("Fail: Failed to join " + gameID));
@@ -170,10 +172,10 @@ public class LoginServer implements Runnable{
       
       else{
         if(gameID == -1){
-          int gameID = masterServer.createNewParentServer(user, playerConnection);
+          gameID = masterServer.createNewParentServer(user, playerConnection);
           playerConnection.sendObject(new StringMessage("Success: created game " + gameID));
           playerConnection.sendObject(new HumanPlayer(user));
-          break;
+          return;
         }
         if(validGameID(gamesIn, gameID)){
           boolean join = masterServer.getParentServer(gameID).tryJoin(user, playerConnection);
@@ -181,7 +183,7 @@ public class LoginServer implements Runnable{
             playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
             activeGameID = gameID;
             playerConnection.sendObject(new HumanPlayer(user));
-            break;
+            return;
           }
           else{
             playerConnection.sendObject(new StringMessage("Fail: Failed to join " + gameID));
@@ -199,7 +201,7 @@ public class LoginServer implements Runnable{
       selectGame();
     }
     catch(Exception e){
-      masterServer.removeActivePlayer(ls);
+      masterServer.removePlayer(this);
       playerConnection.closeAll();
     }
     

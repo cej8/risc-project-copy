@@ -6,6 +6,8 @@ public final class Constants {
   public static final double START_WAIT_MINUTES = 2.5;
   // time to wait between turns (must be > 0)
   public static final double TURN_WAIT_MINUTES = 3.0;
+  //Time to wait before connected to parentserver
+  public static final double LOGIN_WAIT_MINUTES = 1.0;
   // max number of units per player (must be > 0)
   public static final int UNIT_START_MULTIPLIER = 3;
   // max number of players at a given time (must be > 0)
