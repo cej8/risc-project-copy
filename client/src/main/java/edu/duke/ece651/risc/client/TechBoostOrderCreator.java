@@ -7,10 +7,10 @@ import java.util.*;
 import java.io.*;
 
 
-public class PlayerOrderCreator extends OrderCreator{
+public class TechBoostOrderCreator extends OrderCreator{
   //  private Client client;
   PlayerOrderFactory factory;
-  public PlayerOrderCreator(Client c){
+  public TechBoostOrderCreator(Client c){
     this.client=c;
     factory = new PlayerOrderFactory();
 
@@ -18,7 +18,7 @@ public class PlayerOrderCreator extends OrderCreator{
  
   public void techBoostHelper(List<OrderInterface> orderList) {
     while (true) {
-         OrderInterface order = factory.getOrder("tech boost", client.getPlayer());
+         OrderInterface order = PlayerOrderFactory.getOrder("tech boost", client.getPlayer());
         if (order != null) {
           orderList.add(order);
           break;
@@ -26,4 +26,9 @@ public class PlayerOrderCreator extends OrderCreator{
     
     }
   }
+
+@Override
+public void addToOrderList(List<OrderInterface> orderList) {
+techBoostHelper(orderList);	
+}
 }

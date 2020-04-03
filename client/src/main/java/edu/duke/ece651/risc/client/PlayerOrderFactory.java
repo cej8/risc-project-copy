@@ -6,7 +6,7 @@ import java.util.*;
 import java.io.*;
 
 public class PlayerOrderFactory extends AbstractOrderFactory{
-  public OrderInterface getOrder(String unitKeyWord, AbstractPlayer p){
+  public static OrderInterface getOrder(String unitKeyWord, AbstractPlayer p){
     // OrderInterface order = null;
     switch (unitKeyWord) {
   

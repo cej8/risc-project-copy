@@ -7,7 +7,10 @@ import java.io.*;
 public abstract class OrderCreator {
   
   protected Client client;
-   public Region promptForRegion(String keyWord) {
+  protected List<OrderInterface> orderList;
+
+  abstract public void addToOrderList(List<OrderInterface> orderList);
+  public Region promptForRegion(String keyWord) {
     Region r = null;
     while (r == null) {
       client.getClientOutput()

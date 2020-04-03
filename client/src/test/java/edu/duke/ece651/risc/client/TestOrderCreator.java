@@ -37,7 +37,7 @@ public class TestOrderCreator {
     assertEquals(Constants.ATTACK_MOVE_PRIORITY, orders.get(1).getPriority());
     assertEquals(Constants.ATTACK_COMBAT_PRIORITY, orders.get(2).getPriority());
     assertEquals(Constants.UPGRADE_UNITS_PRIORITY,  orders.get(3).getPriority());
- assertEquals(Constants.UPGRADE_TECH_PRIORITY,  orders.get(4).getPriority());
+    assertEquals(Constants.UPGRADE_TECH_PRIORITY,  orders.get(4).getPriority());
 
     
     

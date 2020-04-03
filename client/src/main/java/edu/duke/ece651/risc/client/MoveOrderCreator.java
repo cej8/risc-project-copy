@@ -1,17 +1,12 @@
 package edu.duke.ece651.risc.client;
-
 import edu.duke.ece651.risc.shared.*;
 
 import java.net.*;
 import java.util.*;
 import java.io.*;
 
-// S(ource)D(estination)OrderCreator abstracted class from Client.java to make orders more extensible and manageable as code grows. Class handles all orders associated with game
-
-public class SDOrderCreator extends OrderCreator{
-  // private Client client;
-  SourceDestOrderFactory factory = new SourceDestOrderFactory();
-  public SDOrderCreator(Client c){
+public class MoveOrderCreator extends OrderCreator {
+ public MoveOrderCreator(Client c){
     this.client =c;
   }
   public void moveHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord ) {
@@ -22,7 +17,7 @@ public class SDOrderCreator extends OrderCreator{
       try {
         Unit units = getOrderUnits(source);
 
-        OrderInterface order = factory.getOrder("move", source, destination, units);
+        OrderInterface order =SourceDestOrderFactory.getOrder("move", source, destination, units);
         if (order != null) {
           orderList.add(order);
           break;
@@ -33,30 +28,7 @@ public class SDOrderCreator extends OrderCreator{
       }
     }
    }
-
-  public void attackHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord) {
-    Region source = promptForRegion(sourceKeyWord);
-    Region destination = promptForRegion(destKeyWord);
-    while (true) {
-      try {
-        Unit units = getOrderUnits(source);
-        OrderInterface order1 =factory.getOrder("attack move", source, destination, units);
-        if (order1 != null) {
-          OrderInterface order2=factory.getOrder("attack combat", source, destination, units);
-          if (order2 != null) {
-            orderList.add(order1);
-            orderList.add(order2);
-            break;
-          }
-        }
-      } catch (NumberFormatException ne) {
-        // ne.printStackTrace();
-        client.getClientOutput().displayString("That was not an integer, please try again.");
-      }
-    }
-  }
-
-  // TODO -- WIP commented for testing
+ // TODO -- WIP commented for testing
   public Unit getOrderUnits(Region source) {
     // Unit sourceUnits = (Unit) DeepCopy.deepCopy(source.getUnits().getUnits());
     // List<Integer> orderUnits = new ArrayList<Integer>();
@@ -81,9 +53,13 @@ public class SDOrderCreator extends OrderCreator{
     // }
     // }
     // TODO:fix temp return value return new Unit(orderUnits);
-    return new Unit(3);
+    return new Unit(4);
   }
-
-
+@Override
+public void addToOrderList(List<OrderInterface> orderList) {
+	// TODO Auto-generated method stub
+  moveHelper(orderList, "move units from", "move untis to");
+	
+}
 
 }

@@ -183,8 +183,9 @@ public class Client extends Thread{
 
         // Display and move into placements
         clientOutput.displayBoard(board);
-        DestOrderCreator doc = new DestOrderCreator(this);
-        List<OrderInterface> placementOrders = doc.createPlacements();
+        OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", this);
+        List<OrderInterface> placementOrders = new ArrayList<OrderInterface>();
+        placement.addToOrderList(placementOrders);
         if(timeOut(startTime, maxTime)) { return false; }
         connection.sendObject(placementOrders);
 
@@ -290,8 +291,8 @@ public class Client extends Thread{
           // Client generates orders --> sends
           if (alive) {
             //new OrderCreator
-            OrderHelper createOrders = new OrderHelper(this);
-            List<OrderInterface> orders = createOrders.createOrders();
+            OrderHelper orderhelper = new OrderHelper(this);
+            List<OrderInterface> orders = orderhelper.createOrders();
             //If too long --> kill player
             if(timeOut(startTime, maxTime)){ return;}
             connection.sendObject(orders);

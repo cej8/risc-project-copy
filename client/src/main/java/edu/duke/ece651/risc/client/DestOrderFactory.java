@@ -6,7 +6,7 @@ import java.util.*;
 import java.io.*;
 
 public class DestOrderFactory extends AbstractOrderFactory{
-  public OrderInterface getOrder(String unitKeyWord, Region destination, Unit units){
+  public static OrderInterface getOrder(String unitKeyWord, Region destination, Unit units){
     // OrderInterface order = null;
     switch (unitKeyWord) {
   
