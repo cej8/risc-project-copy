@@ -55,8 +55,7 @@ public class BoardTest {
     regions.add(region); //add all regions to regionlist for board
     Board board = new Board(regions);
     assertEquals(regions, board.getRegions());
-    assertEquals(null, board.getRegionByName("Mars"));
-    assertEquals(region, board.getRegionByName("Earth"));
+    assertEquals(region, adjRegion2.getRegionByName(board, "Earth"));
     return board;
   }
 }
