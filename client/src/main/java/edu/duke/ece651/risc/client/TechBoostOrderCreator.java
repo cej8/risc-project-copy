@@ -7,11 +7,12 @@ import java.util.*;
 import java.io.*;
 
 
-public class PlayerOrderCreator {
-   private Client client;
-
-  public PlayerOrderCreator(Client c){
+public class TechBoostOrderCreator extends OrderCreator{
+  //  private Client client;
+  PlayerOrderFactory factory;
+  public TechBoostOrderCreator(Client c){
     this.client=c;
+    factory = new PlayerOrderFactory();
 
     }
  
@@ -25,4 +26,9 @@ public class PlayerOrderCreator {
     
     }
   }
+
+@Override
+public void addToOrderList(List<OrderInterface> orderList) {
+techBoostHelper(orderList);	
+}
 }

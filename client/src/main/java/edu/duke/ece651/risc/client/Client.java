@@ -184,8 +184,9 @@ public class Client extends Thread{
 
         // Display and move into placements
         clientOutput.displayBoard(board);
-        DestOrderCreator doc = new DestOrderCreator(this);
-        List<OrderInterface> placementOrders = doc.createPlacements();
+        OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", this);
+        List<OrderInterface> placementOrders = new ArrayList<OrderInterface>();
+        placement.addToOrderList(placementOrders);
         if(timeOut(startTime, maxTime)) { return false; }
         connection.sendObject(placementOrders);
 
@@ -209,41 +210,6 @@ public class Client extends Thread{
     return true;
   }
 
-  // public List<PlacementOrder> placementOrderHelper(List<PlacementOrder> placementList, String regionName,
-  //     Region placement) {
-  //   while (true) {
-  //     try {
-  //       clientOutput.displayString("How many units would you like to place in " + regionName + "? (please enter a number)");
-  //       Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
-  //       PlacementOrder placementOrder = new PlacementOrder(placement, units);
-  //       //  System.out.println(units.getTotalUnits());
-  //       placementList.add(placementOrder);
-  //       break;
-  //     } catch (NumberFormatException ne) {
-  //       // ne.printStackTrace();
-  //       clientOutput.displayString("That was not an integer, please try again.");
-  //     }
-  //   }
-  //   return placementList;
-  // }
-
-  // public List<PlacementOrder> createPlacements() {
-  //   // Prompt user for placements, create list of placementOrders, send to server
-  //   int startUnits = Constants.UNIT_START_MULTIPLIER * board.getNumRegionsOwned(player);
-  //   clientOutput.displayString("You are " + player.getName() + ", prepare to place " + startUnits + " units.");
-  //   List<PlacementOrder> placementList = new ArrayList<PlacementOrder>();
-  //   List<Region> regionList = board.getRegions();
-  //   Region placement;
-  //   String regionName;
-  //   for (int i = 0; i < regionList.size(); i++) {
-  //     if (player.getName().equals(regionList.get(i).getOwner().getName())) {
-  //       placement = regionList.get(i);
-  //       regionName = regionList.get(i).getName();
-  //       placementList = placementOrderHelper(placementList, regionName, placement);
-  //     }
-  //   }
-  //   return placementList;
-  // }
 
   public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
     StringMessage message = (StringMessage) (connection.receiveObject());
@@ -430,8 +396,8 @@ public class Client extends Thread{
           // Client generates orders --> sends
           if (alive) {
             //new OrderCreator
-            SDOrderCreator createOrders = new SDOrderCreator(this);
-            List<OrderInterface> orders = createOrders.createOrders();
+            OrderHelper orderhelper = new OrderHelper(this);
+            List<OrderInterface> orders = orderhelper.createOrders();
             //If too long --> kill player
             if(timeOut(startTime, maxTime)){ return;}
             connection.sendObject(orders);

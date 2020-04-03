@@ -5,9 +5,9 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-public class SourceDestOrderFactory {
-  public static OrderInterface getOrder(String unitKeyWord, Region source, Region destination, Unit units){
-   OrderInterface order = null;
+public class SourceDestOrderFactory extends AbstractOrderFactory{
+  public  static OrderInterface getOrder(String unitKeyWord, Region source, Region destination, Unit units){
+    //   OrderInterface order = null;
     switch (unitKeyWord) {
     case "move":
       order = new MoveOrder(source, destination, units);
@@ -19,8 +19,7 @@ public class SourceDestOrderFactory {
       order = new AttackCombat(source, destination, units);
       break;
   
-    default: //TODO: what would this be?
-      break;
+   
     }
     return order;   
   }
