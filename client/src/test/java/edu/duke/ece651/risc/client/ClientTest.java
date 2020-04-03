@@ -4,6 +4,8 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 
+import org.mindrot.jbcrypt.*;
+
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -437,7 +439,28 @@ public class ClientTest {
     Board board3 = new Board(allRegions3);
 
     ArrayList<Object> objs = new ArrayList<Object>();
-
+    //First connect success
+    objs.add(new StringMessage("Success: connected"));
+    //Send "salt"
+    objs.add(new StringMessage(BCrypt.gensalt()));
+    //Send fail
+    objs.add(new StringMessage("Fail: invalid user/password"));
+    //Send "salt"
+    objs.add(new StringMessage(BCrypt.gensalt()));
+    //Send fail
+    objs.add(new StringMessage("Fail: user already exists"));
+    //Send "salt"
+    objs.add(new StringMessage(BCrypt.gensalt()));
+    //Send fail
+    objs.add(new StringMessage("Success: login"));
+    //Send games
+    objs.add(new StringMessage("games...."));
+    //Send fail
+    objs.add(new StringMessage("Fail: bad gameid"));
+    //Send games
+    objs.add(new StringMessage("games...."));
+    //Send success
+    objs.add(new StringMessage("Success: good game"));
     //Send player
     objs.add(player1);
     //Enter chooseRegions
@@ -490,7 +513,7 @@ public class ClientTest {
 
     
     Socket mockSocket = MockTests.setupMockSocket(objs);
-    
+
     client.makeConnection(mockSocket);
     client.playGame();
 

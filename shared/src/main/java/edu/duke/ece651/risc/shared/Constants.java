@@ -6,6 +6,8 @@ public final class Constants {
   public static final double START_WAIT_MINUTES = 2.5;
   // time to wait between turns (must be > 0)
   public static final double TURN_WAIT_MINUTES = 3.0;
+  //Time to wait before connected to parentserver
+  public static final double LOGIN_WAIT_MINUTES = 1.0;
   // max number of units per player (must be > 0)
   public static final int UNIT_START_MULTIPLIER = 3;
   // max number of players at a given time (must be > 0)
@@ -14,6 +16,9 @@ public final class Constants {
   public static final int MAX_REGIONS = 12;
   // default port number (port for server connection default)
   public static final int DEFAULT_PORT = 12345;
+  //Value for max missed moves allowed before killing player
+  public static final int MAX_MISSED = 1;
+  
  
   //priorities for ordering moves 
   public static final int ATTACK_COMBAT_PRIORITY=5000;
