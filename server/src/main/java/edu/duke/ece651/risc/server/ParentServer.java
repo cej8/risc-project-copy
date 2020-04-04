@@ -406,8 +406,7 @@ public class ParentServer extends Thread{
     
     //While regions not owned all by one player
     createStartingGroups();
-    boolean notFirstCall = false;
-    while (numPlayersLeft() > 1) {
+    while (turnNumber == 1 || numPlayersLeft() > 1) {
       try {
         // Prompt users
         callThreads();

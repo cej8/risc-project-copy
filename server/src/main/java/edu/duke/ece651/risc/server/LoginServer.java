@@ -139,6 +139,7 @@ public class LoginServer extends Thread{
   }
 
   public void sendJoinMessages() throws IOException{
+    System.out.println(user + " joining " + activeGameID);
   playerConnection.sendObject(new StringMessage("Success: Joined " + activeGameID));
   playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(activeGameID).getFirstCall(user)));
   playerConnection.sendObject(new HumanPlayer(user));

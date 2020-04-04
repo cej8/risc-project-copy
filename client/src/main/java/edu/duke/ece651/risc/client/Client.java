@@ -136,7 +136,7 @@ public class Client extends Thread{
   }
 
   public boolean chooseRegions() {
-
+    
     //Initial to -1 for timers, don't set until turn actually starts
     long startTime = -1;
     long maxTime = -1;
