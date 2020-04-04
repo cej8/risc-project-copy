@@ -2,7 +2,7 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,18 +15,21 @@ public class UnitBoostTest {
     Unit boost5zeros = new Unit(5);
     UnitBoost boost = new UnitBoost(earth, boost5zeros);
     int totalUnits = earth.getUnits().getTotalUnits();
-    boost.doAction();     //Earth units are now [0,10,5,5,5,5,5]
+    assertEquals(15, boost.generateCost()); //5 units * 3 cost
+    boost.doAction(); // Earth units are now [0,10,5,5,5,5,5]
     assertEquals(0, earth.getUnits().getUnits().get(0)); // 5-5
     assertEquals(10, earth.getUnits().getUnits().get(1));// 5+5
     assertEquals(5, earth.getUnits().getUnits().get(2));// 5, unchanged
-    assertEquals(5, earth.getUnits().getUnits().get(3)); //5, unchanged
+    assertEquals(5, earth.getUnits().getUnits().get(3)); // 5, unchanged
     assertEquals(5, earth.getUnits().getUnits().get(4)); // 5, unchanged
     assertEquals(5, earth.getUnits().getUnits().get(5)); // 5, unchanged
     assertEquals(5, earth.getUnits().getUnits().get(6)); // 5, unchanged
-    assertEquals(totalUnits, earth.getUnits().getTotalUnits()); //total numUnits unchanged w boost
+    assertEquals(totalUnits, earth.getUnits().getTotalUnits()); // total numUnits unchanged w boost
     Unit boostRestUnits = new Unit(listOfUnitInts(0, 5, 5, 5, 1, 1, 0));
     UnitBoost boost2 = new UnitBoost(earth, boostRestUnits);
-    boost2.doAction();     //Earth units are now [0,5,5,5,9,5,6]
+    assertEquals(345, boost2.generateCost()); //5(8) + 5(19) + 5(25) + 1(35) +1(50) = 
+
+    boost2.doAction(); // Earth units are now [0,5,5,5,9,5,6]
     assertEquals(0, earth.getUnits().getUnits().get(0)); // 5, unchanged
     assertEquals(5, earth.getUnits().getUnits().get(1));// 10-5
     assertEquals(5, earth.getUnits().getUnits().get(2));// 5+5-5 (now that 5 have been moved in from 1)
@@ -34,23 +37,41 @@ public class UnitBoostTest {
     assertEquals(9, earth.getUnits().getUnits().get(4));// 5+5-1
     assertEquals(5, earth.getUnits().getUnits().get(5));// 5+1-1
     assertEquals(6, earth.getUnits().getUnits().get(6));// 5+1
-    assertEquals(totalUnits, earth.getUnits().getTotalUnits()); //total numUnits unchanged w boost
+    assertEquals(totalUnits, earth.getUnits().getTotalUnits()); // total numUnits unchanged w boost
   }
 
-    @Test
-    public void test_IndividualUnitBoost() {
-      List<Region> regions = getRegions(1, 1, 1, 1, 1, 1); // 1 unit of each type in each region
-      Board board = new Board(regions);
-      Region earth = regions.get(0).getRegionByName(board, "Earth");
-      Unit earthUnits = earth.getUnits();
-      List<Integer> individUnits = listOfUnitInts(0, 1, 2, 3, 4, 5, 6);
-      assertEquals(individUnits, earthUnits.getUnitList()); // actual units on earth [0, 1, 2, 3, 4, 5, 6]
-      Unit unitBoost = new Unit(listOfUnitInts(1, 1, 1, 1, 1, 1, 0)); //boost all by 1 (except highest)
-      UnitBoost boost = new UnitBoost(earth, unitBoost);
-      boost.doAction(); //Earth units are now [0,1,1,1,1,1,2]
-      List<Integer> actualUnits = listOfUnitInts(1, 2, 3, 4, 5, 6, 6);  // actual units on earth [1, 2, 3, 4, 5, 6, 6]
-      assertEquals(actualUnits, earthUnits.getUnitList()); 
-    }
+  @Test
+  public void test_IndividualUnitBoost() {
+    List<Region> regions = getRegions(1, 1, 1, 1, 1, 1); // 1 unit of each type in each region
+    Board board = new Board(regions);
+    Region earth = regions.get(0).getRegionByName(board, "Earth");
+    Unit earthUnits = earth.getUnits();
+    List<Integer> individUnits = listOfUnitInts(0, 1, 2, 3, 4, 5, 6);
+    assertEquals(individUnits, earthUnits.getUnitList()); // actual units on earth [0, 1, 2, 3, 4, 5, 6]
+    Unit unitBoost = new Unit(listOfUnitInts(1, 1, 1, 1, 1, 1, 0)); // boost all by 1 (except highest)
+    UnitBoost boost = new UnitBoost(earth, unitBoost);
+    assertEquals(140, boost.generateCost()); //3 + 8 + 19 + 25 + 35 + 50
+    boost.doAction(); // Earth units are now [0,1,1,1,1,1,2]
+    List<Integer> actualUnits = listOfUnitInts(1, 2, 3, 4, 5, 6, 6); // actual units on earth [1, 2, 3, 4, 5, 6, 6]
+    assertEquals(actualUnits, earthUnits.getUnitList());
+  }
+
+  @Test
+  public void test_BoostCost(){
+    List<Region> regions = getRegions(1, 1, 1, 1, 1, 1); // 1 unit of each type in each region
+    Board board = new Board(regions);
+    Region earth = regions.get(0).getRegionByName(board, "Earth");
+    Unit unitBoost = new Unit(listOfUnitInts(1, 1, 1, 1, 1, 1, 0)); //cost should not be affected by invalid 6
+    UnitBoost boost = new UnitBoost(earth, unitBoost);
+    assertEquals(140, boost.generateCost());
+    assertEquals(Constants.UPGRADE_UNITS_PRIORITY, boost.getPriority()); //assert priority
+    MoveOrder move = new MoveOrder(earth, earth, unitBoost);
+    assertEquals(true, boost.getPriority() < move.getPriority()); //assert higher priority than move 
+                 
+    boost.doAction(); // Earth units are now [0,1,1,1,1,1,2]
+
+  }
+
   
   private List<Region> getRegions(int u0, int u1, int u2, int u3, int u4, int u5) {
     AbstractPlayer p1 = new HumanPlayer("Player 1");
