@@ -13,7 +13,6 @@ import java.util.List;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.Unit;
 
-
 public class MainActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 2000;
     @Override

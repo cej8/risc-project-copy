@@ -57,17 +57,7 @@ public class ExecuteClient {
     }
     public void loginGame(String username, String password) throws IOException, ClassNotFoundException {
         GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
-          /*  connection.sendObject(username);
-            hasspass = clientLogin.hashPassword(password);
-            connection.sendObject(hasspass);
-            response = clientLogin.receiveAndDisplayString();
-            if (response.matches("^Fail:.*$")) {
-                loginResult = false;
-            }
-            if (response.matches("^Success:.*$")) {
-                loginResult = true;
-            }*/
-          clientLogin.start();
+        clientLogin.start();
           this.loginResult = clientLogin.getLoginResult();
           //Log.d("Login Result", loginResult.toString());
     }
