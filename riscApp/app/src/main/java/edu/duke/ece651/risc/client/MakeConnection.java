@@ -39,7 +39,7 @@ public class MakeConnection extends Thread {
             connection.setSocket(socket);
             connection.getStreamsFromSocket();
             socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
-            Log.d("Socket","Connected");
+            Log.d("Connection","Should be connected");
             } catch (Exception e) {
             e.printStackTrace(System.out);
         }

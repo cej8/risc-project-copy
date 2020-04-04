@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.IOException;
+
 public class LoginActivity extends AppCompatActivity {
     private TextView helpText;
     private EditText editUsername;
@@ -16,6 +18,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Button registerButton;
     private TextView welcomeText;
+    ExecuteClient executeClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login);
         registerButton = findViewById(R.id.register);
         welcomeText = findViewById(R.id.welcomeText);
-        ExecuteClient executeClient = new ExecuteClient();
+        executeClient = new ExecuteClient(this);
         executeClient.createGame();
         /*ExecuteClient executeClient = new ExecuteClient();
         outputText = findViewById(R.id.popUpText);
@@ -39,11 +42,20 @@ public class LoginActivity extends AppCompatActivity {
 //        startActivity(loginIntent);
 //    }
     // TODO: on button press we send object to
-    public void userLogin(View view){
+    // on button press do GUIClientLogin??
+    public void userLogin(View view) throws IOException, ClassNotFoundException{
         String username = editUsername.getText().toString();
         String password = editPassword.getText().toString();
-        // start new intent but first login
-        //Intent loginIntent = new Intent(this, );
+        executeClient.loginGame(username, password);
+        Boolean loginResult = executeClient.getLoginResult();
+        if (loginResult == false){
+            // set help text
+            helpText.setText("Username or password not found. Please register if needed.");
+        } else {
+            // start new intent aka display available games
+            //Intent loginIntent = new Intent(this, );
+        }
+
     }
     public void userRegister(View view) {
         // TODO: registration

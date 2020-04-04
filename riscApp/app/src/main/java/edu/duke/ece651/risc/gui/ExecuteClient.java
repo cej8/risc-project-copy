@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +26,21 @@ import edu.duke.ece651.risc.shared.Unit;
 
 public class ExecuteClient {
     Connection connection;
+    ClientInputInterface clientInput;
+    ClientOutputInterface clientOutput;
+    Boolean loginResult;
+    Activity act;
+
+    public ExecuteClient(Activity activity) {
+        clientInput = new GUIConsoleInput();
+        clientOutput = new GUITextDisplay();
+        loginResult = null;
+        this.act = activity;
+    }
 
     public void createGame(){
-        String addr = "67.159.89.108";
+        // TODO: change to your localhost for testing
+        String addr = "172.74.90.68";
         String portS = "12345";
         int port;
         try {
@@ -41,16 +54,33 @@ public class ExecuteClient {
         makeConnection.start();
         this.connection = makeConnection.getConnection();
     }
+    public void loginGame(String username, String password) throws IOException, ClassNotFoundException {
+        GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
+          /*  connection.sendObject(username);
+            hasspass = clientLogin.hashPassword(password);
+            connection.sendObject(hasspass);
+            response = clientLogin.receiveAndDisplayString();
+            if (response.matches("^Fail:.*$")) {
+                loginResult = false;
+            }
+            if (response.matches("^Success:.*$")) {
+                loginResult = true;
+            }*/
+          clientLogin.start();
+          this.loginResult = clientLogin.getLoginResult();
+          //Log.d("Login Result", loginResult.toString());
+    }
     public void startGame(TextView textView, Activity act, EditText editText) {
-        ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
-        ClientOutputInterface clientOutput = new GUITextDisplay(textView,act);
-
-
+        //ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
+        //ClientOutputInterface clientOutput = new GUITextDisplay(textView,act);
 
         Log.d("Test Connection", "Test Connection");
         GUIClient client = new GUIClient(clientInput,clientOutput,connection);
         //GUIClient client = new GUIClient(clientInput, clientOutput, addr, port);
         //client.start();
+    }
+    public Boolean getLoginResult() {
+        return loginResult;
     }
     private void printPath(Path shortestPath){
         if(shortestPath==null){
