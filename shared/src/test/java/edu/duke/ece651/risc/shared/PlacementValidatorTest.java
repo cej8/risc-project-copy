@@ -16,7 +16,10 @@ public class PlacementValidatorTest {
     Unit playerUnits = new Unit(totalUnits);
     List<Region> regions = getRegions(player);
     Board board = new Board(regions);
-    ValidatorInterface<PlacementOrder> pv = new PlacementValidator(player, playerUnits, board);
+    //  ValidatorInterface<PlacementOrder> pv = new PlacementValidator(player, playerUnits, board);
+      PlacementValidator pv = new PlacementValidator(player, playerUnits, board);
+  
+
     //true: valid units
     List<Unit> validUnits = get6UnitList(3, 3, 3, 3, 3, 3);
     List<PlacementOrder> validPlacements = getPlacements(regions, validUnits);

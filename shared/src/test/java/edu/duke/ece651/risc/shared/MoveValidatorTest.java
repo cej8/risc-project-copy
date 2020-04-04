@@ -13,7 +13,7 @@ public class MoveValidatorTest {
   public void Move_UnitTest() {
     List<Region> regions = getRegions(false);
     Board board = new Board(regions);
-    ValidatorInterface<MoveOrder> mv = new MoveValidator(new HumanPlayer("Player 1"), board);
+    MoveValidator mv = new MoveValidator(new HumanPlayer("Player 1"), board);
     // Moves using all but one of sourceUnits all with same owner
     List<Unit> allButOneUnit = get6UnitList(4, 9, 14, 19, 24, 29); // true: moving all but one unit
     List<MoveOrder> moveAllButOneUnit = getMovesDependent(regions, allButOneUnit);
@@ -25,7 +25,7 @@ public class MoveValidatorTest {
   public void test_Owner() {
     List<Region> regions = getRegions(true); // set multiple owners to true
     Board board = new Board(regions);
-    ValidatorInterface<MoveOrder> mv = new MoveValidator(board.getRegions().get(0).getOwner(), board);
+    MoveValidator mv = new MoveValidator(board.getRegions().get(0).getOwner(), board);
     // // Moves using all but one of sourceUnits this time with different owner
     List<Unit> allButOneUnit = get6UnitList(4, 9, 14, 19, 24, 29); // true: moving all but one unit
     List<MoveOrder> moveAllButOneUnit = getMovesDependent(regions, allButOneUnit);
@@ -36,7 +36,8 @@ public class MoveValidatorTest {
   public void test_UnitMoves() {
     List<Region> regions = getRegions(false);
     Board board = new Board(regions);
-    ValidatorInterface<MoveOrder> mv = new MoveValidator(new HumanPlayer("Player 1"), board);
+    MoveValidator mv = new MoveValidator(new HumanPlayer("Player 1"), board);
+    // ValidatorInterface<MoveOrder> mv = new MoveValidator(new HumanPlayer("Player 1"), board);
 
     // Orders using all units
     List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);

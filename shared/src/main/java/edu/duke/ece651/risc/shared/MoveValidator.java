@@ -80,7 +80,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     return validRegions && validUnits;
   }
 
-  @Override
+  //  @Override
   public boolean validateRegions(List<MoveOrder> moveList) {
     for (MoveOrder move : moveList) {
       if (!isValidMove(move)) {
@@ -95,7 +95,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
 
   // Ensure at least one unit is left behind in region moving from (based on game
   // rules)
-  @Override
+  // @Override
   public boolean validateUnits(List<MoveOrder> m) {
     for (MoveOrder move : m) {
       Region tempSource = move.getSource().getRegionByName(tempBoard, move.getSource().getName());

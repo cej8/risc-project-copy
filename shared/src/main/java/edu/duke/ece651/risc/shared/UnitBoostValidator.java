@@ -11,13 +11,14 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
     this.player = player;
   }
 
+
   @Override
   public boolean validateOrders(List<UnitBoost> orders) {
     return validateRegions(orders) && validateCost(orders) && validateUnits(orders);
   }
 
   // make sure player owns all regions in which units are to be upgraded
-  @Override
+
   public boolean validateRegions(List<UnitBoost> orders) {
     for (UnitBoost boost : orders) {
       if (!(validateRegion(boost))) {
@@ -38,7 +39,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
 
   // Make sure have enough units of each type to upgrade
   // Cannot upgrade max bonus units
-  @Override
+
   public boolean validateUnits(List<UnitBoost> orders) {
     for (UnitBoost boost : orders) {
       if (!(validateUnit(boost))) {

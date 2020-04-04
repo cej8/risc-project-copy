@@ -15,7 +15,7 @@ import edu.duke.ece651.risc.shared.Constants;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
-import edu.duke.ece651.risc.shared.Unit;
+import edu.duke.ece651.risc.shared.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestOrderCreator {
@@ -24,7 +24,10 @@ public class TestOrderCreator {
     InputStream input = new FileInputStream(new File("src/test/resources/testSDOrders.txt"));
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput(input);
-    Client client = new Client(ci, td);
+    // Client client = new Client(ci, td);
+ ConnectionManager connect = new ConnectionManager();
+    Connection c = connect.getConnection();
+    Client client = new Client(ci, td, c);
     HumanPlayer    p1 = new HumanPlayer("player 1");
     HumanPlayer p2 = new HumanPlayer("player 2");
     Board b= new Board(getRegionList(p1, p2));
@@ -38,7 +41,9 @@ public class TestOrderCreator {
     assertEquals(Constants.ATTACK_COMBAT_PRIORITY, orders.get(2).getPriority());
     assertEquals(Constants.UPGRADE_UNITS_PRIORITY,  orders.get(3).getPriority());
     assertEquals(Constants.UPGRADE_TECH_PRIORITY,  orders.get(4).getPriority());
-
+    OrderCreator poc = OrderFactoryProducer.getOrderCreator("P", client);
+    poc.addToOrderList(orders);
+    
     
     
  

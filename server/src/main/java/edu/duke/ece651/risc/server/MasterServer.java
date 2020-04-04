@@ -191,11 +191,11 @@ public class MasterServer {
     }
   }
 
-  public synchronized int createNewParentServer(String user, Connection playerConnection){
+  public synchronized int createNewParentServer(String user, Connection playerConnection) throws IOException{
     ParentServer ps = new ParentServer(nextGameID++, this);
-    ps.addPlayer(user, playerConnection);
-    parentServers.put(ps.getGameID(), ps);
     ps.start();
+    ps.tryJoin(user, playerConnection);
+    parentServers.put(ps.getGameID(), ps);
     return ps.getGameID();
   }
 
