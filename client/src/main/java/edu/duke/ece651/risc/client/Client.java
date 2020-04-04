@@ -18,7 +18,7 @@ public class Client extends Thread implements ClientInterface {
   private int port;
 
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
-  private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
+  private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
   private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
 
   private boolean firstCall = true;
@@ -242,7 +242,7 @@ public class Client extends Thread implements ClientInterface {
       clientOutput.displayString("Successfully connected, you are named: " + player.getName());
       clientOutput.displayString("Please wait for more players to connect");
       //Set timeout to START_WAIT plus a little buffer
-      setSocketTimeout((int)(60*START_WAIT_MINUTES*1000+500));
+      setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
       //If notStarted
       if(firstCall){
         if(!chooseRegions()) {return; }
