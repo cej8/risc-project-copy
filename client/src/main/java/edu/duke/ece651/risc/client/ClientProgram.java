@@ -23,7 +23,7 @@ public class ClientProgram {
       return;
     }
     
-    MakeConnection makeConnection = new MakeConnection(addr,port);
+    ConnectionManager makeConnection = new ConnectionManager(addr,port);
     makeConnection.connectGame();
     Connection connection = makeConnection.getConnection();
     ClientLogin login = new ClientLogin(connection, clientInput, clientOutput);
