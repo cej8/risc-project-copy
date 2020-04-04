@@ -142,7 +142,7 @@
         android:id="@+id/button"
         android:layout_width="100dp"
         android:layout_height="61dp"
-        android:background="@drawable/upgradeButton"
+        android:background="@drawable/upgradebutton"
         android:text=""
         tools:layout_editor_absoluteX="569dp"
         tools:layout_editor_absoluteY="107dp" />
