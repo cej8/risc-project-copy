@@ -21,7 +21,7 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
     }
     return false;
   }
-  	@Override
+  //  	@Override
     public boolean validateRegions(List<PlacementOrder> placementList) {
       for (PlacementOrder place : placementList) {
         if (!isValidPlacement(place, this.player)) {
@@ -39,7 +39,7 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
       return validRegions && validUnits;
     }
 
-  	@Override
+  //	@Override
     public boolean validateUnits(List<PlacementOrder> orders) {
     int totalUnits = this.playerUnits.getTotalUnits();
     for (PlacementOrder p : orders) {

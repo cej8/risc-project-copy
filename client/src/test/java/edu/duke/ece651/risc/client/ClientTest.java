@@ -138,8 +138,8 @@ public class ClientTest {
     try {
     
       message = (StringMessage) (client.getConnection().receiveObject());
-      System.out.println(message.getMessage());
-      assertEquals("test sending string message", message.getMessage());
+      System.out.println(message.unpacker());
+      assertEquals("test sending string message", message.unpacker());
     
     } catch (Exception e) {
       e.printStackTrace(System.out);
@@ -508,6 +508,7 @@ public class ClientTest {
     Board board3 = new Board(allRegions3);
 
     ArrayList<Object> objs = new ArrayList<Object>();
+    /* DEPRECATED LOGIN FLOW, NOW IN CLIENT LOGIN
     //First connect success
     objs.add(new StringMessage("Success: connected"));
     //Send "salt"
@@ -530,6 +531,10 @@ public class ClientTest {
     objs.add(new StringMessage("games...."));
     //Send success
     objs.add(new StringMessage("Success: good game"));
+    //Send firstturn
+    objs.add(new ConfirmationMessage(true));
+    */
+    
     //Send player
     objs.add(player1);
     //Enter chooseRegions
@@ -585,11 +590,10 @@ public class ClientTest {
         
     makeConnection.makeConnection(mockSocket);
     Connection connection = makeConnection.getConnection();
-    Client client = new Client(ci,td,connection);
+    Client client = new Client(ci,td,connection, true);
  
 
     //client.makeConnection(mockSocket);
-    client.playGame();
 
   }
 }
