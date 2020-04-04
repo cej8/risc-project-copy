@@ -36,27 +36,35 @@
 
     <ImageButton
         android:id="@+id/p3"
-        android:onClick="planetThree"
-        android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginEnd="384dp"
+        android:layout_marginRight="384dp"
+        android:background="@android:color/transparent"
+        android:onClick="planetThree"
         android:padding="0dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/p3nb"
-        tools:layout_editor_absoluteX="266dp"
-        tools:layout_editor_absoluteY="107dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.318"
+        app:srcCompat="@drawable/p3nb" />
 
     <ImageButton
         android:id="@+id/p4"
-        android:onClick="planetFour"
-        android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginEnd="384dp"
+        android:layout_marginRight="384dp"
+        android:background="@android:color/transparent"
+        android:onClick="planetFour"
         android:padding="0dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/p4nb"
-        tools:layout_editor_absoluteX="271dp"
-        tools:layout_editor_absoluteY="298dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.047"
+        app:srcCompat="@drawable/p4nb" />
 
     <ImageButton
         android:id="@+id/p5"
@@ -96,27 +104,35 @@
 
     <ImageButton
         android:id="@+id/p8"
-        android:onClick="planetEight"
-        android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginEnd="384dp"
+        android:layout_marginRight="384dp"
+        android:background="@android:color/transparent"
+        android:onClick="planetEight"
         android:padding="0dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/p8nb"
-        tools:layout_editor_absoluteX="271dp"
-        tools:layout_editor_absoluteY="18dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.872"
+        app:srcCompat="@drawable/p8nb" />
 
     <ImageButton
         android:id="@+id/p9"
-        android:onClick="planetNine"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginEnd="264dp"
+        android:layout_marginRight="264dp"
         android:background="@android:color/transparent"
+        android:onClick="planetNine"
         android:padding="0dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/p9nb"
-        tools:layout_editor_absoluteX="371dp"
-        tools:layout_editor_absoluteY="223dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.622"
+        app:srcCompat="@drawable/p9nb" />
 
     <ImageButton
         android:id="@+id/p10"
@@ -144,17 +160,21 @@
 
     <ImageButton
         android:id="@+id/p12"
-        android:onClick="planetTwelve"
-        android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginEnd="384dp"
+        android:layout_marginRight="384dp"
+        android:background="@android:color/transparent"
+        android:onClick="planetTwelve"
         android:padding="0dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/p12nb"
-        tools:layout_editor_absoluteX="271dp"
-        tools:layout_editor_absoluteY="202dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.601"
+        app:srcCompat="@drawable/p12nb" />
 
-<!--    <Button-->
+    <!--    <Button-->
 <!--        android:id="@+id/button"-->
 <!--        android:layout_width="100dp"-->
 <!--        android:layout_height="61dp"-->
