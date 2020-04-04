@@ -216,7 +216,7 @@ public class GUIClient extends Thread implements ClientInterface {
 
                     // Display and move into placements
                     clientOutput.displayBoard(board);
-                    OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", this);
+                    OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", (edu.duke.ece651.risc.client.ClientInterface) this);
                     List<OrderInterface> placementOrders = new ArrayList<OrderInterface>();
                     placement.addToOrderList(placementOrders);
                     if(timeOut(startTime, maxTime)) { return false; }
@@ -426,7 +426,7 @@ public class GUIClient extends Thread implements ClientInterface {
                         // Client generates orders --> sends
                         if (alive) {
                             //new OrderCreator
-                            OrderHelper orderhelper = new OrderHelper(this);
+                            OrderHelper orderhelper = new OrderHelper((edu.duke.ece651.risc.client.ClientInterface) this);
                             List<OrderInterface> orders = orderhelper.createOrders();
                             //If too long --> kill player
                             if(timeOut(startTime, maxTime)){ return;}

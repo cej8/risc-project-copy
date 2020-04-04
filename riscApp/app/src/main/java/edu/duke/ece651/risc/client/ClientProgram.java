@@ -24,11 +24,15 @@ public class ClientProgram {
     }
     
     
-    Client client = new Client(clientInput, clientOutput,addr,port);
+    // Client client = new Client(clientInput, clientOutput,addr,port);
     //client.setSTART_WAIT_MINUTES(10.0/60);
     //client.setTURN_WAIT_MINUTES(15.0/60);
     
     //client.makeConnection(addr, port);
+    MakeConnection makeConnection = new MakeConnection(addr,port);
+    makeConnection.connectGame();
+    Connection connection = makeConnection.getConnection();
+    Client client = new Client(clientInput, clientOutput, connection);
     client.playGame();
   }
 }
