@@ -98,26 +98,6 @@ public class Client extends Thread implements ClientInterface {
     connection.getSocket().setSoTimeout(timeout);
   }
 
-  /* public void makeConnection(String address, int port) {
-    Socket socket;
-    try {
-      socket = new Socket(address, port);
-      makeConnection(socket);
-    } catch (Exception e) {
-      e.printStackTrace(System.out);
-    }
-  }
-
-  public void makeConnection(Socket socket) {
-    try {
-      connection.setSocket(socket);
-      connection.getStreamsFromSocket();
-      socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
-    } catch (Exception e) {
-      e.printStackTrace(System.out);
-    }
-  }*/
-
   public boolean timeOut(long startTime, long maxTime){
     // If too long --> kill player (prevent trying to write to closed pipe)
     if (System.currentTimeMillis() - startTime > maxTime) {
@@ -230,8 +210,8 @@ public class Client extends Thread implements ClientInterface {
     return str;
   }
   
-  //Method to mesh with loginProcess() in loginServer
-  public void performLogin() throws IOException, ClassNotFoundException{
+  /*  //Method to mesh with loginProcess() in loginServer
+   public void performLogin() throws IOException, ClassNotFoundException{
     String initalSuccess = receiveAndDisplayString();
 
 
@@ -319,7 +299,7 @@ public class Client extends Thread implements ClientInterface {
       }
     }
     
-  }
+    }*/
 
   //Helper method to ask YN and send back ConfirmationMessage
   public boolean queryYNAndRespond(String query) throws IOException{
@@ -350,8 +330,8 @@ public class Client extends Thread implements ClientInterface {
       makeConnection(address,port);
     }*/
     try {
-      performLogin();
-      performSelectGame();
+      // performLogin();
+      //performSelectGame();
       // Make initial connection, waits for server to send back player's player object
       // Get initial player object (for name)
       player = (HumanPlayer) (connection.receiveObject());
