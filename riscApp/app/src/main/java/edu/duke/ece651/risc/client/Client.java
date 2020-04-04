@@ -1,8 +1,5 @@
 package edu.duke.ece651.risc.client;
 
-import android.util.Log;
-
-import edu.duke.ece651.risc.gui.ClientInterface;
 import edu.duke.ece651.risc.shared.*;
 
 import java.net.*;
@@ -27,23 +24,35 @@ public class Client extends Thread implements ClientInterface {
     clientInput = new ConsoleInput();
     clientOutput = new TextDisplay();
     board = new Board();
-    connection = new Connection();
+    // connection = new Connection();
   }
-
-  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput) {
+  // for testing
+  public Client(Connection connection){
+    clientInput = new ConsoleInput();
+    clientOutput = new TextDisplay();
+    this.connection = connection;
+  }
+  // constructor for abstracted out makeConnection class 
+  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,Connection connection) {
+        this();
+        this.clientInput = clientInput;
+        this.clientOutput = clientOutput;
+        this.connection = connection;
+        }
+  /*  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput) {
     this();
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
-  }
+    }*/
 
     // Constructor needed for Android threads
-  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,String address, int port) {
+  /* public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,String address, int port) {
     this();
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
     this.address = address;
     this.port = port;
-  }
+  }*/
   
   public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
     this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
@@ -89,7 +98,7 @@ public class Client extends Thread implements ClientInterface {
     connection.getSocket().setSoTimeout(timeout);
   }
 
-  public void makeConnection(String address, int port) {
+  /* public void makeConnection(String address, int port) {
     Socket socket;
     try {
       socket = new Socket(address, port);
@@ -107,7 +116,7 @@ public class Client extends Thread implements ClientInterface {
     } catch (Exception e) {
       e.printStackTrace(System.out);
     }
-  }
+  }*/
 
   public boolean timeOut(long startTime, long maxTime){
     // If too long --> kill player (prevent trying to write to closed pipe)
@@ -146,10 +155,7 @@ public class Client extends Thread implements ClientInterface {
       connection.getSocket().setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
       while (true) {
         // Game starts with board message
-        Log.d("Pre Board:", "About to get board");
         board = (Board) (connection.receiveObject());
-        Log.d("Post Board:","Should have board");
-        Thread.dumpStack();
         // Return timeout to smaller value
         connection.getSocket().setSoTimeout((int) (Constants.TURN_WAIT_MINUTES * 60 * 1000));
 
@@ -166,10 +172,7 @@ public class Client extends Thread implements ClientInterface {
         }
         
         // Output board
-        Log.d("Pre Board:", "About to print board");
         clientOutput.displayBoard(board);
-        Thread.dumpStack();
-        Log.d("Board print:","Board should be printed");
         // Print prompt and get group name
         clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
         String groupName = clientInput.readInput();
@@ -230,6 +233,8 @@ public class Client extends Thread implements ClientInterface {
   //Method to mesh with loginProcess() in loginServer
   public void performLogin() throws IOException, ClassNotFoundException{
     String initalSuccess = receiveAndDisplayString();
+
+
     while(true){
       boolean loginBoolean = queryYNAndRespond("Do you already have a login? [Y/N]");
       //Either way request login
@@ -341,9 +346,9 @@ public class Client extends Thread implements ClientInterface {
   
  
   public void playGame() {
-    if(connection.getSocket() == null){
+    /* if(connection.getSocket() == null){
       makeConnection(address,port);
-    }
+    }*/
     try {
       performLogin();
       performSelectGame();
