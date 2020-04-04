@@ -29,7 +29,7 @@ public class GUITextDisplay extends Thread implements ClientOutputInterface {
     }
     public GUITextDisplay(TextView textView, Activity act) {
         this.outputTextView = textView;
-        outputTextView = outputTextView.findViewById(R.id.popUpText);
+        //outputTextView = outputTextView.findViewById(R.id.popUpText);
         this.activity = act;
     }
     @Override

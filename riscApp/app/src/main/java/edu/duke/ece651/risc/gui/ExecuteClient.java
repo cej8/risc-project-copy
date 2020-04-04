@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,33 +16,40 @@ import edu.duke.ece651.risc.client.TextDisplay;
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.BoardGenerator;
+import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.Path;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.Unit;
 
 public class ExecuteClient {
-    public void createGame(TextView textView, Activity act) {
-        ClientInputInterface clientInput = new ConsoleInput();
-        ClientOutputInterface clientOutput = new GUITextDisplay(textView,act);
+    Connection connection;
 
+    public void createGame(){
         String addr = "67.159.89.108";
         String portS = "12345";
-        textView.setText("Waiting to connect");
-
-
-        Log.d("Test Connection", "Test Connection");
-
         int port;
         try {
             port = Integer.parseInt(portS);
         } catch (NumberFormatException ne) {
-            textView.setText("Port invalid");
+            //textView.setText("Port invalid");
+            Log.d("Port","Invalid");
             return;
         }
+        GUIMakeConnection makeConnection = new GUIMakeConnection(addr,port);
+        makeConnection.start();
+        this.connection = makeConnection.getConnection();
+    }
+    public void startGame(TextView textView, Activity act, EditText editText) {
+        ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
+        ClientOutputInterface clientOutput = new GUITextDisplay(textView,act);
 
-        Client client = new Client(clientInput, clientOutput, addr, port);
-        client.start();
+
+
+        Log.d("Test Connection", "Test Connection");
+        GUIClient client = new GUIClient(clientInput,clientOutput,connection);
+        //GUIClient client = new GUIClient(clientInput, clientOutput, addr, port);
+        //client.start();
     }
     private void printPath(Path shortestPath){
         if(shortestPath==null){

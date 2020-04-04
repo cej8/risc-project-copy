@@ -43,13 +43,20 @@ public class GUIClient extends Thread implements ClientInterface {
             clientInput = new ConsoleInput();
             clientOutput = new TextDisplay();
             board = new Board();
-            connection = new Connection();
+           // connection = new Connection();
         }
 
         public GUIClient(ClientInputInterface clientInput, ClientOutputInterface clientOutput) {
             this();
             this.clientInput = clientInput;
             this.clientOutput = clientOutput;
+        }
+
+        public GUIClient(ClientInputInterface clientInput, ClientOutputInterface clientOutput,Connection connection) {
+        this();
+        this.clientInput = clientInput;
+        this.clientOutput = clientOutput;
+        this.connection = connection;
         }
 
         // Constructor needed for Android threads
@@ -105,25 +112,25 @@ public class GUIClient extends Thread implements ClientInterface {
             connection.getSocket().setSoTimeout(timeout);
         }
 
-        public void makeConnection(String address, int port) {
-            Socket socket;
-            try {
-                socket = new Socket(address, port);
-                makeConnection(socket);
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-            }
-        }
-
-        public void makeConnection(Socket socket) {
-            try {
-                connection.setSocket(socket);
-                connection.getStreamsFromSocket();
-                socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-            }
-        }
+//        public void makeConnection(String address, int port) {
+//            Socket socket;
+//            try {
+//                socket = new Socket(address, port);
+//                makeConnection(socket);
+//            } catch (Exception e) {
+//                e.printStackTrace(System.out);
+//            }
+//        }
+//
+//        public void makeConnection(Socket socket) {
+//            try {
+//                connection.setSocket(socket);
+//                connection.getStreamsFromSocket();
+//                socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
+//            } catch (Exception e) {
+//                e.printStackTrace(System.out);
+//            }
+//        }
 
         public boolean timeOut(long startTime, long maxTime){
             // If too long --> kill player (prevent trying to write to closed pipe)
@@ -249,13 +256,13 @@ public class GUIClient extends Thread implements ClientInterface {
             while(true){
                 boolean loginBoolean = queryYNAndRespond("Do you already have a login? [Y/N]");
                 //Either way request login
-                clientOutput.displayString("Username:");
+                //clientOutput.displayString("Username:");
                 connection.sendObject(new StringMessage(clientInput.readInput()));
                 //We will get salt back
                 String salt = ((StringMessage)(connection.receiveObject())).unpacker();
 
                 //We will request a password
-                clientOutput.displayString("Password:");
+                //clientOutput.displayString("Password:");
                 String password1 = clientInput.readInput();
                 //Hash password
                 String hashPassword1;
@@ -357,9 +364,9 @@ public class GUIClient extends Thread implements ClientInterface {
 
 
         public void playGame() {
-            if(connection.getSocket() == null){
-                makeConnection(address,port);
-            }
+//            if(connection.getSocket() == null){
+//                makeConnection(address,port);
+//            }
             try {
                 performLogin();
                 performSelectGame();
