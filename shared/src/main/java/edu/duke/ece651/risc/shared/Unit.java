@@ -3,7 +3,7 @@ package edu.duke.ece651.risc.shared;
 import java.io.Serializable;
 import java.util.*;
 
-import com.google.common.reflect.TypeToken.TypeSet;
+//import com.google.common.reflect.TypeToken.TypeSet;
 
 // Class to set number of units for players
 public class Unit implements Serializable {
@@ -120,7 +120,7 @@ public class Unit implements Serializable {
   public Integer getCostFromTech(Integer tech) {
     return techToCostMap.get(tech);
   }
-  
+
   public String getTypeFromTech(Integer tech) {
     return techToTypeMap.get(tech);
   }
