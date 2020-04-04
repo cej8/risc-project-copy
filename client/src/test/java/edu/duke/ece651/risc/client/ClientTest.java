@@ -12,14 +12,69 @@ import org.junit.jupiter.api.Test;
 
 public class ClientTest {
   @Test
+  public void tet_connection() throws IOException{
+    AbstractPlayer player1 = new HumanPlayer("Player 1");
+    Board board = getTestBoard(player1);
+    ArrayList<Object> inputs = new ArrayList<Object>();
+    inputs.add(board);
+    Socket mockSocket = MockTests.setupMockSocket(inputs);
+    ConnectionManager makeConnection = new ConnectionManager();
+    Connection connection = makeConnection.getConnection();
+    Client client = new Client(connection);
+  }
+  @Test
+  public void test_makeConnectionClass() throws IOException{
+    AbstractPlayer player1 = new HumanPlayer("Player 1");
+    Board board = getTestBoard(player1);
+    ArrayList<Object> inputs = new ArrayList<Object>();
+    inputs.add(board);
+    Socket mockSocket = MockTests.setupMockSocket(inputs);
+    //Client client = new Client();
+    //client.makeConnection(mockSocket);
+    ConnectionManager makeConnection = new ConnectionManager();
+    makeConnection.makeConnection(mockSocket);
+    Connection connection = makeConnection.getConnection();
+    Client client = new Client(connection);
+   
+    try {
+      assertTrue(client.getBoard().getRegions().isEmpty());
+      client.updateClientBoard();
+      //make sure region list same size
+      assertEquals(board.getRegions().size(), client.getBoard().getRegions().size());
+      //test to make sure region added all regions by name
+      Set<String> regionNames = new HashSet<String>();
+      for (Region r : board.getRegions()){
+        regionNames.add(r.getName());
+      }
+      for (Region r : client.getBoard().getRegions()){
+        assertTrue(regionNames.contains(r.getName()));
+      }
+
+    } catch (Exception e) { //TODO -- test exception handling
+      e.printStackTrace(System.out);
+      return;
+    } finally {
+      try {
+        client.getConnection().closeAll(); //TODO - mocking closing the connection
+      } catch (Exception e) {
+        e.printStackTrace(System.out);
+      }
+    }
+  }
+  @Test
   public void test_updateBoard() throws IOException {
     AbstractPlayer player1 = new HumanPlayer("Player 1");
     Board board = getTestBoard(player1);
     ArrayList<Object> inputs = new ArrayList<Object>();
     inputs.add(board);
     Socket mockSocket = MockTests.setupMockSocket(inputs);
-    Client client = new Client();
-    client.makeConnection(mockSocket);
+    // Client client = new Client();
+    //client.makeConnection(mockSocket);
+    ConnectionManager makeConnection = new ConnectionManager();
+    makeConnection.makeConnection(mockSocket);
+    Connection connection = makeConnection.getConnection();
+    Client client = new Client(connection);
+   
     try {
       assertTrue(client.getBoard().getRegions().isEmpty());
       client.updateClientBoard();
@@ -69,14 +124,17 @@ public class ClientTest {
 
   @Test
   public void test_ClientSimple() throws IOException{
-    Client client = new Client();
+    // Client client = new Client();
     ArrayList<Object> objs = new ArrayList<Object>();
     StringMessage message = new StringMessage("test sending string message");
     objs.add(message);
     Socket mockSocket = MockTests.setupMockSocket(objs);
     //    client.makeConnection("localhost", 12345);
-    client.makeConnection(mockSocket);
-  
+    //client.makeConnection(mockSocket);
+    ConnectionManager makeConnection = new ConnectionManager();
+    makeConnection.makeConnection(mockSocket);
+    Connection connection = makeConnection.getConnection();
+    Client client = new Client(connection);
     try {
     
       message = (StringMessage) (client.getConnection().receiveObject());
@@ -142,7 +200,9 @@ public class ClientTest {
   public void test_assorted(){
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput();
-    Client inputClient = new Client(ci, td);
+    ConnectionManager connect = new ConnectionManager();
+    Connection c = connect.getConnection();
+    Client inputClient = new Client(ci, td, c);
     assertEquals(td, inputClient.getClientOutput());
     assertEquals(ci, inputClient.getClientInput());
     assertTrue(inputClient.getBoard() != null);
@@ -151,13 +211,20 @@ public class ClientTest {
 
     String addr = "127.0.0.1";
     int port = 12346;
-    Client localConnection = new Client();
+    //Client localConnection = new Client();
+    ConnectionManager localConnection = new ConnectionManager();
+    //makeConnection.makeConnection(mockSocket);
+    Connection connection = localConnection.getConnection();
+    Client client = new Client(connection);
+
     try{
       Thread t = new Thread(new dummyServerSocket(port));
       t.start();
       Thread.sleep(5000);
+      
       localConnection.makeConnection(addr, port);
       assertEquals(localConnection.getConnection().getSocket().getInetAddress().getHostAddress(), addr);
+      System.out.println(localConnection.getConnection().getSocket().getInetAddress().getHostAddress());
       assertEquals(localConnection.getConnection().getSocket().getPort(), port);
       
     }
@@ -165,7 +232,8 @@ public class ClientTest {
       e.printStackTrace(System.out);
     }
     localConnection.getConnection().closeAll();
-    localConnection.getClientInput().close();
+    client.getClientInput().close();
+    //localConnection.getClientInput().close();
     }
   
 //TODO: refactor for new units
@@ -341,15 +409,16 @@ public class ClientTest {
     InputStream input = new FileInputStream(new File("src/test/resources/testPlayGame.txt"));
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput(input);
-    Client client = new Client(ci, td);
-    
+    //    Client client = new Client(ci, td);
+    ConnectionManager makeConnection = new ConnectionManager();
+   
        //setup Player
     InputStream mockInputStream = mock(InputStream.class); 
     OutputStream mockOutputStream = mock(OutputStream.class); 
 
     Socket mockClientSocket1 = mock(Socket.class);
     HumanPlayer player1 = new HumanPlayer("Player 1");
-    
+
     Socket mockClientSocket2 = mock(Socket.class);
     HumanPlayer player2 = new HumanPlayer("Player 2");
 
@@ -439,6 +508,7 @@ public class ClientTest {
     Board board3 = new Board(allRegions3);
 
     ArrayList<Object> objs = new ArrayList<Object>();
+    /* DEPRECATED LOGIN FLOW, NOW IN CLIENT LOGIN
     //First connect success
     objs.add(new StringMessage("Success: connected"));
     //Send "salt"
@@ -461,6 +531,10 @@ public class ClientTest {
     objs.add(new StringMessage("games...."));
     //Send success
     objs.add(new StringMessage("Success: good game"));
+    //Send firstturn
+    objs.add(new ConfirmationMessage(true));
+    */
+    
     //Send player
     objs.add(player1);
     //Enter chooseRegions
@@ -513,9 +587,13 @@ public class ClientTest {
 
     
     Socket mockSocket = MockTests.setupMockSocket(objs);
+        
+    makeConnection.makeConnection(mockSocket);
+    Connection connection = makeConnection.getConnection();
+    Client client = new Client(ci,td,connection, true);
+ 
 
-    client.makeConnection(mockSocket);
-    client.playGame();
+    //client.makeConnection(mockSocket);
 
   }
 }

@@ -257,6 +257,7 @@ public class ParentServer extends Thread{
     for (ChildServer child : children) {
       if (child.getPlayerConnection() != null) {
         child.getPlayerConnection().closeAll();
+        masterServer.removePlayer(child.getPlayer().getName(), gameID);
       }
     }
   }
