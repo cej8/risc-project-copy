@@ -138,8 +138,8 @@ public class ClientTest {
     try {
     
       message = (StringMessage) (client.getConnection().receiveObject());
-      System.out.println(message.getMessage());
-      assertEquals("test sending string message", message.getMessage());
+      System.out.println(message.unpacker());
+      assertEquals("test sending string message", message.unpacker());
     
     } catch (Exception e) {
       e.printStackTrace(System.out);

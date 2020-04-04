@@ -337,7 +337,15 @@ public class ParentServer extends Thread{
 
       else if (order instanceof MoveOrder) {
         castOrder = (MoveOrder) (order);
-      } else {
+      }
+      else if (order instanceof UnitBoost) {
+        castOrder = (UnitBoost) (order);
+      }
+       else if (order instanceof TechBoost) {
+        castOrder = (TechBoost) (order);
+      }
+     
+      else {
         continue;
       }
 
@@ -371,8 +379,17 @@ public class ParentServer extends Thread{
     if (orderMap.containsKey("MoveOrder")) {
       applyOrderList(orderMap.get("MoveOrder"));
     }
-    if (orderMap.containsKey("AttackOrder")) {
-      applyOrderList(orderMap.get("AttackOrder"));
+    if (orderMap.containsKey("AttackMove")) {
+      applyOrderList(orderMap.get("AttackMove"));
+    }
+      if (orderMap.containsKey("AttackCombat")) {
+      applyOrderList(orderMap.get("AttackCombat"));
+    }
+        if (orderMap.containsKey("UnitBoost")) {
+      applyOrderList(orderMap.get("UnitBoost"));
+    }
+          if (orderMap.containsKey("TechBoost")) {
+      applyOrderList(orderMap.get("TechBoost"));
     }
   }
 

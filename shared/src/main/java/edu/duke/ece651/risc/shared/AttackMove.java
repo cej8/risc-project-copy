@@ -15,8 +15,7 @@ public class AttackMove extends SourceDestinationOrder {
   }
   public String doAction(){
   // remove units from source (source location)
-    //TODO --WARNING: this line will erase all bonuses
-    // source.setUnits(new Unit(source.getUnits().getUnits() - units.getUnits()));
+    source.getUnits().subtractUnits(this.units);
     //source.getOwner().useFood(Constants.ATTACK_COST);
     int cost = units.getTotalUnits() * Constants.ATTACK_COST;
     source.getOwner().getResources().getFuelResource().useFuel(cost);

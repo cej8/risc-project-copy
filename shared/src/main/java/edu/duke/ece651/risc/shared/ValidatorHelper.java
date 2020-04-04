@@ -6,6 +6,8 @@ public class ValidatorHelper {
   private ValidatorInterface<AttackMove> attackValidator;
   private ValidatorInterface<MoveOrder> moveValidator;
   private ValidatorInterface<PlacementOrder> placementValidator;
+  private ValidatorInterface<TechBoost> techBoostValidator;
+  private ValidatorInterface<UnitBoost>unitBoostValidator;
   private Board tempBoard;
   private AbstractPlayer player;
 
@@ -14,6 +16,8 @@ public class ValidatorHelper {
     this.player = player;
     this.moveValidator = new MoveValidator(player, tempBoard);
     this.attackValidator = new AttackValidator(player, tempBoard);
+    this.techBoostValidator= new TechBoostValidator(player, tempBoard);
+    this.unitBoostValidator= new UnitBoostValidator(player, tempBoard);
   }
 
   public ValidatorHelper(AbstractPlayer player, Unit u, Board currentBoard) {
@@ -26,24 +30,40 @@ public class ValidatorHelper {
     for(int i = 0; i < orders.size(); i++){
        orders.get(i).findValuesInBoard(tempBoard);
     }
-    List<AttackMove> attackList = new ArrayList<AttackMove>();
+    List<AttackMove> attackMoveList = new ArrayList<AttackMove>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
+    List<UnitBoost>unitBoostList= new ArrayList<UnitBoost>();
+    List<TechBoost>techBoostList= new ArrayList<TechBoost>();
     for (OrderInterface order : orders) {
       if (order.getPriority() == Constants.ATTACK_MOVE_PRIORITY) {
         //  System.out.println("Found attack");
-        attackList.add((AttackMove) order);
-      } else if (order.getPriority() == Constants.MOVE_PRIORITY) {
+        attackMoveList.add((AttackMove) order);
+      }
+      else if (order.getPriority() == Constants.MOVE_PRIORITY) {
         moveList.add((MoveOrder) order);
         //  System.out.println("Found move");
       }
+      else if (order.getPriority() == Constants.UPGRADE_TECH_PRIORITY) {
+        //  System.out.println("Found attack");
+        techBoostList.add((TechBoost) order);
+      }
+      else if (order.getPriority() == Constants.UPGRADE_UNITS_PRIORITY){
+        unitBoostList.add((UnitBoost) order);
+        //  System.out.println("Found move");
+      }
+  
     }
     boolean validMoves = moveValidator.validateOrders(moveList);
     System.out.println(validMoves);
 
-    boolean validAttacks = attackValidator.validateOrders(attackList);
+    boolean validAttacks = attackValidator.validateOrders(attackMoveList);
     System.out.println(validAttacks);
 
-    return validMoves && validAttacks;
+    boolean validUnitBoost= unitBoostValidator.validateOrders(unitBoostList);
+
+    boolean validTechBoost = techBoostValidator.validateOrders(techBoostList);
+
+    return validMoves && validAttacks && validTechBoost && validUnitBoost;
 
   }
   // checks all placement are valid per player
