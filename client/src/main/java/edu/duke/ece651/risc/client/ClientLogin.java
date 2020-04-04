@@ -18,15 +18,17 @@ public class ClientLogin {
     this.clientInput = input;
     this.clientOutput = output;
   }
-  public void Login(){// throws IOException, ClassNotFoundException{
+  public boolean Login(){// throws IOException, ClassNotFoundException{
+    boolean firstCall = true;
     try {
     performLogin();
-    performSelectGame();
+    firstCall = performSelectGame();
     } catch (Exception e) {
       e.printStackTrace();
       connection.closeAll();
       clientInput.close();
     }
+    return firstCall;
   }
   public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
     StringMessage message = (StringMessage) (connection.receiveObject());
@@ -91,7 +93,7 @@ public class ClientLogin {
   }
 
   //Method to mesh with selectGame() in loginServer
-  public void performSelectGame() throws IOException, ClassNotFoundException{
+  public boolean performSelectGame() throws IOException, ClassNotFoundException{
     while(true){
       boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
     
@@ -123,6 +125,9 @@ public class ClientLogin {
         break;
       }
     }
+    
+    // Make initial connection, waits for server to send back player's firstCall state
+    return ((ConfirmationMessage)connection.receiveObject()).unpacker();
     
   }
 

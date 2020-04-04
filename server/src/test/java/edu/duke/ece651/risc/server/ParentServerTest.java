@@ -63,12 +63,11 @@ public class ParentServerTest {
   public void test_growUnits() {
     ParentServer ps = new ParentServer();
     // ps.createBoard();
-    AbstractPlayer player = new HumanPlayer("player1");
-    AbstractPlayer player2 = new HumanPlayer("player2");
-    ChildServer cs = new ChildServer(player, ps);
-    ChildServer cs2 = new ChildServer(player2, ps);
-    ps.addPlayer(cs);
-    ps.addPlayer(cs2);
+    ps.addPlayer("player1", null);
+    ps.addPlayer("player2", null);
+    List<ChildServer> children = ps.getChildren();
+    AbstractPlayer player = children.get(0).getPlayer();
+    AbstractPlayer player2 = children.get(1).getPlayer();;
     Board b = new Board(getRegionList(player, player2));
     ps.setBoard(b);
 

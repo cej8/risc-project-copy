@@ -51,12 +51,17 @@ public class ChildServer implements Runnable{
     return player;
   }
 
+  public boolean getFirstCall(){
+    return firstCall;
+  }
+
   //Method to call turn, return true if "successful"
   //Return false if socket has exception
   public boolean performTurn(){
     //If player isn't playing or isn't watching then skip them
     if(!player.isPlaying()){
-      if(!player.isWatching()){
+      firstCall = false;
+      if(player.isWatching() != null && !player.isWatching()){
         return true;
       }
     }
@@ -168,9 +173,13 @@ public class ChildServer implements Runnable{
             
             //Get confirmation message
             ConfirmationMessage spectateMessage = (ConfirmationMessage)(playerConnection.receiveObject());
+            boolean spectate = Boolean.valueOf(spectateMessage.getMessage());
             //Set watching boolean
             //player.setWatching(new Boolean(spectateMessage.getMessage()));
-            player.setWatching(Boolean.valueOf(spectateMessage.getMessage()));
+            player.setWatching(spectate);
+            if(spectate == false){
+              parent.removePlayer(player.getName());
+            }
           }
           //If watching then send board (otherwise client disconnected)
           if(player.isWatching()){
@@ -185,6 +194,7 @@ public class ChildServer implements Runnable{
       playerConnection.closeAll();
       playerConnection = null;
       parent.getMasterServer().removePlayer(player.getName(), parent.getGameID());
+      player.setWatchingNull();
       return false;
     }
     System.out.println(player.getName() + " exiting thread gracefully");
