@@ -24,23 +24,35 @@ public class Client extends Thread implements ClientInterface {
     clientInput = new ConsoleInput();
     clientOutput = new TextDisplay();
     board = new Board();
-    connection = new Connection();
+    // connection = new Connection();
   }
-
-  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput) {
+  // for testing
+  public Client(Connection connection){
+    clientInput = new ConsoleInput();
+    clientOutput = new TextDisplay();
+    this.connection = connection;
+  }
+  // constructor for abstracted out makeConnection class 
+  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,Connection connection) {
+        this();
+        this.clientInput = clientInput;
+        this.clientOutput = clientOutput;
+        this.connection = connection;
+        }
+  /*  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput) {
     this();
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
-  }
+    }*/
 
     // Constructor needed for Android threads
-  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,String address, int port) {
+  /* public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,String address, int port) {
     this();
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
     this.address = address;
     this.port = port;
-  }
+  }*/
   
   public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
     this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
@@ -84,26 +96,6 @@ public class Client extends Thread implements ClientInterface {
   
   public void setSocketTimeout(int timeout) throws SocketException {
     connection.getSocket().setSoTimeout(timeout);
-  }
-
-  public void makeConnection(String address, int port) {
-    Socket socket;
-    try {
-      socket = new Socket(address, port);
-      makeConnection(socket);
-    } catch (Exception e) {
-      e.printStackTrace(System.out);
-    }
-  }
-
-  public void makeConnection(Socket socket) {
-    try {
-      connection.setSocket(socket);
-      connection.getStreamsFromSocket();
-      socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
-    } catch (Exception e) {
-      e.printStackTrace(System.out);
-    }
   }
 
   public boolean timeOut(long startTime, long maxTime){
@@ -218,8 +210,8 @@ public class Client extends Thread implements ClientInterface {
     return str;
   }
   
-  //Method to mesh with loginProcess() in loginServer
-  public void performLogin() throws IOException, ClassNotFoundException{
+  /*  //Method to mesh with loginProcess() in loginServer
+   public void performLogin() throws IOException, ClassNotFoundException{
     String initalSuccess = receiveAndDisplayString();
 
 
@@ -307,7 +299,7 @@ public class Client extends Thread implements ClientInterface {
       }
     }
     
-  }
+    }*/
 
   //Helper method to ask YN and send back ConfirmationMessage
   public boolean queryYNAndRespond(String query) throws IOException{
@@ -334,12 +326,12 @@ public class Client extends Thread implements ClientInterface {
   
  
   public void playGame() {
-    if(connection.getSocket() == null){
+    /* if(connection.getSocket() == null){
       makeConnection(address,port);
-    }
+    }*/
     try {
-      performLogin();
-      performSelectGame();
+      // performLogin();
+      //performSelectGame();
       // Make initial connection, waits for server to send back player's player object
       // Get initial player object (for name)
       player = (HumanPlayer) (connection.receiveObject());
