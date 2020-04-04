@@ -63,7 +63,6 @@ public boolean validateOrders(List<AttackMove> attackList) {
       Unit sourceUnits = tempSource.getUnits();
       Unit attackUnits = new Unit(attack.getUnits().getUnits());
       AttackMove attackCopyMove = new AttackMove(tempSource, tempDest, attackUnits);
-      AttackCombat attackCopyCombat = new AttackCombat(tempSource,tempDest,attackUnits);
       // make sure at least 1 sourceUnit, 1 attackUnit, and sourceUnits > attackUnits
        boolean validMove = true;
       // set validMove to false if any of these are false: at least 1 sourceUnit, 1
@@ -76,7 +75,6 @@ public boolean validateOrders(List<AttackMove> attackList) {
       }
       if(validMove){
         attackCopyMove.doAction();
-        attackCopyCombat.doAction();
       
       } else {
         System.out.println("Attack failed: sourceUnits are " + sourceUnits.getTotalUnits() + " but attackUnits are " + attackUnits.getTotalUnits()); //this is just for testing
