@@ -27,27 +27,26 @@ public class ValidatorTest {
     AttackValidator av = new AttackValidator(p1, b);
     PlacementValidator pv = new PlacementValidator(p2, new Unit(15), b);
     TechBoostValidator tbv = new TechBoostValidator(p1, b);
-    
+
     List<MoveOrder> moves = getMoveOrders(regions);
     List<AttackMove> attacks = getAttackList(regions);
     List<PlacementOrder> placements = getPlacementList(p1, p2);
 
-     List<TechBoost> invalidCostBoost = getInvalidResourceTechBoosts(p2);
+    List<TechBoost> invalidCostBoost = getInvalidResourceTechBoosts(p2);
     assertEquals(false, tbv.validateOrders(invalidCostBoost));
-   
+
     List<TechBoost> validBoosts = getValidTechBoosts(p1);
     assertEquals(true, tbv.validateOrders(validBoosts));
 
     List<TechBoost> invalidCountBoosts = getInvalidCountTechBoosts(p2);
     assertEquals(false, tbv.validateOrders(invalidCountBoosts));
 
-    
     assertEquals(true, mv.isValidMove(moves.get(0)));
     assertEquals(false, mv.isValidMove(moves.get(1)));
     assertEquals(false, mv.isValidMove(moves.get(2)));
     assertEquals(false, mv.isValidMove(moves.get(3)));
     assertEquals(false, mv.validateRegions(moves));
-    //TODO uncomment when attacska re changed
+    // TODO uncomment when attacska re changed
     assertEquals(true, av.isValidAttack(attacks.get(0)));
     assertEquals(false, av.isValidAttack(attacks.get(1)));
     assertEquals(false, av.isValidAttack(attacks.get(2)));
@@ -58,40 +57,40 @@ public class ValidatorTest {
     assertEquals(false, pv.validateRegions(placements));
 
   }
-  private List<TechBoost>getInvalidCountTechBoosts(AbstractPlayer p){
-  List<TechBoost>boosts= new ArrayList<TechBoost>();
-     TechBoost tb1 = new TechBoost(p);
-     TechBoost tb2 = new TechBoost(p);
-     boosts.add(tb1);
-     boosts.add(tb2);
 
+  private List<TechBoost> getInvalidCountTechBoosts(AbstractPlayer p) {
+    List<TechBoost> boosts = new ArrayList<TechBoost>();
+    TechBoost tb1 = new TechBoost(p);
+    TechBoost tb2 = new TechBoost(p);
+    boosts.add(tb1);
+    boosts.add(tb2);
 
-     return boosts;
-
-  }
-   private List<TechBoost>getInvalidResourceTechBoosts(AbstractPlayer p){
-  List<TechBoost>boosts= new ArrayList<TechBoost>();
-     TechBoost tb1 = new TechBoost(p);
-     //    TechBoost tb2 = new TechBoost(p);
-     boosts.add(tb1);
-     // boosts.add(tb2);
-
-
-     return boosts;
+    return boosts;
 
   }
- 
-  private List<TechBoost> getValidTechBoosts(AbstractPlayer p){
+
+  private List<TechBoost> getInvalidResourceTechBoosts(AbstractPlayer p) {
+    List<TechBoost> boosts = new ArrayList<TechBoost>();
+    TechBoost tb1 = new TechBoost(p);
+    // TechBoost tb2 = new TechBoost(p);
+    boosts.add(tb1);
+    // boosts.add(tb2);
+
+    return boosts;
+
+  }
+
+  private List<TechBoost> getValidTechBoosts(AbstractPlayer p) {
     p.getResources().getTechResource().addTech(200);
-     List<TechBoost>boosts= new ArrayList<TechBoost>();
-     TechBoost tb1 = new TechBoost(p);
-     //     TechBoost tb2 = new TechBoost(p);
-     boosts.add(tb1);
-     // boosts.add(tb2);
+    List<TechBoost> boosts = new ArrayList<TechBoost>();
+    TechBoost tb1 = new TechBoost(p);
+    // TechBoost tb2 = new TechBoost(p);
+    boosts.add(tb1);
+    // boosts.add(tb2);
 
-
-     return boosts;
+    return boosts;
   }
+
   private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2) {
     Region r1 = new Region(p1, new Unit(1));
     r1.setName("r1");
@@ -192,44 +191,44 @@ public class ValidatorTest {
     return pRegions;
   }
 
-  // // @Test
-  // public void test_validatorHelper() {
-  //   AbstractPlayer p1 = new HumanPlayer("player 1");
-  //   AbstractPlayer p2 = new HumanPlayer("player 2");
-  //   List<Region> regions = getRegionList(p1, p2);
-  //   Board b = new Board(regions);
+  @Test
+  public void test_validatorHelper() {
+    AbstractPlayer p1 = new HumanPlayer("player 1");
+    AbstractPlayer p2 = new HumanPlayer("player 2");
+    List<Region> regions = getRegionList(p1, p2);
+    Board b = new Board(regions);
 
-  //   List<OrderInterface> orders = new ArrayList<OrderInterface>();
-  //   List<OrderInterface> ordersValid = new ArrayList<OrderInterface>();
+    List<OrderInterface> orders = new ArrayList<OrderInterface>();
+    List<OrderInterface> ordersinValid = new ArrayList<OrderInterface>();
 
-  //   OrderInterface attack13 = new AttackOrder(regions.get(0), regions.get(3), new Unit(4));// valid adjacent
-  //   OrderInterface attack23 = new AttackOrder(regions.get(1), regions.get(3), new Unit(3));// invalid not adjacent
-  //   OrderInterface attack36 = new AttackOrder(regions.get(3), regions.get(5), new Unit(2));// invalid same owner
-  //   orders.add(attack13);
-  //   orders.add(attack23);
-  //   orders.add(attack36);
-  //   OrderInterface move12 = new MoveOrder(regions.get(0), regions.get(1), new Unit(5));// valid adjacent
-  //   OrderInterface move23 = new MoveOrder(regions.get(1), regions.get(3), new Unit(2));// invalid (diff owner)
-  //   OrderInterface move14 = new MoveOrder(regions.get(0), regions.get(2), new Unit(3));// valid not adjacent
-  //   OrderInterface move15 = new MoveOrder(regions.get(0), regions.get(4), new Unit(1));// invalid no path
+    OrderInterface attack13 = new AttackMove(regions.get(3), regions.get(0), new Unit(2));// valid adjacent
+    OrderInterface attack23 = new AttackMove(regions.get(3), regions.get(1), new Unit(2));// invalid not adjacent
+    OrderInterface attack36 = new AttackMove(regions.get(5), regions.get(3), new Unit(2));// invalid same owner
+    orders.add(attack13);
+    orders.add(attack23);
+    orders.add(attack36);
+    OrderInterface move12 = new MoveOrder(regions.get(3), regions.get(1), new Unit(2));// valid adjacent
+    OrderInterface move23 = new MoveOrder(regions.get(4), regions.get(3), new Unit(3));// invalid (diff owner)
+    OrderInterface move14 = new MoveOrder(regions.get(2), regions.get(0), new Unit(1));// valid not adjacent
+    OrderInterface move15 = new MoveOrder(regions.get(4), regions.get(0), new Unit(3));// invalid no path
 
-  //   orders.add(move12);
-  //   orders.add(move23);
-  //   orders.add(move14);
-  //   orders.add(move15);
+    orders.add(move12);
+    orders.add(move23);
+    orders.add(move14);
+    orders.add(move15);
 
-  //   // TODO: create valid regions and units test
-  //   OrderInterface move21 = new MoveOrder(regions.get(1), regions.get(0), new Unit(1));// valid units
-  //   OrderInterface move41 = new MoveOrder(regions.get(2), regions.get(0), new Unit(2));// valid
-  //   OrderInterface attack35 = new AttackOrder(regions.get(4), regions.get(3), new Unit(1));// invalid same owner
+    // TODO: create valid regions and units test
+    OrderInterface move21 = new MoveOrder(regions.get(1), regions.get(0), new Unit(1));// valid units
+    OrderInterface move41 = new MoveOrder(regions.get(2), regions.get(0), new Unit(2));// valid
+    OrderInterface attack35 = new AttackMove(regions.get(4), regions.get(3), new Unit(1));// invalid same owner
 
-  //   ordersValid.add(attack35);
-  //   ordersValid.add(move21);
-  //   ordersValid.add(move41);
-  //   ValidatorHelper vh = new ValidatorHelper(p1, b);
-  //   assertEquals(false, vh.allOrdersValid(orders));
-  //   assertEquals(true, vh.allOrdersValid(ordersValid));
+    ordersinValid.add(attack35);
+    ordersinValid.add(move21);
+    ordersinValid.add(move41);
+    ValidatorHelper vh = new ValidatorHelper(p1, b);
+    assertEquals(false, vh.allOrdersValid(orders));
+    assertEquals(false, vh.allOrdersValid(ordersinValid));
 
-  // }
+  }
 
 }
