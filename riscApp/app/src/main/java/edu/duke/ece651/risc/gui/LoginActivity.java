@@ -26,12 +26,24 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login);
         registerButton = findViewById(R.id.register);
         welcomeText = findViewById(R.id.welcomeText);
-        welcomeText.setText("Please login or register");
+        ExecuteClient executeClient = new ExecuteClient();
+        executeClient.createGame();
+        /*ExecuteClient executeClient = new ExecuteClient();
+        outputText = findViewById(R.id.popUpText);
+        executeClient.createGame(outputText,this,**figure out the edit text stuff);*/
+
     }
     // on button click open DisplayGameActivity.java
-    public void userLogin(View view) {
-        Intent loginIntent = new Intent(this, DisplayGamesActivity.class);
-        startActivity(loginIntent);
+//    public void userLogin(View view) {
+//        Intent loginIntent = new Intent(this, DisplayGamesActivity.class);
+//        startActivity(loginIntent);
+//    }
+    // TODO: on button press we send object to
+    public void userLogin(View view){
+        String username = editUsername.getText().toString();
+        String password = editPassword.getText().toString();
+        // start new intent but first login
+        //Intent loginIntent = new Intent(this, );
     }
     public void userRegister(View view) {
         // TODO: registration

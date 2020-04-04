@@ -10,7 +10,7 @@ import java.io.*;
 public class TechBoostOrderCreator extends OrderCreator{
   //  private Client client;
   PlayerOrderFactory factory;
-  public TechBoostOrderCreator(Client c){
+  public TechBoostOrderCreator(ClientInterface c){
     this.client=c;
     factory = new PlayerOrderFactory();
 

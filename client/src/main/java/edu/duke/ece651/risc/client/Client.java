@@ -7,7 +7,7 @@ import java.util.*;
 import java.io.*;
 import org.mindrot.jbcrypt.*;
 
-public class Client extends Thread{
+public class Client extends Thread implements ClientInterface {
   private Connection connection;
   private Board board;
   private boolean isPlaying = true;
