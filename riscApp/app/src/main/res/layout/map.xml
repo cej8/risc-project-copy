@@ -7,18 +7,24 @@
     android:background="@drawable/spacebackground">
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/p1"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        android:layout_marginEnd="264dp"
+        android:layout_marginRight="264dp"
+        android:background="@android:color/transparent"
+        android:onClick="planetOne"
         android:padding="0dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/p1nb"
-        android:background="@android:color/transparent"
-        tools:layout_editor_absoluteX="371dp"
-        tools:layout_editor_absoluteY="63dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.276"
+        app:srcCompat="@drawable/p1nb" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/p2"
+        android:onClick="planetTwo"
         android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -29,7 +35,8 @@
         tools:layout_editor_absoluteY="63dp" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/p3"
+        android:onClick="planetThree"
         android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -40,7 +47,8 @@
         tools:layout_editor_absoluteY="107dp" />
 
     <ImageButton
-        android:id="@+id/imageButton4"
+        android:id="@+id/p4"
+        android:onClick="planetFour"
         android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -51,7 +59,8 @@
         tools:layout_editor_absoluteY="298dp" />
 
     <ImageButton
-        android:id="@+id/imageButton5"
+        android:id="@+id/p5"
+        android:onClick="planetFive"
         android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -62,7 +71,8 @@
         tools:layout_editor_absoluteY="16dp" />
 
     <ImageButton
-        android:id="@+id/imageButton6"
+        android:id="@+id/p6"
+        android:onClick="planetSix"
         android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -73,7 +83,8 @@
         tools:layout_editor_absoluteY="107dp" />
 
     <ImageButton
-        android:id="@+id/imageButton7"
+        android:id="@+id/p7"
+        android:onClick="planetSeven"
         android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -84,7 +95,8 @@
         tools:layout_editor_absoluteY="218dp" />
 
     <ImageButton
-        android:id="@+id/imageButton8"
+        android:id="@+id/p8"
+        android:onClick="planetEight"
         android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -95,7 +107,8 @@
         tools:layout_editor_absoluteY="18dp" />
 
     <ImageButton
-        android:id="@+id/imageButton9"
+        android:id="@+id/p9"
+        android:onClick="planetNine"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:background="@android:color/transparent"
@@ -106,7 +119,8 @@
         tools:layout_editor_absoluteY="223dp" />
 
     <ImageButton
-        android:id="@+id/imageButton10"
+        android:id="@+id/p10"
+        android:onClick="planetTen"
         android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -117,7 +131,8 @@
         tools:layout_editor_absoluteY="298dp" />
 
     <ImageButton
-        android:id="@+id/imageButton11"
+        android:id="@+id/p11"
+        android:onClick="planetEleven"
         android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -128,7 +143,8 @@
         tools:layout_editor_absoluteY="202dp" />
 
     <ImageButton
-        android:id="@+id/imageButton12"
+        android:id="@+id/p12"
+        android:onClick="planetTwelve"
         android:background="@android:color/transparent"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -138,39 +154,39 @@
         tools:layout_editor_absoluteX="271dp"
         tools:layout_editor_absoluteY="202dp" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="100dp"
-        android:layout_height="61dp"
-        android:background="@drawable/upgradebutton"
-        android:text=""
-        tools:layout_editor_absoluteX="569dp"
-        tools:layout_editor_absoluteY="107dp" />
+<!--    <Button-->
+<!--        android:id="@+id/button"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="61dp"-->
+<!--        android:background="@drawable/oval"-->
+<!--        android:text="Button"-->
+<!--        tools:layout_editor_absoluteX="569dp"-->
+<!--        tools:layout_editor_absoluteY="107dp" />-->
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        android:background="@drawable/oval"
-        tools:layout_editor_absoluteX="553dp"
-        tools:layout_editor_absoluteY="161dp" />
+<!--    <Button-->
+<!--        android:id="@+id/button2"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Button"-->
+<!--        android:background="@drawable/oval"-->
+<!--        tools:layout_editor_absoluteX="553dp"-->
+<!--        tools:layout_editor_absoluteY="161dp" />-->
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        android:background="@drawable/oval"
-        tools:layout_editor_absoluteX="555dp"
-        tools:layout_editor_absoluteY="234dp" />
+<!--    <Button-->
+<!--        android:id="@+id/button3"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Button"-->
+<!--        android:background="@drawable/oval"-->
+<!--        tools:layout_editor_absoluteX="555dp"-->
+<!--        tools:layout_editor_absoluteY="234dp" />-->
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="555dp"
-        tools:layout_editor_absoluteY="321dp" />
+<!--    <Button-->
+<!--        android:id="@+id/button4"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Button"-->
+<!--        tools:layout_editor_absoluteX="555dp"-->
+<!--        tools:layout_editor_absoluteY="321dp" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

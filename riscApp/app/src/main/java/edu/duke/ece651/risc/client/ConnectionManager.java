@@ -7,15 +7,15 @@ import java.net.Socket;
 import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.Constants;
 
-public class MakeConnection extends Thread {
+public class ConnectionManager extends Thread {
    private Connection connection;
     private String address;
     private int port;
 
-  public MakeConnection(){
+  public ConnectionManager(){
     connection = new Connection();
   }
-    public MakeConnection(String address, int port){
+    public ConnectionManager(String address, int port){
       //connection = new Connection();
       this();
       this.address = address;

@@ -44,7 +44,7 @@ public class GUIClientLogin extends Thread{
     }
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
-        String str = message.getMessage();
+        String str = message.unpacker();
         //clientOutput.displayString(str);
         return str;
     }
@@ -65,7 +65,7 @@ public class GUIClientLogin extends Thread{
             return null;
         }
     }
-    public void performLogin() throws IOException, ClassNotFoundException{
+  /*  public void performLogin() throws IOException, ClassNotFoundException{
         String initalSuccess = receiveAndDisplayString();
         connection.sendObject(new ConfirmationMessage(true));
         connection.sendObject(username);
@@ -78,15 +78,15 @@ public class GUIClientLogin extends Thread{
         if (response.matches("^Success:.*$")) {
             loginResult = true;
         }
-    }
+    }*/
     public Boolean getLoginResult(){
         return loginResult;
     }
     //Method to mesh with loginProcess() in loginServer
-  /*  public void performLogin() throws IOException, ClassNotFoundException{
+    public void performLogin() throws IOException, ClassNotFoundException{
         String initalSuccess = receiveAndDisplayString();
         while(true){
-            boolean loginBoolean = queryYNAndRespond("Do you already have a login? [Y/N]");
+            boolean loginBoolean = true;//queryYNAndRespond("Do you already have a login? [Y/N]");
             //Either way request login
             //clientOutput.displayString("Username:");
             connection.sendObject(new StringMessage(clientInput.readInput()));
@@ -130,9 +130,9 @@ public class GUIClientLogin extends Thread{
             }
         }
 
-        At this point user is logged in (either old or new)
+        //At this point user is logged in (either old or new)
 
-    }*/
+    }
 
     //Method to mesh with selectGame() in loginServer
     public void performSelectGame() throws IOException, ClassNotFoundException{

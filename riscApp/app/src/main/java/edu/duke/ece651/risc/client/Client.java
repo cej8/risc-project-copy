@@ -18,33 +18,47 @@ public class Client extends Thread implements ClientInterface {
   private int port;
 
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
-  private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
+  private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
+  private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
+
+  private boolean firstCall = true;
 
   public Client() {
     clientInput = new ConsoleInput();
     clientOutput = new TextDisplay();
     board = new Board();
-    // connection = new Connection();
+    connection = new Connection();
   }
   // for testing
   public Client(Connection connection){
-    clientInput = new ConsoleInput();
-    clientOutput = new TextDisplay();
+    this();
     this.connection = connection;
   }
   // constructor for abstracted out makeConnection class 
   public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,Connection connection) {
-        this();
-        this.clientInput = clientInput;
-        this.clientOutput = clientOutput;
-        this.connection = connection;
-        }
+    board = new Board();
+    this.clientInput = clientInput;
+    this.clientOutput = clientOutput;
+    this.connection = connection;
+    this.firstCall = true;
+  }
+  // constructor for abstracted out makeConnection class 
+  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,Connection connection, boolean firstCall) {
+    board = new Board();
+    this.clientInput = clientInput;
+    this.clientOutput = clientOutput;
+    this.connection = connection;
+    this.firstCall = firstCall;
+  }
   
   public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
     this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
   }
   public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES){
     this.START_WAIT_MINUTES = START_WAIT_MINUTES;
+  }
+  public void setLOGIN_WAIT_MINUTES(double LOGIN_WAIT_MINUTES){
+    this.LOGIN_WAIT_MINUTES = LOGIN_WAIT_MINUTES;
   }
 
   public void setBoard(Board board) {
@@ -83,7 +97,7 @@ public class Client extends Thread implements ClientInterface {
   public void setSocketTimeout(int timeout) throws SocketException {
     connection.getSocket().setSoTimeout(timeout);
   }
-
+  
   public boolean timeOut(long startTime, long maxTime){
     // If too long --> kill player (prevent trying to write to closed pipe)
     if (System.currentTimeMillis() - startTime > maxTime) {
@@ -110,7 +124,7 @@ public class Client extends Thread implements ClientInterface {
   }
 
   public boolean chooseRegions() {
-
+    
     //Initial to -1 for timers, don't set until turn actually starts
     long startTime = -1;
     long maxTime = -1;
@@ -118,19 +132,19 @@ public class Client extends Thread implements ClientInterface {
     try {
       // Set timeout to constant, wait this long for game start
       // This will block on FIRST board = ...
-      connection.getSocket().setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
+      connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
       while (true) {
         // Game starts with board message
         board = (Board) (connection.receiveObject());
         // Return timeout to smaller value
-        connection.getSocket().setSoTimeout((int) (Constants.TURN_WAIT_MINUTES * 60 * 1000));
+        connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
 
         //Set max/start first time board received (start of turn)
         if(maxTime == -1){
           maxTime = (long) (connection.getSocket().getSoTimeout());
           //Catch case for issues in testing, should never really happen
           if (maxTime == 0) {
-            maxTime = (long) (Constants.TURN_WAIT_MINUTES * 60 * 1000);
+            maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
           }
         }
         if(startTime == -1){
@@ -147,7 +161,7 @@ public class Client extends Thread implements ClientInterface {
 
         // Wait for response
         StringMessage responseMessage = (StringMessage) (connection.receiveObject());
-        String response = responseMessage.getMessage();
+        String response = responseMessage.unpacker();
         clientOutput.displayString(response);
         if (response.matches("^Fail:.*$")) {
           continue;
@@ -170,7 +184,7 @@ public class Client extends Thread implements ClientInterface {
 
         // Wait for response
         StringMessage responseMessage = (StringMessage) (connection.receiveObject());
-        String response = responseMessage.getMessage();
+        String response = responseMessage.unpacker();
         clientOutput.displayString(response);
         if (response.matches("^Fail:.*$")) {
           continue;
@@ -188,10 +202,9 @@ public class Client extends Thread implements ClientInterface {
     return true;
   }
 
-
   public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
     StringMessage message = (StringMessage) (connection.receiveObject());
-    String str = message.getMessage();
+    String str = message.unpacker();
     clientOutput.displayString(str);
     return str;
   }
@@ -218,30 +231,34 @@ public class Client extends Thread implements ClientInterface {
       clientOutput.displayString("Invalid input.");
     }
   }
-
+  
+ 
   public void playGame() {
     try {
-      // Make initial connection, waits for server to send back player's player object
-      // Get initial player object (for name)
       player = (HumanPlayer) (connection.receiveObject());
       clientOutput.displayString("Successfully connected, you are named: " + player.getName());
       clientOutput.displayString("Please wait for more players to connect");
-      // After which choose regions
-      if(!chooseRegions()) {return; }
+      //Set timeout to START_WAIT plus a little buffer
+      setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
+      //If notStarted
+      if(firstCall){
+        if(!chooseRegions()) {return; }
+      }
       while (true) {
+
+        String turn = receiveAndDisplayString();
+        
         long startTime = System.currentTimeMillis();
         long maxTime = (long) (connection.getSocket().getSoTimeout());
         //Catch case for issues in testing, should never really happen
         if (maxTime == 0) {
-          maxTime = (long) (Constants.TURN_WAIT_MINUTES * 60 * 1000);
+          maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
         }
-
-        String turn = receiveAndDisplayString();
 
         // Start of each turn will have continue message if game still going
         // Otherwise is winner message
         StringMessage startMessage = (StringMessage) (connection.receiveObject());
-        String start = startMessage.getMessage();
+        String start = startMessage.unpacker();
         if (!start.equals("Continue")) {
           // If not continue then someone won --> print and exit
           clientOutput.displayString(start);

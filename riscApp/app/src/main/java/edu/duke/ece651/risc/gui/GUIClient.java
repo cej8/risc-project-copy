@@ -181,7 +181,7 @@ public class GUIClient extends Thread implements ClientInterface {
 
                     // Wait for response
                     StringMessage responseMessage = (StringMessage) (connection.receiveObject());
-                    String response = responseMessage.getMessage();
+                    String response = responseMessage.unpacker();
                     clientOutput.displayString(response);
                     if (response.matches("^Fail:.*$")) {
                         continue;
@@ -204,7 +204,7 @@ public class GUIClient extends Thread implements ClientInterface {
 
                     // Wait for response
                     StringMessage responseMessage = (StringMessage) (connection.receiveObject());
-                    String response = responseMessage.getMessage();
+                    String response = responseMessage.unpacker();
                     clientOutput.displayString(response);
                     if (response.matches("^Fail:.*$")) {
                         continue;
@@ -225,7 +225,7 @@ public class GUIClient extends Thread implements ClientInterface {
 
         public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
             StringMessage message = (StringMessage) (connection.receiveObject());
-            String str = message.getMessage();
+            String str = message.unpacker();
             clientOutput.displayString(str);
             return str;
         }
@@ -276,7 +276,7 @@ public class GUIClient extends Thread implements ClientInterface {
                     // Start of each turn will have continue message if game still going
                     // Otherwise is winner message
                     StringMessage startMessage = (StringMessage) (connection.receiveObject());
-                    String start = startMessage.getMessage();
+                    String start = startMessage.unpacker();
                     if (!start.equals("Continue")) {
                         // If not continue then someone won --> print and exit
                         clientOutput.displayString(start);

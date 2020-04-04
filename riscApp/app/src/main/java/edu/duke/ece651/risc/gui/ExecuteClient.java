@@ -13,7 +13,7 @@ import edu.duke.ece651.risc.client.Client;
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
 import edu.duke.ece651.risc.client.ConsoleInput;
-import edu.duke.ece651.risc.client.MakeConnection;
+import edu.duke.ece651.risc.client.ConnectionManager;
 import edu.duke.ece651.risc.client.TextDisplay;
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
@@ -40,7 +40,8 @@ public class ExecuteClient {
 
     public void createGame(){
         // TODO: change to your localhost for testing
-        String addr = "172.74.90.68";
+        //String addr = "172.74.90.68";
+        String addr = "67.159.89.108";
         String portS = "12345";
         int port;
         try {
@@ -50,7 +51,7 @@ public class ExecuteClient {
             Log.d("Port","Invalid");
             return;
         }
-        MakeConnection makeConnection = new MakeConnection(addr,port);
+        ConnectionManager makeConnection = new ConnectionManager(addr,port);
         makeConnection.start();
         this.connection = makeConnection.getConnection();
     }

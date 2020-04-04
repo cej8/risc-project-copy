@@ -12,9 +12,5 @@ public class StringMessage implements MessageInterface<String> {
     return message;
   }
 
-  public String getMessage() {
-	return message;
-  }
-
 
 }
