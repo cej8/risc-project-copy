@@ -5,11 +5,11 @@ import java.util.*;
 import java.io.*;
 
 public class OrderHelper {
-  private Client client;
+  private ClientInterface client;
   // private AttackOrderCreator sdoc;
   //  private DestOrderCreator doc;
   //  private TechBoostOrderCreator poc;
-  public OrderHelper(Client c){
+  public OrderHelper(ClientInterface c){
     this.client = c;
  
   }

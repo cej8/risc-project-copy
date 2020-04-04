@@ -7,7 +7,7 @@ import java.util.*;
 import java.io.*;
 
 public class UnitBoostOrderCreator extends OrderCreator{
-  public UnitBoostOrderCreator(Client c){
+  public UnitBoostOrderCreator(ClientInterface c){
     this.client=c;
    
     }

@@ -8,7 +8,7 @@ import java.io.*;
 
 
 public class PlacementOrderCreator extends OrderCreator {
-  public PlacementOrderCreator(Client c){
+  public PlacementOrderCreator(ClientInterface c){
     this.client = c;
   }
  

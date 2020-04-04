@@ -6,7 +6,7 @@ import java.util.*;
 import java.io.*;
 public abstract class OrderCreator {
   
-  protected Client client;
+  protected ClientInterface client;
   protected List<OrderInterface> orderList;
 
   abstract public void addToOrderList(List<OrderInterface> orderList);

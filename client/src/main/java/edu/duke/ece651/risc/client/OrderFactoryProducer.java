@@ -1,7 +1,7 @@
 package edu.duke.ece651.risc.client;
 
 public class OrderFactoryProducer {
-  public static OrderCreator getOrderCreator(String orderKey, Client c) {
+  public static OrderCreator getOrderCreator(String orderKey, ClientInterface c) {
     OrderCreator factory = null;
     switch (orderKey) {
       case "M":// move
