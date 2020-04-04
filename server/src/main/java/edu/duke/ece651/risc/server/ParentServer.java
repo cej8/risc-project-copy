@@ -145,14 +145,14 @@ public class ParentServer extends Thread{
         }
       }
       try{
-        Thread.sleep(250);
+        Thread.sleep(500);
       }
       catch(Exception e){
         e.printStackTrace();
       }
     }
     notStarted = false;
-    System.out.println("All players or time limit, proceeding");
+    System.out.println("All players or time limit, proceeding on " + gameID);
     gameStart = System.currentTimeMillis();
   }
 

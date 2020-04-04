@@ -19,6 +19,7 @@ public class Client extends Thread{
 
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
+  private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
 
   public Client() {
     clientInput = new ConsoleInput();
@@ -47,6 +48,9 @@ public class Client extends Thread{
   }
   public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES){
     this.START_WAIT_MINUTES = START_WAIT_MINUTES;
+  }
+  public void setLOGIN_WAIT_MINUTES(double LOGIN_WAIT_MINUTES){
+    this.LOGIN_WAIT_MINUTES = LOGIN_WAIT_MINUTES;
   }
 
   public void setBoard(Board board) {
@@ -100,7 +104,7 @@ public class Client extends Thread{
     try {
       connection.setSocket(socket);
       connection.getStreamsFromSocket();
-      socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
+      socket.setSoTimeout((int) (Constants.LOGIN_WAIT_MINUTES * 60 * 1000));
     } catch (Exception e) {
       e.printStackTrace(System.out);
     }
@@ -346,6 +350,8 @@ public class Client extends Thread{
       player = (HumanPlayer) (connection.receiveObject());
       clientOutput.displayString("Successfully connected, you are named: " + player.getName());
       clientOutput.displayString("Please wait for more players to connect");
+      //Set timeout to START_WAIT plus a little buffer
+      setSocketTimeout((int)(60*START_WAIT_MINUTES*1000+500));
       //If notStarted
       if(firstCall){
         if(!chooseRegions()) {return; }

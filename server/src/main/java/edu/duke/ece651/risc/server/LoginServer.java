@@ -137,6 +137,12 @@ public class LoginServer extends Thread{
     }
     return false;
   }
+
+  public void sendJoinMessages() throws IOException{
+  playerConnection.sendObject(new StringMessage("Success: Joined " + activeGameID));
+  playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(activeGameID).getFirstCall(user)));
+  playerConnection.sendObject(new HumanPlayer(user));
+  }
   
   //First prompts for rejoining game or new game
   //Then will give list of games already in or games not started (with start new)
@@ -174,10 +180,8 @@ public class LoginServer extends Thread{
           if(ps != null){
             boolean join = ps.tryJoin(user, playerConnection);
             if(join){
-              playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
               activeGameID = gameID;
-              playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(gameID).getFirstCall(user)));
-              playerConnection.sendObject(new HumanPlayer(user));
+              sendJoinMessages();
               return;
             }
           }
@@ -189,9 +193,8 @@ public class LoginServer extends Thread{
       else{
         if(gameID == -1){
           gameID = masterServer.createNewParentServer(user, playerConnection);
-          playerConnection.sendObject(new StringMessage("Success: created game " + gameID));
-          playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(gameID).getFirstCall(user)));
-          playerConnection.sendObject(new HumanPlayer(user));
+          activeGameID = gameID;
+          sendJoinMessages();
           return;
         }
         if(validGameID(gamesIn, gameID)){
@@ -199,9 +202,8 @@ public class LoginServer extends Thread{
           if(ps != null){
             boolean join = ps.tryJoin(user, playerConnection);
             if(join){
-              playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
-              activeGameID = gameID;playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(gameID).getFirstCall(user)));
-              playerConnection.sendObject(new HumanPlayer(user));
+              activeGameID = gameID;
+              sendJoinMessages();
               return;
             }
           }
