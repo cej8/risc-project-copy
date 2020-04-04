@@ -411,17 +411,14 @@ public class ClientTest {
     ConsoleInput ci = new ConsoleInput(input);
     //    Client client = new Client(ci, td);
     ConnectionManager makeConnection = new ConnectionManager();
-    //makeConnection.makeConnection(mockSocket);
-    Connection connection = makeConnection.getConnection();
-    Client client = new Client(ci,td,connection);
-
+   
        //setup Player
     InputStream mockInputStream = mock(InputStream.class); 
     OutputStream mockOutputStream = mock(OutputStream.class); 
 
     Socket mockClientSocket1 = mock(Socket.class);
     HumanPlayer player1 = new HumanPlayer("Player 1");
-    
+
     Socket mockClientSocket2 = mock(Socket.class);
     HumanPlayer player2 = new HumanPlayer("Player 2");
 
@@ -511,6 +508,7 @@ public class ClientTest {
     Board board3 = new Board(allRegions3);
 
     ArrayList<Object> objs = new ArrayList<Object>();
+    /* DEPRECATED LOGIN FLOW, NOW IN CLIENT LOGIN
     //First connect success
     objs.add(new StringMessage("Success: connected"));
     //Send "salt"
@@ -533,6 +531,10 @@ public class ClientTest {
     objs.add(new StringMessage("games...."));
     //Send success
     objs.add(new StringMessage("Success: good game"));
+    //Send firstturn
+    objs.add(new ConfirmationMessage(true));
+    */
+    
     //Send player
     objs.add(player1);
     //Enter chooseRegions
@@ -585,9 +587,13 @@ public class ClientTest {
 
     
     Socket mockSocket = MockTests.setupMockSocket(objs);
+        
+    makeConnection.makeConnection(mockSocket);
+    Connection connection = makeConnection.getConnection();
+    Client client = new Client(ci,td,connection, true);
+ 
 
     //client.makeConnection(mockSocket);
-    client.playGame();
 
   }
 }

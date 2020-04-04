@@ -48,7 +48,7 @@ public class ParentServer extends Thread{
   }
 
   public double getTURN_WAIT_MINUTES() {
-    return Constants.TURN_WAIT_MINUTES;
+    return TURN_WAIT_MINUTES;
   }
 
   public int getGameID(){
@@ -110,6 +110,10 @@ public class ParentServer extends Thread{
   public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES) {
     this.START_WAIT_MINUTES = START_WAIT_MINUTES;
   }
+
+  public boolean getFirstCall(String user){
+    return children.get(players.indexOf(user)).getFirstCall();
+  }
   
   public void waitingForPlayers() {
 
@@ -119,28 +123,36 @@ public class ParentServer extends Thread{
 
     gameStart = System.currentTimeMillis();
     
-    while (children.size() < MAX_PLAYERS && (startTime == -1 || (System.currentTimeMillis()-startTime < gameStartTime))) {
+    while (children.size() < MAX_PLAYERS && (System.currentTimeMillis()-startTime < gameStartTime)) {
       //Set timeout to .5 seconds --> try to read
       //If timeout then still there
-      for(ChildServer child : children){
-        Connection playerConnection = child.getPlayerConnection();
-        if(playerConnection != null){
-          try{
-            playerConnection.getSocket().setSoTimeout(500);
-            playerConnection.receiveObject();
-          }
-          catch(Exception e){
-            if(!(e instanceof SocketTimeoutException)){
-              playerConnection.closeAll();
-              playerConnection = null;
-              masterServer.removePlayer(child.getPlayer().getName(), gameID);
+      synchronized(children){
+        for(ChildServer child : children){
+          Connection playerConnection = child.getPlayerConnection();
+          if(playerConnection != null){
+            try{
+              playerConnection.getSocket().setSoTimeout(500);
+              playerConnection.receiveObject();
+            }
+            catch(Exception e){
+              if(!(e instanceof SocketTimeoutException)){
+                playerConnection.closeAll();
+                playerConnection = null;
+                masterServer.removePlayer(child.getPlayer().getName(), gameID);
+              }
             }
           }
         }
       }
+      try{
+        Thread.sleep(500);
+      }
+      catch(Exception e){
+        e.printStackTrace();
+      }
     }
     notStarted = false;
-    System.out.println("All players or time limit, proceeding");
+    System.out.println("All players or time limit, proceeding on " + gameID);
     gameStart = System.currentTimeMillis();
   }
 
@@ -157,8 +169,14 @@ public class ParentServer extends Thread{
   }
 
   // Helper method to add player to global player list - children
-  public synchronized void addPlayer(ChildServer c){
-    children.add(c);
+  public void addPlayer(ChildServer c){
+    synchronized(children){
+      children.add(c);
+    }
+  }
+
+  public void removePlayer(String username){
+    players.remove(username);
   }
 
   //Method to add username/connection to game by creating new childserver
@@ -169,7 +187,7 @@ public class ParentServer extends Thread{
   }
 
   //Method to try to join game
-  public synchronized boolean tryJoin(String username, Connection playerConnection){
+  public synchronized boolean tryJoin(String username, Connection playerConnection) throws IOException{
     //If game not started then trying to join as new player
     if(notStarted){
       //Confirm not already in game and still space
@@ -196,7 +214,7 @@ public class ParentServer extends Thread{
     }
   }
 
-  public boolean tryJoin(LoginServer ls){
+  public boolean tryJoin(LoginServer ls) throws IOException{
     return tryJoin(ls.getUser(), ls.getConnection());
   }
   
@@ -239,6 +257,7 @@ public class ParentServer extends Thread{
     for (ChildServer child : children) {
       if (child.getPlayerConnection() != null) {
         child.getPlayerConnection().closeAll();
+        masterServer.removePlayer(child.getPlayer().getName(), gameID);
       }
     }
   }
@@ -389,9 +408,11 @@ public class ParentServer extends Thread{
   public void growUnits() {
     for (Region r : board.getRegions()) {
       // increment number of basic units
-      r.getOwner().getResources().getFuelResource().addFuel(r.getFuelProduction());
-      r.getOwner().getResources().getTechResource().addTech(r.getTechProduction());
-      r.getUnits().getUnits().set(0, r.getUnits().getUnits().get(0) + 1);
+      if(players.contains(r.getOwner().getName())){
+        r.getOwner().getResources().getFuelResource().addFuel(r.getFuelProduction());
+        r.getOwner().getResources().getTechResource().addTech(r.getTechProduction());
+        r.getUnits().getUnits().set(0, r.getUnits().getUnits().get(0) + 1);
+      }
     }
 
   }
@@ -403,8 +424,7 @@ public class ParentServer extends Thread{
     
     //While regions not owned all by one player
     createStartingGroups();
-    boolean notFirstCall = false;
-    while (numPlayersLeft() > 1) {
+    while (turnNumber == 1 || numPlayersLeft() > 1) {
       try {
         // Prompt users
         callThreads();

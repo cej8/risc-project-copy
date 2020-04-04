@@ -95,6 +95,13 @@ public class LoginServer extends Thread{
         
         //Enforce lock to prevent double creation
         registerLock.lock();
+        //Ensure not starting group name
+        if(username.matches("^Group [A-F]$")) {
+          playerConnection.sendObject(new StringMessage("Fail: User invalid"));
+          registerLock.unlock();
+          continue;
+        }
+        
         //Check if user already exists
         if(masterServer.checkUserExists(username)){
           playerConnection.sendObject(new StringMessage("Fail: User already exists"));
@@ -129,6 +136,13 @@ public class LoginServer extends Thread{
       }
     }
     return false;
+  }
+
+  public void sendJoinMessages() throws IOException{
+    System.out.println(user + " joining " + activeGameID);
+  playerConnection.sendObject(new StringMessage("Success: Joined " + activeGameID));
+  playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(activeGameID).getFirstCall(user)));
+  playerConnection.sendObject(new HumanPlayer(user));
   }
   
   //First prompts for rejoining game or new game
@@ -167,9 +181,8 @@ public class LoginServer extends Thread{
           if(ps != null){
             boolean join = ps.tryJoin(user, playerConnection);
             if(join){
-              playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
               activeGameID = gameID;
-              playerConnection.sendObject(new HumanPlayer(user));
+              sendJoinMessages();
               return;
             }
           }
@@ -181,8 +194,8 @@ public class LoginServer extends Thread{
       else{
         if(gameID == -1){
           gameID = masterServer.createNewParentServer(user, playerConnection);
-          playerConnection.sendObject(new StringMessage("Success: created game " + gameID));
-          playerConnection.sendObject(new HumanPlayer(user));
+          activeGameID = gameID;
+          sendJoinMessages();
           return;
         }
         if(validGameID(gamesIn, gameID)){
@@ -190,9 +203,8 @@ public class LoginServer extends Thread{
           if(ps != null){
             boolean join = ps.tryJoin(user, playerConnection);
             if(join){
-              playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
               activeGameID = gameID;
-              playerConnection.sendObject(new HumanPlayer(user));
+              sendJoinMessages();
               return;
             }
           }

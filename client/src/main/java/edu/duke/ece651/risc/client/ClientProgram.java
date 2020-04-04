@@ -27,8 +27,7 @@ public class ClientProgram {
     makeConnection.connectGame();
     Connection connection = makeConnection.getConnection();
     ClientLogin login = new ClientLogin(connection, clientInput, clientOutput);
-    login.Login();
-    Client client = new Client(clientInput, clientOutput, connection);
+    Client client = new Client(clientInput, clientOutput, connection, login.Login());
     client.playGame();
   }
 }
