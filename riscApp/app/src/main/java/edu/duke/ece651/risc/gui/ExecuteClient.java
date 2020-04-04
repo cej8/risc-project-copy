@@ -12,6 +12,7 @@ import edu.duke.ece651.risc.client.Client;
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
 import edu.duke.ece651.risc.client.ConsoleInput;
+import edu.duke.ece651.risc.client.MakeConnection;
 import edu.duke.ece651.risc.client.TextDisplay;
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
@@ -36,7 +37,7 @@ public class ExecuteClient {
             Log.d("Port","Invalid");
             return;
         }
-        GUIMakeConnection makeConnection = new GUIMakeConnection(addr,port);
+        MakeConnection makeConnection = new MakeConnection(addr,port);
         makeConnection.start();
         this.connection = makeConnection.getConnection();
     }

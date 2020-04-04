@@ -24,23 +24,35 @@ public class Client extends Thread implements ClientInterface {
     clientInput = new ConsoleInput();
     clientOutput = new TextDisplay();
     board = new Board();
-    connection = new Connection();
+    // connection = new Connection();
   }
-
-  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput) {
+  // for testing
+  public Client(Connection connection){
+    clientInput = new ConsoleInput();
+    clientOutput = new TextDisplay();
+    this.connection = connection;
+  }
+  // constructor for abstracted out makeConnection class 
+  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,Connection connection) {
+        this();
+        this.clientInput = clientInput;
+        this.clientOutput = clientOutput;
+        this.connection = connection;
+        }
+  /*  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput) {
     this();
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
-  }
+    }*/
 
     // Constructor needed for Android threads
-  public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,String address, int port) {
+  /* public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,String address, int port) {
     this();
     this.clientInput = clientInput;
     this.clientOutput = clientOutput;
     this.address = address;
     this.port = port;
-  }
+  }*/
   
   public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
     this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
@@ -84,26 +96,6 @@ public class Client extends Thread implements ClientInterface {
   
   public void setSocketTimeout(int timeout) throws SocketException {
     connection.getSocket().setSoTimeout(timeout);
-  }
-
-  public void makeConnection(String address, int port) {
-    Socket socket;
-    try {
-      socket = new Socket(address, port);
-      makeConnection(socket);
-    } catch (Exception e) {
-      e.printStackTrace(System.out);
-    }
-  }
-
-  public void makeConnection(Socket socket) {
-    try {
-      connection.setSocket(socket);
-      connection.getStreamsFromSocket();
-      socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
-    } catch (Exception e) {
-      e.printStackTrace(System.out);
-    }
   }
 
   public boolean timeOut(long startTime, long maxTime){
@@ -218,96 +210,7 @@ public class Client extends Thread implements ClientInterface {
     return str;
   }
   
-  //Method to mesh with loginProcess() in loginServer
-  public void performLogin() throws IOException, ClassNotFoundException{
-    String initalSuccess = receiveAndDisplayString();
-
-
-    while(true){
-      boolean loginBoolean = queryYNAndRespond("Do you already have a login? [Y/N]");
-      //Either way request login
-      clientOutput.displayString("Username:");
-      connection.sendObject(new StringMessage(clientInput.readInput()));
-      //We will get salt back
-      String salt = ((StringMessage)(connection.receiveObject())).unpacker();
-
-      //We will request a password
-      clientOutput.displayString("Password:");
-      String password1 = clientInput.readInput();
-      //Hash password
-      String hashPassword1;
-      if(!salt.equals("")){
-        hashPassword1 = BCrypt.hashpw(password1, salt);
-      }
-      else{
-        hashPassword1 = "";
-      }
-
-      //Send hashed password back
-      connection.sendObject(new StringMessage(hashPassword1));
-
-      //If true then has login (nothing extra)
-      //If false then registering (need second password entry)
-      if(!loginBoolean){
-        //Request repeat of password
-        clientOutput.displayString("Password (again):");
-        String password2 = clientInput.readInput();
-        //Hash password
-        String hashPassword2 = BCrypt.hashpw(password1, salt);
-        //Send copy back
-        connection.sendObject(new StringMessage(hashPassword2));
-      }
-
-      //Get back response
-      String response = receiveAndDisplayString();
-      //Repeat if fail, continue if success
-      if (response.matches("^Fail:.*$")) {
-        continue;
-      }
-      if (response.matches("^Success:.*$")) {
-        break;
-      }
-    }
-
-    //At this point user is logged in (either old or new)
-    
-  }
-
-  //Method to mesh with selectGame() in loginServer
-  public void performSelectGame() throws IOException, ClassNotFoundException{
-    while(true){
-      boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
-    
-      //Server then sends back list of games
-      String list = receiveAndDisplayString();
-      Integer gameID;
-      while(true){
-        clientOutput.displayString("Pick a game via ID");
-        try{
-          gameID = Integer.parseInt(clientInput.readInput());
-        }
-        catch (NumberFormatException ne) {
-          // ne.printStackTrace();
-          clientOutput.displayString("That was not an integer.");
-          continue;
-        }
-        break;
-      }
-      //Send ID to server
-      connection.sendObject(new IntegerMessage(gameID));
-
-      //Get back response
-      String response = receiveAndDisplayString();
-      //Repeat if fail, continue if success
-      if (response.matches("^Fail:.*$")) {
-        continue;
-      }
-      if (response.matches("^Success:.*$")) {
-        break;
-      }
-    }
-    
-  }
+ 
 
   //Helper method to ask YN and send back ConfirmationMessage
   public boolean queryYNAndRespond(String query) throws IOException{
@@ -334,12 +237,12 @@ public class Client extends Thread implements ClientInterface {
   
  
   public void playGame() {
-    if(connection.getSocket() == null){
+    /* if(connection.getSocket() == null){
       makeConnection(address,port);
-    }
+    }*/
     try {
-      performLogin();
-      performSelectGame();
+      // performLogin();
+      //performSelectGame();
       // Make initial connection, waits for server to send back player's player object
       // Get initial player object (for name)
       player = (HumanPlayer) (connection.receiveObject());
