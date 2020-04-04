@@ -95,6 +95,13 @@ public class LoginServer extends Thread{
         
         //Enforce lock to prevent double creation
         registerLock.lock();
+        //Ensure not starting group name
+        if(username.matches("^Group [A-F]$")) {
+          playerConnection.sendObject(new StringMessage("Fail: User invalid"));
+          registerLock.unlock();
+          continue;
+        }
+        
         //Check if user already exists
         if(masterServer.checkUserExists(username)){
           playerConnection.sendObject(new StringMessage("Fail: User already exists"));
@@ -169,6 +176,7 @@ public class LoginServer extends Thread{
             if(join){
               playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
               activeGameID = gameID;
+              playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(gameID).getFirstCall(user)));
               playerConnection.sendObject(new HumanPlayer(user));
               return;
             }
@@ -182,6 +190,7 @@ public class LoginServer extends Thread{
         if(gameID == -1){
           gameID = masterServer.createNewParentServer(user, playerConnection);
           playerConnection.sendObject(new StringMessage("Success: created game " + gameID));
+          playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(gameID).getFirstCall(user)));
           playerConnection.sendObject(new HumanPlayer(user));
           return;
         }
@@ -191,7 +200,7 @@ public class LoginServer extends Thread{
             boolean join = ps.tryJoin(user, playerConnection);
             if(join){
               playerConnection.sendObject(new StringMessage("Success: Joined " + gameID));
-              activeGameID = gameID;
+              activeGameID = gameID;playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(gameID).getFirstCall(user)));
               playerConnection.sendObject(new HumanPlayer(user));
               return;
             }

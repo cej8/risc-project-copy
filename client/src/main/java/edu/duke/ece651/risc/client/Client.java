@@ -184,9 +184,8 @@ public class Client extends Thread{
 
         // Display and move into placements
         clientOutput.displayBoard(board);
-        OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", this);
-        List<OrderInterface> placementOrders = new ArrayList<OrderInterface>();
-        placement.addToOrderList(placementOrders);
+        DestOrderCreator doc = new DestOrderCreator(this);
+        List<OrderInterface> placementOrders = doc.createPlacements();
         if(timeOut(startTime, maxTime)) { return false; }
         connection.sendObject(placementOrders);
 
@@ -210,6 +209,41 @@ public class Client extends Thread{
     return true;
   }
 
+  // public List<PlacementOrder> placementOrderHelper(List<PlacementOrder> placementList, String regionName,
+  //     Region placement) {
+  //   while (true) {
+  //     try {
+  //       clientOutput.displayString("How many units would you like to place in " + regionName + "? (please enter a number)");
+  //       Unit units = new Unit(Integer.parseInt(clientInput.readInput()));
+  //       PlacementOrder placementOrder = new PlacementOrder(placement, units);
+  //       //  System.out.println(units.getTotalUnits());
+  //       placementList.add(placementOrder);
+  //       break;
+  //     } catch (NumberFormatException ne) {
+  //       // ne.printStackTrace();
+  //       clientOutput.displayString("That was not an integer, please try again.");
+  //     }
+  //   }
+  //   return placementList;
+  // }
+
+  // public List<PlacementOrder> createPlacements() {
+  //   // Prompt user for placements, create list of placementOrders, send to server
+  //   int startUnits = Constants.UNIT_START_MULTIPLIER * board.getNumRegionsOwned(player);
+  //   clientOutput.displayString("You are " + player.getName() + ", prepare to place " + startUnits + " units.");
+  //   List<PlacementOrder> placementList = new ArrayList<PlacementOrder>();
+  //   List<Region> regionList = board.getRegions();
+  //   Region placement;
+  //   String regionName;
+  //   for (int i = 0; i < regionList.size(); i++) {
+  //     if (player.getName().equals(regionList.get(i).getOwner().getName())) {
+  //       placement = regionList.get(i);
+  //       regionName = regionList.get(i).getName();
+  //       placementList = placementOrderHelper(placementList, regionName, placement);
+  //     }
+  //   }
+  //   return placementList;
+  // }
 
   public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
     StringMessage message = (StringMessage) (connection.receiveObject());
@@ -274,7 +308,7 @@ public class Client extends Thread{
   }
 
   //Method to mesh with selectGame() in loginServer
-  public void performSelectGame() throws IOException, ClassNotFoundException{
+  public boolean performSelectGame() throws IOException, ClassNotFoundException{
     while(true){
       boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
     
@@ -306,6 +340,9 @@ public class Client extends Thread{
         break;
       }
     }
+    
+    // Make initial connection, waits for server to send back player's firstCall state
+    return ((ConfirmationMessage)connection.receiveObject()).unpacker();
     
   }
 
@@ -339,14 +376,15 @@ public class Client extends Thread{
     }
     try {
       performLogin();
-      performSelectGame();
-      // Make initial connection, waits for server to send back player's player object
-      // Get initial player object (for name)
+      boolean firstCall = performSelectGame();
+      // Then sends player object (for name)
       player = (HumanPlayer) (connection.receiveObject());
       clientOutput.displayString("Successfully connected, you are named: " + player.getName());
       clientOutput.displayString("Please wait for more players to connect");
-      // After which choose regions
-      if(!chooseRegions()) {return; }
+      //If notStarted
+      if(firstCall){
+        if(!chooseRegions()) {return; }
+      }
       while (true) {
         long startTime = System.currentTimeMillis();
         long maxTime = (long) (connection.getSocket().getSoTimeout());
@@ -396,8 +434,8 @@ public class Client extends Thread{
           // Client generates orders --> sends
           if (alive) {
             //new OrderCreator
-            OrderHelper orderhelper = new OrderHelper(this);
-            List<OrderInterface> orders = orderhelper.createOrders();
+            SDOrderCreator createOrders = new SDOrderCreator(this);
+            List<OrderInterface> orders = createOrders.createOrders();
             //If too long --> kill player
             if(timeOut(startTime, maxTime)){ return;}
             connection.sendObject(orders);
