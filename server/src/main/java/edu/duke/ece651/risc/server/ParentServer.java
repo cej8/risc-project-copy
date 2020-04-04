@@ -15,8 +15,8 @@ public class ParentServer extends Thread{
   private Map<String, List<OrderInterface>> orderMap;
   private ExecutorService threads = Executors.newFixedThreadPool(Constants.MAX_PLAYERS);
   private int MAX_PLAYERS = Constants.MAX_PLAYERS;
-  private double TURN_WAIT_MINUTES = .5;//Constants.TURN_WAIT_MINUTES;
-  private double START_WAIT_MINUTES = .5;//Constants.START_WAIT_MINUTES;
+  private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
+  private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
   
   private boolean notStarted = true;
   private int gameID;
