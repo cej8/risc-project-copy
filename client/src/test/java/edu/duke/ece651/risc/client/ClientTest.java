@@ -18,7 +18,7 @@ public class ClientTest {
     ArrayList<Object> inputs = new ArrayList<Object>();
     inputs.add(board);
     Socket mockSocket = MockTests.setupMockSocket(inputs);
-    MakeConnection makeConnection = new MakeConnection();
+    ConnectionManager makeConnection = new ConnectionManager();
     Connection connection = makeConnection.getConnection();
     Client client = new Client(connection);
   }
@@ -31,7 +31,7 @@ public class ClientTest {
     Socket mockSocket = MockTests.setupMockSocket(inputs);
     //Client client = new Client();
     //client.makeConnection(mockSocket);
-    MakeConnection makeConnection = new MakeConnection();
+    ConnectionManager makeConnection = new ConnectionManager();
     makeConnection.makeConnection(mockSocket);
     Connection connection = makeConnection.getConnection();
     Client client = new Client(connection);
@@ -70,7 +70,7 @@ public class ClientTest {
     Socket mockSocket = MockTests.setupMockSocket(inputs);
     // Client client = new Client();
     //client.makeConnection(mockSocket);
-    MakeConnection makeConnection = new MakeConnection();
+    ConnectionManager makeConnection = new ConnectionManager();
     makeConnection.makeConnection(mockSocket);
     Connection connection = makeConnection.getConnection();
     Client client = new Client(connection);
@@ -131,7 +131,7 @@ public class ClientTest {
     Socket mockSocket = MockTests.setupMockSocket(objs);
     //    client.makeConnection("localhost", 12345);
     //client.makeConnection(mockSocket);
-    MakeConnection makeConnection = new MakeConnection();
+    ConnectionManager makeConnection = new ConnectionManager();
     makeConnection.makeConnection(mockSocket);
     Connection connection = makeConnection.getConnection();
     Client client = new Client(connection);
@@ -200,7 +200,7 @@ public class ClientTest {
   public void test_assorted(){
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput();
-    MakeConnection connect = new MakeConnection();
+    ConnectionManager connect = new ConnectionManager();
     Connection c = connect.getConnection();
     Client inputClient = new Client(ci, td, c);
     assertEquals(td, inputClient.getClientOutput());
@@ -212,7 +212,7 @@ public class ClientTest {
     String addr = "127.0.0.1";
     int port = 12346;
     //Client localConnection = new Client();
-    MakeConnection localConnection = new MakeConnection();
+    ConnectionManager localConnection = new ConnectionManager();
     //makeConnection.makeConnection(mockSocket);
     Connection connection = localConnection.getConnection();
     Client client = new Client(connection);
@@ -410,7 +410,7 @@ public class ClientTest {
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput(input);
     //    Client client = new Client(ci, td);
-    MakeConnection makeConnection = new MakeConnection();
+    ConnectionManager makeConnection = new ConnectionManager();
     //makeConnection.makeConnection(mockSocket);
     Connection connection = makeConnection.getConnection();
     Client client = new Client(ci,td,connection);
