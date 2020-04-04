@@ -132,19 +132,19 @@ public class Client extends Thread implements ClientInterface {
     try {
       // Set timeout to constant, wait this long for game start
       // This will block on FIRST board = ...
-      connection.getSocket().setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
+      connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
       while (true) {
         // Game starts with board message
         board = (Board) (connection.receiveObject());
         // Return timeout to smaller value
-        connection.getSocket().setSoTimeout((int) (Constants.TURN_WAIT_MINUTES * 60 * 1000));
+        connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
 
         //Set max/start first time board received (start of turn)
         if(maxTime == -1){
           maxTime = (long) (connection.getSocket().getSoTimeout());
           //Catch case for issues in testing, should never really happen
           if (maxTime == 0) {
-            maxTime = (long) (Constants.TURN_WAIT_MINUTES * 60 * 1000);
+            maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
           }
         }
         if(startTime == -1){
@@ -234,9 +234,6 @@ public class Client extends Thread implements ClientInterface {
   
  
   public void playGame() {
-    /* if(connection.getSocket() == null){
-      makeConnection(address,port);
-    }*/
     try {
       player = (HumanPlayer) (connection.receiveObject());
       clientOutput.displayString("Successfully connected, you are named: " + player.getName());
@@ -255,7 +252,7 @@ public class Client extends Thread implements ClientInterface {
         long maxTime = (long) (connection.getSocket().getSoTimeout());
         //Catch case for issues in testing, should never really happen
         if (maxTime == 0) {
-          maxTime = (long) (Constants.TURN_WAIT_MINUTES * 60 * 1000);
+          maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
         }
 
         // Start of each turn will have continue message if game still going
