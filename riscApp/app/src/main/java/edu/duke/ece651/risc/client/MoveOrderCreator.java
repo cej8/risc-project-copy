@@ -1,4 +1,5 @@
 package edu.duke.ece651.risc.client;
+import edu.duke.ece651.risc.gui.ClientInterface;
 import edu.duke.ece651.risc.shared.*;
 
 import java.net.*;
@@ -6,7 +7,7 @@ import java.util.*;
 import java.io.*;
 
 public class MoveOrderCreator extends OrderCreator {
- public MoveOrderCreator(Client c){
+ public MoveOrderCreator(ClientInterface c){
     this.client =c;
   }
   public void moveHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord ) {

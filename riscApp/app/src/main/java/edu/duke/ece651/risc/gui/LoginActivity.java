@@ -26,7 +26,9 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login);
         registerButton = findViewById(R.id.register);
         welcomeText = findViewById(R.id.welcomeText);
-        welcomeText.setText("Please login or register");
+        /*ExecuteClient executeClient = new ExecuteClient();
+        outputText = findViewById(R.id.popUpText);
+        executeClient.createGame(outputText,this);*/
     }
     // on button click open DisplayGameActivity.java
     public void userLogin(View view) {

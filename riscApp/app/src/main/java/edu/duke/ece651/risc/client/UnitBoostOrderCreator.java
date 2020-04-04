@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.client;
 
+import edu.duke.ece651.risc.gui.ClientInterface;
 import edu.duke.ece651.risc.shared.*;
 
 import java.net.*;
@@ -7,7 +8,7 @@ import java.util.*;
 import java.io.*;
 
 public class UnitBoostOrderCreator extends OrderCreator{
-  public UnitBoostOrderCreator(Client c){
+  public UnitBoostOrderCreator(ClientInterface c){
     this.client=c;
    
     }

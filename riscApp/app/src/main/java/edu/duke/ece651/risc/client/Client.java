@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.client;
 
 import android.util.Log;
 
+import edu.duke.ece651.risc.gui.ClientInterface;
 import edu.duke.ece651.risc.shared.*;
 
 import java.net.*;
@@ -9,7 +10,7 @@ import java.util.*;
 import java.io.*;
 import org.mindrot.jbcrypt.*;
 
-public class Client extends Thread{
+public class Client extends Thread implements ClientInterface {
   private Connection connection;
   private Board board;
   private boolean isPlaying = true;
@@ -229,8 +230,6 @@ public class Client extends Thread{
   //Method to mesh with loginProcess() in loginServer
   public void performLogin() throws IOException, ClassNotFoundException{
     String initalSuccess = receiveAndDisplayString();
-
-
     while(true){
       boolean loginBoolean = queryYNAndRespond("Do you already have a login? [Y/N]");
       //Either way request login

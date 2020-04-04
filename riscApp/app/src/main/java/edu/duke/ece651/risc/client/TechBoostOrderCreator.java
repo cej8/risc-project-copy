@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.client;
 
+import edu.duke.ece651.risc.gui.ClientInterface;
 import edu.duke.ece651.risc.shared.*;
 
 import java.net.*;
@@ -10,7 +11,7 @@ import java.io.*;
 public class TechBoostOrderCreator extends OrderCreator{
   //  private Client client;
   PlayerOrderFactory factory;
-  public TechBoostOrderCreator(Client c){
+  public TechBoostOrderCreator(ClientInterface c){
     this.client=c;
     factory = new PlayerOrderFactory();
 

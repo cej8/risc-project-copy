@@ -1,4 +1,5 @@
 package edu.duke.ece651.risc.client;
+import edu.duke.ece651.risc.gui.ClientInterface;
 import edu.duke.ece651.risc.shared.*;
 
 import java.net.*;
@@ -6,7 +7,7 @@ import java.util.*;
 import java.io.*;
 public abstract class OrderCreator {
   
-  protected Client client;
+  protected ClientInterface client;
   protected List<OrderInterface> orderList;
 
   abstract public void addToOrderList(List<OrderInterface> orderList);
