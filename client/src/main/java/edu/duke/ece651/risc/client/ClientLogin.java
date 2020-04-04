@@ -30,7 +30,7 @@ public class ClientLogin {
   }
   public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
     StringMessage message = (StringMessage) (connection.receiveObject());
-    String str = message.getMessage();
+    String str = message.unpacker();
     clientOutput.displayString(str);
     return str;
   }
