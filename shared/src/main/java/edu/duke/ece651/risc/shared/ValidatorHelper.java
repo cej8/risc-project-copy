@@ -17,7 +17,7 @@ public class ValidatorHelper {
     this.moveValidator = new MoveValidator(player, tempBoard);
     this.attackValidator = new AttackValidator(player, tempBoard);
     this.techBoostValidator= new TechBoostValidator(player, tempBoard);
-    //   this.unitBoostValidator= new UnitBoostValidar
+    this.unitBoostValidator= new UnitBoostValidator(player, tempBoard);
   }
 
   public ValidatorHelper(AbstractPlayer player, Unit u, Board currentBoard) {
@@ -46,7 +46,8 @@ public class ValidatorHelper {
       else if (order.getPriority() == Constants.UPGRADE_TECH_PRIORITY) {
         //  System.out.println("Found attack");
         techBoostList.add((TechBoost) order);
-      } else if (order.getPriority() == Constants.UPGRADE_UNITS_PRIORITY){
+      }
+      else if (order.getPriority() == Constants.UPGRADE_UNITS_PRIORITY){
         unitBoostList.add((UnitBoost) order);
         //  System.out.println("Found move");
       }
@@ -62,7 +63,7 @@ public class ValidatorHelper {
 
     boolean validTechBoost = techBoostValidator.validateOrders(techBoostList);
 
-    return validMoves && validAttacks && validTechBoost;// && validUnitBoost;
+    return validMoves && validAttacks && validTechBoost && validUnitBoost;
 
   }
   // checks all placement are valid per player
