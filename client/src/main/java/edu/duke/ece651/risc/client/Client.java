@@ -28,14 +28,16 @@ public class Client extends Thread implements ClientInterface {
   }
   // for testing
   public Client(Connection connection){
-    clientInput = new ConsoleInput();
-    clientOutput = new TextDisplay();
+    //clientInput = new ConsoleInput();
+    //clientOutput = new TextDisplay();
+    this();
     this.connection = connection;
   }
   // constructor for abstracted out makeConnection class 
   public Client(ClientInputInterface clientInput, ClientOutputInterface clientOutput,Connection connection) {
-        this();
-        this.clientInput = clientInput;
+    // this();
+    board = new Board();
+    this.clientInput = clientInput;
         this.clientOutput = clientOutput;
         this.connection = connection;
         }
