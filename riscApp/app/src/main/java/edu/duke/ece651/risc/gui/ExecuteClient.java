@@ -6,23 +6,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import edu.duke.ece651.risc.client.Client;
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
-import edu.duke.ece651.risc.client.ConsoleInput;
 import edu.duke.ece651.risc.client.ConnectionManager;
-import edu.duke.ece651.risc.client.TextDisplay;
-import edu.duke.ece651.risc.shared.AbstractPlayer;
-import edu.duke.ece651.risc.shared.Board;
-import edu.duke.ece651.risc.shared.BoardGenerator;
-import edu.duke.ece651.risc.shared.Connection;
-import edu.duke.ece651.risc.shared.HumanPlayer;
-import edu.duke.ece651.risc.shared.Path;
-import edu.duke.ece651.risc.shared.Region;
-import edu.duke.ece651.risc.shared.Unit;
+import edu.duke.ece651.risc.shared.*;
+
 
 public class ExecuteClient {
     Connection connection;
@@ -30,11 +19,12 @@ public class ExecuteClient {
     ClientOutputInterface clientOutput;
     Boolean loginResult;
     Activity act;
+    String helpText;
 
     public ExecuteClient(Activity activity) {
         clientInput = new GUIEditTextInput(activity);
         clientOutput = new GUITextDisplay();
-        loginResult = null;
+        //loginResult = null;
         this.act = activity;
     }
 
@@ -56,11 +46,25 @@ public class ExecuteClient {
         makeConnection.start();
         this.connection = makeConnection.getConnection();
     }
-    public void loginGame(String username, String password) throws IOException, ClassNotFoundException {
+    public void loginGame(String username, String password) throws IOException, ClassNotFoundException, InterruptedException {
         GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
         clientLogin.start();
+        //clientLogin.performLogin();
+        //wait(2000);
           this.loginResult = clientLogin.getLoginResult();
-          //Log.d("Login Result", loginResult.toString());
+//          while(loginResult == null){
+//              wait(2000);
+//              this.loginResult = clientLogin.getLoginResult();
+//          }
+          Log.d("Login Result", loginResult.toString());
+          if (loginResult == false){
+            // set help text
+            //helpText.setText("Username or password not found. Please register if needed.");
+              helpText = "Username or password not found. Please register if needed.";
+        } else {
+            // start new intent aka display available games
+            //Intent loginIntent = new Intent(this, );
+        }
     }
     public void startGame(TextView textView, Activity act, EditText editText) {
         //ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
@@ -72,9 +76,13 @@ public class ExecuteClient {
         //client.start();
     }
     public Boolean getLoginResult() {
-        return loginResult;
+        return this.loginResult;
     }
-    private void printPath(Path shortestPath){
+    public String getHelpText(){
+        return this.helpText;
+    }
+
+   /* private void printPath(Path shortestPath){
         if(shortestPath==null){
             System.out.println("No path exists");
             return;
@@ -85,7 +93,7 @@ public class ExecuteClient {
 
     }
 
-    /*AbstractPlayer p1 = new HumanPlayer("player 1");
+    AbstractPlayer p1 = new HumanPlayer("player 1");
     AbstractPlayer p2 = new HumanPlayer("player 2");
     List<Region> regions = getRegionList(p1, p2);
     Path sp14 = regions.get(0).findShortestPath(regions.get(2));//valid not adjacent

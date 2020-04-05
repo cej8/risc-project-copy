@@ -1,8 +1,14 @@
 package edu.duke.ece651.risc.gui;
 
+import android.app.ActionBar;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,7 +46,6 @@ public class DisplayMapActivity extends AppCompatActivity {
     // TODO: change from hardcoded to based off of regionList
     public void planetOne(View view){
           Region region = regions.get(0);
-
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region.getName(),region.getUnits().getTotalUnits());
         //DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment("Hoth",5);
         dialogFragment.show(getSupportFragmentManager(), "P1");
