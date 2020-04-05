@@ -11,6 +11,8 @@ stages:
    - coverage
    - deploy
    - build_stable
+   - test_stable
+   - coverage_stable
    - deploy_stable
   # - test-deployment
    
@@ -51,13 +53,44 @@ deploy:
 build_stable:
   tags:
      - host-server
-  stage: build
+  stage: build_stable
   script: docker build --build-arg LOCAL_USER_ID=`id -u`  --tag citest .
+  only:
+    refs:
+     - master
+
+
+test_stable:
+  tags:
+     - host-server
+  stage: test_stable
+  script: scripts/run-tests-in-docker.sh
+  artifacts:
+    paths:
+      - coverage
+  only:
+    refs:
+      - master
+      
+pages_stable:
+ stage: coverage_stable
+ tags:
+     - host-server
+ dependencies:
+   - test_stable
+ script:
+   - mv coverage public/
+ artifacts:
+   paths:
+     - public
+ only:
+   refs:
+     - master
 
 deploy_stable:
  tags:
    - host-server
- stage: deploy
+ stage: deploy_stable
  script: ./scripts/redeploy.sh
  only:
    refs:
