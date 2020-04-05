@@ -10,19 +10,18 @@ import android.widget.ScrollView;
 
 import java.io.Serializable;
 
+import edu.duke.ece651.risc.shared.Connection;
+
 public class DisplayGamesActivity extends AppCompatActivity {
     Button joinGameButton;
     Button newGameButton;
-    ScrollView scrollView;
-    Serializable connection;
+    Connection connection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_games);
         joinGameButton = findViewById(R.id.joinGame);
         newGameButton = findViewById(R.id.newGame);
-        Intent intent = getIntent();
-        connection = intent.getSerializableExtra("CONNECTION");
     }
     // TODO: update onClick listeners to do tasks - after joining whatever game need to display map!
     public void joinGame(View view){

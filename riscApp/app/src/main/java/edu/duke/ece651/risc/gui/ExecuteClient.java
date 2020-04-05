@@ -44,6 +44,8 @@ public class ExecuteClient {
         ConnectionManager makeConnection = new ConnectionManager(addr,port);
         makeConnection.start();
         this.connection = makeConnection.getConnection();
+        ParentActivity parentActivity = new ParentActivity();
+        parentActivity.setConnection(connection);
     }
     public Connection getConnection(){
         return this.connection;

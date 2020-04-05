@@ -36,8 +36,11 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login);
         registerButton = findViewById(R.id.register);
         welcomeText = findViewById(R.id.welcomeText);
-        //executeClient = new ExecuteClient(this);
+        connection = ParentActivity.getConnection();
+        executeClient = new ExecuteClient(this);
         //executeClient.createGame();
+        connection = ParentActivity.getConnection();
+        executeClient.setConnection(connection);
     }
 
     // TODO: on button press we send object to
