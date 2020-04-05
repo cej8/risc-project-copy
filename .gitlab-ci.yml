@@ -10,15 +10,16 @@ stages:
    - test
    - coverage
    - deploy
+   - build_stable
    - deploy_stable
   # - test-deployment
    
 build:
   tags:
      - ece651
-     - host-server
   stage: build
   script: docker build --build-arg LOCAL_USER_ID=`id -u`  --tag citest .
+
 
 test:
   tags:
@@ -47,6 +48,11 @@ deploy:
  stage: deploy
  script: ./scripts/redeploy.sh
 
+build_stable:
+  tags:
+     - host-server
+  stage: build
+  script: docker build --build-arg LOCAL_USER_ID=`id -u`  --tag citest .
 
 deploy_stable:
  tags:
