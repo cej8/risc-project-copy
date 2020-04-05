@@ -1,6 +1,7 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.InputStream;
@@ -12,8 +13,9 @@ public class GUIButtonInput implements ClientInputInterface {
   
   Button button;
   Activity activity;
+
   public GUIButtonInput(Button b, Activity a){
-    this.button= findViewByIy(R.id.b);
+    this.button= b;//.findViewById(R.id.b);
     this.activity= a;
        
     }
@@ -22,12 +24,14 @@ public class GUIButtonInput implements ClientInputInterface {
     @Override
     public String readInput() {
         // runnable?
-        return editText.getText().toString();
+      // TODO: need this editText return statement
+       // return editText.getText().toString();
+      return "";
     }
 
     @Override
     public void close(){
-        input.close();
+        //input.close();
     }
 
 }

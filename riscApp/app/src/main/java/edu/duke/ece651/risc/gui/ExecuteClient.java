@@ -32,7 +32,7 @@ public class ExecuteClient {
     Activity act;
 
     public ExecuteClient(Activity activity) {
-        clientInput = new GUIConsoleInput();
+        clientInput = new GUIEditTextInput(activity);
         clientOutput = new GUITextDisplay();
         loginResult = null;
         this.act = activity;

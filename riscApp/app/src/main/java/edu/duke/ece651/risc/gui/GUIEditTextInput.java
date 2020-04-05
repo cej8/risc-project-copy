@@ -12,13 +12,16 @@ public class GUIEditTextInput implements ClientInputInterface {
   
     EditText editText;
  Activity activity;
- 
-  
 
   public GUIEditTextInput(EditText editText, Activity a){
         this.editText = editText;
         this.activity=a;
-       
+    }
+    public GUIEditTextInput(Activity a) {
+      this.activity = a;
+    }
+    public void setEditText(EditText edit){
+      this.editText = edit;
     }
    
 
@@ -30,7 +33,7 @@ public class GUIEditTextInput implements ClientInputInterface {
 
     @Override
     public void close(){
-        input.close();
+        //input.close();
     }
 
 }
