@@ -48,13 +48,14 @@ public class LoginActivity extends AppCompatActivity {
         String password = editPassword.getText().toString();
         executeClient.loginGame(username, password);
         Boolean loginResult = executeClient.getLoginResult();
-        if (loginResult == false){
-            // set help text
-            helpText.setText("Username or password not found. Please register if needed.");
-        } else {
-            // start new intent aka display available games
-            //Intent loginIntent = new Intent(this, );
-        }
+//        if (loginResult == false){
+//            // set help text
+//            helpText.setText("Username or password not found. Please register if needed.");
+//        } else {
+//            // start new intent aka display available games
+//            //Intent loginIntent = new Intent(this, );
+//        }
+        helpText.setText("Username or password not found. Please register if needed");
 
     }
     public void userRegister(View view) {

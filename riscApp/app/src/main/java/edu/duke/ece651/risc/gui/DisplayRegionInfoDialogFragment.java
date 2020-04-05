@@ -37,7 +37,7 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
             // Create the AlertDialog object and return it
             return builder.create();
         }
-        public Dialog DialogTwo(Bundle savedInstanceState){
+        public Dialog DialogTwo(final Bundle savedInstanceState){
             AlertDialog.Builder unitBuilder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = requireActivity().getLayoutInflater();
             unitBuilder.setView(inflater.inflate(R.layout.planet_dialog, null))
@@ -50,6 +50,7 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // User cancelled the dialog
+                            //onCreateDialog(savedInstanceState).show();
                         }
                     });
             return unitBuilder.create();

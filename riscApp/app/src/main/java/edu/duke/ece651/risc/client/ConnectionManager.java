@@ -40,6 +40,7 @@ public class ConnectionManager extends Thread {
             connection.getStreamsFromSocket();
             socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
             Log.d("Connection","Should be connected");
+            Thread.dumpStack();
             } catch (Exception e) {
             e.printStackTrace(System.out);
         }

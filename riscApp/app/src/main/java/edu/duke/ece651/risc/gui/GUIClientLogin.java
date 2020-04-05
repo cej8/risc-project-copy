@@ -94,7 +94,8 @@ public class GUIClientLogin extends Thread{
             connection.sendObject(username);
             //We will get salt back
             String salt = ((StringMessage)(connection.receiveObject())).unpacker();
-            Log.d("Salt",salt);
+        //String salt = "abcdefghijklmnop";
+        Log.d("Salt",salt);
             //We will request a password
             //clientOutput.displayString("Password:");
             //String password1 = clientInput.readInput();

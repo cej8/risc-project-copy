@@ -40,8 +40,9 @@ public class ExecuteClient {
 
     public void createGame(){
         // TODO: change to your localhost for testing
-        //String addr = "172.74.90.68";
-        String addr = "67.159.89.108";
+        //String addr = "172.74.90.68"; localhost
+        //String addr = "67.159.89.108"; old server
+        String addr = "152.3.64.158";
         String portS = "12345";
         int port;
         try {
