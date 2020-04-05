@@ -49,8 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         String username = editUsername.getText().toString();
         String password = editPassword.getText().toString();
         executeClient.loginGame(username, password, helpText);
-        helpText.setText(executeClient.getHelpText());
-        Log.d("LoginActivity",helpText.toString());
     }
     public void userRegister(View view) {
         // TODO: registration
