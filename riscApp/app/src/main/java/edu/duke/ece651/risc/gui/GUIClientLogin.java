@@ -20,9 +20,12 @@ public class GUIClientLogin extends Thread{
     private ClientOutputInterface clientOutput;
     private String username;
     private String password;
+    private String confirmPassword;
     Activity activity;
     Boolean loginResult;
+    Boolean registeredUser;
 
+    // Login constructor
     public GUIClientLogin(Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act){
         this.connection = connect;
         this.clientInput = input;
@@ -31,6 +34,19 @@ public class GUIClientLogin extends Thread{
         this.username = username;
         this.password = password;
         this.loginResult = null;
+        this.registeredUser = true;
+    }
+    // Registration Constructor
+    public GUIClientLogin(Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act, String password2){
+        this.connection = connect;
+        this.clientInput = input;
+        this.clientOutput = output;
+        this.activity = act;
+        this.username = username;
+        this.password = password;
+        this.loginResult = null;
+        this.registeredUser = false;
+        confirmPassword = password2;
     }
     public void Login(){// throws IOException, ClassNotFoundException{
         try {
@@ -45,40 +61,9 @@ public class GUIClientLogin extends Thread{
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
         String str = message.unpacker();
-        //clientOutput.displayString(str);
+        clientOutput.displayString(str);
         return str;
     }
-    public String hashPassword(String password1) throws ClassNotFoundException{
-        try {
-            String salt = ((StringMessage) (connection.receiveObject())).unpacker();
-            Log.d("Salt",salt);
-            //Hash password
-            String hashPassword1;
-            if (!salt.equals("")) {
-                hashPassword1 = BCrypt.hashpw(password1, salt);
-            } else {
-                hashPassword1 = "";
-            }
-            return hashPassword1;
-        } catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-  /*  public void performLogin() throws IOException, ClassNotFoundException{
-        String initalSuccess = receiveAndDisplayString();
-        connection.sendObject(new ConfirmationMessage(true));
-        connection.sendObject(username);
-        String hasspass = hashPassword(password);
-        connection.sendObject(hasspass);
-        String response = receiveAndDisplayString();
-        if (response.matches("^Fail:.*$")) {
-             loginResult = false;
-        }
-        if (response.matches("^Success:.*$")) {
-            loginResult = true;
-        }
-    }*/
     public Boolean getLoginResult(){
         return this.loginResult;
     }
@@ -86,10 +71,9 @@ public class GUIClientLogin extends Thread{
     public void performLogin() throws IOException, ClassNotFoundException{
         String initalSuccess = receiveAndDisplayString();
        // while(true){
-            boolean loginBoolean = true;//queryYNAndRespond("Do you already have a login? [Y/N]");
+            //boolean loginBoolean = true;//queryYNAndRespond("Do you already have a login? [Y/N]");
             //Either way request login
-            //clientOutput.displayString("Username:");
-            connection.sendObject(new ConfirmationMessage(true));
+            connection.sendObject(new ConfirmationMessage(registeredUser));
            // connection.sendObject(new StringMessage(clientInput.readInput()));
             connection.sendObject(new StringMessage(username));
             //We will get salt back
@@ -114,15 +98,15 @@ public class GUIClientLogin extends Thread{
 
             //If true then has login (nothing extra)
             //If false then registering (need second password entry)
-            if(!loginBoolean){
-                //Request repeat of password
-                clientOutput.displayString("Password (again):");
-                String password2 = clientInput.readInput();
-                //Hash password
-                String hashPassword2 = BCrypt.hashpw(password1, salt);
-                //Send copy back
-                connection.sendObject(new StringMessage(hashPassword2));
-            }
+            if(!registeredUser){
+            //Request repeat of password
+            clientOutput.displayString("Password (again):");
+            String password2 = confirmPassword;//clientInput.readInput();
+            //Hash password
+            String hashPassword2 = BCrypt.hashpw(password1, salt);
+            //Send copy back
+            connection.sendObject(new StringMessage(hashPassword2));
+        }
 
             //Get back response - checks login
             String response = receiveAndDisplayString();
@@ -178,7 +162,6 @@ public class GUIClientLogin extends Thread{
                 break;
             }
         }
-
     }
 
     //Helper method to ask YN and send back ConfirmationMessage

@@ -1,12 +1,12 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.io.IOException;
-
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
 import edu.duke.ece651.risc.client.ConnectionManager;
@@ -24,7 +24,6 @@ public class ExecuteClient {
     public ExecuteClient(Activity activity) {
         clientInput = new GUIEditTextInput(activity);
         clientOutput = new GUITextDisplay();
-        //loginResult = null;
         this.act = activity;
     }
 
@@ -46,25 +45,35 @@ public class ExecuteClient {
         makeConnection.start();
         this.connection = makeConnection.getConnection();
     }
-    public void loginGame(String username, String password) throws IOException, ClassNotFoundException, InterruptedException {
-        GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
+    public void loginGame(String username, String password,TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+        clientOutput = new GUITextDisplay(textHelp,act);
+        final GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
         clientLogin.start();
-        //clientLogin.performLogin();
-        //wait(2000);
-          this.loginResult = clientLogin.getLoginResult();
-//          while(loginResult == null){
-//              wait(2000);
-//              this.loginResult = clientLogin.getLoginResult();
-//          }
-          Log.d("Login Result", loginResult.toString());
-          if (loginResult == false){
-            // set help text
-            //helpText.setText("Username or password not found. Please register if needed.");
-              helpText = "Username or password not found. Please register if needed.";
-        } else {
-            // start new intent aka display available games
-            //Intent loginIntent = new Intent(this, );
-        }
+        new Handler().postDelayed(new Runnable() {
+            //private Boolean loginResult;
+            @Override
+            public void run() {
+                // This method will be executed once the timer is over
+                loginResult = clientLogin.getLoginResult();
+                Log.d("Login Result", loginResult.toString());
+
+                if (loginResult == false){
+                    // set help text
+                    //helpText.setText("Username or password not found. Please register if needed.");
+                    helpText = "Username or password not found. Please register if needed.";
+                    setHelpText(helpText);
+                    Log.d("Login","false");
+                    Log.d("Helptext",helpText);
+                    setLoginResult(loginResult);
+                } else {
+                    // start new intent aka display available games
+                    Intent loginIntent = new Intent(act, DisplayGamesActivity.class);
+                    Log.d("Login","true");
+                    setLoginResult(loginResult);
+                    act.startActivity(loginIntent);
+                }
+            }
+        }, 6000);
     }
     public void startGame(TextView textView, Activity act, EditText editText) {
         //ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
@@ -78,8 +87,14 @@ public class ExecuteClient {
     public Boolean getLoginResult() {
         return this.loginResult;
     }
+    public void setLoginResult(Boolean login){
+        this.loginResult = login;
+    }
     public String getHelpText(){
         return this.helpText;
+    }
+    public void setHelpText(String text){
+        this.helpText = text;
     }
 
    /* private void printPath(Path shortestPath){

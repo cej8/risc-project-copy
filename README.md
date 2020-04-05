@@ -1,5 +1,5 @@
 ![pipeline](https://gitlab.oit.duke.edu/ld170/risc-project1/badges/master/pipeline.svg)
-![coverage](https://gitlab.oit.duke.edu/ld170/risc-project1/badges/master/coverage.svg?job=test)
+![coverage](https://gitlab.oit.duke.edu/ld170/risc-project1/badges/master/coverage.svg?job=test_stable)
 
 
 ECE 651: RISC Evolution 1
