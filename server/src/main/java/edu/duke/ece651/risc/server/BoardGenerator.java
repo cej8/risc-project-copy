@@ -17,18 +17,18 @@ public class BoardGenerator {
     List<Region> adjRegion = null;
     List<Region> regionList = new ArrayList<Region>();
 
-    Region regionA = createRegion("A");
-    Region regionB = createRegion("B");
-    Region regionC = createRegion("C");
-    Region regionD = createRegion("D");
-    Region regionE = createRegion("E");
-    Region regionF = createRegion("F");
-    Region regionG = createRegion("G");
-    Region regionH = createRegion("H");
-    Region regionI = createRegion("I");
-    Region regionJ = createRegion("J");
-    Region regionK = createRegion("K");
-    Region regionL = createRegion("L");
+    	Region regionA = createRegion("Caprica");
+        Region regionB = createRegion("Hoth");
+        Region regionC = createRegion("Worlorn");
+        Region regionD = createRegion("Dagobah");
+        Region regionE = createRegion("Krypton");
+        Region regionF = createRegion("Ego");
+        Region regionG = createRegion("Terra Prime");
+        Region regionH = createRegion("Arda");
+        Region regionI = createRegion("Dune");
+        Region regionJ = createRegion("Solaris");
+        Region regionK = createRegion("Gallifrey");
+        Region regionL = createRegion("Cybertron");
     // A
     adjRegion = createAdjRegions(regionB, regionF, regionL);
     addToRegionList(adjRegion, regionList, regionA);
@@ -89,9 +89,6 @@ public class BoardGenerator {
 
   private Region createRegion(String name) {
     Region regionA = new Region(name);
-    regionA.setSize(1);
-    regionA.setFuelProduction(1);
-    regionA.setTechProduction(1);
     return regionA;
   }
 
