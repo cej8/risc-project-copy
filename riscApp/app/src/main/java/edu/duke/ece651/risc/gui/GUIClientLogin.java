@@ -80,7 +80,7 @@ public class GUIClientLogin extends Thread{
         }
     }*/
     public Boolean getLoginResult(){
-        return loginResult;
+        return this.loginResult;
     }
     //Method to mesh with loginProcess() in loginServer
     public void performLogin() throws IOException, ClassNotFoundException{
@@ -91,7 +91,7 @@ public class GUIClientLogin extends Thread{
             //clientOutput.displayString("Username:");
             connection.sendObject(new ConfirmationMessage(true));
            // connection.sendObject(new StringMessage(clientInput.readInput()));
-            connection.sendObject(username);
+            connection.sendObject(new StringMessage(username));
             //We will get salt back
             String salt = ((StringMessage)(connection.receiveObject())).unpacker();
         //String salt = "abcdefghijklmnop";
@@ -110,7 +110,7 @@ public class GUIClientLogin extends Thread{
             }
 
             //Send hashed password back
-            //connection.sendObject(new StringMessage(hashPassword1));
+            connection.sendObject(new StringMessage(hashPassword1));
 
             //If true then has login (nothing extra)
             //If false then registering (need second password entry)
@@ -128,10 +128,10 @@ public class GUIClientLogin extends Thread{
             String response = receiveAndDisplayString();
             //Repeat if fail, continue if success
             if (response.matches("^Fail:.*$")) {
-                loginResult = false;
+                this.loginResult = false;
             }
             if (response.matches("^Success:.*$")) {
-                loginResult = true;
+                this.loginResult = true;
             }
      //   }
 
