@@ -1,11 +1,16 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
@@ -47,24 +52,32 @@ public class ExecuteClient {
         this.connection = makeConnection.getConnection();
     }
     public void loginGame(String username, String password) throws IOException, ClassNotFoundException, InterruptedException {
-        GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
+        final GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
         clientLogin.start();
-        //clientLogin.performLogin();
-        //wait(2000);
-          this.loginResult = clientLogin.getLoginResult();
-//          while(loginResult == null){
-//              wait(2000);
-//              this.loginResult = clientLogin.getLoginResult();
-//          }
-          Log.d("Login Result", loginResult.toString());
-          if (loginResult == false){
-            // set help text
-            //helpText.setText("Username or password not found. Please register if needed.");
-              helpText = "Username or password not found. Please register if needed.";
-        } else {
-            // start new intent aka display available games
-            //Intent loginIntent = new Intent(this, );
-        }
+        new Handler().postDelayed(new Runnable() {
+            //private Boolean loginResult;
+            @Override
+            public void run() {
+                // This method will be executed once the timer is over
+                loginResult = clientLogin.getLoginResult();
+                Log.d("Login Result", loginResult.toString());
+
+                if (loginResult == false){
+                    // set help text
+                    //helpText.setText("Username or password not found. Please register if needed.");
+                    helpText = "Username or password not found. Please register if needed.";
+                    Log.d("Login","false");
+                    Log.d("Helptext",helpText);
+                } else {
+                    // start new intent aka display available games
+                    //Intent loginIntent = new Intent(this, );
+                    Log.d("Login","true");
+                }
+            }
+        }, 9000);
+
+
+
     }
     public void startGame(TextView textView, Activity act, EditText editText) {
         //ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
