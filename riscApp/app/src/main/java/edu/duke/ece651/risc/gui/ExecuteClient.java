@@ -97,9 +97,8 @@ public class ExecuteClient {
 
                 if (loginResult == false){
                     // set help text
-                    //helpText.setText("Username or password not found. Please register if needed.");
                     helpText = "Username or password not found. Please register if needed.";
-                    setHelpText(helpText);
+                    clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
                     Log.d("Login","false");
                     Log.d("Helptext",helpText);
                     setLoginResult(loginResult);

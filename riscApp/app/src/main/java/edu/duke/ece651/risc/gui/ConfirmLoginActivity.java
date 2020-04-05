@@ -17,9 +17,6 @@ import edu.duke.ece651.risc.shared.Connection;
 
 public class ConfirmLoginActivity extends AppCompatActivity {
     ExecuteClient executeClient;
-
-public class ConfirmLoginActivity extends AppCompatActivity {
-    ExecuteClient executeClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

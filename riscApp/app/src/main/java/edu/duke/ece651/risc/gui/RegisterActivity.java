@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
+import edu.duke.ece651.risc.shared.Connection;
+
 public class RegisterActivity extends AppCompatActivity {
     ExecuteClient executeClient;
     private TextView helpText;
@@ -18,7 +20,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText editConfirmPassword;
     private Button registerButton;
     private TextView welcomeText;
-
+    Connection connection;
   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.register);
         welcomeText = findViewById(R.id.welcomeText);
         executeClient = new ExecuteClient(this);
-        executeClient.createGame();
-
+      connection = ParentActivity.getConnection();
+      executeClient.setConnection(connection);
     }
 
     public void userRegister(View view) throws IOException, ClassNotFoundException, InterruptedException{
