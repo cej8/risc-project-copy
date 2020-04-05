@@ -23,9 +23,10 @@ public class GUIClientLogin extends Thread{
     private String confirmPassword;
     Activity activity;
     Boolean loginResult;
-    Boolean newUser;
+    Boolean registeredUser;
 
-    public GUIClientLogin(Boolean newuser, Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act){
+    // Login constructor
+    public GUIClientLogin(Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -33,9 +34,10 @@ public class GUIClientLogin extends Thread{
         this.username = username;
         this.password = password;
         this.loginResult = null;
-        this.newUser = newuser;
+        this.registeredUser = true;
     }
-    public GUIClientLogin(Boolean newuser, Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act, String password2){
+    // Registration Constructor
+    public GUIClientLogin(Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act, String password2){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -43,7 +45,7 @@ public class GUIClientLogin extends Thread{
         this.username = username;
         this.password = password;
         this.loginResult = null;
-        this.newUser = newuser;
+        this.registeredUser = false;
         confirmPassword = password2;
     }
     public void Login(){// throws IOException, ClassNotFoundException{
@@ -71,7 +73,7 @@ public class GUIClientLogin extends Thread{
        // while(true){
             //boolean loginBoolean = true;//queryYNAndRespond("Do you already have a login? [Y/N]");
             //Either way request login
-            connection.sendObject(new ConfirmationMessage(newUser));
+            connection.sendObject(new ConfirmationMessage(registeredUser));
            // connection.sendObject(new StringMessage(clientInput.readInput()));
             connection.sendObject(new StringMessage(username));
             //We will get salt back
@@ -96,7 +98,7 @@ public class GUIClientLogin extends Thread{
 
             //If true then has login (nothing extra)
             //If false then registering (need second password entry)
-            if(!newUser){
+            if(!registeredUser){
             //Request repeat of password
             clientOutput.displayString("Password (again):");
             String password2 = confirmPassword;//clientInput.readInput();
