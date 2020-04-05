@@ -7,7 +7,7 @@ import java.net.Socket;
 import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.Constants;
 
-public class ConnectionManager extends Thread {
+public class ConnectionManager extends Thread{
    private Connection connection;
     private String address;
     private int port;
