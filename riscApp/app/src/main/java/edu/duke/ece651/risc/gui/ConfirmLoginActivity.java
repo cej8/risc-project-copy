@@ -6,8 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-public class ConfirmLoginActivity extends AppCompatActivity {
+import edu.duke.ece651.risc.shared.Connection;
 
+public class ConfirmLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

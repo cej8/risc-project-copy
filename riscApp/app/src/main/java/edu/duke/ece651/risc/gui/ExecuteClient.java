@@ -27,6 +27,7 @@ public class ExecuteClient {
         this.act = activity;
     }
 
+    //public void createGame(){
     public void createGame(){
         // TODO: change to your localhost for testing
         //String addr = "172.74.90.68"; localhost
@@ -44,6 +45,9 @@ public class ExecuteClient {
         ConnectionManager makeConnection = new ConnectionManager(addr,port);
         makeConnection.start();
         this.connection = makeConnection.getConnection();
+    }
+    public Connection getConnection(){
+        return this.connection;
     }
     public void loginGame(String username, String password,TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
         clientOutput = new GUITextDisplay(textHelp,act);

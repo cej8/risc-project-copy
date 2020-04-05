@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 
+import edu.duke.ece651.risc.shared.Connection;
+
 public class LoginActivity extends AppCompatActivity {
     private TextView helpText;
     private EditText editUsername;
@@ -20,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button registerButton;
     private TextView welcomeText;
     ExecuteClient executeClient;
+    Connection connection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,5 @@ public class LoginActivity extends AppCompatActivity {
         String password = editPassword.getText().toString();
         executeClient.loginGame(username, password, helpText);
     }
-
 }
 
