@@ -43,18 +43,19 @@ public class LoginActivity extends AppCompatActivity {
 //    }
     // TODO: on button press we send object to
     // on button press do GUIClientLogin??
-    public void userLogin(View view) throws IOException, ClassNotFoundException{
+    public void userLogin(View view) throws IOException, ClassNotFoundException, InterruptedException{
         String username = editUsername.getText().toString();
         String password = editPassword.getText().toString();
         executeClient.loginGame(username, password);
         Boolean loginResult = executeClient.getLoginResult();
-        if (loginResult == false){
-            // set help text
-            helpText.setText("Username or password not found. Please register if needed.");
-        } else {
-            // start new intent aka display available games
-            //Intent loginIntent = new Intent(this, );
-        }
+        helpText.setText(executeClient.getHelpText());
+//        if (loginResult == false){
+//            // set help text
+//            helpText.setText("Username or password not found. Please register if needed.");
+//        } else {
+//            // start new intent aka display available games
+//            //Intent loginIntent = new Intent(this, );
+//        }
         //helpText.setText("Username or password not found. Please register if needed");
 
     }
