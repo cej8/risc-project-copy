@@ -10,6 +10,7 @@ stages:
    - test
    - coverage
    - deploy
+   - deploy_stable
   # - test-deployment
    
 build:
@@ -43,7 +44,17 @@ deploy:
  tags:
    - ece651
  stage: deploy
- script: ./scripts/redeploy.sh  
+ script: ./scripts/redeploy.sh
+
+
+deploy_stable:
+ tags:
+   - host-server
+ stage: deploy
+ script: ./scripts/redeploy.sh
+ only:
+   refs:
+     - master
 
 #test-deployment:
  #tags:
