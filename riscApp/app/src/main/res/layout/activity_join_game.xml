@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DisplayGamesActivity">
+    tools:context=".JoinGameActivity">
 
     <TextView
-        android:id="@+id/idHelpText"
+        android:id="@+id/idHelpTextJoin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -20,24 +20,19 @@
         app:layout_constraintTop_toTopOf="parent">
     </TextView>
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="422dp"
-        android:layout_height="439dp"
+    <TextView
+        android:id="@+id/gameListJoin"
+        android:layout_width="389dp"
+        android:layout_height="486dp"
         android:layout_marginTop="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.228">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+        app:layout_constraintTop_toTopOf="@+id/idHelpText">
+    </TextView>
 
     <Button
-        android:id="@+id/startGame"
+        android:id="@+id/startGameJoin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="35dp"
@@ -46,17 +41,18 @@
         android:text="Start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:onClick="newGame"/>
+        android:onClick="joinGame"/>
 
     <EditText
-        android:id="@+id/gameID"
+        android:id="@+id/gameIDJoin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
-        android:text="ID"
+        android:hint="ID"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent">
     </EditText>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

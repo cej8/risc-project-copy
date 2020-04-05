@@ -38,8 +38,6 @@ public class LoginActivity extends AppCompatActivity {
         welcomeText = findViewById(R.id.welcomeText);
         connection = ParentActivity.getConnection();
         executeClient = new ExecuteClient(this);
-        //executeClient.createGame();
-        connection = ParentActivity.getConnection();
         executeClient.setConnection(connection);
     }
 
