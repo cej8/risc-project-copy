@@ -48,10 +48,8 @@ public class LoginActivity extends AppCompatActivity {
     public void userLogin(View view) throws IOException, ClassNotFoundException, InterruptedException{
         String username = editUsername.getText().toString();
         String password = editPassword.getText().toString();
-        executeClient.loginGame(username, password, helpText);
+        executeClient.loginGame(true,username, password, helpText);
     }
-    public void userRegister(View view) {
-        // TODO: registration
-    }
+
 }
 

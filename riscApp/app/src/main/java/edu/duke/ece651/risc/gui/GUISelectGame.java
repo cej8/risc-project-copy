@@ -53,7 +53,7 @@ public class GUISelectGame {
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
         String str = message.unpacker();
-        //clientOutput.displayString(str);
+        clientOutput.displayString(str);
         return str;
     }
     //Helper method to ask YN and send back ConfirmationMessage
