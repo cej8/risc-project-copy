@@ -34,14 +34,14 @@ private Board tempBoard;
   System.out.println("regions are not adjacent");
     return false;
   }
-   @Override
+  // @Override
    public boolean validateRegions(List<AttackMove> attackList) {
 	 for (AttackMove attack : attackList) {
      if (!isValidAttack(attack)) {
         System.out.println("Attack not valid");
         return false;
       }
-      //attack.doAction();
+      
     }
 
   // if all attacks are valid
@@ -54,7 +54,7 @@ public boolean validateOrders(List<AttackMove> attackList) {
     return validRegions && validUnits;
   }
   // Method to validate corrent units in each region
-  	@Override
+  //  	@Override
 	public boolean validateUnits(List<AttackMove> a) {
 	 // check to make sure numUnits in source < attackOrder units
      for (AttackMove attack : a) {
@@ -62,10 +62,20 @@ public boolean validateOrders(List<AttackMove> attackList) {
        Region tempDest = attack.getDestination().getRegionByName(tempBoard, attack.getDestination().getName());
       Unit sourceUnits = tempSource.getUnits();
       Unit attackUnits = new Unit(attack.getUnits().getUnits());
-      AttackMove attackCopy = new AttackMove(tempSource, tempDest, attackUnits);
+      AttackMove attackCopyMove = new AttackMove(tempSource, tempDest, attackUnits);
       // make sure at least 1 sourceUnit, 1 attackUnit, and sourceUnits > attackUnits
-      if ((sourceUnits.getTotalUnits() > attackUnits.getTotalUnits()) && (sourceUnits.getTotalUnits() > 0) && (attackUnits.getTotalUnits() > 0)) {
-        attackCopy.doAction();
+       boolean validMove = true;
+      // set validMove to false if any of these are false: at least 1 sourceUnit, 1
+      // moveUnit, and sourceUnits > moveUnits in each index of source
+      for (int i = 0; i < sourceUnits.getUnits().size(); i++) { // for each index of the source units
+        if ((sourceUnits.getUnits().get(i) <= attackUnits.getUnits().get(i)) || (sourceUnits.getUnits().get(i) <= 0)
+            || (attackUnits.getUnits().get(i) <= 0)) {
+          validMove = false;
+        }
+      }
+      if(validMove){
+        attackCopyMove.doAction();
+      
       } else {
         System.out.println("Attack failed: sourceUnits are " + sourceUnits.getTotalUnits() + " but attackUnits are " + attackUnits.getTotalUnits()); //this is just for testing
         return false;

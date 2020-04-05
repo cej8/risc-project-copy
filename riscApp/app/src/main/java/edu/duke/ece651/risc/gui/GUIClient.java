@@ -112,26 +112,6 @@ public class GUIClient extends Thread implements ClientInterface {
             connection.getSocket().setSoTimeout(timeout);
         }
 
-//        public void makeConnection(String address, int port) {
-//            Socket socket;
-//            try {
-//                socket = new Socket(address, port);
-//                makeConnection(socket);
-//            } catch (Exception e) {
-//                e.printStackTrace(System.out);
-//            }
-//        }
-//
-//        public void makeConnection(Socket socket) {
-//            try {
-//                connection.setSocket(socket);
-//                connection.getStreamsFromSocket();
-//                socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
-//            } catch (Exception e) {
-//                e.printStackTrace(System.out);
-//            }
-//        }
-
         public boolean timeOut(long startTime, long maxTime){
             // If too long --> kill player (prevent trying to write to closed pipe)
             if (System.currentTimeMillis() - startTime > maxTime) {
@@ -201,7 +181,7 @@ public class GUIClient extends Thread implements ClientInterface {
 
                     // Wait for response
                     StringMessage responseMessage = (StringMessage) (connection.receiveObject());
-                    String response = responseMessage.getMessage();
+                    String response = responseMessage.unpacker();
                     clientOutput.displayString(response);
                     if (response.matches("^Fail:.*$")) {
                         continue;
@@ -224,7 +204,7 @@ public class GUIClient extends Thread implements ClientInterface {
 
                     // Wait for response
                     StringMessage responseMessage = (StringMessage) (connection.receiveObject());
-                    String response = responseMessage.getMessage();
+                    String response = responseMessage.unpacker();
                     clientOutput.displayString(response);
                     if (response.matches("^Fail:.*$")) {
                         continue;
@@ -245,98 +225,9 @@ public class GUIClient extends Thread implements ClientInterface {
 
         public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
             StringMessage message = (StringMessage) (connection.receiveObject());
-            String str = message.getMessage();
+            String str = message.unpacker();
             clientOutput.displayString(str);
             return str;
-        }
-
-        //Method to mesh with loginProcess() in loginServer
-        public void performLogin() throws IOException, ClassNotFoundException{
-            String initalSuccess = receiveAndDisplayString();
-            while(true){
-                boolean loginBoolean = queryYNAndRespond("Do you already have a login? [Y/N]");
-                //Either way request login
-                //clientOutput.displayString("Username:");
-                connection.sendObject(new StringMessage(clientInput.readInput()));
-                //We will get salt back
-                String salt = ((StringMessage)(connection.receiveObject())).unpacker();
-
-                //We will request a password
-                //clientOutput.displayString("Password:");
-                String password1 = clientInput.readInput();
-                //Hash password
-                String hashPassword1;
-                if(!salt.equals("")){
-                    hashPassword1 = BCrypt.hashpw(password1, salt);
-                }
-                else{
-                    hashPassword1 = "";
-                }
-
-                //Send hashed password back
-                connection.sendObject(new StringMessage(hashPassword1));
-
-                //If true then has login (nothing extra)
-                //If false then registering (need second password entry)
-                if(!loginBoolean){
-                    //Request repeat of password
-                    clientOutput.displayString("Password (again):");
-                    String password2 = clientInput.readInput();
-                    //Hash password
-                    String hashPassword2 = BCrypt.hashpw(password1, salt);
-                    //Send copy back
-                    connection.sendObject(new StringMessage(hashPassword2));
-                }
-
-                //Get back response
-                String response = receiveAndDisplayString();
-                //Repeat if fail, continue if success
-                if (response.matches("^Fail:.*$")) {
-                    continue;
-                }
-                if (response.matches("^Success:.*$")) {
-                    break;
-                }
-            }
-
-            //At this point user is logged in (either old or new)
-
-        }
-
-        //Method to mesh with selectGame() in loginServer
-        public void performSelectGame() throws IOException, ClassNotFoundException{
-            while(true){
-                boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
-
-                //Server then sends back list of games
-                String list = receiveAndDisplayString();
-                Integer gameID;
-                while(true){
-                    clientOutput.displayString("Pick a game via ID");
-                    try{
-                        gameID = Integer.parseInt(clientInput.readInput());
-                    }
-                    catch (NumberFormatException ne) {
-                        // ne.printStackTrace();
-                        clientOutput.displayString("That was not an integer.");
-                        continue;
-                    }
-                    break;
-                }
-                //Send ID to server
-                connection.sendObject(new IntegerMessage(gameID));
-
-                //Get back response
-                String response = receiveAndDisplayString();
-                //Repeat if fail, continue if success
-                if (response.matches("^Fail:.*$")) {
-                    continue;
-                }
-                if (response.matches("^Success:.*$")) {
-                    break;
-                }
-            }
-
         }
 
         //Helper method to ask YN and send back ConfirmationMessage
@@ -364,12 +255,7 @@ public class GUIClient extends Thread implements ClientInterface {
 
 
         public void playGame() {
-//            if(connection.getSocket() == null){
-//                makeConnection(address,port);
-//            }
             try {
-                performLogin();
-                performSelectGame();
                 // Make initial connection, waits for server to send back player's player object
                 // Get initial player object (for name)
                 player = (HumanPlayer) (connection.receiveObject());
@@ -390,7 +276,7 @@ public class GUIClient extends Thread implements ClientInterface {
                     // Start of each turn will have continue message if game still going
                     // Otherwise is winner message
                     StringMessage startMessage = (StringMessage) (connection.receiveObject());
-                    String start = startMessage.getMessage();
+                    String start = startMessage.unpacker();
                     if (!start.equals("Continue")) {
                         // If not continue then someone won --> print and exit
                         clientOutput.displayString(start);

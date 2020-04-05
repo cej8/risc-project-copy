@@ -72,7 +72,7 @@ public class ClientLogin {
         clientOutput.displayString("Password (again):");
         String password2 = clientInput.readInput();
         //Hash password
-        String hashPassword2 = BCrypt.hashpw(password1, salt);
+        String hashPassword2 = BCrypt.hashpw(password2, salt);
         //Send copy back
         connection.sendObject(new StringMessage(hashPassword2));
       }

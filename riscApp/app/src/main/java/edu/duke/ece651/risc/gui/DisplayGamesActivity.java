@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
 
+import java.io.Serializable;
+
+import edu.duke.ece651.risc.shared.Connection;
+
 public class DisplayGamesActivity extends AppCompatActivity {
     Button joinGameButton;
     Button newGameButton;
-    ScrollView scrollView;
+    Connection connection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

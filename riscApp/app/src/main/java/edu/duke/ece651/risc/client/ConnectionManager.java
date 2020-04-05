@@ -1,13 +1,24 @@
 package edu.duke.ece651.risc.client;
 
-public class MakeConnection extends Thread {
+import android.util.Log;
+
+import java.net.Socket;
+
+import edu.duke.ece651.risc.shared.Connection;
+import edu.duke.ece651.risc.shared.Constants;
+
+public class ConnectionManager extends Thread{
    private Connection connection;
     private String address;
     private int port;
 
-    public MakeConnection(String address, int port){
-        connection = new Connection();
-        this.address = address;
+  public ConnectionManager(){
+    connection = new Connection();
+  }
+    public ConnectionManager(String address, int port){
+      //connection = new Connection();
+      this();
+      this.address = address;
         this.port = port;
     }
     public Connection getConnection() {
@@ -28,12 +39,18 @@ public class MakeConnection extends Thread {
             connection.setSocket(socket);
             connection.getStreamsFromSocket();
             socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
-            Log.d("Initial Connection","Probably Connected");
-        } catch (Exception e) {
+            Log.d("Connection","Should be connected");
+            Thread.dumpStack();
+            } catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }
-
+  public void connectGame(){
+          if(connection.getSocket() == null){
+            makeConnection(address,port);
+        }
+  
+  }
     @Override
     public void run(){
         if(connection.getSocket() == null){

@@ -20,7 +20,7 @@ public class GUITextDisplay extends Thread implements ClientOutputInterface {
 
     public GUITextDisplay(){
         try{
-            this.outputTextView = outputTextView.findViewById(R.id.popUpText);
+            //this.outputTextView = outputTextView.findViewById(R.id.popUpText);
         }
         //Shouldn't be possible...
         catch(Exception e){
