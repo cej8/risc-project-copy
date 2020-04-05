@@ -60,7 +60,7 @@ public class ExecuteClient {
         GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
         clientLogin.start();
           this.loginResult = clientLogin.getLoginResult();
-          //Log.d("Login Result", loginResult.toString());
+          Log.d("Login Result", loginResult.toString());
     }
     public void startGame(TextView textView, Activity act, EditText editText) {
         //ClientInputInterface clientInput = new GUIConsoleInput(editText,act);

@@ -85,7 +85,7 @@ public class GUIClientLogin extends Thread{
     //Method to mesh with loginProcess() in loginServer
     public void performLogin() throws IOException, ClassNotFoundException{
         String initalSuccess = receiveAndDisplayString();
-      //  while(true){
+        while(true){
             boolean loginBoolean = true;//queryYNAndRespond("Do you already have a login? [Y/N]");
             //Either way request login
             //clientOutput.displayString("Username:");
@@ -110,7 +110,7 @@ public class GUIClientLogin extends Thread{
             }
 
             //Send hashed password back
-            //connection.sendObject(new StringMessage(hashPassword1));
+            connection.sendObject(new StringMessage(hashPassword1));
 
             //If true then has login (nothing extra)
             //If false then registering (need second password entry)
@@ -129,11 +129,13 @@ public class GUIClientLogin extends Thread{
             //Repeat if fail, continue if success
             if (response.matches("^Fail:.*$")) {
                 loginResult = false;
+                continue;
             }
             if (response.matches("^Success:.*$")) {
                 loginResult = true;
+                break;
             }
-     //   }
+        }
 
         //At this point user is logged in (either old or new)
 
