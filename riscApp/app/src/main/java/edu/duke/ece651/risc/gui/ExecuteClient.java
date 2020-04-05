@@ -75,13 +75,43 @@ public class ExecuteClient {
                     setLoginResult(loginResult);
                 } else {
                     // start new intent aka display available games
-                    Intent loginIntent = new Intent(act, DisplayGamesActivity.class);
+                    Intent loginIntent = new Intent(act, GameTypeActivity.class);
                     Log.d("Login","true");
                     setLoginResult(loginResult);
                     act.startActivity(loginIntent);
                 }
             }
         }, 6000);
+    }
+    public void getGames(boolean gameType, boolean getgame){
+       // clientOutput = new GUITextDisplay(gameText,act);
+        final GUISelectGame selectGame = new GUISelectGame(getgame,gameType,connection,clientInput,clientOutput,act);
+        selectGame.start();
+        new Handler().postDelayed(new Runnable() {
+            //private Boolean loginResult;
+            @Override
+            public void run() {
+                // This method will be executed once the timer is over
+                String games = selectGame.getGameList();
+                Log.d("Game List", games);
+                Intent gamesIntent = new Intent(act, NewGameActivity.class);
+                gamesIntent.putExtra("GAMELIST",games);
+                act.startActivity(gamesIntent);
+            }
+        }, 2000);
+
+    }
+    public void pickGame(boolean gameType,String id, boolean getgame,String gameList){
+        GUISelectGame selectGame = new GUISelectGame(getgame,id,gameType,connection,clientInput,clientOutput,act);
+        selectGame.start();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // This method will be executed once the timer is over
+                // TODO: where we actually play the game - DisplayMapActivity.java
+                Log.d("Game","Ready");
+            }
+        }, 2000);
     }
     public void loginGame(String username, String password,TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
         clientOutput = new GUITextDisplay(textHelp,act);
@@ -104,7 +134,7 @@ public class ExecuteClient {
                     setLoginResult(loginResult);
                 } else {
                     // start new intent aka display available games
-                    Intent loginIntent = new Intent(act, DisplayGamesActivity.class);
+                    Intent loginIntent = new Intent(act, GameTypeActivity.class);
                     Log.d("Login","true");
                     setLoginResult(loginResult);
                     act.startActivity(loginIntent);

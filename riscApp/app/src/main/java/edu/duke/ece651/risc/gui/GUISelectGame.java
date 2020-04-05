@@ -11,27 +11,62 @@ import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.IntegerMessage;
 import edu.duke.ece651.risc.shared.StringMessage;
 
-public class GUISelectGame {
+public class GUISelectGame extends Thread{
     Activity activity;
     private Connection connection;
     private ClientInputInterface clientInput;
     private ClientOutputInterface clientOutput;
+    private boolean oldBoolean;
+    private String gameNumber;
+    private boolean getGames;
+    private String gameList;
 
+    public GUISelectGame(boolean getGames, String gameID,boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+        this.connection = connect;
+        this.clientInput = input;
+        this.clientOutput = output;
+        this.activity = act;
+        this.oldBoolean = bool;
+        this.gameNumber = gameID;
+        this.getGames = getGames;
+    }
+    // Get games
+    public GUISelectGame(boolean getGames, boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+        this.connection = connect;
+        this.clientInput = input;
+        this.clientOutput = output;
+        this.activity = act;
+        this.oldBoolean = bool;
+        this.getGames = getGames;
+    }
+    public String getGameList(){
+        return this.gameList;
+    }
+    public void performGetGame() throws IOException,ClassNotFoundException{
+        // boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
+        connection.sendObject(new ConfirmationMessage(oldBoolean));
+        //Server then sends back list of games
+        StringMessage message = (StringMessage) (connection.receiveObject());
+        gameList = message.unpacker();
+        //clientOutput.displayString(str);
+    }
     //Method to mesh with selectGame() in loginServer
     public void performSelectGame() throws IOException, ClassNotFoundException{
         while(true){
-            boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
-            //Server then sends back list of games
-            String list = receiveAndDisplayString();
+//           // boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
+//            connection.sendObject(new ConfirmationMessage(oldBoolean));
+//            //Server then sends back list of games
+//            String list = receiveAndDisplayString();
             Integer gameID;
             while(true){
-                clientOutput.displayString("Pick a game via ID");
+                //clientOutput.displayString("Pick a game via ID");
                 try{
-                    gameID = Integer.parseInt(clientInput.readInput());
+                    //gameID = Integer.parseInt(clientInput.readInput());
+                    gameID = Integer.parseInt(gameNumber);
                 }
                 catch (NumberFormatException ne) {
                     // ne.printStackTrace();
-                    clientOutput.displayString("That was not an integer.");
+                    //clientOutput.displayString("That was not an integer.");
                     continue;
                 }
                 break;
@@ -40,7 +75,10 @@ public class GUISelectGame {
             connection.sendObject(new IntegerMessage(gameID));
 
             //Get back response
-            String response = receiveAndDisplayString();
+            //String response = receiveAndDisplayString();
+            StringMessage message = (StringMessage) (connection.receiveObject());
+            String response = message.unpacker();
+            //clientOutput.displayString(response);
             //Repeat if fail, continue if success
             if (response.matches("^Fail:.*$")) {
                 continue;
@@ -76,6 +114,20 @@ public class GUISelectGame {
             }
             // Otherwise repeat
             clientOutput.displayString("Invalid input.");
+        }
+    }
+    @Override
+    public void run(){
+        try {
+            if (getGames == true) {
+                performGetGame();
+            } else {
+                performSelectGame();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }
