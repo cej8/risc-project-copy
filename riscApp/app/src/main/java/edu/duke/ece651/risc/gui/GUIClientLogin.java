@@ -91,14 +91,14 @@ public class GUIClientLogin extends Thread{
             //clientOutput.displayString("Username:");
             connection.sendObject(new ConfirmationMessage(true));
            // connection.sendObject(new StringMessage(clientInput.readInput()));
-            connection.sendObject(username);
+            connection.sendObject(new StringMessage(username));
             //We will get salt back
             String salt = ((StringMessage)(connection.receiveObject())).unpacker();
-        //String salt = "abcdefghijklmnop";
-        Log.d("Salt",salt);
+            Log.d("Salt",salt);
             //We will request a password
             //clientOutput.displayString("Password:");
             //String password1 = clientInput.readInput();
+
             String password1 = password;
             //Hash password
             String hashPassword1;
