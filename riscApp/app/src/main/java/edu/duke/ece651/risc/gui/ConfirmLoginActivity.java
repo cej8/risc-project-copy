@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 
 public class ConfirmLoginActivity extends AppCompatActivity {
+    ExecuteClient executeClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_login);
+        executeClient = new ExecuteClient(this);
+        executeClient.createGame();
+
     }
     public void login(View view){
         Intent loginIntent = new Intent(this,LoginActivity.class);
