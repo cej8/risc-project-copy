@@ -45,9 +45,9 @@ public class ExecuteClient {
         makeConnection.start();
         this.connection = makeConnection.getConnection();
     }
-    public void loginGame(String username, String password,TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+    public void loginGame(Boolean newUser,String username, String password,TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
         clientOutput = new GUITextDisplay(textHelp,act);
-        final GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
+        final GUIClientLogin clientLogin = new GUIClientLogin(newUser, connection,clientInput, clientOutput,username,password,act);
         clientLogin.start();
         new Handler().postDelayed(new Runnable() {
             //private Boolean loginResult;
