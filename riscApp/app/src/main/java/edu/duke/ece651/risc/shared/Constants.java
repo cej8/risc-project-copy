@@ -18,7 +18,8 @@ public final class Constants {
   public static final int DEFAULT_PORT = 12345;
   //Value for max missed moves allowed before killing player
   public static final int MAX_MISSED = 1;
-  
+  //max tech level for a player to achieve
+  public static final int MAX_TECH_LEVEL = 6;
  
   //priorities for ordering moves 
   public static final int ATTACK_COMBAT_PRIORITY=5000;

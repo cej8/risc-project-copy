@@ -1,33 +1,37 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import edu.duke.ece651.risc.client.Client;
+import java.io.IOException;
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
-import edu.duke.ece651.risc.client.ConsoleInput;
-import edu.duke.ece651.risc.client.MakeConnection;
-import edu.duke.ece651.risc.client.TextDisplay;
-import edu.duke.ece651.risc.shared.AbstractPlayer;
-import edu.duke.ece651.risc.shared.Board;
-import edu.duke.ece651.risc.shared.BoardGenerator;
-import edu.duke.ece651.risc.shared.Connection;
-import edu.duke.ece651.risc.shared.HumanPlayer;
-import edu.duke.ece651.risc.shared.Path;
-import edu.duke.ece651.risc.shared.Region;
-import edu.duke.ece651.risc.shared.Unit;
+import edu.duke.ece651.risc.client.ConnectionManager;
+import edu.duke.ece651.risc.shared.*;
+
 
 public class ExecuteClient {
     Connection connection;
+    ClientInputInterface clientInput;
+    ClientOutputInterface clientOutput;
+    Boolean loginResult;
+    Activity act;
+    String helpText;
+
+    public ExecuteClient(Activity activity) {
+        clientInput = new GUIEditTextInput(activity);
+        clientOutput = new GUITextDisplay();
+        this.act = activity;
+    }
 
     public void createGame(){
-        String addr = "67.159.89.108";
+        // TODO: change to your localhost for testing
+        //String addr = "172.74.90.68"; localhost
+        //String addr = "67.159.89.108"; old server
+        String addr = "152.3.64.158";
         String portS = "12345";
         int port;
         try {
@@ -37,22 +41,63 @@ public class ExecuteClient {
             Log.d("Port","Invalid");
             return;
         }
-        MakeConnection makeConnection = new MakeConnection(addr,port);
+        ConnectionManager makeConnection = new ConnectionManager(addr,port);
         makeConnection.start();
         this.connection = makeConnection.getConnection();
     }
+    public void loginGame(String username, String password,TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+        clientOutput = new GUITextDisplay(textHelp,act);
+        final GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
+        clientLogin.start();
+        new Handler().postDelayed(new Runnable() {
+            //private Boolean loginResult;
+            @Override
+            public void run() {
+                // This method will be executed once the timer is over
+                loginResult = clientLogin.getLoginResult();
+                Log.d("Login Result", loginResult.toString());
+
+                if (loginResult == false){
+                    // set help text
+                    //helpText.setText("Username or password not found. Please register if needed.");
+                    helpText = "Username or password not found. Please register if needed.";
+                    setHelpText(helpText);
+                    Log.d("Login","false");
+                    Log.d("Helptext",helpText);
+                    setLoginResult(loginResult);
+                } else {
+                    // start new intent aka display available games
+                    Intent loginIntent = new Intent(act, DisplayGamesActivity.class);
+                    Log.d("Login","true");
+                    setLoginResult(loginResult);
+                    act.startActivity(loginIntent);
+                }
+            }
+        }, 6000);
+    }
     public void startGame(TextView textView, Activity act, EditText editText) {
-        ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
-        ClientOutputInterface clientOutput = new GUITextDisplay(textView,act);
-
-
+        //ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
+        //ClientOutputInterface clientOutput = new GUITextDisplay(textView,act);
 
         Log.d("Test Connection", "Test Connection");
         GUIClient client = new GUIClient(clientInput,clientOutput,connection);
         //GUIClient client = new GUIClient(clientInput, clientOutput, addr, port);
         //client.start();
     }
-    private void printPath(Path shortestPath){
+    public Boolean getLoginResult() {
+        return this.loginResult;
+    }
+    public void setLoginResult(Boolean login){
+        this.loginResult = login;
+    }
+    public String getHelpText(){
+        return this.helpText;
+    }
+    public void setHelpText(String text){
+        this.helpText = text;
+    }
+
+   /* private void printPath(Path shortestPath){
         if(shortestPath==null){
             System.out.println("No path exists");
             return;
@@ -63,7 +108,7 @@ public class ExecuteClient {
 
     }
 
-    /*AbstractPlayer p1 = new HumanPlayer("player 1");
+    AbstractPlayer p1 = new HumanPlayer("player 1");
     AbstractPlayer p2 = new HumanPlayer("player 2");
     List<Region> regions = getRegionList(p1, p2);
     Path sp14 = regions.get(0).findShortestPath(regions.get(2));//valid not adjacent

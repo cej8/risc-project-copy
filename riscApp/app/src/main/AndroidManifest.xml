@@ -22,10 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DisplayGamesActivity"
-            android:screenOrientation="landscape"
-            tools:ignore="LockedOrientationActivity"/>
+        <activity android:name=".DisplayGamesActivity"/>
         <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".DisplayMapActivity"
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

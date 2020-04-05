@@ -2,12 +2,15 @@ package edu.duke.ece651.risc.gui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity {
     private TextView helpText;
@@ -16,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Button registerButton;
     private TextView welcomeText;
+    ExecuteClient executeClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,24 +30,25 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login);
         registerButton = findViewById(R.id.register);
         welcomeText = findViewById(R.id.welcomeText);
-        ExecuteClient executeClient = new ExecuteClient();
+        executeClient = new ExecuteClient(this);
         executeClient.createGame();
         /*ExecuteClient executeClient = new ExecuteClient();
         outputText = findViewById(R.id.popUpText);
         executeClient.createGame(outputText,this,**figure out the edit text stuff);*/
 
     }
+
     // on button click open DisplayGameActivity.java
 //    public void userLogin(View view) {
 //        Intent loginIntent = new Intent(this, DisplayGamesActivity.class);
 //        startActivity(loginIntent);
 //    }
     // TODO: on button press we send object to
-    public void userLogin(View view){
+    // on button press do GUIClientLogin??
+    public void userLogin(View view) throws IOException, ClassNotFoundException, InterruptedException{
         String username = editUsername.getText().toString();
         String password = editPassword.getText().toString();
-        // start new intent but first login
-        //Intent loginIntent = new Intent(this, );
+        executeClient.loginGame(username, password, helpText);
     }
     public void userRegister(View view) {
         // TODO: registration

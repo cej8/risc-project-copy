@@ -7,10 +7,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.duke.ece651.risc.shared.Region;
+import edu.duke.ece651.risc.shared.Unit;
 
 public class MainActivity extends AppCompatActivity {
-    TextView outputText;
-    private static int SPLASH_TIME_OUT = 2000;
+    private static int SPLASH_TIME_OUT = 2500;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,10 +24,9 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                // Intent i = new Intent(MainActivity.this, DisplayMapActivity.class);
                 startActivity(i);
-
                 // close this activity
                 finish();
             }

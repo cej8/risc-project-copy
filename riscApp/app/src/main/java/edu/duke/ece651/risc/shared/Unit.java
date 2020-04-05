@@ -10,6 +10,7 @@ public class Unit implements Serializable {
   private List<Integer> units;
   private static Map<Integer, Integer> techToBonusMap;
   private static Map<Integer, String> techToTypeMap;
+  private static Map<Integer, Integer> techToCostMap;
   private static final long serialVersionUID = 2L;
   static {
     // maps tech level with associated bonus
@@ -30,6 +31,15 @@ public class Unit implements Serializable {
     techToTypeMap.put(4, "Space Cadet");
     techToTypeMap.put(5, "Astronaut");
     techToTypeMap.put(6, "Space Captain");
+     // maps tech level with associated cost to upgrade by 1
+    techToCostMap = new HashMap<Integer, Integer>();
+    techToCostMap.put(0, 0);
+    techToCostMap.put(1, 3);
+    techToCostMap.put(2, 8);
+    techToCostMap.put(3, 19);
+    techToCostMap.put(4, 25);
+    techToCostMap.put(5, 35);
+    techToCostMap.put(6, 50);
   }
 
   public Unit() {
@@ -105,6 +115,10 @@ public class Unit implements Serializable {
 
   public Integer getBonusFromTech(Integer tech) {
     return techToBonusMap.get(tech);
+  }
+
+  public Integer getCostFromTech(Integer tech) {
+    return techToCostMap.get(tech);
   }
 
   public String getTypeFromTech(Integer tech) {
