@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="068f775b-2651-4da4-965b-202ede5a30f9" name="Default Changelist" comment="" />
+    <list default="true" id="f6a0358f-d1ef-45a0-8027-d63e3ddd9055" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/riscApp/app/src/main/res/drawable/upgradebutton.png" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +122,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

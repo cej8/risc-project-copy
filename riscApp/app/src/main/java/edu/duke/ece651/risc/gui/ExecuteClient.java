@@ -53,6 +53,36 @@ public class ExecuteClient {
     public void setConnection(Connection connection){
         this.connection = connection;
     }
+    public void registerLogin(String username, String password, String confirmPassword, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+        clientOutput = new GUITextDisplay(textHelp,act);
+        final GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act,confirmPassword);
+        clientLogin.start();
+        new Handler().postDelayed(new Runnable() {
+            //private Boolean loginResult;
+            @Override
+            public void run() {
+                // This method will be executed once the timer is over
+                loginResult = clientLogin.getLoginResult();
+                Log.d("Login Result", loginResult.toString());
+
+                if (loginResult == false){
+                    // set help text
+                    //helpText.setText("Username or password not found. Please register if needed.");
+                    helpText = "User already exists. Please choose another username";
+                    setHelpText(helpText);
+                    Log.d("Login","false");
+                    Log.d("Helptext",helpText);
+                    setLoginResult(loginResult);
+                } else {
+                    // start new intent aka display available games
+                    Intent loginIntent = new Intent(act, DisplayGamesActivity.class);
+                    Log.d("Login","true");
+                    setLoginResult(loginResult);
+                    act.startActivity(loginIntent);
+                }
+            }
+        }, 6000);
+    }
     public void loginGame(String username, String password,TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
         clientOutput = new GUITextDisplay(textHelp,act);
         final GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);

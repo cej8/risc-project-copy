@@ -35,6 +35,7 @@ public class GUIClientLogin extends Thread{
         this.password = password;
         this.loginResult = null;
         this.registeredUser = true;
+        this.confirmPassword = null;
     }
     // Registration Constructor
     public GUIClientLogin(Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act, String password2){
@@ -46,7 +47,7 @@ public class GUIClientLogin extends Thread{
         this.password = password;
         this.loginResult = null;
         this.registeredUser = false;
-        confirmPassword = password2;
+        this.confirmPassword = password2;
     }
     public void Login(){// throws IOException, ClassNotFoundException{
         try {
@@ -65,7 +66,7 @@ public class GUIClientLogin extends Thread{
         return str;
     }
     public Boolean getLoginResult(){
-        return loginResult;
+        return this.loginResult;
     }
     //Method to mesh with loginProcess() in loginServer
     public void performLogin() throws IOException, ClassNotFoundException{
@@ -100,12 +101,13 @@ public class GUIClientLogin extends Thread{
             //If false then registering (need second password entry)
             if(!registeredUser){
             //Request repeat of password
-            clientOutput.displayString("Password (again):");
+            //clientOutput.displayString("Password (again):");
             String password2 = confirmPassword;//clientInput.readInput();
             //Hash password
-            String hashPassword2 = BCrypt.hashpw(password1, salt);
+            String hashPassword2 = BCrypt.hashpw(password2, salt);
             //Send copy back
             connection.sendObject(new StringMessage(hashPassword2));
+
         }
 
             //Get back response - checks login
@@ -113,6 +115,7 @@ public class GUIClientLogin extends Thread{
             //Repeat if fail, continue if success
             if (response.matches("^Fail:.*$")) {
                 this.loginResult = false;
+
                 Log.d("GUIClientLogin", loginResult.toString());
           //      continue;
             }
@@ -120,7 +123,9 @@ public class GUIClientLogin extends Thread{
                 this.loginResult = true;
                 Log.d("GUIClientLogin", loginResult.toString());
          //       break;
+
             }
+        //Log.d("GUIClientLogin", loginResult.toString());
        // }
 
         //At this point user is logged in (either old or new)

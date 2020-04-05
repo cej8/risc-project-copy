@@ -12,7 +12,11 @@ import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 
+
 import edu.duke.ece651.risc.shared.Connection;
+
+public class ConfirmLoginActivity extends AppCompatActivity {
+    ExecuteClient executeClient;
 
 public class ConfirmLoginActivity extends AppCompatActivity {
     ExecuteClient executeClient;
