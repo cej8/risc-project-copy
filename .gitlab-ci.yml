@@ -16,6 +16,7 @@ stages:
 build:
   tags:
      - ece651
+     - host-server
   stage: build
   script: docker build --build-arg LOCAL_USER_ID=`id -u`  --tag citest .
 
