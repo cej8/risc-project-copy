@@ -8,7 +8,6 @@ before_script:
 stages:
    - build
    - test
-   - coverage
    - deploy
    - build_stable
    - test_stable
@@ -31,18 +30,6 @@ test:
   artifacts:
     paths:
       - coverage
-      
-pages:
- stage: coverage
- tags:
-     - ece651
- dependencies:
-   - test
- script:
-   - mv coverage public/
- artifacts:
-   paths:
-     - public
 
 deploy:
  tags:
