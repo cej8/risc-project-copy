@@ -6,12 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
 import edu.duke.ece651.risc.client.ConnectionManager;
@@ -29,7 +24,6 @@ public class ExecuteClient {
     public ExecuteClient(Activity activity) {
         clientInput = new GUIEditTextInput(activity);
         clientOutput = new GUITextDisplay();
-        //loginResult = null;
         this.act = activity;
     }
 
@@ -51,7 +45,8 @@ public class ExecuteClient {
         makeConnection.start();
         this.connection = makeConnection.getConnection();
     }
-    public void loginGame(String username, String password) throws IOException, ClassNotFoundException, InterruptedException {
+    public void loginGame(String username, String password,TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+        clientOutput = new GUITextDisplay(textHelp,act);
         final GUIClientLogin clientLogin = new GUIClientLogin(connection,clientInput, clientOutput,username,password,act);
         clientLogin.start();
         new Handler().postDelayed(new Runnable() {
@@ -66,18 +61,19 @@ public class ExecuteClient {
                     // set help text
                     //helpText.setText("Username or password not found. Please register if needed.");
                     helpText = "Username or password not found. Please register if needed.";
+                    setHelpText(helpText);
                     Log.d("Login","false");
                     Log.d("Helptext",helpText);
+                    setLoginResult(loginResult);
                 } else {
                     // start new intent aka display available games
-                    //Intent loginIntent = new Intent(this, );
+                    Intent loginIntent = new Intent(act, DisplayGamesActivity.class);
                     Log.d("Login","true");
+                    setLoginResult(loginResult);
+                    act.startActivity(loginIntent);
                 }
             }
-        }, 9000);
-
-
-
+        }, 6000);
     }
     public void startGame(TextView textView, Activity act, EditText editText) {
         //ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
@@ -91,8 +87,14 @@ public class ExecuteClient {
     public Boolean getLoginResult() {
         return this.loginResult;
     }
+    public void setLoginResult(Boolean login){
+        this.loginResult = login;
+    }
     public String getHelpText(){
         return this.helpText;
+    }
+    public void setHelpText(String text){
+        this.helpText = text;
     }
 
    /* private void printPath(Path shortestPath){

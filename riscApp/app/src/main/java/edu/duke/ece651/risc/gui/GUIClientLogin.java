@@ -45,40 +45,9 @@ public class GUIClientLogin extends Thread{
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
         String str = message.unpacker();
-        //clientOutput.displayString(str);
+        clientOutput.displayString(str);
         return str;
     }
-    public String hashPassword(String password1) throws ClassNotFoundException{
-        try {
-            String salt = ((StringMessage) (connection.receiveObject())).unpacker();
-            Log.d("Salt",salt);
-            //Hash password
-            String hashPassword1;
-            if (!salt.equals("")) {
-                hashPassword1 = BCrypt.hashpw(password1, salt);
-            } else {
-                hashPassword1 = "";
-            }
-            return hashPassword1;
-        } catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-  /*  public void performLogin() throws IOException, ClassNotFoundException{
-        String initalSuccess = receiveAndDisplayString();
-        connection.sendObject(new ConfirmationMessage(true));
-        connection.sendObject(username);
-        String hasspass = hashPassword(password);
-        connection.sendObject(hasspass);
-        String response = receiveAndDisplayString();
-        if (response.matches("^Fail:.*$")) {
-             loginResult = false;
-        }
-        if (response.matches("^Success:.*$")) {
-            loginResult = true;
-        }
-    }*/
     public Boolean getLoginResult(){
         return loginResult;
     }
@@ -176,7 +145,6 @@ public class GUIClientLogin extends Thread{
                 break;
             }
         }
-
     }
 
     //Helper method to ask YN and send back ConfirmationMessage
