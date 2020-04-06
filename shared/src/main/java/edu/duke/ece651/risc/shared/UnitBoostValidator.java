@@ -31,7 +31,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
 
   // Player must own region
   public boolean validateRegion(UnitBoost order) {
-    if (order.getDestination().getOwner().equals(player)) {
+    if (order.getDestination().getOwner().getName().equals(player.getName())) {
       return true;
     } else {
       return false;
