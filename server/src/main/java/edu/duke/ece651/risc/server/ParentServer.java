@@ -238,7 +238,7 @@ public class ParentServer extends Thread{
     }
     //Once out then game will start
     notStarted = false;
-    System.out.println("All players or time limit, proceeding on " + gameID);
+    System.out.println(gameID + " : " + "All players or time limit, proceeding");
     //Reset timer for game start time
     gameStart = System.currentTimeMillis();
   }
@@ -441,7 +441,7 @@ public class ParentServer extends Thread{
 
   // Method to call child threads, will prompt player and add all orders to map
   public void callThreads() throws InterruptedException {
-    System.out.println("Calling threads");
+    System.out.println(gameID + " : " + "Calling threads");
     List<Callable<Object>> todo = new ArrayList<Callable<Object>>(children.size());
     for (int i = 0; i < children.size(); i++) {
       todo.add(Executors.callable(children.get(i)));
@@ -449,7 +449,7 @@ public class ParentServer extends Thread{
       children.get(i).setTurnMessage(turnResults.toString());
     }
     threads.invokeAll(todo);
-    System.out.println("Threads finished");
+    System.out.println(gameID + " : " + "Threads finished");
   }
 
   // method to add additional unit after round complete to all regions on board
@@ -492,6 +492,7 @@ public class ParentServer extends Thread{
       // If one player alive then create message --> send
       AbstractPlayer winner = playersLeft().iterator().next();
       StringMessage winnerMessage = new StringMessage(winner.getName() + " is the winner!");
+      System.out.println(gameID + " : " + winnerMessage.unpacker());
       // Send message to all children
       for (ChildServer child : children) {
         try {
@@ -509,10 +510,11 @@ public class ParentServer extends Thread{
   // enables game to be runnable
   @Override
   public void run() {
-    System.out.println("MAX_PLAYERS: " + MAX_PLAYERS);
-    System.out.println("TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
-    System.out.println("START_WAIT_MINUTES:" + START_WAIT_MINUTES);
+    System.out.println(gameID + " : Game started");
+    System.out.println(gameID + " : MAX_PLAYERS: " + MAX_PLAYERS);
+    System.out.println(gameID + " : TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
+    System.out.println(gameID + " : START_WAIT_MINUTES:" + START_WAIT_MINUTES);
     playGame();
-    System.out.println("~~~GAMEOVER~~~");
+    System.out.println(gameID + " : Game ended");
   }
 }
