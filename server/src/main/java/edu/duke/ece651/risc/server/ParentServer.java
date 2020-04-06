@@ -220,7 +220,7 @@ public class ParentServer extends Thread{
               if(!(e instanceof SocketTimeoutException)){
                 //If not timeout then not there --> close connection
                 playerConnection.closeAll();
-                playerConnection = null;
+                child.setPlayerConnection(null);
                 //Only remove player IFF in this game
                 masterServer.removePlayer(child.getPlayer().getName(), gameID);
               }
