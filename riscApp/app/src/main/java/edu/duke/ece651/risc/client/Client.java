@@ -246,7 +246,7 @@ public class Client extends Thread implements ClientInterface {
       }
       while (true) {
 
-        String turn = receiveAndDisplayString();
+        String turn = receiveAndDisplayString(); // long turn list
         
         long startTime = System.currentTimeMillis();
         long maxTime = (long) (connection.getSocket().getSoTimeout());
