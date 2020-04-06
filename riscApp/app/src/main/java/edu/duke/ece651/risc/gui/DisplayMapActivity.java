@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,32 +23,29 @@ import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.BoardGenerator;
 import edu.duke.ece651.risc.shared.HumanPlayer;
+import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.Unit;
 
 public class DisplayMapActivity extends AppCompatActivity {
     List<Region> regions;
-
+    ExecuteClient executeClient;
+    TextView helpText;
+    List<OrderInterface> orders;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map);
-        //BoardGenerator boardGenerator = new BoardGenerator();
-        //boardGenerator.createBoard();
-        generateBoard();
-//        Board board = boardGenerator.getBoard();
-//        AbstractPlayer player = new HumanPlayer("P1");
-//        regions = board.getRegions();
-//        Unit u = new Unit(5);
-//        for (int i = 0; i < regions.size(); i++){
-//            regions.get(i).setUnits(u);
-//            regions.get(i).setOwner(player);
-//        }
-//        ParentActivity parentActivity = new ParentActivity();
-//        parentActivity.setBoard(board);
+        executeClient = new ExecuteClient(this);
+        helpText = findViewById(R.id.helpText);
+        //executeClient.displayServerBoard(helpText);
+        // temp for testing
+       // generateBoard();
         Board board = ParentActivity.getBoard();
         regions = board.getRegions();
         Log.d("Inside map regions",regions.get(0).getName());
+        // temp for testing
+
     }
     public void setRegions(ArrayList<Region> regions){
         this.regions = regions;
@@ -70,7 +68,8 @@ public class DisplayMapActivity extends AppCompatActivity {
 
     }
     public void submitAll(View view){
-
+        // TODO: execute client when done
+        executeClient.playGame(helpText,orders);
     }
     // TODO: change from hardcoded to based off of regionList
     public void planetOne(View view){

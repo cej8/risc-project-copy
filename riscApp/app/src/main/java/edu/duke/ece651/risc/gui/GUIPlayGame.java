@@ -24,18 +24,40 @@ public class GUIPlayGame extends Thread{
     private boolean isPlaying = true;
     private Activity activity;
     private Board board;
+    private long startTime;
+    private long maxTime;
+    private boolean displayBoard;
+    private List<OrderInterface> orders;
+    boolean alive;
+    private boolean gotBoard;
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
-
-    public GUIPlayGame(Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    // display board constructor
+    public GUIPlayGame(boolean displayBoard,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
         this.activity = act;
         this.board = ParentActivity.getBoard();
+        this.displayBoard = displayBoard;
+        this.gotBoard = false;
     }
+    // send orders
+    public GUIPlayGame(List<OrderInterface> orders,boolean displayBoard,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+        this.connection = connect;
+        this.clientInput = input;
+        this.clientOutput = output;
+        this.activity = act;
+        this.board = ParentActivity.getBoard();
+        this.displayBoard = displayBoard;
+        this.orders = orders;
+    }
+    public boolean getAlive(){
+        return this.alive;
+    }
+
     public boolean timeOut(long startTime, long maxTime){
         // If too long --> kill player (prevent trying to write to closed pipe)
         if (System.currentTimeMillis() - startTime > maxTime) {
@@ -46,20 +68,16 @@ public class GUIPlayGame extends Thread{
         }
         return false;
     }
-
-    public void playGame() {
+    public void serverDisplayBoard(){
         try {
-            while (true) {
-
+           // while (true) {
                 String turn = receiveAndDisplayString();
-
-                long startTime = System.currentTimeMillis();
-                long maxTime = (long) (connection.getSocket().getSoTimeout());
+                startTime = System.currentTimeMillis();
+                maxTime = (long) (connection.getSocket().getSoTimeout());
                 //Catch case for issues in testing, should never really happen
                 if (maxTime == 0) {
                     maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
                 }
-
                 // Start of each turn will have continue message if game still going
                 // Otherwise is winner message
                 StringMessage startMessage = (StringMessage) (connection.receiveObject());
@@ -71,7 +89,6 @@ public class GUIPlayGame extends Thread{
                     clientInput.close();
                     return;
                 }
-
                 // Next is alive status for player
                 ConfirmationMessage isAlive = (ConfirmationMessage) (connection.receiveObject());
                 // If null then something wrong
@@ -79,33 +96,52 @@ public class GUIPlayGame extends Thread{
                     return;
                 }
                 // Get primitive
-                boolean alive = isAlive.getMessage();
+                alive = isAlive.getMessage();
                 // If not same then player died on previous turn --> get spectate message
                 if (alive != isPlaying) {
                     isPlaying = alive;
                     //Query for spectating
                     //If no then kill connection
-                    if(!queryYNAndRespond("Would you like to keep spectating? [Y/N]")){
+                    if (!queryYNAndRespond("Would you like to keep spectating? [Y/N]")) {
                         // TODO: no spectating allowed for now
                         connection.closeAll();
                         clientInput.close();
                     }
                 }
+                // Next server sends board
+                board = (Board) (connection.receiveObject());
+                ParentActivity parentActivity = new ParentActivity();
+                parentActivity.setBoard(board);
+                gotBoard = true;
+           // }
+        } catch (Exception e) {
+            e.printStackTrace();
+            connection.closeAll();
+            clientInput.close();
+            return;
+        }
+    }
+    public boolean isGotBoard(){
+        return gotBoard;
+    }
+    public void playGame() {
+        try {
+            while (true) {
 
                 while (true) {
-                    // Next server sends board
-                    board = (Board) (connection.receiveObject());
-                    ParentActivity parentActivity = new ParentActivity();
-                    parentActivity.setBoard(board);
-                    // Board now saved globally 
+//                    // Next server sends board
+//                    board = (Board) (connection.receiveObject());
+//                    ParentActivity parentActivity = new ParentActivity();
+//                    parentActivity.setBoard(board);
+                    // Board now saved globally
                     // Display board
-                    clientOutput.displayBoard(board);
+                   // clientOutput.displayBoard(board);
                     // Client generates orders --> sends
                     /////TODO probably seperate this part
                     if (alive) {
                         //new OrderCreator
-                        OrderHelper orderhelper = new OrderHelper((edu.duke.ece651.risc.client.ClientInterface) this);
-                        List<OrderInterface> orders = orderhelper.createOrders();
+                       // OrderHelper orderhelper = new OrderHelper((edu.duke.ece651.risc.client.ClientInterface) this);
+                        //List<OrderInterface> orders = orderhelper.createOrders();
                         //If too long --> kill player
                         if(timeOut(startTime, maxTime)){ return;}
                         connection.sendObject(orders);
@@ -160,6 +196,10 @@ public class GUIPlayGame extends Thread{
 
     @Override
     public void run(){
-        playGame();
+        if (displayBoard == true) {
+            serverDisplayBoard();
+        } else {
+            playGame();
+        }
     }
 }

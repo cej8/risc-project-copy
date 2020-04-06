@@ -6,6 +6,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -181,7 +184,7 @@ public class ExecuteClient {
     }
 
 
-    public void chooseRegions(TextView helpText, String regionGroup) {
+    public void chooseRegions(final TextView helpText, String regionGroup) {
         clientOutput = new GUITextDisplay(helpText, act);
         final GUIClientRegionSelection selection = new GUIClientRegionSelection(regionGroup, connection, clientInput, clientOutput, act);
         selection.start();
@@ -191,10 +194,43 @@ public class ExecuteClient {
                 // This method will be executed once the timer is over
                 // TODO: where we actually play the game - DisplayMapActivity.java
                 Log.d("Game", "Starting");
-                Intent newGame= new Intent(act, DisplayMapActivity.class);
-                //placement.putExtra("GAMELIST", games);
-                act.startActivity(newGame);
+                clientOutput.displayString("Waiting for board from server");
+                clientOutput = new GUITextDisplay();
+                displayServerBoard(helpText);
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Intent newGame= new Intent(act, DisplayMapActivity.class);
+//                        act.startActivity(newGame);
+//                    }
+//                },2000);
             }
         }, 2000);
+    }
+    //set master board
+    public void displayServerBoard(TextView helpText){
+        clientOutput = new GUITextDisplay(helpText, act);
+        final GUIPlayGame guiPlayGame = new GUIPlayGame(true,connection,clientInput,clientOutput,act);
+        guiPlayGame.start();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               // boolean gotBoard = guiPlayGame.isGotBoard();
+                Intent newGame= new Intent(act, DisplayMapActivity.class);
+                 act.startActivity(newGame);
+            }
+        },3000);
+    }
+    public void playGame(TextView helpText,List<OrderInterface> orders){
+        clientOutput = new GUITextDisplay(helpText, act);
+        final GUIPlayGame guiPlayGame = new GUIPlayGame(orders,false, connection, clientInput, clientOutput, act);
+        guiPlayGame.start();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(act,WaitActivity.class);
+                act.startActivity(intent);
+            }
+        },6000);
     }
 }

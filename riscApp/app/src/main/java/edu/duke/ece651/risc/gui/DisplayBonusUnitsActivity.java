@@ -63,7 +63,7 @@ public class DisplayBonusUnitsActivity extends AppCompatActivity {
         //unit0.setText();
     }
     public void next(View view){
-
+        Intent intent = new Intent(this,DisplayMapActivity.class);
     }
     public Region getRegionByName(Board board, String name){
         Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
