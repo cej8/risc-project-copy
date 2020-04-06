@@ -25,6 +25,7 @@ public class ChooseRegionsActivity extends AppCompatActivity {
         executeClient.setConnection(connection);
         editRegionGroup= findViewById(R.id.regionName);
         userPrompt = findViewById(R.id.helpText);
+        executeClient.getBoardAssignments(userPrompt);
 
     }
 
