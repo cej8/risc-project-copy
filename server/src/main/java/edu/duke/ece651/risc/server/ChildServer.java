@@ -204,6 +204,7 @@ public class ChildServer implements Runnable{
       }
     }
     catch(Exception e){
+      System.out.println(player.getName() + " had some issue, disconnected");
       playerConnection.closeAll();
       playerConnection = null;
       parent.getMasterServer().removePlayer(player.getName(), parent.getGameID());

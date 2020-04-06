@@ -110,10 +110,12 @@ public class MasterServer {
   //Ensures to only remove if they are in PS with gameID
   public void removePlayer(String username, int gameID){
     synchronized(activePlayers){
+      System.out.println("trying to remove " + username + " in game " + gameID);
       LoginServer ls = activePlayers.get(username);
       if(ls == null) { return; }
       if(ls.getActiveGameID() == gameID){
-        activePlayers.remove(ls);
+        System.out.println("removing " + username + " in game " + gameID);
+        activePlayers.remove(username);
       }
     }
   }
@@ -172,10 +174,12 @@ public class MasterServer {
     //Check if already logged in
     synchronized(activePlayers){
       if(activePlayers.get(user) != null){
+        System.out.println(user + " tried to login but already logged in");
         return false;
       }
     }
     //Otherwise check if hashed passwords match
+    System.out.println(user + " trying to log in");
     return hashedPassword.equals(loginMap.get(user).getFirst());
   }
 
