@@ -7,6 +7,9 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
 import edu.duke.ece651.risc.client.ConnectionManager;
@@ -193,8 +196,5 @@ public class ExecuteClient {
                 act.startActivity(newGame);
             }
         }, 2000);
-
     }
-
-
 }
