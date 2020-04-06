@@ -5,6 +5,13 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+/*Thread to handle communication to client, run() called once per turn.
+
+Attempts to handle all message passing between client/server for single turn within a game.
+
+Has handling for missing client connections (not connected to this thread/game) and deals with timeouts internally.
+*/
+
 // Class that handles each child implemtation for game (i.e. each player has their own ChildServer)
 public class ChildServer implements Runnable{
   //Player object for client

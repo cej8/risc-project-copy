@@ -9,6 +9,16 @@ import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 import org.mindrot.jbcrypt.*;
 
+/*
+This is the object that deals with the initial login and game select for a client. This is done by accessing the user information and active games in the MasterServer and prompting the client.This is also the class that "attaches" the connection to a single ParentServer, allowing the user to connect to a game.
+
+Maintains connection for current player but does not handle passing messages to game (once logged in/selected game then done with active function).
+
+Used as value for seeing which players are connected within MasterServer.
+*/
+
+
+
 public class LoginServer extends Thread{
   //MS that owns LS
   private MasterServer masterServer;

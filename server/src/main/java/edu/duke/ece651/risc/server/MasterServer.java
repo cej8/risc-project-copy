@@ -6,6 +6,20 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+/*
+This is the main "hub" that connects all of the games/players. Main function is as highest level data structure holding references to all players/games. Also maintains outward facing connection for clients to connect to (but does not handle logins/messages).
+
+Maintains open ServerSocket to which clients connect (after which they are passed to a LoginServer instance).
+
+Maintains Map of all active games (parentServers) by gameID as key.
+
+Maintains Map of all players online (activePlayers) by username as key.
+
+Maintains Map of all user's logins/passwords (centralized so LoginServers can access a single object rather than reloading map) with username as key and Pair of <hashedpassword, salt>.
+*/
+
+
+
 //Highest level server object, accepts incoming connections
 //And passes to LoginServer
 public class MasterServer {
