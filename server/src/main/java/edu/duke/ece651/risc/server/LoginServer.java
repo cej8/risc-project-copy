@@ -10,13 +10,18 @@ import java.util.concurrent.locks.*;
 import org.mindrot.jbcrypt.*;
 
 public class LoginServer extends Thread{
-
+  //MS that owns LS
   private MasterServer masterServer;
+  //Connection to client
   private Connection playerConnection;
+  //String of client's username (starts "")
   private String user;
+  //String of gameID trying/has joined
   private int activeGameID;
 
+  //Lock for logins
   private static final Lock loginLock = new ReentrantLock();
+  //Lock for registration
   private static final Lock registerLock = new ReentrantLock();
   
   public LoginServer(MasterServer masterServer, Connection playerConnection){
@@ -26,17 +31,19 @@ public class LoginServer extends Thread{
     this.activeGameID = -1;
   }
 
-  public String getUser(){
-    return user;
-  }
-
   public Connection getConnection(){
     return playerConnection;
   }
 
+  //Helper method for testing
   public void setUser(String user){
     this.user = user;
   }
+
+  public String getUser(){
+    return user;
+  }
+
 
   public int getActiveGameID(){
     return activeGameID;
@@ -73,6 +80,7 @@ public class LoginServer extends Thread{
         boolean loginSuccess = masterServer.checkLogin(username, hashedPassword);
         if(loginSuccess){
           user = username;
+          //Add player, return if successful
           if(masterServer.addPlayer(this)){
             playerConnection.sendObject(new StringMessage("Success: Logged in"));
             loginLock.unlock();
@@ -125,6 +133,7 @@ public class LoginServer extends Thread{
 
   }
 
+  //Method to build string for each PS in list
   public String buildGamesInfo(List<ParentServer> games){
     StringBuilder sb = new StringBuilder();
     for(ParentServer ps : games){
@@ -133,6 +142,7 @@ public class LoginServer extends Thread{
     return sb.toString();
   }
 
+  //Get PS with gameID of "gameID"
   public boolean validGameID(List<ParentServer> games, int gameID){
     for(ParentServer ps : games){
       if(ps.getGameID() == gameID){
@@ -142,11 +152,15 @@ public class LoginServer extends Thread{
     return false;
   }
 
+  //Method to send messages upon game join
   public void sendJoinMessages() throws IOException{
     System.out.println(user + " joining " + activeGameID);
-  playerConnection.sendObject(new StringMessage("Success: Joined " + activeGameID));
-  playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(activeGameID).getFirstCall(user)));
-  playerConnection.sendObject(new HumanPlayer(user));
+    //Send join
+    playerConnection.sendObject(new StringMessage("Success: Joined " + activeGameID));
+    //Send if firstCall of threads
+    playerConnection.sendObject(new ConfirmationMessage(masterServer.getParentServer(activeGameID).getFirstCall(user)));
+    //Send user's object
+    playerConnection.sendObject(new HumanPlayer(user));
   }
   
   //First prompts for rejoining game or new game
@@ -221,10 +235,12 @@ public class LoginServer extends Thread{
   
   @Override
   public void run(){
+    //Try login/select
     try{
       loginProcess();
       selectGame();
     }
+    //If failure then remove LS and close connection
     catch(Exception e){
       masterServer.removePlayer(this);
       playerConnection.closeAll();

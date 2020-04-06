@@ -9,22 +9,34 @@ import java.util.concurrent.*;
 
 // Class handles all server side implmentation including ChildServer handling
 public class ParentServer extends Thread{
+  //List of ChildServers which talk to clients/handle turns
   private List<ChildServer> children;
+  //List of ChildServer's player names
   private List<String> players;
+  //Game board
   private Board board;
+  //Map of order names to list of those orders
   private Map<String, List<OrderInterface>> orderMap;
+  //Threads for calling childservers
   private ExecutorService threads = Executors.newFixedThreadPool(Constants.MAX_PLAYERS);
+
+  //Local version of constants (allows changing for testing)
   private int MAX_PLAYERS = Constants.MAX_PLAYERS;
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
   
+  //boolean for if still in waitingForPlayers
   private boolean notStarted = true;
+  //Value of server's gameID
   private int gameID;
-
+ 
+  //SB for turns return string
   private StringBuilder turnResults;
   private int turnNumber = 1;
-
+  
+  //MS that owns PS
   private MasterServer masterServer;
+  //Time when waitingForPlayers started or game start
   private long gameStart;
 
   public ParentServer(){
@@ -47,30 +59,103 @@ public class ParentServer extends Thread{
     return children;
   }
 
+  //Method to add player's childserver to list
+  public void addPlayer(ChildServer c){
+    synchronized(children){
+      children.add(c);
+    }
+  }
+
+  //Method to add username/connection to game by creating new childserver
+  //Used by LoginServer
+  public synchronized void addPlayer(String username, Connection playerConnection){
+    HumanPlayer player = new HumanPlayer(username);
+    addPlayer(new ChildServer(player, playerConnection, this));
+    players.add(username);
+  }
+ 
+  //Method to remove player from list of users
+  public void removePlayer(String username){
+    players.remove(username);
+  }
+
+  public Board getBoard() {
+    return this.board;
+  }
+
+  public void setBoard(Board board) {
+    this.board = board;
+  }
+
+  //Used only for testing
+  public Map<String, List<OrderInterface>> getOrderMap() {
+    return orderMap;
+  }
+
+  //Used only for testing
+  public void setMAX_PLAYERS(int MAX_PLAYERS){
+    this.MAX_PLAYERS = MAX_PLAYERS;
+    try {
+      threads = Executors.newFixedThreadPool(this.MAX_PLAYERS);
+    }
+    // For debug --> assume we won't put negative
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  //Used only for testing
   public double getTURN_WAIT_MINUTES() {
     return TURN_WAIT_MINUTES;
   }
 
-  public int getGameID(){
-    return gameID;
+  //Used only for testing
+  public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES) {
+    this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
+  }
+
+  //Used only for testing
+  public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES) {
+    this.START_WAIT_MINUTES = START_WAIT_MINUTES;
   }
 
   public void setNotStarted(boolean notStarted){
     this.notStarted = notStarted;
   }
 
+  public int getGameID(){
+    return gameID;
+  }
+
   public MasterServer getMasterServer(){
     return masterServer;
   }
 
-  public boolean hasPlayer(String player){
-    return players.contains(player);
+  //Function to close all children's connections on game end
+  public void closeAll() {
+    for (ChildServer child : children) {
+      if (child.getPlayerConnection() != null) {
+        child.getPlayerConnection().closeAll();
+        masterServer.removePlayer(child.getPlayer().getName(), gameID);
+      }
+    }
   }
 
+  //Function to get if the server is still waiting
+  //Needs to check MAX_PLAYERS for race on waitingForPlayers while loop exit
   public boolean waitingPlayers(){
     return notStarted && children.size() < MAX_PLAYERS;
   }
 
+  //Function to check if players list has a specific player
+  public boolean hasPlayer(String player){
+    return players.contains(player);
+  }
+
+  //Function to get the "Game String"
+  //Used for LoginServer's buildGameInfo
+  //Essentially gives the game until start (or how long game has been going)
+  //Also shows connected players
   public String getGameString(){
     StringBuilder sb = new StringBuilder();
     if(notStarted){
@@ -94,65 +179,56 @@ public class ParentServer extends Thread{
     for(int i = 0; i < players.size(); i++){
       sb.append(players.get(i) + ", ");
     }
+    //Remove trailling ", "
     sb.deleteCharAt(sb.length()-1);
     sb.deleteCharAt(sb.length()-1);
     sb.append("]");
     return sb.toString();
   }
 
-  //set's for testing
-  public void setMAX_PLAYERS(int MAX_PLAYERS){
-    this.MAX_PLAYERS = MAX_PLAYERS;
-    try {
-      threads = Executors.newFixedThreadPool(this.MAX_PLAYERS);
-    }
-    // For debug --> assume we won't put negative
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES) {
-    this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
-  }
-
-  public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES) {
-    this.START_WAIT_MINUTES = START_WAIT_MINUTES;
-  }
-
+  //Get's the "firstCall" value for a player from their childserver
   public boolean getFirstCall(String user){
     return children.get(players.indexOf(user)).getFirstCall();
   }
   
+  //Function to wait for either MAX_PLAYERS to join or START_WAIT_MINUTES to elapse
   public void waitingForPlayers() {
 
+    //Get time of function start
     long startTime = System.currentTimeMillis();;
     //Start time 2.5 minutes after first connection
     long gameStartTime = (long)(START_WAIT_MINUTES*60*1000);
 
+    //gameStart is timer for getGameString
     gameStart = System.currentTimeMillis();
     
+    //Spin until either all join or time out
     while (children.size() < MAX_PLAYERS && (System.currentTimeMillis()-startTime < gameStartTime)) {
       //Set timeout to .5 seconds --> try to read
-      //If timeout then still there
+      //If timeout then still there (otherwise socket has failed)
       synchronized(children){
         for(ChildServer child : children){
+          //Get connection
           Connection playerConnection = child.getPlayerConnection();
           if(playerConnection != null){
             try{
+              //Try to listen for .5s
               playerConnection.getSocket().setSoTimeout(500);
               playerConnection.receiveObject();
             }
             catch(Exception e){
               if(!(e instanceof SocketTimeoutException)){
+                //If not timeout then not there --> close connection
                 playerConnection.closeAll();
                 playerConnection = null;
+                //Only remove player IFF in this game
                 masterServer.removePlayer(child.getPlayer().getName(), gameID);
               }
             }
           }
         }
       }
+      //Wait for .5s so others can access children
       try{
         Thread.sleep(500);
       }
@@ -160,42 +236,14 @@ public class ParentServer extends Thread{
         e.printStackTrace();
       }
     }
+    //Once out then game will start
     notStarted = false;
     System.out.println("All players or time limit, proceeding on " + gameID);
+    //Reset timer for game start time
     gameStart = System.currentTimeMillis();
   }
 
-  public Board getBoard() {
-    return this.board;
-  }
-
-  public void setBoard(Board board) {
-    this.board = board;
-  }
-
-  public Map<String, List<OrderInterface>> getOrderMap() {
-    return orderMap;
-  }
-
-  // Helper method to add player to global player list - children
-  public void addPlayer(ChildServer c){
-    synchronized(children){
-      children.add(c);
-    }
-  }
-
-  public void removePlayer(String username){
-    players.remove(username);
-  }
-
-  //Method to add username/connection to game by creating new childserver
-  public synchronized void addPlayer(String username, Connection playerConnection){
-    HumanPlayer player = new HumanPlayer(username);
-    addPlayer(new ChildServer(player, playerConnection, this));
-    players.add(username);
-  }
-
-  //Method to try to join game
+  //Method to try to join game, called by LoginServer
   public synchronized boolean tryJoin(String username, Connection playerConnection) throws IOException{
     //If game not started then trying to join as new player
     if(notStarted){
@@ -261,16 +309,6 @@ public class ParentServer extends Thread{
     }
   }
 
-  // Close serverSocket for all children
-  public void closeAll() {
-    for (ChildServer child : children) {
-      if (child.getPlayerConnection() != null) {
-        child.getPlayerConnection().closeAll();
-        masterServer.removePlayer(child.getPlayer().getName(), gameID);
-      }
-    }
-  }
-
   public synchronized boolean assignGroups(String groupName, AbstractPlayer player) {
     // Method to set initial groups (groupName must be of form "Group _" where _ is
     // A-E)
@@ -291,19 +329,6 @@ public class ParentServer extends Thread{
     }
 
     return foundRegion;
-  }
-
-  public void callThreads() throws InterruptedException {
-    // Method to call child threads, will prompt player and add all orders to map
-    System.out.println("Calling threads");
-    List<Callable<Object>> todo = new ArrayList<Callable<Object>>(children.size());
-    for (int i = 0; i < children.size(); i++) {
-      todo.add(Executors.callable(children.get(i)));
-      // Insert message into children
-      children.get(i).setTurnMessage(turnResults.toString());
-    }
-    threads.invokeAll(todo);
-    System.out.println("Threads finished");
   }
 
   public Set<AbstractPlayer> playersLeft() {
@@ -331,6 +356,7 @@ public class ParentServer extends Thread{
     return false;
   }
 
+  //Method to move through orders (all valid) and add to Map
   public synchronized void addOrdersToMap(List<OrderInterface> orders) {
     // Method to add orders to map
     for (OrderInterface order : orders) {
@@ -412,8 +438,21 @@ public class ParentServer extends Thread{
     // }
     orders.clear();
   }
-  // method to add additional unit after round complete to all regions on board
 
+  // Method to call child threads, will prompt player and add all orders to map
+  public void callThreads() throws InterruptedException {
+    System.out.println("Calling threads");
+    List<Callable<Object>> todo = new ArrayList<Callable<Object>>(children.size());
+    for (int i = 0; i < children.size(); i++) {
+      todo.add(Executors.callable(children.get(i)));
+      // Insert message into children
+      children.get(i).setTurnMessage(turnResults.toString());
+    }
+    threads.invokeAll(todo);
+    System.out.println("Threads finished");
+  }
+
+  // method to add additional unit after round complete to all regions on board
   public void growUnits() {
     for (Region r : board.getRegions()) {
       // increment number of basic units

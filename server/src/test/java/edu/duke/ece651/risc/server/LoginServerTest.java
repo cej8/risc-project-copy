@@ -207,12 +207,12 @@ public class LoginServerTest {
     LoginServer ls6 = new LoginServer(ms, null);
     ls6.setUser("ls6");
     
-    ms.addLoginServer(ls);
-    ms.addLoginServer(ls2);
-    ms.addLoginServer(ls3);
-    ms.addLoginServer(ls4);
-    ms.addLoginServer(ls5);
-    ms.addLoginServer(ls6);
+    ms.addPlayer(ls);
+    ms.addPlayer(ls2);
+    ms.addPlayer(ls3);
+    ms.addPlayer(ls4);
+    ms.addPlayer(ls5);
+    ms.addPlayer(ls6);
     //ps1 is open game with ls
     ParentServer ps1 = new ParentServer(2, ms);
     ps1.tryJoin(ls);
