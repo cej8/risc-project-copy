@@ -14,7 +14,7 @@ public class WaitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wait);
-        wait = findViewById(R.layout.waittext);
+        wait = findViewById(R.id.waittext);
         executeClient = new ExecuteClient(this);
         executeClient.displayServerBoard(wait);
     }

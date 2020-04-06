@@ -40,7 +40,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         helpText = findViewById(R.id.helpText);
         //executeClient.displayServerBoard(helpText);
         // temp for testing
-       // generateBoard();
+        generateBoard();
         Board board = ParentActivity.getBoard();
         regions = board.getRegions();
         Log.d("Inside map regions",regions.get(0).getName());
@@ -69,6 +69,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     }
     public void submitAll(View view){
         // TODO: execute client when done
+        orders = ParentActivity.getOrders();
         executeClient.playGame(helpText,orders);
     }
     // TODO: change from hardcoded to based off of regionList
