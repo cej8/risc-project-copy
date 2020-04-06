@@ -41,9 +41,9 @@ public class AttackActivity extends AppCompatActivity {
     }
     public void attackFrom(View view){
         if (planetName == null){
-            helpText.setText("Please select a planet");
-        } else {
-            Intent i = new Intent(this, AttackActivityTwo.class);
+                helpText.setText("Please select a planet");
+            } else {
+                Intent i = new Intent(this, AttackActivityTwo.class);
             i.putExtra("PNAME", planetName);
             i.putExtra("ORDER",orderMessage);
             startActivity(i);

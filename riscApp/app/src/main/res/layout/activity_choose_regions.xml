@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChooseRegionsActivity">
+    tools:context=".ChooseRegionsActivity"
+    android:background="@drawable/spacebackground">
+
     <ImageButton
         android:id="@+id/Caprica"
         android:layout_width="75dp"
@@ -216,7 +218,8 @@
         android:layout_marginTop="284dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Region Name"
+        android:hint="Region Name"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.819"
         app:layout_constraintStart_toStartOf="parent"
@@ -229,6 +232,7 @@
         android:layout_height="41dp"
         android:layout_marginTop="284dp"
         android:text="Submit"
+        android:background="@drawable/oval2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintStart_toStartOf="parent"

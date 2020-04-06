@@ -103,7 +103,6 @@ public class ExecuteClient {
                 act.startActivity(gamesIntent);
             }
         }, 2000);
-
     }
 
     public void pickGame(boolean gameType, String id, boolean getgame, String gameList) {
