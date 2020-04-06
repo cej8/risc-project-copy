@@ -6,6 +6,20 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+/*
+This is the main "hub" that connects all of the games/players. Main function is as highest level data structure holding references to all players/games. Also maintains outward facing connection for clients to connect to (but does not handle logins/messages).
+
+Maintains open ServerSocket to which clients connect (after which they are passed to a LoginServer instance).
+
+Maintains Map of all active games (parentServers) by gameID as key.
+
+Maintains Map of all players online (activePlayers) by username as key.
+
+Maintains Map of all user's logins/passwords (centralized so LoginServers can access a single object rather than reloading map) with username as key and Pair of <hashedpassword, salt>.
+*/
+
+
+
 //Highest level server object, accepts incoming connections
 //And passes to LoginServer
 public class MasterServer {
@@ -27,11 +41,12 @@ public class MasterServer {
     this.loginFile = loginFile;
     
     loginMap = new HashMap<String, Pair<String, String>>();
+    System.out.println("Master : " + "Starting with blank loginMap");
     //Attempt to read loginMap from loginFile, otherwise use blank
     if(!loginFile.equals("")){
       try{
         File file = new File(getClass().getClassLoader().getResource(loginFile).getFile());
-        System.out.println("Reading users at " + file.getAbsolutePath());
+        System.out.println("Master : " + "Reading users at " + loginFile);
         FileInputStream fis = new FileInputStream(file);
         ObjectInputStream ois = new ObjectInputStream(fis);
         loginMap = (HashMap<String, Pair<String, String>>)(ois.readObject());
@@ -39,6 +54,7 @@ public class MasterServer {
         fis.close();
       }
       catch(IOException e){
+        System.out.println("Master : " + "Failed to read users at " + loginFile);
         e.printStackTrace();
       }
     }
@@ -50,10 +66,12 @@ public class MasterServer {
   public MasterServer(String loginFile, int port) throws IOException, ClassNotFoundException{
     this(loginFile);
     serverSocket = new ServerSocket(port);
+    System.out.println("Master : " + "Opening with port " + port);
   }
 
   public void setSocket(int port) throws IOException{
     serverSocket = new ServerSocket(port);
+    System.out.println("Master : " + "Opening with port " + port);
   }
 
   public ServerSocket getServerSocket(){
@@ -81,6 +99,7 @@ public class MasterServer {
     }
     else{
       loginMap.put(user, hashedPasswordAndSalt);
+      System.out.println("Master : " + "Added login for (" + user + ")");
       saveMap();
       return true;
     }
@@ -99,9 +118,11 @@ public class MasterServer {
   public boolean addPlayer(LoginServer ls){
     synchronized(activePlayers){
       if(activePlayers.get(ls.getUser()) == null){
+         System.out.println("Master : " + "Added (" + ls.getUser() + ") to active players");
          activePlayers.put(ls.getUser(), ls);
          return true;
       }
+      System.out.println("Master : " + "Failed to add (" + ls.getUser() + ") to active players, already present");
       return false;
     }
   }
@@ -110,11 +131,11 @@ public class MasterServer {
   //Ensures to only remove if they are in PS with gameID
   public void removePlayer(String username, int gameID){
     synchronized(activePlayers){
-      System.out.println("trying to remove " + username + " in game " + gameID);
+      System.out.println("Master : " + "Trying to remove " + username + " in game " + gameID);
       LoginServer ls = activePlayers.get(username);
       if(ls == null) { return; }
       if(ls.getActiveGameID() == gameID){
-        System.out.println("removing " + username + " in game " + gameID);
+        System.out.println("Master : " + "Removing " + username + " in game " + gameID);
         activePlayers.remove(username);
       }
     }
@@ -131,6 +152,7 @@ public class MasterServer {
   //Method called by LoginServer to create new game
   public synchronized int createNewParentServer(String user, Connection playerConnection) throws IOException{
     ParentServer ps = new ParentServer(nextGameID++, this);
+    System.out.println("Master : " + "Created new game (" + (nextGameID-1) + ")");
     ps.start();
     ps.tryJoin(user, playerConnection);
     parentServers.put(ps.getGameID(), ps);
@@ -144,6 +166,7 @@ public class MasterServer {
 
   //Remove PS by gameID
   public void removeParentServer(Integer gameID){
+    System.out.println("Master : " + "Removing game (" + (gameID) + ")");
     parentServers.remove(gameID);
   }
 
@@ -158,10 +181,11 @@ public class MasterServer {
       oos.flush();
       oos.close();
       fos.close();
-      System.out.println("Successfully saved users at " + file.getAbsolutePath());
+      System.out.println("Master : " + "Successfully saved users at " + loginFile);
     }
     catch(Exception e){
       e.printStackTrace();
+      System.out.println("Master : " + "Failed to save users at " + loginFile);
     }
   }
 
@@ -174,12 +198,12 @@ public class MasterServer {
     //Check if already logged in
     synchronized(activePlayers){
       if(activePlayers.get(user) != null){
-        System.out.println(user + " tried to login but already logged in");
+        System.out.println("Master : " + user + " tried to login but already logged in");
         return false;
       }
     }
     //Otherwise check if hashed passwords match
-    System.out.println(user + " trying to log in");
+    System.out.println("Master : " + user + " trying to log in");
     return hashedPassword.equals(loginMap.get(user).getFirst());
   }
 
@@ -223,7 +247,7 @@ public class MasterServer {
       try {
         //Accept, set timeout to 60 seconds, create player
         newPlayerSocket = serverSocket.accept();
-        System.out.println("new player incoming");
+        System.out.println("Master : " + "New connection incoming");
         newPlayerSocket.setSoTimeout((int)(Constants.LOGIN_WAIT_MINUTES*60*1000));
         newPlayerConnection = new Connection(newPlayerSocket);
         newPlayerConnection.getStreamsFromSocket();
@@ -232,6 +256,7 @@ public class MasterServer {
         newLoginServer.start();
       }
       catch (Exception e) {
+        System.out.println("Master : " + "Failure in waitingForConnections, closing");
         e.printStackTrace(System.out);
         continue;
       }
