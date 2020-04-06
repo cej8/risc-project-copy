@@ -51,7 +51,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
   }
 
   // helper method
-  public boolean isValidMove(MoveOrder m) {
+  public boolean isValidMove(MoveOrder m, int sum) {
     if (!m.getSource().getOwner().getName().equals(player.getName())
         || !m.getDestination().getOwner().getName().equals(player.getName())) {
       return false;
@@ -60,11 +60,13 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
 
     if (hasValidRegionPath(m.getSource(), m.getDestination())) {
 
-      // if (player.getFood() >=
-      // m.getSource().findShortestPath(m.getDestination()).getTotalCost()) {
-      if (player.getResources().getFuelResource().getFuel() >= m.getSource().findShortestPath(m.getDestination())
+       if (player.getResources().getFuelResource().getFuel() >= m.getSource().findShortestPath(m.getDestination())
           .getTotalCost()) {
         // do we have enough food resources to travel shortest path?
+         sum+=m.getSource().findShortestPath(m.getDestination()).getTotalCost();
+         if(sum>player.getResources().getFuelResource().getFuel()){//check cumulative cost of path
+           return false;
+         }
         return true;
       }
       return false;
@@ -82,8 +84,9 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
 
   //  @Override
   public boolean validateRegions(List<MoveOrder> moveList) {
+    int totalMoveCost=0;
     for (MoveOrder move : moveList) {
-      if (!isValidMove(move)) {
+      if (!isValidMove(move,totalMoveCost)) {
         return false;
       }
          }
@@ -106,24 +109,24 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
       // set validMove to false if any of these are false: at least 1 sourceUnit, 1
       // moveUnit, and sourceUnits > moveUnits in each index of source
       for (int i = 0; i < sourceUnits.getUnits().size(); i++) { // for each index of the source units
-        if ((sourceUnits.getUnits().get(i) <= moveUnits.getUnits().get(i)) || (sourceUnits.getUnits().get(i) <= 0)
-            || (moveUnits.getUnits().get(i) <= 0)) {
+
+        if ((sourceUnits.getUnits().get(i) <= moveUnits.getUnits().get(i)) || (moveUnits.getUnits().get(i) < 0)) {
           validMove = false;
         }
       }
       if (validMove && this.hasValidRegionPath(tempSource, tempDest)) {
         moveCopy.doAction();
       } else {
-        // if (!validMove) {
-        //   System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); // this is just for testing
-        // }
-        // else{
-        //   System.out.println("Move failed: there is no valid path between Region " + tempSource.getName()
-        //       + " and Region " + tempDest.getName()); // this is just for testing
-        //   System.out.println("Cost to traverse this path = "/* + tempSource.findShortestPath(tempDest).getTotalCost() */
-        //       + "; " + tempSource.getOwner().getName() + " has "
-        //       + tempSource.getOwner().getResources().getFuelResource().getFuel() + " fuel remaining");
-        // }
+        if (!validMove) {
+          System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); // this is just for testing
+        }
+        else{
+          System.out.println("Move failed: there is no valid path between Region " + tempSource.getName()
+              + " and Region " + tempDest.getName()); // this is just for testing
+          System.out.println("Cost to traverse this path = "/* + tempSource.findShortestPath(tempDest).getTotalCost() */
+              + "; " + tempSource.getOwner().getName() + " has "
+              + tempSource.getOwner().getResources().getFuelResource().getFuel() + " fuel remaining");
+        }
         return false;
       }
     }

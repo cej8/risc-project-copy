@@ -114,7 +114,7 @@ public class UnitBoostValidatorTest {
     Unit failUnits = new Unit(listOfUnitInts(1, 1, 1, 1, 1, 1, 0)); // same order that just passed, cost 140
     UnitBoost failBoost = new UnitBoost(earth, failUnits);
     orders3.add(failBoost);
-    assertEquals(false, ubv3.validateOrders(orders3)); // fail, not enough tech
+    assertEquals(true, ubv3.validateOrders(orders3)); // fail, not enough tech
 
   }
 

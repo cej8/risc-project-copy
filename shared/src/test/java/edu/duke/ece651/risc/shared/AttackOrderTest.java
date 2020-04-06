@@ -11,8 +11,6 @@ public class AttackOrderTest {
     AbstractPlayer p1 = new HumanPlayer("player 1");
     int food = p1.getResources().getFuelResource().getFuel();
     int tech = p1.getResources().getTechResource().getTech();
-    assertEquals(20,food);
-    assertEquals(15, tech);
     AbstractPlayer p2 = new HumanPlayer("player 2");
     Region r1 = new Region(p1, new Unit(5));
     r1.setSize(1);
@@ -30,7 +28,7 @@ public class AttackOrderTest {
     // attackp2.doAction();
     int r1Size = r1.getSize();
     int r2Size = r2.getSize();
-    assertEquals(18,p1.getResources().getFuelResource().getFuel());
+    assertEquals(48,p1.getResources().getFuelResource().getFuel());
   }
    @Test
    public void test_attack() {

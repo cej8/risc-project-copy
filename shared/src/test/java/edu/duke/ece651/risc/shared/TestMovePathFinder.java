@@ -51,11 +51,11 @@ public class TestMovePathFinder {
 
     MoveValidator mv = new MoveValidator(p1, b);
     MoveOrder move1 = new MoveOrder(regions.get(6), regions.get(1), new Unit(2));//valid
-    assertEquals(true,mv.isValidMove(move1));
+    assertEquals(true,mv.isValidMove(move1,0));
     MoveOrder move2 = new MoveOrder(regions.get(6), regions.get(4),new Unit(2));//invalid, not enough resources
     // assertEquals(false, mv.isValidMove(move2));
     MoveOrder move3 = new MoveOrder(regions.get(3), regions.get(7), new Unit(2));//no valid path of adjacent regions
-    assertEquals(false, mv.isValidMove(move3));
+    assertEquals(false, mv.isValidMove(move3,0));
     
     
 

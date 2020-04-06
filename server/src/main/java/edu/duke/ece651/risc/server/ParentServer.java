@@ -7,6 +7,19 @@ import java.util.*;
 import java.io.*;
 import java.util.concurrent.*;
 
+/*
+
+This object maintains a single game's state, which the board and players (ChildServers) therein.
+
+Essentially waits for players to be attached by LoginServers (via tryJoin method) then coordinates calling ChildServers (which communicate with clients).
+
+Maintains all data for single game instance such as the board, the usernames of players connected (players), the threads communicating with said players (children), and the set of orders to apply at the end of a turn (orderMap).
+
+All write level changes to the games board are done within this class. All orders passed to orderMap are assumed to be valid (as validated within ChildServers).
+
+This object also decides when the game is over and handles sending the "winnerMessage" and ending relationship with all the clients (and telling MasterServer to remove the game/ParentServer from the game list).
+*/
+
 // Class handles all server side implmentation including ChildServer handling
 public class ParentServer extends Thread{
   //List of ChildServers which talk to clients/handle turns
@@ -238,7 +251,7 @@ public class ParentServer extends Thread{
     }
     //Once out then game will start
     notStarted = false;
-    System.out.println("All players or time limit, proceeding on " + gameID);
+    System.out.println(gameID + " : " + "All players or time limit, proceeding");
     //Reset timer for game start time
     gameStart = System.currentTimeMillis();
   }
@@ -440,8 +453,11 @@ public class ParentServer extends Thread{
   }
 
   // Method to call child threads, will prompt player and add all orders to map
+  //This DOES NOT timeout based on thread age, will wait for all threads to return
+  //ChildServers internally handle their own timeouts by leveraging socket timeouts
+  //based on TURN_WAIT_MINUTES as a maximum for time spent within run() method
   public void callThreads() throws InterruptedException {
-    System.out.println("Calling threads");
+    System.out.println(gameID + " : " + "Calling threads");
     List<Callable<Object>> todo = new ArrayList<Callable<Object>>(children.size());
     for (int i = 0; i < children.size(); i++) {
       todo.add(Executors.callable(children.get(i)));
@@ -449,7 +465,7 @@ public class ParentServer extends Thread{
       children.get(i).setTurnMessage(turnResults.toString());
     }
     threads.invokeAll(todo);
-    System.out.println("Threads finished");
+    System.out.println(gameID + " : " + "Threads finished");
   }
 
   // method to add additional unit after round complete to all regions on board
@@ -492,6 +508,7 @@ public class ParentServer extends Thread{
       // If one player alive then create message --> send
       AbstractPlayer winner = playersLeft().iterator().next();
       StringMessage winnerMessage = new StringMessage(winner.getName() + " is the winner!");
+      System.out.println(gameID + " : " + winnerMessage.unpacker());
       // Send message to all children
       for (ChildServer child : children) {
         try {
@@ -509,10 +526,11 @@ public class ParentServer extends Thread{
   // enables game to be runnable
   @Override
   public void run() {
-    System.out.println("MAX_PLAYERS: " + MAX_PLAYERS);
-    System.out.println("TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
-    System.out.println("START_WAIT_MINUTES:" + START_WAIT_MINUTES);
+    System.out.println(gameID + " : Game started");
+    System.out.println(gameID + " : MAX_PLAYERS: " + MAX_PLAYERS);
+    System.out.println(gameID + " : TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
+    System.out.println(gameID + " : START_WAIT_MINUTES:" + START_WAIT_MINUTES);
     playGame();
-    System.out.println("~~~GAMEOVER~~~");
+    System.out.println(gameID + " : Game ended");
   }
 }
