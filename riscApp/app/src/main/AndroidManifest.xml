@@ -16,6 +16,7 @@
         <activity android:name=".DisplayBonusUnitsActivity"></activity>
         <activity android:name=".AttackActivityTwo" />
         <activity android:name=".AttackActivity" />
+        <activity android:name=".ChooseRegionsActivity"></activity>
         <activity android:name=".JoinGameActivity" />
         <activity android:name=".NewGameActivity" />
         <activity android:name=".GameTypeActivity" />
