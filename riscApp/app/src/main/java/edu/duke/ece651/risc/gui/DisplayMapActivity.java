@@ -1,6 +1,7 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -32,13 +33,15 @@ public class DisplayMapActivity extends AppCompatActivity {
         BoardGenerator boardGenerator = new BoardGenerator();
         boardGenerator.createBoard();
         Board board = boardGenerator.getBoard();
-        AbstractPlayer player = new HumanPlayer("Leighanne");
+        AbstractPlayer player = new HumanPlayer("P1");
         regions = board.getRegions();
         Unit u = new Unit(5);
         for (int i = 0; i < regions.size(); i++){
             regions.get(i).setUnits(u);
             regions.get(i).setOwner(player);
         }
+        ParentActivity parentActivity = new ParentActivity();
+        parentActivity.setBoard(board);
         Log.d("Inside map regions",regions.get(0).getName());
     }
     public void setRegions(ArrayList<Region> regions){
@@ -47,13 +50,18 @@ public class DisplayMapActivity extends AppCompatActivity {
     public List<Region> getRegions(){
         return regions;
     }
-    public void move(View view){
 
+    public void moveOrder(View view){
+        Intent attackSetup = new Intent(this,AttackActivity.class);
+        attackSetup.putExtra("ORDER","move");
+        startActivity(attackSetup);
     }
-    public void attack(View view){
-
+    public void attackOrder(View view){
+        Intent attackSetup = new Intent(this,AttackActivity.class);
+        attackSetup.putExtra("ORDER","attack");
+        startActivity(attackSetup);
     }
-    public void upgrade(View view){
+    public void upgradeOrder(View view){
 
     }
     public void submitAll(View view){

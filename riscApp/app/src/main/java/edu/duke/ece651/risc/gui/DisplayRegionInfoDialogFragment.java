@@ -55,7 +55,7 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
         public Dialog DialogTwo(final Bundle savedInstanceState){
             AlertDialog.Builder unitBuilder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = requireActivity().getLayoutInflater();
-            unitBuilder.setView(inflater.inflate(R.layout.select_unit_dialog, null))
+            unitBuilder.setView(inflater.inflate(R.layout.display_unit_dialog, null))
                     .setTitle("Available Units")
                     .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
