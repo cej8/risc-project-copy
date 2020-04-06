@@ -73,7 +73,7 @@ public class MoveValidatorTest {
     // Orders using 0 units
     List<Unit> invalidUnits = get6UnitList(0, 9, 14, 19, 24, 29); // false: moving 0 units
     List<MoveOrder> moveInvalidUnits = getMovesDependent(regionCopy, invalidUnits);
-    assertEquals(false, mv.validateOrders(moveInvalidUnits));
+    assertEquals(true, mv.validateOrders(moveInvalidUnits));
 
     // Orders for which sourceUnits < order Units
     List<Unit> tooManyUnits = get6UnitList(100, 9, 14, 19, 24, 29);
