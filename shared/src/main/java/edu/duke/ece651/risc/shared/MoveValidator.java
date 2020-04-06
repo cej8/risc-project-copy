@@ -114,16 +114,16 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
       if (validMove && this.hasValidRegionPath(tempSource, tempDest)) {
         moveCopy.doAction();
       } else {
-        // if (!validMove) {
-        //   System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); // this is just for testing
-        // }
-        // else{
-        //   System.out.println("Move failed: there is no valid path between Region " + tempSource.getName()
-        //       + " and Region " + tempDest.getName()); // this is just for testing
-        //   System.out.println("Cost to traverse this path = "/* + tempSource.findShortestPath(tempDest).getTotalCost() */
-        //       + "; " + tempSource.getOwner().getName() + " has "
-        //       + tempSource.getOwner().getResources().getFuelResource().getFuel() + " fuel remaining");
-        // }
+        if (!validMove) {
+          System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); // this is just for testing
+        }
+        else{
+          System.out.println("Move failed: there is no valid path between Region " + tempSource.getName()
+              + " and Region " + tempDest.getName()); // this is just for testing
+          System.out.println("Cost to traverse this path = "/* + tempSource.findShortestPath(tempDest).getTotalCost() */
+              + "; " + tempSource.getOwner().getName() + " has "
+              + tempSource.getOwner().getResources().getFuelResource().getFuel() + " fuel remaining");
+        }
         return false;
       }
     }
