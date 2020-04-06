@@ -74,7 +74,6 @@ public class TextDisplayTest {
     Board board = new Board(allRegions);
     ClientOutputInterface coi = new TextDisplay(); 
     coi.displayBoard(board);
-    System.out.println(new TextDisplay().createBoard(board));
     coi.displayString("Test string");
   }
 
