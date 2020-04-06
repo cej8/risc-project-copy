@@ -199,39 +199,80 @@
         app:layout_constraintVertical_bias="0.601"
         app:srcCompat="@drawable/p12nb" />
 
-    <!--    <Button-->
-<!--        android:id="@+id/button"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="61dp"-->
-<!--        android:background="@drawable/oval"-->
-<!--        android:text="Button"-->
-<!--        tools:layout_editor_absoluteX="569dp"-->
-<!--        tools:layout_editor_absoluteY="107dp" />-->
+    <Button
+        android:id="@+id/moveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/oval"
+        android:text="move"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.888"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.193" />
 
-<!--    <Button-->
-<!--        android:id="@+id/button2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Button"-->
-<!--        android:background="@drawable/oval"-->
-<!--        tools:layout_editor_absoluteX="553dp"-->
-<!--        tools:layout_editor_absoluteY="161dp" />-->
+    <Button
+        android:id="@+id/attackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/oval"
+        android:text="attack"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.888"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.393" />
 
-<!--    <Button-->
-<!--        android:id="@+id/button3"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Button"-->
-<!--        android:background="@drawable/oval"-->
-<!--        tools:layout_editor_absoluteX="555dp"-->
-<!--        tools:layout_editor_absoluteY="234dp" />-->
+    <Button
+        android:id="@+id/upgradeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/oval"
+        android:text="upgrade"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.888"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.587" />
 
-<!--    <Button-->
-<!--        android:id="@+id/button4"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Button"-->
-<!--        tools:layout_editor_absoluteX="555dp"-->
-<!--        tools:layout_editor_absoluteY="321dp" />-->
+    <TextView
+        android:id="@+id/orderHelper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose an Order"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.047" />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/oval2"
+        android:text="Submit"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.888"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.879" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

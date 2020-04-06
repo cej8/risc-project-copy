@@ -81,7 +81,7 @@ public class ExecuteClient {
                     act.startActivity(loginIntent);
                 }
             }
-        }, 6000);
+        }, 7000);
     }
     public void getGames(boolean gameType, boolean getgame){
        // clientOutput = new GUITextDisplay(gameText,act);
@@ -140,7 +140,7 @@ public class ExecuteClient {
                     act.startActivity(loginIntent);
                 }
             }
-        }, 6000);
+        }, 7000);
     }
     public void startGame(TextView textView, Activity act, EditText editText) {
         //ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
