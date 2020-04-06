@@ -8,6 +8,7 @@
 
     <EditText
         android:id="@+id/bonus0"
+        android:text="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,6 +20,7 @@
 
     <EditText
         android:id="@+id/bonus1"
+        android:text="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
@@ -32,6 +34,7 @@
 
     <EditText
         android:id="@+id/bonus2"
+        android:text="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
@@ -45,6 +48,7 @@
 
     <EditText
         android:id="@+id/bonus5"
+        android:text="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
@@ -59,6 +63,7 @@
 
     <EditText
         android:id="@+id/bonus3"
+        android:text="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
@@ -72,6 +77,7 @@
 
     <EditText
         android:id="@+id/bonus4"
+        android:text="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"
@@ -86,6 +92,7 @@
 
     <EditText
         android:id="@+id/bonus6"
+        android:text="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="120dp"

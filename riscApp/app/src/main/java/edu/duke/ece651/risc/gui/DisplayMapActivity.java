@@ -16,13 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
+import edu.duke.ece651.risc.shared.AttackCombat;
+import edu.duke.ece651.risc.shared.AttackMove;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.BoardGenerator;
 import edu.duke.ece651.risc.shared.HumanPlayer;
+import edu.duke.ece651.risc.shared.MoveOrder;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.Unit;
@@ -32,6 +36,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     ExecuteClient executeClient;
     TextView helpText;
     List<OrderInterface> orders;
+    Board board;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +46,51 @@ public class DisplayMapActivity extends AppCompatActivity {
         //executeClient.displayServerBoard(helpText);
         // temp for testing
         generateBoard();
-        Board board = ParentActivity.getBoard();
+        board = ParentActivity.getBoard();
         regions = board.getRegions();
         Log.d("Inside map regions",regions.get(0).getName());
         // temp for testing
+        getOrders();
+    }
+    public void getOrders(){
+        Intent i = getIntent();
+        String order = i.getStringExtra("ORDER");
+        String attackFrom = i.getStringExtra("ATTACKFROM");
+        String attackTo = i.getStringExtra("ATTACKTO");
+        ArrayList<Integer> unitList = i.getIntegerArrayListExtra("UNITS");
+        Region source = getRegionByName(board,attackFrom);
+        Region destination = getRegionByName(board,attackTo);
+        Unit unit = new Unit(unitList);
+        ParentActivity parentActivity = new ParentActivity();
+        Log.d("Board test",regions.get(0).getName());
+        if (order == null){
+            // do nothing
+        } else {
+            if (order.equals("move")) {
+                MoveOrder moveOrder = new MoveOrder(source, destination, unit);
+                parentActivity.setOrders(moveOrder);
+            } else if (order.equals("attack")) {
+                AttackMove attackMove = new AttackMove(source, destination, unit);
+                parentActivity.setOrders(attackMove);
+                AttackCombat attackCombat = new AttackCombat(source, destination, unit);
+                parentActivity.setOrders(attackCombat);
+            } else if (order.equals("upgrade")) {
 
+            }
+        }
+        if (order != null) {
+            List<OrderInterface> ordersToDate = ParentActivity.getOrders();
+            for (int j = 0; j < ordersToDate.size(); j++) {
+                Log.d("Order List", ordersToDate.get(j).doAction());
+            }
+        }
+    }
+    public Region getRegionByName(Board board, String name){
+        Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
+        for (Region r : board.getRegions()){
+            nameToRegionMap.put(r.getName(), r);
+        }
+        return nameToRegionMap.get(name);
     }
     public void setRegions(ArrayList<Region> regions){
         this.regions = regions;
@@ -145,6 +190,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         //DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment("Planet 12",5);
         dialogFragment.show(getSupportFragmentManager(), "P12");
     }
+    // Mock board
     public void generateBoard(){
         List<Region> regions = getRegions(false);
         Board b = new Board(regions);
@@ -237,61 +283,73 @@ public class DisplayMapActivity extends AppCompatActivity {
         List<Region> adj1 = new ArrayList<Region>();
         adj1.add(r0);
         adj1.add(r2);
+        adj1.add(r5);
         r1.setAdjRegions(adj1);
 
         List<Region> adj2 = new ArrayList<Region>();
         adj2.add(r1);
         adj2.add(r3);
+        adj2.add(r4);
         r2.setAdjRegions(adj2);
 
         List<Region> adj3 = new ArrayList<Region>();
         adj3.add(r2);
         adj3.add(r4);
+        adj3.add(r8);
         r3.setAdjRegions(adj3);
 
         List<Region> adj4 = new ArrayList<Region>();
         adj4.add(r3);
         adj4.add(r5);
+        adj4.add(r7);
+        adj4.add(r2);
         r4.setAdjRegions(adj4);
 
         List<Region> adj5 = new ArrayList<Region>();
         adj5.add(r4);
         adj5.add(r0);
+        adj5.add(r1);
+        adj5.add(r6);
         r5.setAdjRegions(adj5);
 
         List<Region> adj6 = new ArrayList<Region>();
-        adj5.add(r4);
-        adj5.add(r0);
+        adj6.add(r5);
+        adj6.add(r7);
+        adj6.add(r10);
+        adj6.add(r11);
         r6.setAdjRegions(adj6);
 
         List<Region> adj7 = new ArrayList<Region>();
-        adj5.add(r4);
-        adj5.add(r0);
+        adj7.add(r4);
+        adj7.add(r6);
+        adj7.add(r8);
+        adj7.add(r9);
         r7.setAdjRegions(adj7);
 
         List<Region> adj8 = new ArrayList<Region>();
-        adj5.add(r4);
-        adj5.add(r0);
+        adj8.add(r7);
+        adj8.add(r9);
+        adj8.add(r3);
         r8.setAdjRegions(adj8);
 
         List<Region> adj9 = new ArrayList<Region>();
-        adj5.add(r4);
-        adj5.add(r0);
+        adj9.add(r4);
+        adj9.add(r0);
         r9.setAdjRegions(adj9);
 
         List<Region> adj10 = new ArrayList<Region>();
-        adj5.add(r4);
-        adj5.add(r0);
+        adj10.add(r4);
+        adj10.add(r0);
         r10.setAdjRegions(adj10);
 
         List<Region> adj11 = new ArrayList<Region>();
-        adj5.add(r4);
-        adj5.add(r0);
+        adj11.add(r4);
+        adj11.add(r0);
         r11.setAdjRegions(adj11);
 
         List<Region> adj12 = new ArrayList<Region>();
-        adj5.add(r4);
-        adj5.add(r0);
+        adj12.add(r4);
+        adj12.add(r0);
         r12.setAdjRegions(adj12);
 
         List<Region> regions = new ArrayList<Region>();

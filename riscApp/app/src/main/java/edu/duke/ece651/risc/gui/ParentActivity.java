@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.gui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.duke.ece651.risc.shared.Board;
@@ -11,7 +12,7 @@ public final class ParentActivity {
     private static Connection connection;
     private static Board board;
     private static HumanPlayer player;
-    private static List<OrderInterface> orders;
+    private static List<OrderInterface> orders = new ArrayList<OrderInterface>();
 
     final static HumanPlayer getPlayer(){return player;}
     public void setPlayer(HumanPlayer p){this.player=p;}
@@ -26,6 +27,12 @@ public final class ParentActivity {
     public void setOrders(OrderInterface o){
         orders.add(o);
     }
+    public void generateOrders(){
+        this.orders = new ArrayList<OrderInterface>();
+    }
+//    public void setOrders(List<OrderInterface> o){
+//        this.orders = o;
+//    }
     final static List<OrderInterface> getOrders(){
         return orders;
     }
