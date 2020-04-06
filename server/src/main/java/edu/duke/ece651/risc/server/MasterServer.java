@@ -11,9 +11,9 @@ import java.io.*;
 public class MasterServer {
   private ServerSocket serverSocket = null;
   private Map<String, Pair<String, String>> loginMap;
-  private List<LoginServer> activePlayers;
+  private Map<String, LoginServer> activePlayers;
   private Map<Integer, ParentServer> parentServers;
-  private int nextGameID = 0;
+  private int nextGameID = 1;
 
   private String loginFile;
 
@@ -37,7 +37,7 @@ public class MasterServer {
       }
     }
 
-    activePlayers = new ArrayList<LoginServer>();
+    activePlayers = new HashMap<String, LoginServer>();
     parentServers = new HashMap<Integer, ParentServer>();
   }
 
@@ -64,7 +64,7 @@ public class MasterServer {
 
   public void addLoginServer(LoginServer ls){
     synchronized(activePlayers){
-      activePlayers.add(ls);
+      activePlayers.put(ls.getUser(), ls);
     }
   }
 
@@ -107,14 +107,14 @@ public class MasterServer {
 
   //Method to check user login information
   public boolean checkLogin(String user, String hashedPassword){
+    //Check if user in database
     if(!loginMap.containsKey(user)){
       return false;
     }
+    //Check if already logged in
     synchronized(activePlayers){
-      for(LoginServer ls : activePlayers){
-        if(ls.getUser() != null && ls.getUser().equals(user)){
-          return false;
-        }
+      if(activePlayers.get(user) != null){
+        return false;
       }
     }
     return hashedPassword.equals(loginMap.get(user).getFirst());
@@ -179,9 +179,6 @@ public class MasterServer {
         newPlayerConnection.getStreamsFromSocket();
         //Send object to client
         newLoginServer = new LoginServer(this, newPlayerConnection);
-        synchronized(activePlayers){
-          activePlayers.add(newLoginServer);
-        }
         newLoginServer.start();
       }
       catch (Exception e) {
@@ -201,18 +198,17 @@ public class MasterServer {
 
   public void removePlayer(String username, int gameID){
     synchronized(activePlayers){
-      for(LoginServer ls : activePlayers){
-        if(ls.getUser().equals(username) && ls.getActiveGameID() == gameID){
-          activePlayers.remove(ls);
-          return;
-        }
+      LoginServer ls = activePlayers.get(username);
+      if(ls == null) { return; }
+      if(ls.getActiveGameID() == gameID){
+        activePlayers.remove(ls);
       }
     }
   }
 
   public void removePlayer(LoginServer ls){
     synchronized(activePlayers){
-      activePlayers.remove(ls);
+      activePlayers.remove(ls.getUser());
     }
   }
 

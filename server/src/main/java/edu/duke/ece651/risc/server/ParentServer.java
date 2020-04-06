@@ -71,24 +71,33 @@ public class ParentServer extends Thread{
     return notStarted && children.size() < MAX_PLAYERS;
   }
 
-  public String getGameTime(){
+  public String getGameString(){
+    StringBuilder sb = new StringBuilder();
     if(notStarted){
       long timeLeft = (long)(60*1000*START_WAIT_MINUTES) - (System.currentTimeMillis()-gameStart);
-      return String.format("%02d:%02d", 
+      sb.append(String.format("%02d:%02d until game starts", 
                            TimeUnit.MILLISECONDS.toMinutes(timeLeft) - 
                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeLeft)),
                            TimeUnit.MILLISECONDS.toSeconds(timeLeft) - 
-                           TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft)));
+                           TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeLeft))));
     }
     else{
       long timeStart = System.currentTimeMillis()-gameStart;
-      return String.format("%02d:%02d:%02d", 
+      sb.append(String.format("%02d:%02d:%02d since game start", 
                            TimeUnit.MILLISECONDS.toHours(timeStart),
                            TimeUnit.MILLISECONDS.toMinutes(timeStart) - 
                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeStart)),
                            TimeUnit.MILLISECONDS.toSeconds(timeStart) - 
-                           TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeStart)));
+                           TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeStart))));
     }
+    sb.append(" : Players [");
+    for(int i = 0; i < players.size(); i++){
+      sb.append(players.get(i) + ", ");
+    }
+    sb.deleteCharAt(sb.length()-1);
+    sb.deleteCharAt(sb.length()-1);
+    sb.append("]");
+    return sb.toString();
   }
 
   //set's for testing

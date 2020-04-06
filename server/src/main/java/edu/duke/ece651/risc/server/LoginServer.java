@@ -22,6 +22,8 @@ public class LoginServer extends Thread{
   public LoginServer(MasterServer masterServer, Connection playerConnection){
     this.masterServer = masterServer;
     this.playerConnection = playerConnection;
+    this.user = "";
+    this.activeGameID = -1;
   }
 
   public String getUser(){
@@ -96,7 +98,7 @@ public class LoginServer extends Thread{
         //Enforce lock to prevent double creation
         registerLock.lock();
         //Ensure not starting group name
-        if(username.matches("^Group [A-F]$")) {
+        if(username.matches("^Group [A-F]$") || username.equals("")) {
           playerConnection.sendObject(new StringMessage("Fail: User invalid"));
           registerLock.unlock();
           continue;
@@ -124,7 +126,7 @@ public class LoginServer extends Thread{
   public String buildGamesInfo(List<ParentServer> games){
     StringBuilder sb = new StringBuilder();
     for(ParentServer ps : games){
-      sb.append(ps.getGameID() + " : " + ps.getGameTime() + "\n");
+      sb.append(ps.getGameID() + " : " + ps.getGameString() + "\n");
     }
     return sb.toString();
   }
@@ -159,6 +161,7 @@ public class LoginServer extends Thread{
       if(oldBoolean.unpacker()){
         //If true then get games currently in
         gamesIn = masterServer.getGamesIn(user);
+        System.out.println(gamesIn.size());
         gamesList = buildGamesInfo(gamesIn);
       }
 
@@ -166,7 +169,7 @@ public class LoginServer extends Thread{
         //If false then get games that haven't started
         gamesIn = masterServer.getOpenGames(user);
         //Put "-1 new game" at start
-        gamesList = "-1 : New game\n";
+        gamesList = "0 : New game\n";
         gamesList += buildGamesInfo(gamesIn);
       }
 
@@ -192,7 +195,7 @@ public class LoginServer extends Thread{
       }
       
       else{
-        if(gameID == -1){
+        if(gameID == 0){
           gameID = masterServer.createNewParentServer(user, playerConnection);
           activeGameID = gameID;
           sendJoinMessages();
