@@ -27,12 +27,10 @@ public final class ParentActivity {
     public void setOrders(OrderInterface o){
         orders.add(o);
     }
-    public void generateOrders(){
+    public void resetOrders(){
         this.orders = new ArrayList<OrderInterface>();
     }
-//    public void setOrders(List<OrderInterface> o){
-//        this.orders = o;
-//    }
+
     final static List<OrderInterface> getOrders(){
         return orders;
     }

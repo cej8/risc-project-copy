@@ -45,6 +45,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         helpText = findViewById(R.id.helpText);
         //executeClient.displayServerBoard(helpText);
         // temp for testing
+        // TODO: remove generateBoard for whole test
         generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
@@ -85,32 +86,26 @@ public class DisplayMapActivity extends AppCompatActivity {
             }
         }
     }
+    public void moveOrder(View view){
+        Intent attackSetup = new Intent(this,OrderActivity.class);
+        attackSetup.putExtra("ORDER","move");
+        startActivity(attackSetup);
+    }
+    public void attackOrder(View view){
+        Intent attackSetup = new Intent(this,OrderActivity.class);
+        attackSetup.putExtra("ORDER","attack");
+        startActivity(attackSetup);
+    }
+    // TODO: upgrade - add additional upgrade
+    public void upgradeOrder(View view){
+
+    }
     public Region getRegionByName(Board board, String name){
         Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
         for (Region r : board.getRegions()){
             nameToRegionMap.put(r.getName(), r);
         }
         return nameToRegionMap.get(name);
-    }
-    public void setRegions(ArrayList<Region> regions){
-        this.regions = regions;
-    }
-    public List<Region> getRegions(){
-        return regions;
-    }
-
-    public void moveOrder(View view){
-        Intent attackSetup = new Intent(this,AttackActivity.class);
-        attackSetup.putExtra("ORDER","move");
-        startActivity(attackSetup);
-    }
-    public void attackOrder(View view){
-        Intent attackSetup = new Intent(this,AttackActivity.class);
-        attackSetup.putExtra("ORDER","attack");
-        startActivity(attackSetup);
-    }
-    public void upgradeOrder(View view){
-
     }
     public void submitAll(View view){
         // TODO: execute client when done

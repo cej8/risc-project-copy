@@ -15,8 +15,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".WaitActivity"></activity>
         <activity android:name=".DisplayBonusUnitsActivity" />
-        <activity android:name=".AttackActivityTwo" />
-        <activity android:name=".AttackActivity" />
+        <activity android:name=".OrderActivityTwo" />
+        <activity android:name=".OrderActivity" />
         <activity android:name=".ChooseRegionsActivity" />
         <activity android:name=".JoinGameActivity" />
         <activity android:name=".NewGameActivity" />

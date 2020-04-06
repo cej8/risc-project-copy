@@ -7,25 +7,26 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
 
-public class AttackActivityTwo extends AppCompatActivity {
+public class OrderActivity extends AppCompatActivity {
     List<Region> regions;
     String planetName;
     TextView name;
     TextView owner;
     TextView numUnits;
     TextView helpText;
-    String attackFrom;
-    String orderMessage;
     TextView orderHelper;
+    String orderMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attack_two);
+        setContentView(R.layout.activity_attack);
         Board board = ParentActivity.getBoard();
         regions = board.getRegions();
         name = findViewById(R.id.displayPame);
@@ -33,19 +34,17 @@ public class AttackActivityTwo extends AppCompatActivity {
         numUnits = findViewById(R.id.displayUnits);
         helpText = findViewById(R.id.attackHelp);
         orderHelper = findViewById(R.id.orderHelper);
-        Intent intent = getIntent();
-        attackFrom = intent.getStringExtra("PNAME");
-        orderMessage =  intent.getStringExtra("ORDER");
-        String h = "Select planet to " + orderMessage;
+        Intent i = getIntent();
+        orderMessage =  i.getStringExtra("ORDER");
+        String h = "Select planet to " + orderMessage + " from";
         orderHelper.setText(h);
     }
-    public void attackTo(View view){
+    public void attackFrom(View view){
         if (planetName == null){
-            helpText.setText("Please select a planet");
-        } else {
-            Intent i = new Intent(this, DisplayBonusUnitsActivity.class);
-            i.putExtra("PNAME", attackFrom);
-            i.putExtra("ATTACKTO", planetName);
+                helpText.setText("Please select a planet");
+            } else {
+                Intent i = new Intent(this, OrderActivityTwo.class);
+            i.putExtra("PNAME", planetName);
             i.putExtra("ORDER",orderMessage);
             startActivity(i);
         }
@@ -53,7 +52,7 @@ public class AttackActivityTwo extends AppCompatActivity {
     public void planetOne(View view){
         Region r = regions.get(0);
         name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
+        String o = "Owner: " + r.getOwner().getName();
         owner.setText(o);
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);

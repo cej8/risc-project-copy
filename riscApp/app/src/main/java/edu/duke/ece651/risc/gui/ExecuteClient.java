@@ -192,20 +192,13 @@ public class ExecuteClient {
             @Override
             public void run() {
                 // This method will be executed once the timer is over
-                // TODO: where we actually play the game - DisplayMapActivity.java
-                Log.d("Game", "Starting");
-                clientOutput.displayString("Waiting for board from server");
-                clientOutput = new GUITextDisplay();
-                displayServerBoard(helpText);
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Intent newGame= new Intent(act, DisplayMapActivity.class);
-//                        act.startActivity(newGame);
-//                    }
-//                },2000);
-            }
-        }, 2000);
+        // TODO: where we actually play the game - DisplayMapActivity.java
+        Log.d("Game", "Starting");
+        clientOutput.displayString("Waiting for board from server");
+        clientOutput = new GUITextDisplay();
+        displayServerBoard(helpText);
+    }
+}, 2000);
     }
     //set master board
     public void displayServerBoard(TextView helpText){
