@@ -183,10 +183,17 @@ public class ExecuteClient {
         this.helpText = text;
     }
 
+    public void getBoardAssignments(TextView helpText){
+        clientOutput = new GUITextDisplay(helpText, act);
+        final GUIClientRegionSelection selection = new GUIClientRegionSelection(true, connection, clientInput, clientOutput, act);
+        selection.start();
+
 
     public void chooseRegions(final TextView helpText, String regionGroup) {
+
+
         clientOutput = new GUITextDisplay(helpText, act);
-        final GUIClientRegionSelection selection = new GUIClientRegionSelection(regionGroup, connection, clientInput, clientOutput, act);
+        final GUIClientRegionSelection selection = new GUIClientRegionSelection(false,regionGroup, connection, clientInput, clientOutput, act);
         selection.start();
         new Handler().postDelayed(new Runnable() {
             @Override
