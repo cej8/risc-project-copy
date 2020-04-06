@@ -76,7 +76,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
     if ((order.getUnits().getUnits().get((order.getUnits().getUnits().size() - 1))).equals(0)) {
       return true;
     } else {
-       System.out.println("Invalid UnitBoost: player tried to upgrade maxed unit "+ boost.getUnits().getUnits());
+       System.out.println("Invalid UnitBoost: player tried to upgrade maxed unit "+ order.getUnits().getUnits());
       return false;
     }
   }
