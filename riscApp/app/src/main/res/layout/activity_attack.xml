@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChooseRegionsActivity"
+    tools:context=".AttackActivity"
     android:background="@drawable/spacebackground">
 
     <ImageButton
-        android:id="@+id/Caprica"
+        android:id="@+id/p1"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginEnd="264dp"
         android:layout_marginRight="264dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetOne"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,13 +25,13 @@
         android:contentDescription="p1"/>
 
     <ImageButton
-        android:id="@+id/Hoth"
+        android:id="@+id/p2"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="44dp"
         android:layout_marginLeft="44dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetTwo"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,11 +41,11 @@
         app:srcCompat="@drawable/p2nb" />
 
     <ImageButton
-        android:id="@+id/Worlorn"
+        android:id="@+id/p3"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetThree"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -57,11 +57,11 @@
         app:srcCompat="@drawable/p3nb" />
 
     <ImageButton
-        android:id="@+id/Dagobah"
+        android:id="@+id/p4"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetFour"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -73,13 +73,13 @@
         app:srcCompat="@drawable/p4nb" />
 
     <ImageButton
-        android:id="@+id/Krypton"
+        android:id="@+id/p5"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="148dp"
         android:layout_marginLeft="148dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetFive"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -89,13 +89,13 @@
         app:srcCompat="@drawable/p5nb" />
 
     <ImageButton
-        android:id="@+id/Ego"
+        android:id="@+id/p6"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="148dp"
         android:layout_marginLeft="148dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetSix"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -105,13 +105,13 @@
         app:srcCompat="@drawable/p6nb" />
 
     <ImageButton
-        android:id="@+id/Terra"
+        android:id="@+id/p7"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="44dp"
         android:layout_marginLeft="44dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetSeven"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -121,11 +121,11 @@
         app:srcCompat="@drawable/p7nb" />
 
     <ImageButton
-        android:id="@+id/Arda"
+        android:id="@+id/p8"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetEight"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -137,13 +137,13 @@
         app:srcCompat="@drawable/p8nb" />
 
     <ImageButton
-        android:id="@+id/Dune"
+        android:id="@+id/p9"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginEnd="264dp"
         android:layout_marginRight="264dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetNine"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -153,13 +153,13 @@
         app:srcCompat="@drawable/p9nb" />
 
     <ImageButton
-        android:id="@+id/Solaris"
+        android:id="@+id/p10"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="148dp"
         android:layout_marginLeft="148dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetTen"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -169,13 +169,13 @@
         app:srcCompat="@drawable/p10nb" />
 
     <ImageButton
-        android:id="@+id/Gallifrey"
+        android:id="@+id/p11"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="148dp"
         android:layout_marginLeft="148dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetEleven"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -185,11 +185,11 @@
         app:srcCompat="@drawable/p11nb" />
 
     <ImageButton
-        android:id="@+id/Cybertron"
+        android:id="@+id/p12"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:background="@android:color/transparent"
-        android:onClick="chooseRegion"
+        android:onClick="planetTwelve"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -201,41 +201,85 @@
         app:srcCompat="@drawable/p12nb" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="178dp"
-        android:layout_height="247dp"
-        android:layout_marginTop="16dp"
-        android:text=""
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.909"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/regionName"
-        android:layout_width="121dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="284dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Region Name"
+        android:id="@+id/orderHelper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select a planet to attack from"
         android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.819"
+        app:layout_constraintHorizontal_bias="0.97"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.047" />
 
     <Button
-        android:id="@+id/submit"
-        android:onClick="chooseRegion"
-        android:layout_width="85dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="284dp"
-        android:text="Submit"
+        android:id="@+id/submitAttackFrom"
+        android:onClick="attackFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/oval2"
+        android:text="Accept"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
+        app:layout_constraintHorizontal_bias="0.888"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.879" />
+
+    <TextView
+        android:id="@+id/displayPame"
+        android:layout_width="165dp"
+        android:layout_height="44dp"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.929"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.253" />
+
+    <TextView
+        android:id="@+id/displayUnits"
+        android:layout_width="156dp"
+        android:layout_height="44dp"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.914"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.43" />
+
+    <TextView
+        android:id="@+id/displayOwner"
+        android:layout_width="185dp"
+        android:layout_height="37dp"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.978"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.582" />
+
+    <TextView
+        android:id="@+id/attackHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.877"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.959" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

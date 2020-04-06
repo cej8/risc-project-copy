@@ -84,7 +84,7 @@ public class ExecuteClient {
                     act.startActivity(loginIntent);
                 }
             }
-        }, 6000);
+        }, 7000);
     }
 
     public void getGames(boolean gameType, boolean getgame) {
@@ -103,7 +103,6 @@ public class ExecuteClient {
                 act.startActivity(gamesIntent);
             }
         }, 2000);
-
     }
 
     public void pickGame(boolean gameType, String id, boolean getgame, String gameList) {
@@ -149,7 +148,7 @@ public class ExecuteClient {
                     act.startActivity(loginIntent);
                 }
             }
-        }, 6000);
+        }, 7000);
     }
 
     public void startGame(TextView textView, Activity act, EditText editText) {
