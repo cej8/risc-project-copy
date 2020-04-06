@@ -89,10 +89,13 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
   // Validate the order is acceptable
   @Override
   public boolean validateOrders(List<MoveOrder> moveList) {
-    boolean validRegions = validateRegions(moveList);
-    boolean validUnits = validateUnits(moveList);
-    return validRegions && validUnits;
+    boolean valid = validateRegions(moveList);
+    if (valid) {
+      valid = valid && validateUnits(moveList);
+    }
+    return valid;
   }
+
 
   //  @Override
   public boolean validateRegions(List<MoveOrder> moveList) {
