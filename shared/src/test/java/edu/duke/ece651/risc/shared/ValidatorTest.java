@@ -41,10 +41,10 @@ public class ValidatorTest {
     List<TechBoost> invalidCountBoosts = getInvalidCountTechBoosts(p2);
     assertEquals(false, tbv.validateOrders(invalidCountBoosts));
 
-    assertEquals(true, mv.isValidMove(moves.get(0)));
-    assertEquals(false, mv.isValidMove(moves.get(1)));
-    assertEquals(true, mv.isValidMove(moves.get(2)));
-    assertEquals(false, mv.isValidMove(moves.get(3)));
+    assertEquals(true, mv.isValidMove(moves.get(0),0));
+    assertEquals(false, mv.isValidMove(moves.get(1),0));
+    assertEquals(true, mv.isValidMove(moves.get(2),0));
+    assertEquals(false, mv.isValidMove(moves.get(3),0));
     assertEquals(false, mv.validateRegions(moves));
     // TODO uncomment when attacska re changed
     assertEquals(true, av.isValidAttack(attacks.get(0)));
