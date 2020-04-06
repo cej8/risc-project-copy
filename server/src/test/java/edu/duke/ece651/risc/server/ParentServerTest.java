@@ -50,12 +50,12 @@ public class ParentServerTest {
       }
       System.out.println();
     }
-    assertEquals(1, regions.get(0).getSize());
-    assertEquals(1, regions.get(0).getFuelProduction());
-    assertEquals(1, regions.get(0).getTechProduction());
-    assertEquals(1, regions.get(6).getSize());
-    assertEquals(1, regions.get(6).getFuelProduction());
-    assertEquals(1, regions.get(6).getTechProduction());
+    assertEquals(10, regions.get(0).getSize());
+    assertEquals(20, regions.get(0).getFuelProduction());
+    assertEquals(15, regions.get(0).getTechProduction());
+    assertEquals(10, regions.get(6).getSize());
+    assertEquals(20, regions.get(6).getFuelProduction());
+    assertEquals(15, regions.get(6).getTechProduction());
 
   }
 
