@@ -1,13 +1,11 @@
 package edu.duke.ece651.risc.client;
 
-import android.util.Log;
-
 import java.net.Socket;
 
 import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.Constants;
 
-public class ConnectionManager extends Thread{
+public class ConnectionManager extends Thread {
    private Connection connection;
     private String address;
     private int port;
@@ -39,8 +37,6 @@ public class ConnectionManager extends Thread{
             connection.setSocket(socket);
             connection.getStreamsFromSocket();
             socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
-            Log.d("Connection","Should be connected");
-            Thread.dumpStack();
             } catch (Exception e) {
             e.printStackTrace(System.out);
         }
