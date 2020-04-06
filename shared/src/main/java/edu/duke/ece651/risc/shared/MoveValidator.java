@@ -106,8 +106,7 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
       // set validMove to false if any of these are false: at least 1 sourceUnit, 1
       // moveUnit, and sourceUnits > moveUnits in each index of source
       for (int i = 0; i < sourceUnits.getUnits().size(); i++) { // for each index of the source units
-        if ((sourceUnits.getUnits().get(i) <= moveUnits.getUnits().get(i)) || (sourceUnits.getUnits().get(i) <= 0)
-            || (moveUnits.getUnits().get(i) <= 0)) {
+        if ((sourceUnits.getUnits().get(i) <= moveUnits.getUnits().get(i)) || (moveUnits.getUnits().get(i) < 0)) {
           validMove = false;
         }
       }
