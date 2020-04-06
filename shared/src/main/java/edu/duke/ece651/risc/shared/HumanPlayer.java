@@ -6,7 +6,7 @@ import java.io.*;
 public class HumanPlayer extends AbstractPlayer {
   private static final long serialVersionUID = 6L;
   public HumanPlayer(){
-    
+    this.playerResource = new PlayerResources(Constants.STARTING_FUEL_PRODUCTION, Constants.STARTING_TECH_PRODUCTION);  
   }
 
   public HumanPlayer(String name) {//testing construcotr for tests that do no dpend on socket connection
