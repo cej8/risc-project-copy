@@ -46,6 +46,8 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface{
         this.clientOutput = output;
         this.activity = act;
         this.regionGroup= region;
+        this.board= ParentActivity.getBoard();
+        this.player=ParentActivity.getPlayer();
 
     }
 

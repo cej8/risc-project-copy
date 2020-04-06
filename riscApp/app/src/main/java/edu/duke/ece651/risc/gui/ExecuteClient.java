@@ -114,7 +114,10 @@ public class ExecuteClient {
             public void run() {
                 // This method will be executed once the timer is over
                 // TODO: where we actually play the game - DisplayMapActivity.java
-                Log.d("Game", "Ready");
+                Log.d("Game", "Placement");
+                Intent placement= new Intent(act, ChooseRegionsActivity.class);
+                //placement.putExtra("GAMELIST", games);
+                act.startActivity(placement);
             }
         }, 2000);
     }
@@ -185,7 +188,10 @@ public class ExecuteClient {
             public void run() {
                 // This method will be executed once the timer is over
                 // TODO: where we actually play the game - DisplayMapActivity.java
-                Log.d("Game", "Ready");
+                Log.d("Game", "Starting");
+                Intent newGame= new Intent(act, DisplayMapActivity.class);
+                //placement.putExtra("GAMELIST", games);
+                act.startActivity(newGame);
             }
         }, 2000);
 
