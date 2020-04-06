@@ -1,157 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Spinner
+    <EditText
         android:id="@+id/bonus0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.383"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Spinner
+    <EditText
         android:id="@+id/bonus1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginLeft="120dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.11"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/bonus0"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Spinner
+    <EditText
         android:id="@+id/bonus2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
-        android:layout_marginLeft="116dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginLeft="120dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.697"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Spinner
+    <EditText
         android:id="@+id/bonus3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="172dp"
-        android:layout_marginLeft="172dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginLeft="120dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.697"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/bonus2"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Spinner
+    <EditText
         android:id="@+id/bonus4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="228dp"
-        android:layout_marginLeft="228dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginLeft="120dp"
+        android:layout_marginBottom="464dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.11"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/bonus1"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Spinner
+    <EditText
         android:id="@+id/bonus5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="284dp"
-        android:layout_marginLeft="284dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginLeft="120dp"
+        android:layout_marginBottom="492dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.697"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/bonus3"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Spinner
+    <EditText
         android:id="@+id/bonus6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="340dp"
-        android:layout_marginLeft="340dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginLeft="120dp"
+        android:layout_marginBottom="388dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.11"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/bonus4"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/unitBonus0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginBottom="12dp"
-        android:text="0"
-        app:layout_constraintBottom_toTopOf="@+id/bonus0"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:text="Civilian"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bonus0"
+        app:layout_constraintHorizontal_bias="0.328"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
 
     <TextView
         android:id="@+id/unitBonus1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginBottom="12dp"
-        android:text="1"
-        app:layout_constraintBottom_toTopOf="@+id/bonus1"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="Trainee"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bonus2"
+        app:layout_constraintHorizontal_bias="0.839"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
 
     <TextView
         android:id="@+id/unitBonus2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:layout_marginLeft="136dp"
-        android:layout_marginBottom="12dp"
-        android:text="2"
-        app:layout_constraintBottom_toTopOf="@+id/bonus2"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:text="Junior Technician"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bonus1"
+        app:layout_constraintHorizontal_bias="0.687"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bonus0"
+        app:layout_constraintVertical_bias="0.019" />
 
     <TextView
         android:id="@+id/unitBonus3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="192dp"
-        android:layout_marginLeft="192dp"
-        android:layout_marginBottom="12dp"
-        android:text="3"
-        app:layout_constraintBottom_toTopOf="@+id/bonus3"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="Aerospace Engineer"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.64"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bonus2"
+        app:layout_constraintVertical_bias="0.019" />
 
     <TextView
         android:id="@+id/unitBonus4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="248dp"
-        android:layout_marginLeft="248dp"
-        android:layout_marginBottom="12dp"
-        android:text="4"
-        app:layout_constraintBottom_toTopOf="@+id/bonus4"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="Space Cadet"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bonus4"
+        app:layout_constraintHorizontal_bias="0.614"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bonus1"
+        app:layout_constraintVertical_bias="0.022" />
 
     <TextView
         android:id="@+id/unitBonus5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="304dp"
-        android:layout_marginLeft="304dp"
-        android:layout_marginBottom="12dp"
-        android:text="5"
-        app:layout_constraintBottom_toTopOf="@+id/bonus5"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="Astronaut"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bonus5"
+        app:layout_constraintHorizontal_bias="0.885"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bonus3"
+        app:layout_constraintVertical_bias="0.022" />
 
     <TextView
         android:id="@+id/unitBonus6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="360dp"
-        android:layout_marginLeft="360dp"
-        android:layout_marginBottom="12dp"
-        android:text="6"
-        app:layout_constraintBottom_toTopOf="@+id/bonus6"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:text="Space Captain"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bonus6"
+        app:layout_constraintHorizontal_bias="0.714"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bonus4"
+        app:layout_constraintVertical_bias="0.013" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
