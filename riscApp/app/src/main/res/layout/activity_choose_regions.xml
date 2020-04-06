@@ -7,6 +7,7 @@
     tools:context=".ChooseRegionsActivity">
     <ImageButton
         android:id="@+id/Caprica"
+        android:tag="Caprica"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginEnd="264dp"
@@ -24,6 +25,7 @@
 
     <ImageButton
         android:id="@+id/Hoth"
+        android:tag="Hoth"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="44dp"

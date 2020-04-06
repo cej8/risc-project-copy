@@ -29,6 +29,7 @@ public class ChooseRegionsActivity extends AppCompatActivity {
     }
 
     public void chooseRegion(View view) throws IOException, ClassNotFoundException, InterruptedException{
+        //String regionGroup = view.getTag().toString();
         String regionGroup = editRegionGroup.getText().toString();
         executeClient.chooseRegions(userPrompt, regionGroup);
     }
