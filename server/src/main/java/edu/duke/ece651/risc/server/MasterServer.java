@@ -9,19 +9,25 @@ import java.io.*;
 //Highest level server object, accepts incoming connections
 //And passes to LoginServer
 public class MasterServer {
+  //Outfacing socket for incoming connections
   private ServerSocket serverSocket = null;
+  //Map of usernames to <hashed password, salt>
   private Map<String, Pair<String, String>> loginMap;
-  private List<LoginServer> activePlayers;
+  //Map of username to LS managing them
+  private Map<String, LoginServer> activePlayers;
+  //List of GameID to PS with said GameID
   private Map<Integer, ParentServer> parentServers;
-  private int nextGameID = 0;
+  //Value for next new PS GameID
+  private int nextGameID = 1;
 
+  //Location of Serialized loginMap for server restart
   private String loginFile;
 
   public MasterServer(String loginFile) throws IOException, ClassNotFoundException{
     this.loginFile = loginFile;
     
     loginMap = new HashMap<String, Pair<String, String>>();
-
+    //Attempt to read loginMap from loginFile, otherwise use blank
     if(!loginFile.equals("")){
       try{
         File file = new File(getClass().getClassLoader().getResource(loginFile).getFile());
@@ -37,7 +43,7 @@ public class MasterServer {
       }
     }
 
-    activePlayers = new ArrayList<LoginServer>();
+    activePlayers = new HashMap<String, LoginServer>();
     parentServers = new HashMap<Integer, ParentServer>();
   }
 
@@ -62,13 +68,86 @@ public class MasterServer {
     return parentServers;
   }
 
-  public void addLoginServer(LoginServer ls){
-    synchronized(activePlayers){
-      activePlayers.add(ls);
+  //Method to get specific ParentServer via ID
+  public ParentServer getParentServer(int gameID){
+    return parentServers.get(gameID);
+  }
+
+  //Method to add new username/password to map
+  //Only adds if user not already there then attempts to save to disk
+  public synchronized boolean addLogin(String user, Pair<String, String> hashedPasswordAndSalt){
+    if(loginMap.containsKey(user)){
+      return false;
+    }
+    else{
+      loginMap.put(user, hashedPasswordAndSalt);
+      saveMap();
+      return true;
     }
   }
 
-  //Method to save map to file "logins" in resources
+  //Method to get salt for user from map
+  public String getSalt(String user){
+    if(!loginMap.containsKey(user)){
+      return "";
+    }
+    return loginMap.get(user).getSecond();
+  }
+
+  //Helper to add to activePlayer list if not already there
+  //Only use on LoginServer that has passed loginProcess() (has a valid user value)
+  public boolean addPlayer(LoginServer ls){
+    synchronized(activePlayers){
+      if(activePlayers.get(ls.getUser()) == null){
+         activePlayers.put(ls.getUser(), ls);
+         return true;
+      }
+      return false;
+    }
+  }
+
+  //Remove player from activePlayers by username/gameID
+  //Ensures to only remove if they are in PS with gameID
+  public void removePlayer(String username, int gameID){
+    synchronized(activePlayers){
+      System.out.println("trying to remove " + username + " in game " + gameID);
+      LoginServer ls = activePlayers.get(username);
+      if(ls == null) { return; }
+      if(ls.getActiveGameID() == gameID){
+        System.out.println("removing " + username + " in game " + gameID);
+        activePlayers.remove(username);
+      }
+    }
+  }
+
+  //Remove from activePlayers by LoginServer
+  public void removePlayer(LoginServer ls){
+    synchronized(activePlayers){
+      activePlayers.remove(ls.getUser());
+    }
+  }
+
+  //Creates new PS and adds user/connection (that created it) to it
+  //Method called by LoginServer to create new game
+  public synchronized int createNewParentServer(String user, Connection playerConnection) throws IOException{
+    ParentServer ps = new ParentServer(nextGameID++, this);
+    ps.start();
+    ps.tryJoin(user, playerConnection);
+    parentServers.put(ps.getGameID(), ps);
+    return ps.getGameID();
+  }
+
+  //Add PS to list of games
+  public void addParentServer(ParentServer ps){
+    parentServers.put(ps.getGameID(), ps);
+  }
+
+  //Remove PS by gameID
+  public void removeParentServer(Integer gameID){
+    parentServers.remove(gameID);
+  }
+
+  //Method to save map to file in loginFile within resources folder
   public synchronized void saveMap(){
     if(loginFile.equals("")){ return; }
     try{
@@ -86,46 +165,22 @@ public class MasterServer {
     }
   }
 
-  //Method to remove active player (on socket failure)
-  public void removeActivePlayer(LoginServer ls){
-    synchronized(activePlayers){
-      activePlayers.remove(ls);
-    }
-  }
-
-  //Method to add new username/password to map
-  public synchronized boolean addLogin(String user, Pair<String, String> hashedPasswordAndSalt){
-    if(loginMap.containsKey(user)){
-      return false;
-    }
-    else{
-      loginMap.put(user, hashedPasswordAndSalt);
-      saveMap();
-      return true;
-    }
-  }
-
   //Method to check user login information
   public boolean checkLogin(String user, String hashedPassword){
+    //Check if user in database
     if(!loginMap.containsKey(user)){
       return false;
     }
+    //Check if already logged in
     synchronized(activePlayers){
-      for(LoginServer ls : activePlayers){
-        if(ls.getUser() != null && ls.getUser().equals(user)){
-          return false;
-        }
+      if(activePlayers.get(user) != null){
+        System.out.println(user + " tried to login but already logged in");
+        return false;
       }
     }
+    //Otherwise check if hashed passwords match
+    System.out.println(user + " trying to log in");
     return hashedPassword.equals(loginMap.get(user).getFirst());
-  }
-
-  //Method to get salt for user from map
-  public String getSalt(String user){
-    if(!loginMap.containsKey(user)){
-      return "";
-    }
-    return loginMap.get(user).getSecond();
   }
 
   //Method to check if map contains username
@@ -133,7 +188,7 @@ public class MasterServer {
     return loginMap.containsKey(user);
   }
 
-  //Method to get all games that contain a user
+  //Method to get all games that contain a specific user
   public List<ParentServer> getGamesIn(String user){
     List<ParentServer> gamesIn = new ArrayList<ParentServer>();
     for(ParentServer ps : parentServers.values()){
@@ -155,11 +210,6 @@ public class MasterServer {
     return openGames;
   }
 
-  //Method to get specific ParentServer via ID
-  public ParentServer getParentServer(int gameID){
-    return parentServers.get(gameID);
-  }
-
   //Repeated method to accept incoming connections and forward them to a LoginServer
   public void waitingForConnections() throws IOException{
     if(serverSocket == null){
@@ -177,11 +227,8 @@ public class MasterServer {
         newPlayerSocket.setSoTimeout((int)(Constants.LOGIN_WAIT_MINUTES*60*1000));
         newPlayerConnection = new Connection(newPlayerSocket);
         newPlayerConnection.getStreamsFromSocket();
-        //Send object to client
+        //Create new LS to handle login/game select
         newLoginServer = new LoginServer(this, newPlayerConnection);
-        synchronized(activePlayers){
-          activePlayers.add(newLoginServer);
-        }
         newLoginServer.start();
       }
       catch (Exception e) {
@@ -189,39 +236,6 @@ public class MasterServer {
         continue;
       }
     }
-  }
-
-  public synchronized int createNewParentServer(String user, Connection playerConnection) throws IOException{
-    ParentServer ps = new ParentServer(nextGameID++, this);
-    ps.start();
-    ps.tryJoin(user, playerConnection);
-    parentServers.put(ps.getGameID(), ps);
-    return ps.getGameID();
-  }
-
-  public void removePlayer(String username, int gameID){
-    synchronized(activePlayers){
-      for(LoginServer ls : activePlayers){
-        if(ls.getUser().equals(username) && ls.getActiveGameID() == gameID){
-          activePlayers.remove(ls);
-          return;
-        }
-      }
-    }
-  }
-
-  public void removePlayer(LoginServer ls){
-    synchronized(activePlayers){
-      activePlayers.remove(ls);
-    }
-  }
-
-  public void removeParentServer(Integer gameID){
-    parentServers.remove(gameID);
-  }
-
-  public void addParentServer(ParentServer ps){
-    parentServers.put(ps.getGameID(), ps);
   }
 
   public void run() throws IOException{
