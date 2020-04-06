@@ -51,6 +51,8 @@ public class LoginServer extends Thread{
     playerConnection.sendObject(new StringMessage("Success: connected to server"));
 
     while(true){
+      //Double sure that empty string before
+      user = "";
       //Then wait for login/register boolean
       //True : login, False : register
       ConfirmationMessage loginBoolean = (ConfirmationMessage)(playerConnection.receiveObject());
@@ -71,15 +73,15 @@ public class LoginServer extends Thread{
         boolean loginSuccess = masterServer.checkLogin(username, hashedPassword);
         if(loginSuccess){
           user = username;
-          playerConnection.sendObject(new StringMessage("Success: Logged in"));
-          loginLock.unlock();
-          return;
+          if(masterServer.addPlayer(this)){
+            playerConnection.sendObject(new StringMessage("Success: Logged in"));
+            loginLock.unlock();
+            return;
+          }
         }
-        else{
-          playerConnection.sendObject(new StringMessage("Fail: User/password incorrect"));
-          loginLock.unlock();
-          continue;
-        }
+        playerConnection.sendObject(new StringMessage("Fail: User/password incorrect"));
+        loginLock.unlock();
+        continue;
       }
       //If false --> expect register
       else{
@@ -105,19 +107,19 @@ public class LoginServer extends Thread{
         }
         
         //Check if user already exists
-        if(masterServer.checkUserExists(username)){
-          playerConnection.sendObject(new StringMessage("Fail: User already exists"));
-          registerLock.unlock();
-          continue;
-        }
-        else{
+        if(!masterServer.checkUserExists(username)){
           user = username;
-          masterServer.addLogin(username, new Pair(password1, salt));
-          playerConnection.sendObject(new StringMessage("Success: User created"));
-          registerLock.unlock();
-          return;
+          //Ensure that no one else logged in as this user in the mean time
+          if(masterServer.addPlayer(this)){
+            masterServer.addLogin(username, new Pair(password1, salt));
+            playerConnection.sendObject(new StringMessage("Success: User created"));
+            registerLock.unlock();
+            return;
+          }
         }
-        
+        playerConnection.sendObject(new StringMessage("Fail: User already exists"));
+        registerLock.unlock();
+        continue;
       }
     }
 
@@ -161,7 +163,6 @@ public class LoginServer extends Thread{
       if(oldBoolean.unpacker()){
         //If true then get games currently in
         gamesIn = masterServer.getGamesIn(user);
-        System.out.println(gamesIn.size());
         gamesList = buildGamesInfo(gamesIn);
       }
 
@@ -177,7 +178,7 @@ public class LoginServer extends Thread{
 
       //Wait for int return
       int gameID = ((IntegerMessage)(playerConnection.receiveObject())).unpacker().intValue();
-      System.out.println(gameID);
+      System.out.println(user + " returned " + gameID);
       if(oldBoolean.unpacker()){
         if(validGameID(gamesIn, gameID)){
           ParentServer ps = masterServer.getParentServer(gameID);

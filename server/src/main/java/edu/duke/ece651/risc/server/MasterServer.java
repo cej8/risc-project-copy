@@ -212,6 +212,16 @@ public class MasterServer {
     }
   }
 
+  public boolean addPlayer(LoginServer ls){
+    synchronized(activePlayers){
+      if(activePlayers.get(ls.getUser()) == null){
+         activePlayers.put(ls.getUser(), ls);
+         return true;
+      }
+      return false;
+    }
+  }
+
   public void removeParentServer(Integer gameID){
     parentServers.remove(gameID);
   }
