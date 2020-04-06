@@ -54,6 +54,7 @@ public abstract class OrderCreator {
         }
       } else {
         bonusLevel++;
+        orderUnits.add(0); //adds a 0 to that index if none
       }
     }
     // return getUnitListFromClient();

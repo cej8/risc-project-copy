@@ -44,8 +44,9 @@ public class TestOrderCreator {
     OrderCreator poc = OrderFactoryProducer.getOrderCreator("P", client);
     poc.addToOrderList(orders);
     
-    
-    
+    Unit unit = poc.getOrderUnits(b.getRegions().get(1));
+    assertEquals(7, unit.getUnits().size());
+  
  
 
   }
