@@ -27,6 +27,7 @@ public class UnitBoost extends DestinationOrder {
     // remove old unit from list
     destination.getUnits().subtractUnits(units);
     sb.append(" to " + destination.getUnits().getUnits() + "\n");
+    System.out.println(sb.toString());
     return sb.toString();
   }
 
@@ -53,6 +54,7 @@ public class UnitBoost extends DestinationOrder {
       cost += (upgradedUnits.getCostFromTech(i) * numUnitsofType); // multiply cost to upgrade * num of units of that
                                                                    // type you're upgrading
     }
+    System.out.println("Cost of upgrade = " + cost);
     return cost;
   }
 

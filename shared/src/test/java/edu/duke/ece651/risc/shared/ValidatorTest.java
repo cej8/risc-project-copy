@@ -220,14 +220,14 @@ public class ValidatorTest {
     // TODO: create valid regions and units test
     OrderInterface move21 = new MoveOrder(regions.get(1), regions.get(0), new Unit(1));// valid units
     OrderInterface move41 = new MoveOrder(regions.get(2), regions.get(0), new Unit(2));// valid
-    OrderInterface attack35 = new AttackMove(regions.get(4), regions.get(3), new Unit(1));// invalid same owner
+    OrderInterface attack34 = new AttackMove(regions.get(4), regions.get(3), new Unit(1));// invalid same owner
 
-    ordersinValid.add(attack35);
+    ordersinValid.add(attack34);
     ordersinValid.add(move21);
     ordersinValid.add(move41);
     ValidatorHelper vh = new ValidatorHelper(p1, b);
     assertEquals(false, vh.allOrdersValid(orders));
-    assertEquals(false, vh.allOrdersValid(ordersinValid));
+    assertEquals(true, vh.allOrdersValid(ordersinValid));
 
   }
 

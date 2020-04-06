@@ -52,8 +52,14 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
 
   // helper method
   public boolean isValidMove(MoveOrder m, int sum) {
+    if(m.getSource()==m.getDestination()){
+      System.out.println("Source cannot also be destionation");
+   
+      return false;
+    }
     if (!m.getSource().getOwner().getName().equals(player.getName())
         || !m.getDestination().getOwner().getName().equals(player.getName())) {
+      System.out.println(player.getName()+" does not own source or destination");
       return false;
     }
     // can we get there through regions owned?
@@ -65,22 +71,31 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
         // do we have enough food resources to travel shortest path?
          sum+=m.getSource().findShortestPath(m.getDestination()).getTotalCost();
          if(sum>player.getResources().getFuelResource().getFuel()){//check cumulative cost of path
+           System.out.println(player.getName()+" move order failed. Player did not have enough fuel for a cumulative cost of "+sum+ " for all paths");
            return false;
          }
         return true;
+        
       }
+       System.out.println(player.getName()+" move order failed. Player did not have enough fuel for a path cost of "+ m.getSource().findShortestPath(m.getDestination()).getTotalCost() );
+        
       return false;
     }
+    System.out.println(player.getName()+" move order failed. Player did not have a valid path of owned regions from "+m.getSource().getName()+ " to "+ m.getDestination().getName());
+       
     return false;
   }
 
   // Validate the order is acceptable
   @Override
   public boolean validateOrders(List<MoveOrder> moveList) {
-    boolean validRegions = validateRegions(moveList);
-    boolean validUnits = validateUnits(moveList);
-    return validRegions && validUnits;
+    boolean valid = validateRegions(moveList);
+    if (valid) {
+      valid = valid && validateUnits(moveList);
+    }
+    return valid;
   }
+
 
   //  @Override
   public boolean validateRegions(List<MoveOrder> moveList) {
@@ -109,8 +124,10 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
       // set validMove to false if any of these are false: at least 1 sourceUnit, 1
       // moveUnit, and sourceUnits > moveUnits in each index of source
       for (int i = 0; i < sourceUnits.getUnits().size(); i++) { // for each index of the source units
-
-        if ((sourceUnits.getUnits().get(i) <= moveUnits.getUnits().get(i)) || (moveUnits.getUnits().get(i) < 0)) {
+        if (sourceUnits.getUnits().get(i).equals(0) && moveUnits.getUnits().get(i).equals(0)){
+            continue;   
+        }
+        else if (((sourceUnits.getUnits().get(i) - 1)< moveUnits.getUnits().get(i)) || (moveUnits.getUnits().get(i) < 0)) {
           validMove = false;
         }
       }
