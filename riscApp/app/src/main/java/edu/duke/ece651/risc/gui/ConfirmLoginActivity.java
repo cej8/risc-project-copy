@@ -13,7 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.duke.ece651.risc.shared.Connection;
+import edu.duke.ece651.risc.shared.OrderInterface;
 
 public class ConfirmLoginActivity extends AppCompatActivity {
     ExecuteClient executeClient;
@@ -21,6 +25,8 @@ public class ConfirmLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_login);
+       // ParentActivity parentActivity = new ParentActivity();
+       // parentActivity.generateOrders();
         executeClient = new ExecuteClient(this);
         executeClient.createGame();
     }

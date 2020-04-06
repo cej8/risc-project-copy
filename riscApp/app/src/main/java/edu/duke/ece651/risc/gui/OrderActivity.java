@@ -14,7 +14,7 @@ import java.util.List;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
 
-public class AttackActivity extends AppCompatActivity {
+public class OrderActivity extends AppCompatActivity {
     List<Region> regions;
     String planetName;
     TextView name;
@@ -43,7 +43,7 @@ public class AttackActivity extends AppCompatActivity {
         if (planetName == null){
                 helpText.setText("Please select a planet");
             } else {
-                Intent i = new Intent(this, AttackActivityTwo.class);
+                Intent i = new Intent(this, OrderActivityTwo.class);
             i.putExtra("PNAME", planetName);
             i.putExtra("ORDER",orderMessage);
             startActivity(i);
