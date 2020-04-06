@@ -205,6 +205,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/oval"
         android:text="move"
+        android:onClick="moveOrder"
         android:textAllCaps="true"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -216,6 +217,7 @@
 
     <Button
         android:id="@+id/attackButton"
+        android:onClick="attackOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/oval"
@@ -231,6 +233,7 @@
 
     <Button
         android:id="@+id/upgradeButton"
+        android:onClick="upgradeOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -261,10 +264,11 @@
 
     <Button
         android:id="@+id/submitButton"
+        android:onClick="submitAll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/oval2"
-        android:text="Submit"
+        android:text="Submit all"
         android:textAllCaps="true"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
