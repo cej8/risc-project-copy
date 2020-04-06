@@ -84,11 +84,9 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
   public boolean validateRegions(List<MoveOrder> moveList) {
     for (MoveOrder move : moveList) {
       if (!isValidMove(move)) {
-        System.out.println("Move not valid");
         return false;
       }
-      // move.doAction();
-    }
+         }
     // if all moves are valid
     return true;
   }
@@ -116,30 +114,20 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
       if (validMove && this.hasValidRegionPath(tempSource, tempDest)) {
         moveCopy.doAction();
       } else {
-        System.out.println(
-            "Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); // this
-                                                                                                                      // is
-                                                                                                                      // just
-                                                                                                                      // for
-                                                                                                                      // testing
+        // if (!validMove) {
+        //   System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() + " but moveUnits are " + moveUnits.getUnits()); // this is just for testing
+        // }
+        // else{
+        //   System.out.println("Move failed: there is no valid path between Region " + tempSource.getName()
+        //       + " and Region " + tempDest.getName()); // this is just for testing
+        //   System.out.println("Cost to traverse this path = "/* + tempSource.findShortestPath(tempDest).getTotalCost() */
+        //       + "; " + tempSource.getOwner().getName() + " has "
+        //       + tempSource.getOwner().getResources().getFuelResource().getFuel() + " fuel remaining");
+        // }
         return false;
       }
     }
-    // }
     return true;
   }
 
-  // if ((sourceUnits.getUnits() > moveUnits.getUnits()) &&
-  // (sourceUnits.getUnits() > 0) && (moveUnits.getUnits() > 0)) {
-  // moveCopy.doSourceAction();
-  // moveCopy.doDestinationAction();
-  // } else {
-  // System.out.println("Move failed: sourceUnits are " + sourceUnits.getUnits() +
-  // " but moveUnits are " + moveUnits.getUnits()); //this is just for testing
-  // return false;
-  // }
-  // }
-  // return true;
-
-  // }
 }
