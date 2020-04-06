@@ -22,6 +22,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
   public boolean validateRegions(List<UnitBoost> orders) {
     for (UnitBoost boost : orders) {
       if (!(validateRegion(boost))) {
+        System.out.println("Invalid UnitBoost: player did not own region "+ boost.getDestination().getName());
         return false;
       }
     }
@@ -43,6 +44,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
   public boolean validateUnits(List<UnitBoost> orders) {
     for (UnitBoost boost : orders) {
       if (!(validateUnit(boost))) {
+        System.out.println("Invalid UnitBoost: units " + boost.getUnits().getUnits() + " invalid for " + boost.getDestination().getName() + " " + boost.getDestination().getUnits().getUnits());
         return false;
       }
     }
@@ -74,6 +76,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
     if ((order.getUnits().getUnits().get((order.getUnits().getUnits().size() - 1))).equals(0)) {
       return true;
     } else {
+       System.out.println("Invalid UnitBoost: player tried to upgrade maxed unit "+ order.getUnits().getUnits());
       return false;
     }
   }
@@ -87,6 +90,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
     if (player.getResources().getTechResource().getTech() >= totalCost) {
       return true;
     } else {
+        System.out.println("Invalid UnitBoost: player did not have enough fuel "+ player.getResources().getTechResource().getTech() + " for order needing" + totalCost);
       return false;
     }
   }
