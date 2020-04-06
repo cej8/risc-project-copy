@@ -13,8 +13,8 @@ public class MoveOrderTest {
     AbstractPlayer p1 = new HumanPlayer("player 1");
     int food = p1.getResources().getFuelResource().getFuel();
     int tech = p1.getResources().getTechResource().getTech();
-    assertEquals(20, food);
-    assertEquals(15, tech);
+    assertEquals(50, food);
+    assertEquals(30, tech);
     Region r1 = new Region(p1, new Unit(5));
     r1.setSize(1);
     Region r2 = new Region(p1, new Unit(2));
@@ -35,7 +35,7 @@ public class MoveOrderTest {
     move1.doAction();
     int r1Size = r1.getSize();
     int r2Size = r2.getSize();
-    assertEquals(16, p1.getResources().getFuelResource().getFuel());
+    assertEquals(46, p1.getResources().getFuelResource().getFuel());
   }
 
   public List<Integer> listOfUnitInts(int u0, int u1, int u2, int u3, int u4, int u5, int u6) {

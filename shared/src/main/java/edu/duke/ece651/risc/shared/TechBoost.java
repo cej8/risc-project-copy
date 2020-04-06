@@ -15,7 +15,9 @@ private  AbstractPlayer player;
       //increase level
     player.getMaxTechLevel().upgradeLevel();
     
-		return null;
+	  StringBuilder sb = new StringBuilder(player.getName() + " upgrade to tech level " + player.getMaxTechLevel().getMaxTechLevel()+" \n");
+    return sb.toString();
+
 	}
 
 	@Override

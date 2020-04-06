@@ -31,24 +31,24 @@ public class TestTechBoost {
     //1->2 (cost 50)
     techboost.doAction();
     assertEquals(2,p1.getMaxTechLevel().getMaxTechLevel());
-    assertEquals(665, p1.getResources().getTechResource().getTech());
+    assertEquals(680, p1.getResources().getTechResource().getTech());
     //2->3 (cost 75)
     techboost.doAction();
     assertEquals(3,p1.getMaxTechLevel().getMaxTechLevel());
-    assertEquals(590, p1.getResources().getTechResource().getTech());
+    assertEquals(605, p1.getResources().getTechResource().getTech());
     // 3->4 (cost 125)
     techboost.doAction();
     assertEquals(4,p1.getMaxTechLevel().getMaxTechLevel());
-    assertEquals(465, p1.getResources().getTechResource().getTech());
+    assertEquals(480, p1.getResources().getTechResource().getTech());
     //4->5 (cost 200)
     techboost.doAction();
     assertEquals(5,p1.getMaxTechLevel().getMaxTechLevel());
-    assertEquals(265, p1.getResources().getTechResource().getTech());
+    assertEquals(280, p1.getResources().getTechResource().getTech());
     //5->6 (cost 300)
      p1.getResources().getTechResource().addTech(100);
        techboost.doAction();
     assertEquals(6,p1.getMaxTechLevel().getMaxTechLevel());
-    assertEquals(65, p1.getResources().getTechResource().getTech());
+    assertEquals(80, p1.getResources().getTechResource().getTech());
     
     
 
