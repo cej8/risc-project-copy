@@ -27,9 +27,6 @@ test:
      - ece651
   stage: test
   script: scripts/run-tests-in-docker.sh
-  artifacts:
-    paths:
-      - coverage
 
 deploy:
  tags:
