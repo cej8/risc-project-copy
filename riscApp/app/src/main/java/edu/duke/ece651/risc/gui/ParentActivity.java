@@ -9,17 +9,14 @@ public final class ParentActivity {
     private static Board board;
     private static HumanPlayer player;
 
-    final static Board getBoard(){return board;}
-    public void setBoard(Board b){this.board=b;}
-
     final static HumanPlayer getPlayer(){return player;}
     public void setPlayer(HumanPlayer p){this.player=p;}
-
-
     final static Connection getConnection(){
         return connection;
     }
     public void setConnection(Connection connection){
         this.connection = connection;
     }
+    final static Board getBoard(){return board;}
+    public void setBoard(Board board){this.board = board;}
 }

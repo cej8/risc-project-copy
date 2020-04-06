@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.shared;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -9,59 +10,125 @@ import java.util.*;
 import org.junit.jupiter.api.Test;
 
 public class MoveValidatorTest {
-  @Test
-  public void Move_UnitTest() {
-    List<Region> regions = getRegions(false);
-    Board board = new Board(regions);
-    MoveValidator mv = new MoveValidator(new HumanPlayer("Player 1"), board);
-    // Moves using all but one of sourceUnits all with same owner
-    List<Unit> allButOneUnit = get6UnitList(4, 9, 14, 19, 24, 29); // true: moving all but one unit
-    List<MoveOrder> moveAllButOneUnit = getMovesDependent(regions, allButOneUnit);
-    assertEquals(true, mv.validateUnits(moveAllButOneUnit));
-    assertEquals(false, mv.validateRegions(moveAllButOneUnit));
-  }
 
    @Test
   public void test_Owner() {
-    List<Region> regions = getRegions(true); // set multiple owners to true
+    trueIfOwner(true);
+    trueIfOwner(false);
+  }
+  //this method return true (valid move) if the regions are owner by the same player and false if not 
+  private void trueIfOwner(boolean singleOwner) {
+    List<Region> regions = getRegions(singleOwner); 
     Board board = new Board(regions);
-    MoveValidator mv = new MoveValidator(board.getRegions().get(0).getOwner(), board);
-    // // Moves using all but one of sourceUnits this time with different owner
-    List<Unit> allButOneUnit = get6UnitList(4, 9, 14, 19, 24, 29); // true: moving all but one unit
-    List<MoveOrder> moveAllButOneUnit = getMovesDependent(regions, allButOneUnit);
-    assertEquals(false, mv.validateUnits(moveAllButOneUnit));
+    int totalUnits = board.getRegions().get(0).getUnits().getTotalUnits();
+    board.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves 
+    Board boardCopy = (Board) DeepCopy.deepCopy(board);
+    List<Region> regionCopy = boardCopy.getRegions();
+    MoveValidator mv = new MoveValidator(regionCopy.get(0).getOwner(), boardCopy);
+    // Moves using all but one of sourceUnits all with same owner
+    List<Unit> units = get6UnitList(4, 9, 14, 19, 24, 29); // true: moving all but one unit   
+    List<MoveOrder> moveUnits = getMovesDependent(regionCopy, units);
+    
+    assertEquals(singleOwner, mv.validateRegions(moveUnits)); //true if one owner for regions, false if multiple
+    assertEquals(singleOwner, mv.validateOrders(moveUnits)); //true if one owner for regions, false if multiple
+  
+    assertEquals(totalUnits, board.getRegions().get(0).getUnits().getTotalUnits()); //number of units on actual cost should not have changed after validation
   }
 
   @Test
-  public void test_UnitMoves() {
-    List<Region> regions = getRegions(false);
+    public void dependentUnitsMoveTest() {
+    List<Region> regions = getRegions(true); 
     Board board = new Board(regions);
-    MoveValidator mv = new MoveValidator(new HumanPlayer("Player 1"), board);
-    // ValidatorInterface<MoveOrder> mv = new MoveValidator(new HumanPlayer("Player 1"), board);
+    int totalUnits = board.getRegions().get(0).getUnits().getTotalUnits();
+    board.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves 
+    Board boardCopy = (Board) DeepCopy.deepCopy(board);
+    List<Region> regionCopy = boardCopy.getRegions();
+    MoveValidator mv = new MoveValidator(regionCopy.get(0).getOwner(), boardCopy);
+    // Moves using all but one of sourceUnits all with same owner
+    List<Unit> allButOneUnit = get6UnitList(4, 13, 27, 46, 70, 99); // true: moving all but one unit   
+    List<MoveOrder> moveAllButOneUnit = getMovesDependent(regionCopy, allButOneUnit);
+    System.out.println("Board before dependent moves: " + createBoard(boardCopy));
+    assertEquals(true, mv.validateOrders(moveAllButOneUnit)); //true if one owner for regions, false if multiple
+    System.out.println("Board after dependent moves: " + createBoard(boardCopy));
+    assertEquals(totalUnits, board.getRegions().get(0).getUnits().getTotalUnits()); //number of units on actual cost should not have changed after validation
+  }
+
+  
+  @Test
+  public void test_UnitMoves() {
+    List<Region> regions = getRegions(true); 
+    Board board = new Board(regions);
+    int totalUnits = board.getRegions().get(0).getUnits().getTotalUnits();
+    board.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves 
+    Board boardCopy = (Board) DeepCopy.deepCopy(board);
+    List<Region> regionCopy = boardCopy.getRegions();
+    MoveValidator mv = new MoveValidator(regionCopy.get(0).getOwner(), boardCopy);
 
     // Orders using all units
     List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);
-    List<MoveOrder> moveAllUnits = getMovesIndependent(regions, regionUnits); // false: moving all units in region to
+    List<MoveOrder> moveAllUnits = getMovesIndependent(regionCopy, regionUnits); // false: moving all units in region to
                                                                               // another
-    assertEquals(false, mv.validateUnits(moveAllUnits));
+    assertEquals(false, mv.validateOrders(moveAllUnits));
 
     // Orders using 0 units
-    List<Unit> invalidUnits = get6UnitList(0, 9, 14, 19, 24, 29); // false: moving 0 units
-    List<MoveOrder> moveInvalidUnits = getMovesDependent(regions, invalidUnits);
-    assertEquals(false, mv.validateUnits(moveInvalidUnits));
+    List<Unit> invalidUnits = get6UnitList(-1, 9, 14, 19, 24, 29); // false: moving -1 units
+    List<MoveOrder> moveInvalidUnits = getMovesDependent(regionCopy, invalidUnits);
+    assertEquals(false, mv.validateOrders(moveInvalidUnits));
 
     // Orders for which sourceUnits < order Units
     List<Unit> tooManyUnits = get6UnitList(100, 9, 14, 19, 24, 29);
-    List<MoveOrder> moveTooManyUnits = getMovesDependent(regions, tooManyUnits);
-    assertEquals(false, mv.validateUnits(moveTooManyUnits)); // false: move too many units
+    List<MoveOrder> moveTooManyUnits = getMovesDependent(regionCopy, tooManyUnits);
+    assertEquals(false, mv.validateOrders(moveTooManyUnits)); // false: move too many units
   }
 
-  private List<Region> getRegions(boolean multipleOwners) {
+    //returns a String of all of the board info
+  public String createBoard(Board b){
+    StringBuilder boardText = new StringBuilder();
+    Map<AbstractPlayer, List<Region>> playerRegionMap = b.getPlayerToRegionMap();
+    List<AbstractPlayer> players = new ArrayList<AbstractPlayer>(playerRegionMap.keySet());
+    Collections.sort(players);
+    for(AbstractPlayer player : players) { //for each entry in the map
+      boardText.append(player.getName() + ": \n---------\n"); //append player name
+      for (Region r : playerRegionMap.get(player)){ //for each region the player has
+        boardText.append(this.printRegionInfo(r)); //add its info to board
+      }
+      boardText.append("\n");
+    }
+    return boardText.toString();
+  }
+
+ //returns String w board info for a given region
+  private String printRegionInfo(Region r){
+    int numUnits = r.getUnits().getTotalUnits();
+    String name = r.getName();
+    StringBuilder sb = new StringBuilder(numUnits + " units in " + name); //add info on num units in region
+    sb.append(this.printRegionAdjacencies(r)); //add adj info
+    return sb.toString();
+  }
+  
+   //returns String w adjacency info info for a given region  
+  private String printRegionAdjacencies(Region r){
+    StringBuilder sb = new StringBuilder(" (next to:");
+    List<Region> adjList = r.getAdjRegions();
+    for (int i = 0; i < adjList.size(); i++){
+      sb.append(" " + adjList.get(i).getName()); //add name of adjacent region to sb
+      if (i <  adjList.size() -1){
+        sb.append(","); //add a comma if not the last in list
+      }
+    }
+    sb.append(")\n"); //close parentheses
+    return sb.toString();
+  }
+      
+
+  
+  
+  private List<Region> getRegions(boolean singleOwner) {
     AbstractPlayer p1 = new HumanPlayer("Player 1");
     AbstractPlayer p2 = new HumanPlayer("Player 2");
     List<Region> regions = null;
     List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);
-    if (multipleOwners) {
+    if (!singleOwner) {
       regions = getRegionHelper(p1, p2, regionUnits);
     } else {
       regions = getRegionHelper(p1, p1, regionUnits);
@@ -121,7 +188,7 @@ public class MoveValidatorTest {
 
     List<Region> adj0 = new ArrayList<Region>();
     adj0.add(r5);
-    adj0.add(r0);
+    adj0.add(r1);
     r0.setAdjRegions(adj0);
 
     List<Region> adj1 = new ArrayList<Region>();
@@ -171,8 +238,14 @@ public class MoveValidatorTest {
     return moves;
   }
 
+  // private void printCostPerMove(List<MoveOrder> moves){
+  //   for (MoveOrder m : moves){
+  //     System.out.println(
+  //   }
+  // }
   private List<MoveOrder> getMovesDependent(List<Region> regions, List<Unit> units) {
     MoveOrder move01 = new MoveOrder(regions.get(0), regions.get(1), units.get(0));
+
     MoveOrder move12 = new MoveOrder(regions.get(1), regions.get(2), units.get(1));
     MoveOrder move23 = new MoveOrder(regions.get(2), regions.get(3), units.get(2));
     MoveOrder move34 = new MoveOrder(regions.get(3), regions.get(4), units.get(3));

@@ -17,7 +17,7 @@ public class BoardGenerator {
     List<Region> adjRegion = null;
     List<Region> regionList = new ArrayList<Region>();
 
-    	Region regionA = createRegion("Caprica");
+    Region regionA = createRegion("Caprica");
         Region regionB = createRegion("Hoth");
         Region regionC = createRegion("Worlorn");
         Region regionD = createRegion("Dagobah");

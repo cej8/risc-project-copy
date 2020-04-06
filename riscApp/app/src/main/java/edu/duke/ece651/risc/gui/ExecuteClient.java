@@ -7,6 +7,9 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
 import edu.duke.ece651.risc.client.ConnectionManager;
@@ -84,7 +87,7 @@ public class ExecuteClient {
                     act.startActivity(loginIntent);
                 }
             }
-        }, 6000);
+        }, 7000);
     }
 
     public void getGames(boolean gameType, boolean getgame) {
@@ -103,7 +106,6 @@ public class ExecuteClient {
                 act.startActivity(gamesIntent);
             }
         }, 2000);
-
     }
 
     public void pickGame(boolean gameType, String id, boolean getgame, String gameList) {
@@ -149,7 +151,7 @@ public class ExecuteClient {
                     act.startActivity(loginIntent);
                 }
             }
-        }, 6000);
+        }, 7000);
     }
 
     public void startGame(TextView textView, Activity act, EditText editText) {
@@ -194,8 +196,5 @@ public class ExecuteClient {
                 act.startActivity(newGame);
             }
         }, 2000);
-
     }
-
-
 }
