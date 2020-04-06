@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestOrderCreator {
   @Test
   public void test_Creator() throws FileNotFoundException {
-    InputStream input = new FileInputStream(new File("src/test/resources/testSDOrders.txt"));
+    InputStream input = new FileInputStream(new File("src/test/resources/SDOrdersAskForUnits.txt"));
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput(input);
     // Client client = new Client(ci, td);
@@ -49,8 +49,18 @@ public class TestOrderCreator {
  
 
   }
+
   private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2) {
-    Region r1 = new Region(p1, new Unit(1));
+    List<Integer> list1 = new ArrayList<Integer>();
+    list1.add(1);
+    list1.add(2);
+    list1.add(3);
+    list1.add(4);
+    list1.add(5);
+    list1.add(0);
+    list1.add(0);
+    Region r1 = new Region(p1, new Unit(list1));
+    //Region r1 = new Region(p1, new Unit(1));
     r1.setName("r1");
     r1.setSize(1);
     r1.setFuelProduction(100);
@@ -60,7 +70,15 @@ public class TestOrderCreator {
     r2.setSize(2);
     r2.setFuelProduction(100);
   
-    Region r4 = new Region(p1, new Unit(4));
+    List<Integer> list4 = new ArrayList<Integer>();
+    list4.add(1);
+    list4.add(10);
+    list4.add(0);
+    list4.add(0);
+    list4.add(0);
+    list4.add(0);
+    list4.add(0);
+    Region r4 = new Region(p1, new Unit(list4));
     r4.setName("r4");
     r4.setSize(4);
     r4.setFuelProduction(100);
@@ -80,8 +98,16 @@ public class TestOrderCreator {
     r6.setName("r6");
     r6.setSize(6);
     r1.setFuelProduction(100);
-    
-     Region r7 = new Region(p1, new Unit(7));
+
+    List<Integer> list7 = new ArrayList<Integer>();
+    list7.add(0);
+    list7.add(2);
+    list7.add(3);
+    list7.add(4);
+    list7.add(0);
+    list7.add(0);
+    list7.add(0);
+     Region r7 = new Region(p1, new Unit(list7));
     r7.setName("r7");
     r7.setSize(5);
     r7.setFuelProduction(100);

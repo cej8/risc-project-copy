@@ -7,16 +7,25 @@ import java.io.*;
 
 // Class that handles each child implemtation for game (i.e. each player has their own ChildServer)
 public class ChildServer implements Runnable{
-  private AbstractPlayer player;  
-  private ParentServer parent;
+  //Player object for client
+  private AbstractPlayer player;
+  //ParentServer that owns this child
+  private ParentServer parent; 
+  //Connection for player
   private Connection playerConnection;
+  //Message to send for turn
   private String turnMessage = "";
 
+  //Boolean for if firstCall of threads (placement)
   private boolean firstCall = true;
+  //Boolean for if connection has failed (playerConnection null/DC'ed)
   private boolean connectionFailed = false;
 
+  //Number of turns without input successful
   private int missedTurns = 0;
+  //Time for turn start
   private long startTime;
+  //Maximum time for turn
   private long maxTime;
 
   public ChildServer(AbstractPlayer player, ParentServer parent){
@@ -30,25 +39,28 @@ public class ChildServer implements Runnable{
     this.parent = parent;
   }
 
-  public void setTurnMessage(String turnMessage){
-    this.turnMessage = turnMessage;
-  }
   
   // Getters & setters
-  public Connection getPlayerConnection(){
-    return playerConnection;
+  public AbstractPlayer getPlayer(){
+    return player;
   }
-  public void setPlayerConnection(Connection playerConnection){
-    this.playerConnection = playerConnection;
-  }
+
   public ParentServer getParentServer(){
     return parent;
   }
   public void setParentServer(ParentServer parent){
     this.parent = parent;
   }
-  public AbstractPlayer getPlayer(){
-    return player;
+
+  public Connection getPlayerConnection(){
+    return playerConnection;
+  }
+  public void setPlayerConnection(Connection playerConnection){
+    this.playerConnection = playerConnection;
+  }
+
+  public void setTurnMessage(String turnMessage){
+    this.turnMessage = turnMessage;
   }
 
   public boolean getFirstCall(){
@@ -60,12 +72,13 @@ public class ChildServer implements Runnable{
   public boolean performTurn(){
     //If player isn't playing or isn't watching then skip them
     if(!player.isPlaying()){
+      //if not playing then previously was --> not first call
       firstCall = false;
       if(player.isWatching() != null && !player.isWatching()){
         return true;
       }
     }
-
+    //If no connection then fails
     if(playerConnection == null){
       return false;
     }
@@ -191,6 +204,7 @@ public class ChildServer implements Runnable{
       }
     }
     catch(Exception e){
+      System.out.println(player.getName() + " had some issue, disconnected");
       playerConnection.closeAll();
       playerConnection = null;
       parent.getMasterServer().removePlayer(player.getName(), parent.getGameID());
