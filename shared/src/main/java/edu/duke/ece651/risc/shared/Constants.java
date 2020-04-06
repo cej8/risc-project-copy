@@ -30,8 +30,8 @@ public final class Constants {
   public static final int UPGRADE_TECH_PRIORITY = 9000;
   // cost to attack - food 
   public static final int ATTACK_COST = 1;
-  public static final int STARTING_FUEL_PRODUCTION = 20;
-  public static final int STARTING_TECH_PRODUCTION = 15;
+  public static final int STARTING_FUEL_PRODUCTION = 50;
+  public static final int STARTING_TECH_PRODUCTION = 30;
   //board values
   public static final int REGION_SIZE = 10;
   // Technology Defaults

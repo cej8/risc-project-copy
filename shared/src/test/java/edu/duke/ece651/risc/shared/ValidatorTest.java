@@ -43,7 +43,7 @@ public class ValidatorTest {
 
     assertEquals(true, mv.isValidMove(moves.get(0)));
     assertEquals(false, mv.isValidMove(moves.get(1)));
-    assertEquals(false, mv.isValidMove(moves.get(2)));
+    assertEquals(true, mv.isValidMove(moves.get(2)));
     assertEquals(false, mv.isValidMove(moves.get(3)));
     assertEquals(false, mv.validateRegions(moves));
     // TODO uncomment when attacska re changed

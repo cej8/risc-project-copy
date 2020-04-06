@@ -51,11 +51,11 @@ public class ParentServerTest {
       System.out.println();
     }
     assertEquals(10, regions.get(0).getSize());
-    assertEquals(20, regions.get(0).getFuelProduction());
-    assertEquals(15, regions.get(0).getTechProduction());
+    assertEquals(50, regions.get(0).getFuelProduction());
+    assertEquals(30, regions.get(0).getTechProduction());
     assertEquals(10, regions.get(6).getSize());
-    assertEquals(20, regions.get(6).getFuelProduction());
-    assertEquals(15, regions.get(6).getTechProduction());
+    assertEquals(50, regions.get(6).getFuelProduction());
+    assertEquals(30, regions.get(6).getTechProduction());
 
   }
 
@@ -71,12 +71,12 @@ public class ParentServerTest {
     Board b = new Board(getRegionList(player, player2));
     ps.setBoard(b);
 
-    assertEquals(20, player2.getResources().getFuelResource().getFuel());
-    assertEquals(15, player.getResources().getTechResource().getTech());
+    assertEquals(50, player2.getResources().getFuelResource().getFuel());
+    assertEquals(30, player.getResources().getTechResource().getTech());
     assertEquals(4, b.getRegions().get(2).getUnits().getUnits().get(0));
     ps.growUnits();
-    assertEquals(220, player2.getResources().getFuelResource().getFuel());
-    assertEquals(190, player.getResources().getTechResource().getTech()); // TODO -- this line produces 190 not 115
+    assertEquals(250, player2.getResources().getFuelResource().getFuel());
+    assertEquals(280, player.getResources().getTechResource().getTech()); 
     assertEquals(5, b.getRegions().get(2).getUnits().getUnits().get(0));
 
   }
