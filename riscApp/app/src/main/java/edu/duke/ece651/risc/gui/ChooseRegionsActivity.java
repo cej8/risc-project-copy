@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,16 +17,25 @@ public class ChooseRegionsActivity extends AppCompatActivity {
     private ExecuteClient executeClient;
     private EditText editRegionGroup;
     private TextView userPrompt;
+    private Button submit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_regions);
+        submit= findViewById(R.id.submit);
+        submit.setVisibility(View.GONE);
         connection = ParentActivity.getConnection();
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
         editRegionGroup= findViewById(R.id.regionName);
+        editRegionGroup.setVisibility(View.GONE);
         userPrompt = findViewById(R.id.helpText);
+        userPrompt.setText("WAITING FOR OTHER PLAYERS TO JOIN");
         executeClient.getBoardAssignments(userPrompt);
+        submit.setVisibility(View.VISIBLE);
+        editRegionGroup.setVisibility(View.VISIBLE);
+
+        // executeClient.chooseRegions(userPrompt,regionGroup);
 
     }
 
