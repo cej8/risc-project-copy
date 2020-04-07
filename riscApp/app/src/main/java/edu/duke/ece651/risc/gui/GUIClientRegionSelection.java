@@ -52,8 +52,6 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
         this.regionGroup = region;
         //  this.board= ParentActivity.getBoard();
         // this.player=ParentActivity.getPlayer();
-
-
     }
 
     public GUIClientRegionSelection(boolean begin, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
@@ -151,50 +149,6 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
         //long maxTime = -1;
 
         try {
-            // Set timeout to constant, wait this long for game start
-            // This will block on FIRST board = ...
-           // connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
-
-         //   while (true) {
-                // Game starts with board message
-              /*  ParentActivity parentActivity = new ParentActivity();
-                parentActivity.setBoard((Board) (connection.receiveObject()));
-                this.board = ParentActivity.getBoard();
-                // Return timeout to smaller value
-                connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
-
-                //Set max/start first time board received (start of turn)
-                if(maxTime == -1){
-                    maxTime = (long) (connection.getSocket().getSoTimeout());
-                    //Catch case for issues in testing, should never really happen
-                    if (maxTime == 0) {
-                        maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
-                    }
-                }
-                if(startTime == -1){
-                    startTime = System.currentTimeMillis();
-                }
-
-                //Output board
-                clientOutput.displayBoard(board);
-          //     Print prompt and get group name
-                clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
-             //   String groupName = clientInput.readInput();*/
-             /*   String groupName= this.regionGroup;
-              if(timeOut(startTime, maxTime)) { return false; }
-                connection.sendObject(new StringMessage(groupName));
-
-               //  Wait for response
-                StringMessage responseMessage = (StringMessage) (connection.receiveObject());
-                String response = responseMessage.unpacker();
-                clientOutput.displayString(response);
-                if (response.matches("^Fail:.*$")) {
-                    continue;
-                }
-                if (response.matches("^Success:.*$")) {
-                    break;
-                }
-            }*/
              while (true) {
                 // Server then sends board again
                // board = (Board) (connection.receiveObject());
