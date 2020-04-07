@@ -112,10 +112,10 @@ public class ExecuteClient {
         while (pickedGames == null){
             pickedGames = selectGame.getPickedGames();
         }
-        Log.d("Game", "Placement");
-        Intent placement= new Intent(act, ChooseRegionsActivity.class);
+        Log.d("Game", "Waitiing for players");
+        Intent lobby= new Intent(act, PlayerLobbyActivity.class);
         //placement.putExtra("GAMELIST", games);
-        act.startActivity(placement);
+        act.startActivity(lobby);
     }
 
     public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
@@ -173,27 +173,58 @@ public class ExecuteClient {
         this.helpText = text;
     }
 
+    public void startPlacement(){
+        Board board = ParentActivity.getBoard();
+        if(board!=null) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // This method will be executed once the timer is over
+                    // TODO: where we actually play the game - DisplayMapActivity.java
+                    Log.d("Game", "Received board");
+                    clientOutput = new GUITextDisplay();
+                    Intent newGame= new Intent(act, ChooseRegionsActivity.class);
+                    act.startActivity(newGame);
+                }
+            }, 2000);
+        }
+
+
+    }
     public void getBoardAssignments(TextView helpText) {
         clientOutput = new GUITextDisplay(helpText, act);
-        final GUIClientRegionSelection selection = new GUIClientRegionSelection(true, connection, clientInput, clientOutput, act);
-        selection.start();
+        final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(connection, clientInput, clientOutput, act);
+        initializeBoard.start();
+
+        while(!initializeBoard.getDoneRunning()){
+//wait for board to come in
+
+        }
+
     }
+public void showStartBoard(TextView boardView) {
+    clientOutput = new GUITextDisplay(boardView, act);
+    clientOutput.displayBoard(ParentActivity.getBoard());
 
+}
 
-    public void chooseRegions(final TextView helpText, String regionGroup) {
+    public void chooseRegions(final TextView boardView, String regionGroup) {
 
-       clientOutput = new GUITextDisplay(helpText, act);
+       clientOutput = new GUITextDisplay(boardView, act);
         final GUIClientRegionSelection selection = new GUIClientRegionSelection(false,regionGroup, connection, clientInput, clientOutput, act);
         selection.start();
+        while(!selection.getRegionChosen()) {
+        //wait for thread to return
+        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 // This method will be executed once the timer is over
-        // TODO: where we actually play the game - DisplayMapActivity.java
+        // TODO: change to placement selection activity
         Log.d("Game", "Starting");
-        //clientOutput.displayString("Waiting for board from server");
+        clientOutput.displayString("Waiting for board from server");
         clientOutput = new GUITextDisplay();
-        displayServerBoard(helpText);
+        displayServerBoard(boardView);
     }
 }, 2000);
     }

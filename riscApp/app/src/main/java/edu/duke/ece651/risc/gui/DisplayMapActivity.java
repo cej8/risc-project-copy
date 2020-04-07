@@ -83,9 +83,8 @@ public class DisplayMapActivity extends AppCompatActivity {
                 parentActivity.setOrders(unitBoost);
             }
             else if (order.equals("techBoost")) {
-                   TechBoost boostOrder = new TechBoost(player);
-                   parentActivity.setOrders(boostOrder);
-                }
+                //i put my method in the techboost activity itself
+            }
         }
         if (order != null) {
             List<OrderInterface> ordersToDate = ParentActivity.getOrders();
@@ -111,7 +110,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     }
 
     public void techBoostOrder(View view){
-        Intent techBoostSetup = new Intent(this,OrderActivity.class);
+        Intent techBoostSetup = new Intent(this,TechBoostActivity.class);
         techBoostSetup.putExtra("ORDER","techBoost");
         startActivity(techBoostSetup);
     }

@@ -17,31 +17,31 @@ public class ChooseRegionsActivity extends AppCompatActivity {
     private ExecuteClient executeClient;
     private EditText editRegionGroup;
     private TextView userPrompt;
+    private TextView boardView;
     private Button submit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_regions);
         submit= findViewById(R.id.submit);
-        submit.setVisibility(View.GONE);
-        connection = ParentActivity.getConnection();
+        boardView= findViewById(R.id.showBoard);
+         connection = ParentActivity.getConnection();
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
         editRegionGroup= findViewById(R.id.regionName);
-        editRegionGroup.setVisibility(View.GONE);
-        userPrompt = findViewById(R.id.helpText);
-        userPrompt.setText("WAITING FOR OTHER PLAYERS TO JOIN");
-        executeClient.getBoardAssignments(userPrompt);
-        submit.setVisibility(View.VISIBLE);
-        editRegionGroup.setVisibility(View.VISIBLE);
+         userPrompt = findViewById(R.id.helpText);
+        userPrompt.setText("Please select a starting group by typing in a group name (i.e. 'Group A')");
 
-        // executeClient.chooseRegions(userPrompt,regionGroup);
-
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        executeClient.showStartBoard(boardView);
     }
 
     public void chooseRegion(View view) throws IOException, ClassNotFoundException, InterruptedException{
         //String regionGroup = view.getTag().toString();
         String regionGroup = editRegionGroup.getText().toString();
-        executeClient.chooseRegions(userPrompt, regionGroup);
+        executeClient.chooseRegions(boardView, regionGroup);
     }
 }
