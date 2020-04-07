@@ -30,6 +30,7 @@ import edu.duke.ece651.risc.shared.MoveOrder;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.Unit;
+import edu.duke.ece651.risc.shared.UnitBoost;
 
 public class DisplayMapActivity extends AppCompatActivity {
     List<Region> regions;
@@ -75,8 +76,9 @@ public class DisplayMapActivity extends AppCompatActivity {
                 parentActivity.setOrders(attackMove);
                 AttackCombat attackCombat = new AttackCombat(source, destination, unit);
                 parentActivity.setOrders(attackCombat);
-            } else if (order.equals("upgrade")) {
-
+            } else if (order.equals("boost units")) {
+                UnitBoost unitBoost = new UnitBoost(source,unit);
+                parentActivity.setOrders(unitBoost);
             }
         }
         if (order != null) {
@@ -96,9 +98,10 @@ public class DisplayMapActivity extends AppCompatActivity {
         attackSetup.putExtra("ORDER","attack");
         startActivity(attackSetup);
     }
-    // TODO: upgrade - add additional upgrade
     public void upgradeOrder(View view){
-
+        Intent unitBoost = new Intent(this,BoostRegionActivity.class);
+        unitBoost.putExtra("ORDER","boost units");
+        startActivity(unitBoost);
     }
     public Region getRegionByName(Board board, String name){
         Map<String, Region> nameToRegionMap = new HashMap<String, Region>();

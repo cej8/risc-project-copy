@@ -239,6 +239,7 @@ public class Client extends Thread implements ClientInterface {
   public void playGame() {
     try {
       player = (HumanPlayer) (connection.receiveObject());
+
       clientOutput.displayString("Successfully connected, you are named: " + player.getName());
       clientOutput.displayString("Please wait for more players to connect");
       //Set timeout to START_WAIT plus a little buffer
