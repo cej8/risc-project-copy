@@ -22,6 +22,7 @@ import edu.duke.ece651.risc.shared.Constants;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.StringMessage;
+import edu.duke.ece651.risc.shared.ConfirmationMessage;
 
 public class GUIClientRegionSelection extends Thread implements ClientInterface{
     private Connection connection;
@@ -64,10 +65,15 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface{
 
 
     }
-public void getStartBoard() {
+
+/*public void getStartBoard() {
     //Initial to -1 for timers, don't set until turn actually starts
     long startTime = -1;
     long maxTime = -1;
+    clientOutput.displayString("Successfully connected, you are named: " + player.getName());
+    clientOutput.displayString("Please wait for more players to connect");
+    //Set timeout to START_WAIT plus a little buffer
+    setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
 
     try {
         // Set timeout to constant, wait this long for game start
@@ -120,7 +126,10 @@ public void getStartBoard() {
             connection.closeAll();
 
         }
-}
+}*/
+    public void setSocketTimeout(int timeout) throws SocketException {
+        connection.getSocket().setSoTimeout(timeout);
+    }
     public boolean chooseRegions() {
 
        //Initial to -1 for timers, don't set until turn actually starts
@@ -130,45 +139,47 @@ public void getStartBoard() {
         try {
             // Set timeout to constant, wait this long for game start
             // This will block on FIRST board = ...
-          //  connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
-           // while (true) {
+            connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
+            while (true) {
                 // Game starts with board message
-            //    board = (Board) (connection.receiveObject());
+                ParentActivity parentActivity = new ParentActivity();
+                parentActivity.setBoard((Board) (connection.receiveObject()));
+                this.board = ParentActivity.getBoard();
                 // Return timeout to smaller value
-             //   connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
+                connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
 
                 //Set max/start first time board received (start of turn)
-              //  if(maxTime == -1){
-               //     maxTime = (long) (connection.getSocket().getSoTimeout());
+                if(maxTime == -1){
+                    maxTime = (long) (connection.getSocket().getSoTimeout());
                     //Catch case for issues in testing, should never really happen
-                 //   if (maxTime == 0) {
-                    //    maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
-                  //  }
-              //  }
-               // if(startTime == -1){
-               //     startTime = System.currentTimeMillis();
-               // }
+                    if (maxTime == 0) {
+                        maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
+                    }
+                }
+                if(startTime == -1){
+                    startTime = System.currentTimeMillis();
+                }
 
-                // Output board
-                //clientOutput.displayBoard(board);
-                // Print prompt and get group name
-               /// clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
-                //String groupName = clientInput.readInput();
-                //String groupName= regionGroup;
-               // if(timeOut(startTime, maxTime)) { return false; }
-               // connection.sendObject(new StringMessage(groupName));
+                //Output board
+                clientOutput.displayBoard(board);
+          //     Print prompt and get group name
+                clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
+            //    String groupName = clientInput.readInput();
+                String groupName= this.regionGroup;
+               if(timeOut(startTime, maxTime)) { return false; }
+                connection.sendObject(new StringMessage(groupName));
 
-                // Wait for response
-              //  StringMessage responseMessage = (StringMessage) (connection.receiveObject());
-               // String response = responseMessage.unpacker();
-             //   clientOutput.displayString(response);
-               // if (response.matches("^Fail:.*$")) {
-               //     continue;
-               // }
-                //if (response.matches("^Success:.*$")) {
-                //    break;
-              //  }
-            //}
+               //  Wait for response
+                StringMessage responseMessage = (StringMessage) (connection.receiveObject());
+                String response = responseMessage.unpacker();
+                clientOutput.displayString(response);
+                if (response.matches("^Fail:.*$")) {
+                    continue;
+                }
+                if (response.matches("^Success:.*$")) {
+                    break;
+                }
+            }
             while (true) {
                 // Server then sends board again
                // board = (Board) (connection.receiveObject());
@@ -215,11 +226,21 @@ public void getStartBoard() {
     }
     @Override
     public void run() {
-        if(firstCall) {
-            getStartBoard();
+        try {
+            firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
+            ParentActivity pa=new ParentActivity();
+            pa.setPlayer((HumanPlayer)connection.receiveObject());
+            this.player= ParentActivity.getPlayer();
+          //  if (firstCall) {
+            //    if(!chooseRegions()) {
+              //      return;
+                //}
+                //}
+
         }
-         else{
-            if(!chooseRegions()) {return; }
+        catch(IOException e) {
+        }
+        catch(ClassNotFoundException e){
         }
         }
 
