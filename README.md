@@ -5,11 +5,11 @@
 ECE 651: RISC Evolution 2 (Space Invaders)
 ======================================
 
-Final commit ID: 
+Final commit ID: 6611ce8e
 
 Hosting server can be done with './gradlew run-server' in highest level of repository. This will open server on the machine 153.3.64.158 with the default port of 12345.
 
-Th client can be run in the console via './gradlew run-client' or via an android app for access through a graphical user interface.
+The client can be run in the console via './gradlew run-client' or via an android app for access through a graphical user interface.
 
 The server waits 2.5 minutes for players to connect before starting the game or timing out.
 
