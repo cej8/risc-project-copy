@@ -9,6 +9,7 @@
 
     <ImageButton
         android:id="@+id/Caprica"
+        android:tag="Caprica"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginEnd="264dp"
@@ -26,6 +27,7 @@
 
     <ImageButton
         android:id="@+id/Hoth"
+        android:tag="Hoth"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="44dp"
@@ -202,6 +204,7 @@
 
     <TextView
         android:id="@+id/textView"
+        android:textColor="#ffffff"
         android:layout_width="178dp"
         android:layout_height="247dp"
         android:layout_marginTop="16dp"
