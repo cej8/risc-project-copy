@@ -12,7 +12,7 @@ import java.util.List;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
 
-public class AttackActivityTwo extends AppCompatActivity {
+public class OrderActivityTwo extends AppCompatActivity {
     List<Region> regions;
     String planetName;
     TextView name;
@@ -36,7 +36,7 @@ public class AttackActivityTwo extends AppCompatActivity {
         Intent intent = getIntent();
         attackFrom = intent.getStringExtra("PNAME");
         orderMessage =  intent.getStringExtra("ORDER");
-        String h = "Select planet to " + orderMessage + " from";
+        String h = "Select planet to " + orderMessage;
         orderHelper.setText(h);
     }
     public void attackTo(View view){
@@ -46,6 +46,7 @@ public class AttackActivityTwo extends AppCompatActivity {
             Intent i = new Intent(this, DisplayBonusUnitsActivity.class);
             i.putExtra("PNAME", attackFrom);
             i.putExtra("ATTACKTO", planetName);
+            i.putExtra("ORDER",orderMessage);
             startActivity(i);
         }
     }

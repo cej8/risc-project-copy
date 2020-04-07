@@ -22,8 +22,9 @@ import edu.duke.ece651.risc.shared.Constants;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.StringMessage;
+import edu.duke.ece651.risc.shared.ConfirmationMessage;
 
-public class GUIClientRegionSelection extends Thread implements ClientInterface{
+public class GUIClientRegionSelection extends Thread implements ClientInterface {
     private Connection connection;
     private Board board;
     private ClientInputInterface clientInput;
@@ -31,39 +32,134 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface{
     private HumanPlayer player;
     private Activity activity;
     private String regionGroup;
+    private boolean firstCall;
+    private boolean waitingForPlayers;
 
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
-    private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
+    private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES + .1;
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
+    private long startTime=-1;
+    private long maxTime=-1;
+    //private boolean firstCall = true;
 
-    private boolean firstCall = true;
 
-
-    public GUIClientRegionSelection(String region,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUIClientRegionSelection(boolean begin, String region, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
         this.activity = act;
-        this.regionGroup= region;
-        this.board= ParentActivity.getBoard();
-        this.player=ParentActivity.getPlayer();
+        this.regionGroup = region;
+        //  this.board= ParentActivity.getBoard();
+        // this.player=ParentActivity.getPlayer();
+
 
     }
 
-    public boolean chooseRegions() {
+    public GUIClientRegionSelection(boolean begin, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
+        this.connection = connect;
+        this.clientInput = input;
+        this.clientOutput = output;
+        this.activity = act;
+        // this.board= ParentActivity.getBoard();
+        //this.player=ParentActivity.getPlayer();
+        //this.firstCall=begin;
+        this.waitingForPlayers = begin;
 
-        //Initial to -1 for timers, don't set until turn actually starts
+
+    }
+
+
+    public void waitingToStart() {
+        try {
+            connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
+        } catch (Exception e) {
+            e.printStackTrace();
+            connection.closeAll();
+        }
+    }
+
+    public void showInitialBoard(){
         long startTime = -1;
         long maxTime = -1;
+    try {
+        ParentActivity parentActivity = new ParentActivity();
+        parentActivity.setBoard((Board) (connection.receiveObject()));
+        this.board = ParentActivity.getBoard();
+        // Return timeout to smaller value
+        connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
+
+        //Set max/start first time board received (start of turn)
+        if (maxTime == -1) {
+            maxTime = (long) (connection.getSocket().getSoTimeout());
+            //Catch case for issues in testing, should never really happen
+            if (maxTime == 0) {
+                maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
+            }
+        }
+        if (startTime == -1) {
+            startTime = System.currentTimeMillis();
+        }
+
+        //Output board
+        clientOutput.displayBoard(board);
+        //     Print prompt and get group name
+        clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
+        //    String groupName = clientInput.readInput();
+    }
+    catch(Exception e) {
+        e.printStackTrace();
+        connection.closeAll();
+            }
+
+
+    }
+    public void setSocketTimeout(int timeout) throws SocketException {
+        connection.getSocket().setSoTimeout(timeout);
+    }
+    public boolean chooseStartGroup() {
+            try {
+                while(true) {
+
+                    String groupName = this.regionGroup;
+                    if (timeOut(startTime, maxTime)) {
+                        return false;
+                    }
+                    connection.sendObject(new StringMessage(groupName));
+
+                    //  Wait for response
+                    StringMessage responseMessage = (StringMessage) (connection.receiveObject());
+                    String response = responseMessage.unpacker();
+                    clientOutput.displayString(response);
+                    if (response.matches("^Fail:.*$")) {
+                        continue;
+                    }
+                    if (response.matches("^Success:.*$")) {
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+
+
+            }
+            return true;
+    }
+    public boolean chooseRegions() {
+
+       //Initial to -1 for timers, don't set until turn actually starts
+       // long startTime = -1;
+        //long maxTime = -1;
 
         try {
             // Set timeout to constant, wait this long for game start
             // This will block on FIRST board = ...
-            connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
-            while (true) {
+           // connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
+
+         //   while (true) {
                 // Game starts with board message
-                board = (Board) (connection.receiveObject());
+              /*  ParentActivity parentActivity = new ParentActivity();
+                parentActivity.setBoard((Board) (connection.receiveObject()));
+                this.board = ParentActivity.getBoard();
                 // Return timeout to smaller value
                 connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
 
@@ -79,15 +175,16 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface{
                     startTime = System.currentTimeMillis();
                 }
 
-                // Output board
+                //Output board
                 clientOutput.displayBoard(board);
-                // Print prompt and get group name
+          //     Print prompt and get group name
                 clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
-                String groupName = clientInput.readInput();
-                if(timeOut(startTime, maxTime)) { return false; }
+             //   String groupName = clientInput.readInput();*/
+             /*   String groupName= this.regionGroup;
+              if(timeOut(startTime, maxTime)) { return false; }
                 connection.sendObject(new StringMessage(groupName));
 
-                // Wait for response
+               //  Wait for response
                 StringMessage responseMessage = (StringMessage) (connection.receiveObject());
                 String response = responseMessage.unpacker();
                 clientOutput.displayString(response);
@@ -97,10 +194,13 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface{
                 if (response.matches("^Success:.*$")) {
                     break;
                 }
-            }
-            while (true) {
+            }*/
+             while (true) {
                 // Server then sends board again
-                board = (Board) (connection.receiveObject());
+               // board = (Board) (connection.receiveObject());
+                ParentActivity parentActivity = new ParentActivity();
+                parentActivity.setBoard((Board) (connection.receiveObject()));
+                this.board = ParentActivity.getBoard();
 
                 // Display and move into placements
                 clientOutput.displayBoard(board);
@@ -141,10 +241,29 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface{
     }
     @Override
     public void run() {
-        if(firstCall) {
-            if(!chooseRegions()) {return; }
+        try {
+            firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
+            ParentActivity pa = new ParentActivity();
+            pa.setPlayer((HumanPlayer) connection.receiveObject());
+            this.player = ParentActivity.getPlayer();
         }
+        catch(Exception e) {
+            e.printStackTrace();
+            connection.closeAll();
         }
+
+        if(waitingForPlayers) {
+             waitingToStart();
+            return;
+        }
+            showInitialBoard();
+            if (firstCall) {
+                if(!chooseRegions()) {
+                    return;
+                }
+                }
+
+             }
 
 
         @Override

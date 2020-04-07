@@ -14,7 +14,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
 
   @Override
   public boolean validateOrders(List<UnitBoost> orders) {
-    return validateRegions(orders) && validateCost(orders) && validateUnits(orders);
+    return validateRegions(orders) && validateCost(orders) && validateUnits(orders) && validateAllTech(orders);
   }
 
   // make sure player owns all regions in which units are to be upgraded
@@ -22,6 +22,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
   public boolean validateRegions(List<UnitBoost> orders) {
     for (UnitBoost boost : orders) {
       if (!(validateRegion(boost))) {
+        System.out.println("Invalid UnitBoost: player did not own region "+ boost.getDestination().getName());
         return false;
       }
     }
@@ -30,19 +31,43 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
 
   // Player must own region
   public boolean validateRegion(UnitBoost order) {
-    if (order.getDestination().getOwner().equals(player)) {
+    if (order.getDestination().getOwner().getName().equals(player.getName())) {
       return true;
     } else {
       return false;
     }
   }
 
+
+ public boolean validateAllTech(List<UnitBoost> orders) {
+    for (UnitBoost boost : orders) {
+      if (!(validateTech(boost))) {
+        System.out.println("Invalid UnitBoost: player tech level is "+ player.getMaxTechLevel().getMaxTechLevel() + " but tried to upgrade" + boost.getUnits().getUnits());
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  //assert all indices above max tech level == 0 
+  public boolean validateTech(UnitBoost order) {
+    //max tech == highest you can upgrade to
+    int maxTech = this.player.maxTechLevel.getMaxTechLevel();
+    for (int i = maxTech; i < order.getUnits().getUnits().size(); i++) {
+      if (!(order.getUnits().getUnits().get(i).equals(0))){
+        return false;
+      }
+    }
+    return true;
+  }
+  
   // Make sure have enough units of each type to upgrade
   // Cannot upgrade max bonus units
 
   public boolean validateUnits(List<UnitBoost> orders) {
     for (UnitBoost boost : orders) {
       if (!(validateUnit(boost))) {
+        System.out.println("Invalid UnitBoost: units " + boost.getUnits().getUnits() + " invalid for " + boost.getDestination().getName() + " " + boost.getDestination().getUnits().getUnits());
         return false;
       }
     }
@@ -74,6 +99,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
     if ((order.getUnits().getUnits().get((order.getUnits().getUnits().size() - 1))).equals(0)) {
       return true;
     } else {
+       System.out.println("Invalid UnitBoost: player tried to upgrade maxed unit "+ order.getUnits().getUnits());
       return false;
     }
   }
@@ -87,6 +113,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
     if (player.getResources().getTechResource().getTech() >= totalCost) {
       return true;
     } else {
+        System.out.println("Invalid UnitBoost: player did not have enough fuel "+ player.getResources().getTechResource().getTech() + " for order needing" + totalCost);
       return false;
     }
   }

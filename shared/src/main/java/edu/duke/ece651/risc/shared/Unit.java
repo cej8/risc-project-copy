@@ -98,7 +98,8 @@ public class Unit implements Serializable {
   }
 
   public void setUnits(List<Integer> u) {
-    this.units = u;
+    List<Integer> unit = (ArrayList<Integer>)DeepCopy.deepCopy(u);
+    this.units = unit;
   }
 
   // returns a list of the actual units (e.g. if 1 unit of each type [0, 1, 2, 3,

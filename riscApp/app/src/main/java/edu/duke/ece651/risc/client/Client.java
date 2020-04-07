@@ -177,6 +177,9 @@ public class Client extends Thread implements ClientInterface {
         // Display and move into placements
         clientOutput.displayBoard(board);
         OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", this);
+        if (placement == null) {
+          continue;
+        }
         List<OrderInterface> placementOrders = new ArrayList<OrderInterface>();
         placement.addToOrderList(placementOrders);
         if(timeOut(startTime, maxTime)) { return false; }
@@ -246,7 +249,7 @@ public class Client extends Thread implements ClientInterface {
       }
       while (true) {
 
-        String turn = receiveAndDisplayString(); // long turn list
+        String turn = receiveAndDisplayString();
         
         long startTime = System.currentTimeMillis();
         long maxTime = (long) (connection.getSocket().getSoTimeout());

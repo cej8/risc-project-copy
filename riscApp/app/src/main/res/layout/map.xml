@@ -524,5 +524,17 @@ android:background="@drawable/spacebackground">
         app:layout_constraintVertical_bias="0.187"
         app:srcCompat="@drawable/lineangleright35" />
 
+    <TextView
+        android:id="@+id/helpText"
+        android:layout_width="295dp"
+        android:layout_height="17dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.931"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.959" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
