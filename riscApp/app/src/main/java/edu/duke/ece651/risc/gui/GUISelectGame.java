@@ -8,6 +8,7 @@ import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
 import edu.duke.ece651.risc.shared.ConfirmationMessage;
 import edu.duke.ece651.risc.shared.Connection;
+import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.IntegerMessage;
 import edu.duke.ece651.risc.shared.StringMessage;
 
@@ -101,6 +102,8 @@ public class GUISelectGame extends Thread{
                 break;
             }
         }
+
+
     }
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
