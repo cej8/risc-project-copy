@@ -66,95 +66,82 @@ public class ExecuteClient {
         clientOutput = new GUITextDisplay(textHelp, act);
         final GUIClientLogin clientLogin = new GUIClientLogin(connection, clientInput, clientOutput, username, password, act, confirmPassword);
         clientLogin.start();
-        new Handler().postDelayed(new Runnable() {
-            //private Boolean loginResult;
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                loginResult = clientLogin.getLoginResult();
-                Log.d("Login Result", loginResult.toString());
+        loginResult = clientLogin.getLoginResult();
+        while (loginResult == null){
+            loginResult = clientLogin.getLoginResult();
+        }
+        loginResult = clientLogin.getLoginResult();
+        Log.d("Login Result", loginResult.toString());
 
-                if (loginResult == false) {
-                    // set help text
-                    //helpText.setText("Username or password not found. Please register if needed.");
-                    helpText = "User already exists. Please choose another username";
-                    setHelpText(helpText);
-                    Log.d("Login", "false");
-                    Log.d("Helptext", helpText);
-                    setLoginResult(loginResult);
-                } else {
-                    // start new intent aka display available games
-                    Intent loginIntent = new Intent(act, GameTypeActivity.class);
-                    Log.d("Login", "true");
-                    setLoginResult(loginResult);
-                    act.startActivity(loginIntent);
-                }
-            }
-        }, 7000);
+        if (loginResult == false) {
+            // set help text
+            //helpText.setText("Username or password not found. Please register if needed.");
+            helpText = "User already exists. Please choose another username";
+            setHelpText(helpText);
+            Log.d("Login", "false");
+            Log.d("Helptext", helpText);
+            setLoginResult(loginResult);
+        } else {
+            // start new intent aka display available games
+            Intent loginIntent = new Intent(act, GameTypeActivity.class);
+            Log.d("Login", "true");
+            setLoginResult(loginResult);
+            act.startActivity(loginIntent);
+        }
     }
 
     public void getGames(boolean gameType, boolean getgame) {
         // clientOutput = new GUITextDisplay(gameText,act);
         final GUISelectGame selectGame = new GUISelectGame(getgame, gameType, connection, clientInput, clientOutput, act);
         selectGame.start();
-        new Handler().postDelayed(new Runnable() {
-            //private Boolean loginResult;
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                String games = selectGame.getGameList();
-                Log.d("Game List", games);
-                Intent gamesIntent = new Intent(act, NewGameActivity.class);
-                gamesIntent.putExtra("GAMELIST", games);
-                act.startActivity(gamesIntent);
-            }
-        }, 2000);
+        Boolean gotGames = selectGame.getGotGames();
+        while (gotGames == null){
+            gotGames = selectGame.getGotGames();
+        }
+        String games = selectGame.getGameList();
+        Log.d("Game List", games);
+        Intent gamesIntent = new Intent(act, NewGameActivity.class);
+        gamesIntent.putExtra("GAMELIST", games);
+        act.startActivity(gamesIntent);
     }
 
     public void pickGame(boolean gameType, String id, boolean getgame, String gameList) {
         GUISelectGame selectGame = new GUISelectGame(getgame, id, gameType, connection, clientInput, clientOutput, act);
         selectGame.start();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // TODO: where we actually play the game - DisplayMapActivity.java
-                Log.d("Game", "Placement");
-                Intent placement= new Intent(act, ChooseRegionsActivity.class);
-                //placement.putExtra("GAMELIST", games);
-                act.startActivity(placement);
-            }
-        }, 2000);
+        Boolean pickedGames = selectGame.getPickedGames();
+        while (pickedGames == null){
+            pickedGames = selectGame.getPickedGames();
+        }
+        Log.d("Game", "Placement");
+        Intent placement= new Intent(act, ChooseRegionsActivity.class);
+        //placement.putExtra("GAMELIST", games);
+        act.startActivity(placement);
     }
 
     public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
         clientOutput = new GUITextDisplay(textHelp, act);
         final GUIClientLogin clientLogin = new GUIClientLogin(connection, clientInput, clientOutput, username, password, act);
         clientLogin.start();
-        new Handler().postDelayed(new Runnable() {
-            //private Boolean loginResult;
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                loginResult = clientLogin.getLoginResult();
-                Log.d("Login Result", loginResult.toString());
+        loginResult = clientLogin.getLoginResult();
+        while (loginResult == null) {
+            loginResult = clientLogin.getLoginResult();
+        }
+            Log.d("Login Result", loginResult.toString());
 
-                if (loginResult == false) {
-                    // set help text
-                    helpText = "Username or password not found. Please register if needed.";
-                    clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
-                    Log.d("Login", "false");
-                    Log.d("Helptext", helpText);
-                    setLoginResult(loginResult);
-                } else {
-                    // start new intent aka display available games
-                    Intent loginIntent = new Intent(act, GameTypeActivity.class);
-                    Log.d("Login", "true");
-                    setLoginResult(loginResult);
-                    act.startActivity(loginIntent);
-                }
+            if (loginResult == false) {
+                // set help text
+                helpText = "Username or password not found. Please register if needed.";
+                clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
+                Log.d("Login", "false");
+                Log.d("Helptext", helpText);
+                setLoginResult(loginResult);
+            } else {
+                // start new intent aka display available games
+                Intent loginIntent = new Intent(act, GameTypeActivity.class);
+                Log.d("Login", "true");
+                setLoginResult(loginResult);
+                act.startActivity(loginIntent);
             }
-        }, 7000);
     }
 
     public void startGame(TextView textView, Activity act, EditText editText) {
