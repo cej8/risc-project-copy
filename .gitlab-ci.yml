@@ -56,7 +56,7 @@ test_stable:
     refs:
       - master
       
-pages_stable:
+pages:
  stage: coverage_stable
  tags:
      - host-server

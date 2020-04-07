@@ -164,7 +164,7 @@ public class LoginServer extends Thread{
 
   //Method to send messages upon game join
   public void sendJoinMessages() throws IOException{
-    System.out.println(user + " joining " + activeGameID);
+    System.out.println("LoginServer : " + user + " joined " + activeGameID);
     //Send join
     playerConnection.sendObject(new StringMessage("Success: Joined " + activeGameID));
     //Send if firstCall of threads
@@ -202,7 +202,7 @@ public class LoginServer extends Thread{
 
       //Wait for int return
       int gameID = ((IntegerMessage)(playerConnection.receiveObject())).unpacker().intValue();
-      System.out.println(user + " returned " + gameID);
+      System.out.println("LoginServer : (" + user + ") is trying to join " + gameID);
       if(oldBoolean.unpacker()){
         if(validGameID(gamesIn, gameID)){
           ParentServer ps = masterServer.getParentServer(gameID);
@@ -215,6 +215,7 @@ public class LoginServer extends Thread{
             }
           }
         }
+      	System.out.println("LoginServer : (" + user + ") failed to join " + gameID);
         playerConnection.sendObject(new StringMessage("Fail: Failed to join " + gameID));
         continue;
       }
@@ -237,6 +238,7 @@ public class LoginServer extends Thread{
             }
           }
         }
+      	System.out.println("LoginServer : (" + user + ") failed to joinS " + gameID);
         playerConnection.sendObject(new StringMessage("Fail: Failed to join " + gameID));
         continue;
       }

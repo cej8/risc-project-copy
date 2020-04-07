@@ -92,7 +92,7 @@ public class ChildServer implements Runnable{
     
     ValidatorHelper validator;
     try{
-      System.out.println(parent.getGameID() + " : " + player.getName() + " enter thread");
+      System.out.println(parent.getGameID() + " : (" + player.getName() + ") enter thread");
       playerConnection.getSocket().setSoTimeout((int)maxTime);
       if(firstCall){
         //Prompt for region --> placement
@@ -211,7 +211,7 @@ public class ChildServer implements Runnable{
       }
     }
     catch(Exception e){
-      System.out.println(parent.getGameID() + " : " + player.getName() + " had some issue, disconnected");
+      System.out.println(parent.getGameID() + " : (" + player.getName() + ") had some issue, disconnected");
       if(!(e instanceof SocketTimeoutException)){
         e.printStackTrace();
       }
@@ -221,7 +221,7 @@ public class ChildServer implements Runnable{
       player.setWatchingNull();
       return false;
     }
-    System.out.println(parent.getGameID() + " : " + player.getName() + " exiting thread gracefully");
+    System.out.println(parent.getGameID() + " : (" + player.getName() + ") exiting thread gracefully");
     return true;
   }
   
@@ -237,17 +237,17 @@ public class ChildServer implements Runnable{
       if(performTurn()){
         //If successful then decrement missed turns to zero
         missedTurns = (missedTurns > 0) ? (missedTurns - 1) : (0);
-        System.out.println(parent.getGameID() + " : " + player.getName() + " input turn, missed now " + missedTurns);
+        System.out.println(parent.getGameID() + " : (" + player.getName() + ") input turn, missed now " + missedTurns);
         return;
       }
     }
     //If exits then never successfully performTurn
     //Increment missedTurns
     missedTurns++;
-    System.out.println(parent.getGameID() + " : " + player.getName() + " did not input turn, missed now " + missedTurns);
+    System.out.println(parent.getGameID() + " : (" + player.getName() + ") did not input turn, missed now " + missedTurns);
     //If past maximum then mark as not playing
     if(missedTurns > Constants.MAX_MISSED){
-      System.out.println(parent.getGameID() + " : " + player.getName() + " missed more than " + Constants.MAX_MISSED + " turns, marking as dead");
+      System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed more than " + Constants.MAX_MISSED + " turns, marking as dead");
       player.setPlaying(false);
     }
   }

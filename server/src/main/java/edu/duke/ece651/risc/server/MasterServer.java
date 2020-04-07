@@ -22,7 +22,7 @@ Maintains Map of all user's logins/passwords (centralized so LoginServers can ac
 
 //Highest level server object, accepts incoming connections
 //And passes to LoginServer
-public class MasterServer {
+public class MasterServer extends Thread{
   //Outfacing socket for incoming connections
   private ServerSocket serverSocket = null;
   //Map of usernames to <hashed password, salt>
@@ -235,9 +235,15 @@ public class MasterServer {
   }
 
   //Repeated method to accept incoming connections and forward them to a LoginServer
-  public void waitingForConnections() throws IOException{
+  public void waitingForConnections(){
     if(serverSocket == null){
-      serverSocket = new ServerSocket(Constants.DEFAULT_PORT);
+      try{
+        serverSocket = new ServerSocket(Constants.DEFAULT_PORT);
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        return;
+      }
     }
     
     while (true) {
@@ -263,7 +269,8 @@ public class MasterServer {
     }
   }
 
-  public void run() throws IOException{
+  @Override
+  public void run(){
     waitingForConnections();
   }
 
