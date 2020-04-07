@@ -23,7 +23,7 @@ public class ExecuteClient {
     Connection connection;
     ClientInputInterface clientInput;
     ClientOutputInterface clientOutput;
-    Boolean loginResult;
+   // Boolean loginResult;
     Activity act;
     String helpText;
 
@@ -66,7 +66,7 @@ public class ExecuteClient {
         clientOutput = new GUITextDisplay(textHelp, act);
         final GUIClientLogin clientLogin = new GUIClientLogin(connection, clientInput, clientOutput, username, password, act, confirmPassword);
         clientLogin.start();
-        loginResult = clientLogin.getLoginResult();
+        Boolean loginResult = clientLogin.getLoginResult();
         while (loginResult == null){
             loginResult = clientLogin.getLoginResult();
         }
@@ -80,12 +80,12 @@ public class ExecuteClient {
             setHelpText(helpText);
             Log.d("Login", "false");
             Log.d("Helptext", helpText);
-            setLoginResult(loginResult);
+           // setLoginResult(loginResult);
         } else {
             // start new intent aka display available games
             Intent loginIntent = new Intent(act, GameTypeActivity.class);
             Log.d("Login", "true");
-            setLoginResult(loginResult);
+           // setLoginResult(loginResult);
             act.startActivity(loginIntent);
         }
     }
@@ -122,7 +122,7 @@ public class ExecuteClient {
         clientOutput = new GUITextDisplay(textHelp, act);
         final GUIClientLogin clientLogin = new GUIClientLogin(connection, clientInput, clientOutput, username, password, act);
         clientLogin.start();
-        loginResult = clientLogin.getLoginResult();
+        Boolean loginResult = clientLogin.getLoginResult();
         while (loginResult == null) {
             loginResult = clientLogin.getLoginResult();
         }
@@ -134,12 +134,15 @@ public class ExecuteClient {
                 clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
                 Log.d("Login", "false");
                 Log.d("Helptext", helpText);
-                setLoginResult(loginResult);
+//                Intent loginFalse = new Intent(act,LoginActivity.class);
+//                loginFalse.putExtra("LOGIN","Username or password not found. Please register if needed.");
+//                act.startActivity(loginFalse);
+               // loginGame(reprompt,username,password,textHelp);
             } else {
                 // start new intent aka display available games
                 Intent loginIntent = new Intent(act, GameTypeActivity.class);
                 Log.d("Login", "true");
-                setLoginResult(loginResult);
+                //setLoginResult(loginResult);
                 act.startActivity(loginIntent);
             }
     }
@@ -154,13 +157,13 @@ public class ExecuteClient {
         //client.start();
     }
 
-    public Boolean getLoginResult() {
+    /*public Boolean getLoginResult() {
         return this.loginResult;
     }
 
     public void setLoginResult(Boolean login) {
         this.loginResult = login;
-    }
+    }*/
 
     public String getHelpText() {
         return this.helpText;
@@ -187,7 +190,7 @@ public class ExecuteClient {
                 // This method will be executed once the timer is over
         // TODO: where we actually play the game - DisplayMapActivity.java
         Log.d("Game", "Starting");
-        clientOutput.displayString("Waiting for board from server");
+        //clientOutput.displayString("Waiting for board from server");
         clientOutput = new GUITextDisplay();
         displayServerBoard(helpText);
     }

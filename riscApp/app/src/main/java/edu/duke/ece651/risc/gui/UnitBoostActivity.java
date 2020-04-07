@@ -85,9 +85,9 @@ public class UnitBoostActivity extends AppCompatActivity {
         unitName5.setText("Astronaut (" + unitList.get(5) + " units available)");
         unitName6.setText("Space Captain (" + unitList.get(6) + " units available)");
         sendUnits = new ArrayList<Integer>();
-        //AbstractPlayer player = ParentActivity.getPlayer();
-        //String resourcesText = "You have " + Integer.toString(player.getResources().getTechResource().getTech()) + " tech resources available for upgrade";
-        //resources.setText(resourcesText);
+        AbstractPlayer player = ParentActivity.getPlayer();
+        String resourcesText = "You have " + Integer.toString(player.getResources().getTechResource().getTech()) + " tech resources available for upgrade";
+        resources.setText(resourcesText);
     }
     public void next(View view){
         u0 = Integer.parseInt(bonus0.getText().toString());
