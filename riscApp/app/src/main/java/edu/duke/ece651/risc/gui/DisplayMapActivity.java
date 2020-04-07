@@ -64,6 +64,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         Region destination = getRegionByName(board,attackTo);
         Unit unit = new Unit(unitList);
         ParentActivity parentActivity = new ParentActivity();
+        HumanPlayer player = parentActivity.getPlayer();
         Log.d("Board test",regions.get(0).getName());
         if (order == null){
             // do nothing
@@ -79,7 +80,7 @@ public class DisplayMapActivity extends AppCompatActivity {
             } else if (order.equals("upgrade")) {
 
             }else if (order.equals("techBoost")) {
-                   TechBoost boostOrder = new TechBoost(new HumanPlayer(""));
+                   TechBoost boostOrder = new TechBoost(player);
                    parentActivity.setOrders(boostOrder);
                 }
 
