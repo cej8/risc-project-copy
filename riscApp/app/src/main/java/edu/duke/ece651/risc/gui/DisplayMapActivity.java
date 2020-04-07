@@ -31,6 +31,7 @@ import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.TechBoost;
 import edu.duke.ece651.risc.shared.Unit;
+import edu.duke.ece651.risc.shared.UnitBoost;
 
 public class DisplayMapActivity extends AppCompatActivity {
     List<Region> regions;
@@ -77,13 +78,14 @@ public class DisplayMapActivity extends AppCompatActivity {
                 parentActivity.setOrders(attackMove);
                 AttackCombat attackCombat = new AttackCombat(source, destination, unit);
                 parentActivity.setOrders(attackCombat);
-            } else if (order.equals("upgrade")) {
-
-            }else if (order.equals("techBoost")) {
+            } else if (order.equals("boost units")) {
+                UnitBoost unitBoost = new UnitBoost(source,unit);
+                parentActivity.setOrders(unitBoost);
+            }
+            else if (order.equals("techBoost")) {
                    TechBoost boostOrder = new TechBoost(player);
                    parentActivity.setOrders(boostOrder);
                 }
-
         }
         if (order != null) {
             List<OrderInterface> ordersToDate = ParentActivity.getOrders();
@@ -102,9 +104,10 @@ public class DisplayMapActivity extends AppCompatActivity {
         attackSetup.putExtra("ORDER","attack");
         startActivity(attackSetup);
     }
-    // TODO: upgrade - add additional upgrade
     public void upgradeOrder(View view){
-
+        Intent unitBoost = new Intent(this,BoostRegionActivity.class);
+        unitBoost.putExtra("ORDER","boost units");
+        startActivity(unitBoost);
     }
 
     public void techBoostOrder(View view){
@@ -340,24 +343,23 @@ public class DisplayMapActivity extends AppCompatActivity {
         r8.setAdjRegions(adj8);
 
         List<Region> adj9 = new ArrayList<Region>();
-        adj9.add(r4);
-        adj9.add(r0);
+        adj9.add(r7);
+        adj9.add(r8);
+        adj9.add(r10);
         r9.setAdjRegions(adj9);
 
         List<Region> adj10 = new ArrayList<Region>();
-        adj10.add(r4);
-        adj10.add(r0);
+        adj10.add(r9);
+        adj10.add(r6);
+        adj10.add(r11);
         r10.setAdjRegions(adj10);
 
         List<Region> adj11 = new ArrayList<Region>();
-        adj11.add(r4);
+        adj11.add(r6);
         adj11.add(r0);
+        adj11.add(r10);
         r11.setAdjRegions(adj11);
-
-        List<Region> adj12 = new ArrayList<Region>();
-        adj12.add(r4);
-        adj12.add(r0);
-        r12.setAdjRegions(adj12);
+        
 
         List<Region> regions = new ArrayList<Region>();
         regions.add(r0);

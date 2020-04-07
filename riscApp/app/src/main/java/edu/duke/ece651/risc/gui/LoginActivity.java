@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView welcomeText;
     ExecuteClient executeClient;
     Connection connection;
+    String loginResult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +40,14 @@ public class LoginActivity extends AppCompatActivity {
         connection = ParentActivity.getConnection();
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
+//        Intent loginIntent = getIntent();
+//        loginResult = loginIntent.getStringExtra("LOGIN");
+//        helpText.setText(loginResult);
     }
 
     // TODO: on button press we send object to
     public void userLogin(View view) throws IOException, ClassNotFoundException, InterruptedException{
+        helpText.setText("");
         String username = editUsername.getText().toString();
         String password = editPassword.getText().toString();
         executeClient.loginGame(username, password, helpText);
