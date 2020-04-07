@@ -13,9 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PlaceUnitsActivity"
+        <activity android:name=".PlayerLobbyActivity"></activity>
+        <activity
+            android:name=".PlaceUnitsActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".BoostRegionActivity"
             android:screenOrientation="landscape"
@@ -64,7 +66,7 @@
             android:name=".ConfirmLoginActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".TechBoostActivity"></activity>
+        <activity android:name=".TechBoostActivity" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/SplashTheme">
