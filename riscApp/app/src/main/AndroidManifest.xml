@@ -64,6 +64,7 @@
             android:name=".ConfirmLoginActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".TechBoostActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:theme="@style/SplashTheme">

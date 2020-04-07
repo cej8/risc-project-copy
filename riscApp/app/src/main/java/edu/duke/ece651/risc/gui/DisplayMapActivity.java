@@ -29,6 +29,7 @@ import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.MoveOrder;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
+import edu.duke.ece651.risc.shared.TechBoost;
 import edu.duke.ece651.risc.shared.Unit;
 import edu.duke.ece651.risc.shared.UnitBoost;
 
@@ -64,6 +65,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         Region destination = getRegionByName(board,attackTo);
         Unit unit = new Unit(unitList);
         ParentActivity parentActivity = new ParentActivity();
+        HumanPlayer player = parentActivity.getPlayer();
         Log.d("Board test",regions.get(0).getName());
         if (order == null){
             // do nothing
@@ -80,6 +82,10 @@ public class DisplayMapActivity extends AppCompatActivity {
                 UnitBoost unitBoost = new UnitBoost(source,unit);
                 parentActivity.setOrders(unitBoost);
             }
+            else if (order.equals("techBoost")) {
+                   TechBoost boostOrder = new TechBoost(player);
+                   parentActivity.setOrders(boostOrder);
+                }
         }
         if (order != null) {
             List<OrderInterface> ordersToDate = ParentActivity.getOrders();
@@ -102,6 +108,12 @@ public class DisplayMapActivity extends AppCompatActivity {
         Intent unitBoost = new Intent(this,BoostRegionActivity.class);
         unitBoost.putExtra("ORDER","boost units");
         startActivity(unitBoost);
+    }
+
+    public void techBoostOrder(View view){
+        Intent techBoostSetup = new Intent(this,OrderActivity.class);
+        techBoostSetup.putExtra("ORDER","techBoost");
+        startActivity(techBoostSetup);
     }
     public Region getRegionByName(Board board, String name){
         Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
