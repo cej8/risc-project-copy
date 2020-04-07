@@ -79,8 +79,8 @@ public class GUITextDisplay extends Thread implements ClientOutputInterface {
     private String printRegionInfo(Region r){
         int numUnits = r.getUnits().getTotalUnits();
         String name = r.getName();
-        StringBuilder sb = new StringBuilder(numUnits + " units in " + name); //add info on num units in region
-        sb.append(this.printRegionAdjacencies(r)); //add adj info
+        StringBuilder sb = new StringBuilder(numUnits + " units in " + name+"\n"); //add info on num units in region
+       // sb.append(this.printRegionAdjacencies(r)); //add adj info
         return sb.toString();
     }
 
