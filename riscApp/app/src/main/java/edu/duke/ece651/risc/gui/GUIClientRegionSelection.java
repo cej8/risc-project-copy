@@ -33,14 +33,15 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
     private Activity activity;
     private String regionGroup;
     private boolean firstCall;
-    private boolean waitingForPlayers;
+    private boolean regionChosen=false;
+    //private boolean waitingForPlayers;
 
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES + .1;
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
-    private long startTime=-1;
-    private long maxTime=-1;
+    //private long startTime=-1;
+    //private long maxTime=-1;
     //private boolean firstCall = true;
 
 
@@ -50,77 +51,28 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
         this.clientOutput = output;
         this.activity = act;
         this.regionGroup = region;
-        //  this.board= ParentActivity.getBoard();
-        // this.player=ParentActivity.getPlayer();
-    }
-
-    public GUIClientRegionSelection(boolean begin, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
-        this.connection = connect;
-        this.clientInput = input;
-        this.clientOutput = output;
-        this.activity = act;
-        // this.board= ParentActivity.getBoard();
-        //this.player=ParentActivity.getPlayer();
-        //this.firstCall=begin;
-        this.waitingForPlayers = begin;
-
-
+        this.board= ParentActivity.getBoard();
+        this.player=ParentActivity.getPlayer();
     }
 
 
-    public void waitingToStart() {
-        try {
-            connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
-        } catch (Exception e) {
-            e.printStackTrace();
-            connection.closeAll();
-        }
-    }
-
-    public void showInitialBoard(){
-        long startTime = -1;
-        long maxTime = -1;
-    try {
-        ParentActivity parentActivity = new ParentActivity();
-        parentActivity.setBoard((Board) (connection.receiveObject()));
-        this.board = ParentActivity.getBoard();
-        // Return timeout to smaller value
-        connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
-
-        //Set max/start first time board received (start of turn)
-        if (maxTime == -1) {
-            maxTime = (long) (connection.getSocket().getSoTimeout());
-            //Catch case for issues in testing, should never really happen
-            if (maxTime == 0) {
-                maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
-            }
-        }
-        if (startTime == -1) {
-            startTime = System.currentTimeMillis();
-        }
-
-        //Output board
-        clientOutput.displayBoard(board);
-        //     Print prompt and get group name
-        clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
-        //    String groupName = clientInput.readInput();
-    }
-    catch(Exception e) {
-        e.printStackTrace();
-        connection.closeAll();
-            }
 
 
-    }
     public void setSocketTimeout(int timeout) throws SocketException {
         connection.getSocket().setSoTimeout(timeout);
     }
     public boolean chooseStartGroup() {
             try {
                 while(true) {
+                    //Output board
+
+                //    clientOutput.displayBoard(board);
+                    //     Print prompt and get group name
+                   // clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
 
                     String groupName = this.regionGroup;
-                    if (timeOut(startTime, maxTime)) {
+                    //if (timeOut(startTime, maxTime)) {
+                    if(timeOut(ParentActivity.getStartTime(),ParentActivity.getMaxTime())){
                         return false;
                     }
                     connection.sendObject(new StringMessage(groupName));
@@ -128,14 +80,18 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                     //  Wait for response
                     StringMessage responseMessage = (StringMessage) (connection.receiveObject());
                     String response = responseMessage.unpacker();
-                    clientOutput.displayString(response);
+                   // clientOutput.displayString(response);
                     if (response.matches("^Fail:.*$")) {
                         continue;
                     }
                     if (response.matches("^Success:.*$")) {
                         break;
                     }
+
                 }
+                ParentActivity parentActivity = new ParentActivity();
+                parentActivity.setBoard((Board) (connection.receiveObject()));
+                this.board = ParentActivity.getBoard();
             } catch (Exception e) {
 
 
@@ -144,25 +100,24 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
     }
     public boolean chooseRegions() {
 
-       //Initial to -1 for timers, don't set until turn actually starts
-       // long startTime = -1;
-        //long maxTime = -1;
-
+       //TODO: MOVE TO PLACEMENT ACTIVITY
         try {
              while (true) {
+
                 // Server then sends board again
                // board = (Board) (connection.receiveObject());
-                ParentActivity parentActivity = new ParentActivity();
-                parentActivity.setBoard((Board) (connection.receiveObject()));
-                this.board = ParentActivity.getBoard();
+                //ParentActivity parentActivity = new ParentActivity();
+                //parentActivity.setBoard((Board) (connection.receiveObject()));
+                //this.board = ParentActivity.getBoard();
 
                 // Display and move into placements
-                clientOutput.displayBoard(board);
+                clientOutput.displayBoard(board);//should be in onStart() of placement activity
                 OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", (edu.duke.ece651.risc.client.ClientInterface) this);
                 List<OrderInterface> placementOrders = new ArrayList<OrderInterface>();
                 placement.addToOrderList(placementOrders);
-                if(timeOut(startTime, maxTime)) { return false; }
-                connection.sendObject(placementOrders);
+              //  if(timeOut(startTime, maxTime)) { return false; }
+                   if(timeOut(ParentActivity.getStartTime(), ParentActivity.getMaxTime())) { return false; }
+                   connection.sendObject(placementOrders);
 
                 // Wait for response
                 StringMessage responseMessage = (StringMessage) (connection.receiveObject());
@@ -174,12 +129,14 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                 if (response.matches("^Success:.*$")) {
                     break;
                 }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
             return false;
         }
+
 
         return true;
     }
@@ -193,32 +150,21 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
         }
         return false;
     }
+    public boolean getRegionChosen(){
+        return regionChosen;
+    }
     @Override
     public void run() {
         try {
-            firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
-            ParentActivity pa = new ParentActivity();
-            pa.setPlayer((HumanPlayer) connection.receiveObject());
-            this.player = ParentActivity.getPlayer();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            connection.closeAll();
-        }
+            if (chooseStartGroup()) {
+                regionChosen=true;
 
-        if(waitingForPlayers) {
-             waitingToStart();
-            return;
+
+            }
+        } catch (Exception e) {
+
         }
-            showInitialBoard();
-            if (firstCall) {
-                if(!chooseRegions()) {
-                    return;
-                }
-                }
-
-             }
-
+    }
 
         @Override
     public ClientOutputInterface getClientOutput() {

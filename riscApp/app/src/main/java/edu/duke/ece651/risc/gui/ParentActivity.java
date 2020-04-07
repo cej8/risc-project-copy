@@ -13,6 +13,15 @@ public final class ParentActivity {
     private static Board board;
     private static HumanPlayer player;
     private static List<OrderInterface> orders = new ArrayList<OrderInterface>();
+    private static long startTime;
+    private static long maxTime;
+
+    final static long getMaxTime(){return maxTime;}
+    public void setMaxTime(long t){this.maxTime=t;}
+
+    final static long getStartTime(){return startTime;}
+    public void setStartTime(long t){this.startTime=t;}
+
 
     final static HumanPlayer getPlayer(){return player;}
     public void setPlayer(HumanPlayer p){this.player=p;}
