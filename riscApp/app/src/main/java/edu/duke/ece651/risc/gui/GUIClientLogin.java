@@ -117,12 +117,12 @@ public class GUIClientLogin extends Thread{
                 this.loginResult = false;
 
                 Log.d("GUIClientLogin", loginResult.toString());
-          //      continue;
+               // continue;
             }
             if (response.matches("^Success:.*$")) {
                 this.loginResult = true;
                 Log.d("GUIClientLogin", loginResult.toString());
-         //       break;
+               // break;
 
             }
         //Log.d("GUIClientLogin", loginResult.toString());

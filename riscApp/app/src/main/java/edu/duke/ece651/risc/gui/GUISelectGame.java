@@ -20,6 +20,8 @@ public class GUISelectGame extends Thread{
     private String gameNumber;
     private boolean getGames;
     private String gameList;
+    private Boolean gotGames;
+    private Boolean pickedGames;
 
     public GUISelectGame(boolean getGames, String gameID,boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
@@ -29,6 +31,8 @@ public class GUISelectGame extends Thread{
         this.oldBoolean = bool;
         this.gameNumber = gameID;
         this.getGames = getGames;
+        this.gotGames = null;
+        this.pickedGames = null;
     }
     // Get games
     public GUISelectGame(boolean getGames, boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
@@ -38,9 +42,17 @@ public class GUISelectGame extends Thread{
         this.activity = act;
         this.oldBoolean = bool;
         this.getGames = getGames;
+        this.gotGames = null;
+        this.pickedGames = null;
     }
     public String getGameList(){
         return this.gameList;
+    }
+    public Boolean getGotGames(){
+        return this.gotGames;
+    }
+    public Boolean getPickedGames(){
+        return this.pickedGames;
     }
     public void performGetGame() throws IOException,ClassNotFoundException{
         // boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
@@ -49,6 +61,7 @@ public class GUISelectGame extends Thread{
         StringMessage message = (StringMessage) (connection.receiveObject());
         gameList = message.unpacker();
         //clientOutput.displayString(str);
+        this.gotGames = true;
     }
     //Method to mesh with selectGame() in loginServer
     public void performSelectGame() throws IOException, ClassNotFoundException{
@@ -84,6 +97,7 @@ public class GUISelectGame extends Thread{
                 continue;
             }
             if (response.matches("^Success:.*$")) {
+                this.pickedGames = true;
                 break;
             }
         }
