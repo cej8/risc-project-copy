@@ -255,15 +255,15 @@ public class GUIClient extends Thread implements ClientInterface, edu.duke.ece65
 
     public void playGame() {
         try {
-            player = (HumanPlayer) (connection.receiveObject());
-            clientOutput.displayString("Successfully connected, you are named: " + player.getName());
-            clientOutput.displayString("Please wait for more players to connect");
+           // player = (HumanPlayer) (connection.receiveObject());
+          //  clientOutput.displayString("Successfully connected, you are named: " + player.getName());
+           // clientOutput.displayString("Please wait for more players to connect");
             //Set timeout to START_WAIT plus a little buffer
-            setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
+           // setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
             //If notStarted
-            if(firstCall){
-                if(!chooseRegions()) {return; }
-            }
+           // if(firstCall){
+             //   if(!chooseRegions()) {return; }
+           // }
             while (true) {
 
                 String turn = receiveAndDisplayString();
