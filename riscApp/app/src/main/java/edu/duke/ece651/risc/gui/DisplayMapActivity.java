@@ -331,24 +331,23 @@ public class DisplayMapActivity extends AppCompatActivity {
         r8.setAdjRegions(adj8);
 
         List<Region> adj9 = new ArrayList<Region>();
-        adj9.add(r4);
-        adj9.add(r0);
+        adj9.add(r7);
+        adj9.add(r8);
+        adj9.add(r10);
         r9.setAdjRegions(adj9);
 
         List<Region> adj10 = new ArrayList<Region>();
-        adj10.add(r4);
-        adj10.add(r0);
+        adj10.add(r9);
+        adj10.add(r6);
+        adj10.add(r11);
         r10.setAdjRegions(adj10);
 
         List<Region> adj11 = new ArrayList<Region>();
-        adj11.add(r4);
+        adj11.add(r6);
         adj11.add(r0);
+        adj11.add(r10);
         r11.setAdjRegions(adj11);
-
-        List<Region> adj12 = new ArrayList<Region>();
-        adj12.add(r4);
-        adj12.add(r0);
-        r12.setAdjRegions(adj12);
+        
 
         List<Region> regions = new ArrayList<Region>();
         regions.add(r0);

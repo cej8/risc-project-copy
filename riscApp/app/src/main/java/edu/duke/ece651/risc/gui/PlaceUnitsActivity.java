@@ -16,6 +16,6 @@ public class PlaceUnitsActivity extends AppCompatActivity {
     }
 
     public void sendPlacement(View view){
-        
+
     }
 }
