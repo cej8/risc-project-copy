@@ -48,6 +48,7 @@ public class GUIClientLogin extends Thread{
         this.loginResult = null;
         this.registeredUser = false;
         this.confirmPassword = password2;
+
     }
     public void Login(){// throws IOException, ClassNotFoundException{
         try {
@@ -192,7 +193,7 @@ public class GUIClientLogin extends Thread{
     @Override
     public void run(){
         try {
-            performLogin();
+                performLogin();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
