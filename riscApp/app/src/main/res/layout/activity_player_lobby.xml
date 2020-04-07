@@ -4,8 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChooseRegionsActivity"
+    tools:context=".PlayerLobbyActivity"
     android:background="@drawable/spacebackground">
+
+    <Button
+        android:id="@+id/ready"
+        android:layout_width="85dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="288dp"
+        android:background="@drawable/oval2"
+        android:onClick="playerReady"
+        android:text="Ready"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.871"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/begin"
+        android:layout_width="85dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="340dp"
+        android:background="@drawable/oval2"
+        android:onClick="beginGame"
+        android:text="Blast Off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.871"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/line1"
         android:layout_width="47dp"
@@ -251,31 +278,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.187"
         app:srcCompat="@drawable/lineangleright35" />
-   <!-- <ImageButton
+    <ImageButton
         android:id="@+id/Caprica"
-        android:tooltipText="Caprica"
+        android:tag="Caprica"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginEnd="264dp"
         android:layout_marginRight="264dp"
         android:background="@android:color/transparent"
         android:padding="0dp"
-       android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.276"
-        app:srcCompat="@drawable/p1nb"
-        android:contentDescription="p1"/>-->
-    <Button
-        android:id="@+id/Caprica"
-        android:text="Caprica"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginEnd="264dp"
-        android:layout_marginRight="264dp"
-        android:padding="0dp"
-        android:background="@drawable/p1nb"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -284,14 +295,14 @@
         app:srcCompat="@drawable/p1nb"
         android:contentDescription="p1"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/Hoth"
-        android:text="Hoth"
+        android:tag="Hoth"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="44dp"
         android:layout_marginLeft="44dp"
-        android:background="@drawable/p2nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -300,12 +311,11 @@
         app:layout_constraintVertical_bias="0.276"
         app:srcCompat="@drawable/p2nb" />
 
-    <Button
+    <ImageButton
         android:id="@+id/Worlorn"
-        android:text="Worlorn"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:background="@drawable/p3nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -316,12 +326,11 @@
         app:layout_constraintVertical_bias="0.318"
         app:srcCompat="@drawable/p3nb" />
 
-    <Button
+    <ImageButton
         android:id="@+id/Dagobah"
-        android:text="Dagobah"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:background="@drawable/p4nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -332,14 +341,13 @@
         app:layout_constraintVertical_bias="0.053"
         app:srcCompat="@drawable/p4nb" />
 
-    <Button
+    <ImageButton
         android:id="@+id/Krypton"
-        android:text="Krypton"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="148dp"
         android:layout_marginLeft="148dp"
-        android:background="@drawable/p5nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -348,14 +356,13 @@
         app:layout_constraintVertical_bias="0.047"
         app:srcCompat="@drawable/p5nb" />
 
-    <Button
+    <ImageButton
         android:id="@+id/Ego"
-        android:text="Ego"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="148dp"
         android:layout_marginLeft="148dp"
-        android:background="@drawable/p6nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -364,14 +371,13 @@
         app:layout_constraintVertical_bias="0.318"
         app:srcCompat="@drawable/p6nb" />
 
-    <Button
+    <ImageButton
         android:id="@+id/Terra"
-        android:text="Terra"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="44dp"
         android:layout_marginLeft="44dp"
-        android:background="@drawable/p7nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -380,12 +386,11 @@
         app:layout_constraintVertical_bias="0.622"
         app:srcCompat="@drawable/p7nb" />
 
-    <Button
+    <ImageButton
         android:id="@+id/Arda"
-        android:text="Arda"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:background="@drawable/p8nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -396,14 +401,13 @@
         app:layout_constraintVertical_bias="0.872"
         app:srcCompat="@drawable/p8nb" />
 
-    <Button
+    <ImageButton
         android:id="@+id/Dune"
-        android:text="Dune"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginEnd="264dp"
         android:layout_marginRight="264dp"
-        android:background="@drawable/p9nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -412,14 +416,13 @@
         app:layout_constraintVertical_bias="0.622"
         app:srcCompat="@drawable/p9nb" />
 
-    <Button
+    <ImageButton
         android:id="@+id/Solaris"
-        android:text="Solaris"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="148dp"
         android:layout_marginLeft="148dp"
-        android:background="@drawable/p10nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -428,14 +431,13 @@
         app:layout_constraintVertical_bias="0.872"
         app:srcCompat="@drawable/p10nb" />
 
-    <Button
+    <ImageButton
         android:id="@+id/Gallifrey"
-        android:text="Gallifrey"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="148dp"
         android:layout_marginLeft="148dp"
-        android:background="@drawable/p11nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -444,12 +446,11 @@
         app:layout_constraintVertical_bias="0.601"
         app:srcCompat="@drawable/p11nb" />
 
-    <Button
+    <ImageButton
         android:id="@+id/Cybertron"
-        android:text="Cybertron"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:background="@drawable/p12nb"
+        android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -462,53 +463,15 @@
 
     <TextView
         android:id="@+id/helpText"
-        android:layout_width="159dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="178dp"
+        android:layout_height="247dp"
+        android:layout_marginTop="32dp"
         android:text=""
         android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.909"
+        app:layout_constraintHorizontal_bias="0.92"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/showBoard"
-        android:layout_width="198dp"
-        android:layout_height="175dp"
-        android:layout_marginTop="88dp"
-        android:text=""
-        android:textColor="#ffffff"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.938"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/regionName"
-        android:layout_width="121dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="284dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Region Name"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.819"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/submit"
-        android:onClick="chooseRegion"
-        android:layout_width="85dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="284dp"
-        android:text="Submit"
-        android:background="@drawable/oval2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
