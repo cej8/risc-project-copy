@@ -29,6 +29,7 @@ import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.MoveOrder;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
+import edu.duke.ece651.risc.shared.TechBoost;
 import edu.duke.ece651.risc.shared.Unit;
 
 public class DisplayMapActivity extends AppCompatActivity {
@@ -77,7 +78,11 @@ public class DisplayMapActivity extends AppCompatActivity {
                 parentActivity.setOrders(attackCombat);
             } else if (order.equals("upgrade")) {
 
-            }
+            }else if (order.equals("techBoost")) {
+                   TechBoost boostOrder = new TechBoost(new HumanPlayer(""));
+                   parentActivity.setOrders(boostOrder);
+                }
+
         }
         if (order != null) {
             List<OrderInterface> ordersToDate = ParentActivity.getOrders();
@@ -99,6 +104,12 @@ public class DisplayMapActivity extends AppCompatActivity {
     // TODO: upgrade - add additional upgrade
     public void upgradeOrder(View view){
 
+    }
+
+    public void techBoostOrder(View view){
+        Intent techBoostSetup = new Intent(this,OrderActivity.class);
+        techBoostSetup.putExtra("ORDER","techBoost");
+        startActivity(techBoostSetup);
     }
     public Region getRegionByName(Board board, String name){
         Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
