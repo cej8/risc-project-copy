@@ -30,6 +30,7 @@ public class GUIPlayGame extends Thread{
     private List<OrderInterface> orders;
     boolean alive;
     private boolean gotBoard;
+    private boolean turnOver = false;
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
@@ -57,6 +58,7 @@ public class GUIPlayGame extends Thread{
     public boolean getAlive(){
         return this.alive;
     }
+    public boolean getTurnOver(){return this.turnOver;}
 
     public boolean timeOut(long startTime, long maxTime){
         // If too long --> kill player (prevent trying to write to closed pipe)
@@ -72,11 +74,13 @@ public class GUIPlayGame extends Thread{
         try {
            // while (true) {
                 String turn = receiveAndDisplayString();
-                startTime = System.currentTimeMillis();
-                maxTime = (long) (connection.getSocket().getSoTimeout());
+                ParentActivity parentActivity = new ParentActivity();
+                //startTime = System.currentTimeMillis();
+                parentActivity.setStartTime(System.currentTimeMillis());
+                parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));//(long) (connection.getSocket().getSoTimeout());
                 //Catch case for issues in testing, should never really happen
-                if (maxTime == 0) {
-                    maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
+                if (ParentActivity.getMaxTime() == 0) {
+                    parentActivity.setMaxTime((long) (TURN_WAIT_MINUTES * 60 * 1000)); //= (long) (TURN_WAIT_MINUTES * 60 * 1000);
                 }
                 // Start of each turn will have continue message if game still going
                 // Otherwise is winner message
@@ -84,7 +88,7 @@ public class GUIPlayGame extends Thread{
                 String start = startMessage.unpacker();
                 if (!start.equals("Continue")) {
                     // If not continue then someone won --> print and exit
-                    clientOutput.displayString(start);  // help text on map
+                  //  clientOutput.displayString(start);  // help text on map
                     connection.closeAll();
                     clientInput.close();
                     return;
@@ -110,7 +114,7 @@ public class GUIPlayGame extends Thread{
                 }
                 // Next server sends board
                 board = (Board) (connection.receiveObject());
-                ParentActivity parentActivity = new ParentActivity();
+               // ParentActivity parentActivity = new ParentActivity();
                 parentActivity.setBoard(board);
                 gotBoard = true;
            // }
@@ -127,7 +131,6 @@ public class GUIPlayGame extends Thread{
     public void playGame() {
         try {
             while (true) {
-
                 while (true) {
 //                    // Next server sends board
 //                    board = (Board) (connection.receiveObject());
@@ -143,7 +146,7 @@ public class GUIPlayGame extends Thread{
                        // OrderHelper orderhelper = new OrderHelper((edu.duke.ece651.risc.client.ClientInterface) this);
                         //List<OrderInterface> orders = orderhelper.createOrders();
                         //If too long --> kill player
-                        if(timeOut(startTime, maxTime)){ return;}
+                        if(timeOut(ParentActivity.getStartTime(), ParentActivity.getMaxTime())){ return;}
                         connection.sendObject(orders);
                     }
 
@@ -200,6 +203,7 @@ public class GUIPlayGame extends Thread{
             serverDisplayBoard();
         } else {
             playGame();
+            turnOver = true;
         }
     }
 }

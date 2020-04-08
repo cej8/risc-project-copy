@@ -45,10 +45,10 @@ public class DisplayMapActivity extends AppCompatActivity {
         setContentView(R.layout.map);
         executeClient = new ExecuteClient(this);
         helpText = findViewById(R.id.helpText);
-        //executeClient.displayServerBoard(helpText);
+        executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        generateBoard();
+        //generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         Log.d("Inside map regions",regions.get(0).getName());
@@ -110,9 +110,9 @@ public class DisplayMapActivity extends AppCompatActivity {
     }
 
     public void techBoostOrder(View view){
-      //  Intent techBoostSetup = new Intent(this,TechBoostActivity.class);
-       // techBoostSetup.putExtra("ORDER","techBoost");
-       // startActivity(techBoostSetup);
+        Intent techBoostSetup = new Intent(this,TechBoostActivity.class);
+        techBoostSetup.putExtra("ORDER","techBoost");
+        startActivity(techBoostSetup);
     }
     public Region getRegionByName(Board board, String name){
         Map<String, Region> nameToRegionMap = new HashMap<String, Region>();

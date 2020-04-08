@@ -16,7 +16,7 @@
         <activity android:name=".PlayerLobbyActivity"></activity>
         <activity
             android:name=".PlaceUnitsActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".BoostRegionActivity"
