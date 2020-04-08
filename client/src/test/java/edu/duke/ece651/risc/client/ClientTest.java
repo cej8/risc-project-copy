@@ -591,9 +591,7 @@ public class ClientTest {
     makeConnection.makeConnection(mockSocket);
     Connection connection = makeConnection.getConnection();
     Client client = new Client(ci,td,connection, true);
- 
-
-    //client.makeConnection(mockSocket);
+    client.playGame();
 
   }
 }
