@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.gui;
 
+import android.app.Activity;
 import android.util.Log;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -66,7 +67,7 @@ public class GUIClient extends Thread implements ClientInterface, edu.duke.ece65
         }
 
         // Constructor needed for Android threads
-        public GUIClient(ClientInputInterface clientInput, ClientOutputInterface clientOutput,String address, int port) {
+        public GUIClient(ClientInputInterface clientInput, ClientOutputInterface clientOutput, String address, int port) {
             this();
             this.clientInput = clientInput;
             this.clientOutput = clientOutput;
@@ -111,9 +112,11 @@ public class GUIClient extends Thread implements ClientInterface, edu.duke.ece65
         // 1) Connection
         ConnectionManager makeConnection = new ConnectionManager(address,port);
         makeConnection.connectGame();
-
+        this.connection = ParentActivity.getConnection();
         try {
-            // 2) Perform login
+            // 2) Perform login / registration
+            GUIClientLogin clientLogin = new GUIClientLogin(true,connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
+            clientLogin.performLogin();
             // 3) Perform select game
         } catch (Exception e) {
             e.printStackTrace();

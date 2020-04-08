@@ -14,51 +14,22 @@ import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.IntegerMessage;
 import edu.duke.ece651.risc.shared.StringMessage;
 
-public class GUIClientLogin extends Thread{
+public class GUIClientLogin {//extends Thread{
     private Connection connection;
     private ClientInputInterface clientInput;
     private ClientOutputInterface clientOutput;
-    private String username;
-    private String password;
-    private String confirmPassword;
     Activity activity;
     Boolean loginResult;
     Boolean registeredUser;
 
     // Login constructor
-    public GUIClientLogin(Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act){
+    public GUIClientLogin(boolean registeredUser,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
         this.activity = act;
-        this.username = username;
-        this.password = password;
         this.loginResult = null;
-        this.registeredUser = true;
-        this.confirmPassword = null;
-    }
-    // Registration Constructor
-    public GUIClientLogin(Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act, String password2){
-        this.connection = connect;
-        this.clientInput = input;
-        this.clientOutput = output;
-        this.activity = act;
-        this.username = username;
-        this.password = password;
-        this.loginResult = null;
-        this.registeredUser = false;
-        this.confirmPassword = password2;
-
-    }
-    public void Login(){// throws IOException, ClassNotFoundException{
-        try {
-            //performLogin();
-            performSelectGame();
-        } catch (Exception e) {
-            e.printStackTrace();
-            connection.closeAll();
-            clientInput.close();
-        }
+        this.registeredUser = registeredUser;
     }
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
@@ -70,14 +41,21 @@ public class GUIClientLogin extends Thread{
         return this.loginResult;
     }
     //Method to mesh with loginProcess() in loginServer
-    public void performLogin() throws IOException, ClassNotFoundException{
-        String initalSuccess = receiveAndDisplayString();
-       // while(true){
-            //boolean loginBoolean = true;//queryYNAndRespond("Do you already have a login? [Y/N]");
-            //Either way request login
+    public void performLogin() throws IOException, ClassNotFoundException,InterruptedException{
+        //String initalSuccess = receiveAndDisplayString();
+        StringMessage message = (StringMessage) (connection.receiveObject());
+        String str = message.unpacker();
+        while(true){
             connection.sendObject(new ConfirmationMessage(registeredUser));
-           // connection.sendObject(new StringMessage(clientInput.readInput()));
+           //connection.sendObject(new StringMessage(username));
+
+            //---Login blocking start
+            GameStateModel model = new GameStateModel();
+            String username = model.getLoginUsername();
             connection.sendObject(new StringMessage(username));
+            Log.d("Login","Username sent");
+            //---Login blocking end
+
             //We will get salt back
             String salt = ((StringMessage)(connection.receiveObject())).unpacker();
             Log.d("Salt",salt);
@@ -85,7 +63,11 @@ public class GUIClientLogin extends Thread{
             //clientOutput.displayString("Password:");
             //String password1 = clientInput.readInput();
 
-            String password1 = password;
+            //---Login blocking start
+            //String password1 = password;
+            String password1 = model.getLoginPassword();
+            //---Login blocking end
+
             //Hash password
             String hashPassword1;
             if(!salt.equals("")){
@@ -103,31 +85,37 @@ public class GUIClientLogin extends Thread{
             if(!registeredUser){
             //Request repeat of password
             //clientOutput.displayString("Password (again):");
-            String password2 = confirmPassword;//clientInput.readInput();
+
+                //---Login blocking start
+            //String password2 = confirmPassword;//clientInput.readInput();
+                String password2 = model.getConfirmationPassword();
+                //---Login blocking end
+
             //Hash password
             String hashPassword2 = BCrypt.hashpw(password2, salt);
             //Send copy back
             connection.sendObject(new StringMessage(hashPassword2));
-
         }
 
             //Get back response - checks login
             String response = receiveAndDisplayString();
             //Repeat if fail, continue if success
             if (response.matches("^Fail:.*$")) {
-                this.loginResult = false;
-
+               this.loginResult = false;
+                model.setLoginResult(false);
+                clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
                 Log.d("GUIClientLogin", loginResult.toString());
-               // continue;
+               continue;
             }
             if (response.matches("^Success:.*$")) {
-                this.loginResult = true;
+               this.loginResult = true;
+                model.setLoginResult(true);
                 Log.d("GUIClientLogin", loginResult.toString());
-               // break;
+               break;
 
             }
         //Log.d("GUIClientLogin", loginResult.toString());
-       // }
+        }
 
         //At this point user is logged in (either old or new)
 
@@ -190,14 +178,14 @@ public class GUIClientLogin extends Thread{
             clientOutput.displayString("Invalid input.");
         }
     }
-    @Override
-    public void run(){
-        try {
-                performLogin();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+   // @Override
+//    public void run(){
+//        try {
+//                performLogin();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

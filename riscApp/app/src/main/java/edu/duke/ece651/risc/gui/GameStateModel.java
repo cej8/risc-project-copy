@@ -1,28 +1,66 @@
 package edu.duke.ece651.risc.gui;
 
-import edu.duke.ece651.risc.client.ClientInputInterface;
-import edu.duke.ece651.risc.client.ClientOutputInterface;
-
 public class GameStateModel {
-    private static String startGroup;
+    private static String startGroup = null;
     private static boolean startConnection = false;
+    private static String loginUsername = null;
+    private static String loginPassword = null;
+    private static String registerPassword = null;
+    private static boolean loginResult = false;
 
-    // Connection blocking
+    //------- Connection blocking
     public synchronized boolean getConnection() throws InterruptedException {
-        while (startConnection == false){
+        while (!startConnection){
             wait();
         }
         return startConnection;
     }
-    public synchronized void setConnection(boolean startConnection){
-        this.startConnection = startConnection;
+    public synchronized void setConnection(boolean s){
+        startConnection = s;
         notifyAll();
     }
-//    synchronized String getLogin() throws InterruptedException{
-//        while (login == null){
-//            wait();
-//        }
-//    }
+    //------- Login blocking
+    synchronized String getLoginPassword() throws InterruptedException{
+        while ((loginPassword == null)){
+            wait();
+        }
+        return loginPassword;
+    }
+    synchronized String getLoginUsername() throws InterruptedException{
+        while (loginUsername == null){
+            wait();
+        }
+        return loginUsername;
+    }
+    synchronized void setLoginPassword(String s){
+        loginPassword = s;
+        notifyAll();
+    }
+    synchronized void setLoginUsername(String s){
+        loginUsername = s;
+        notifyAll();
+    }
+    synchronized boolean getLoginResult() throws InterruptedException{
+        while (!loginResult){
+            wait();
+        }
+        return loginResult;
+    }
+    synchronized void setLoginResult(Boolean r){
+        loginResult = r;
+        notifyAll();
+    }
+    //------- Registration blocking
+    synchronized String getConfirmationPassword() throws InterruptedException{
+        while (registerPassword == null){
+            wait();
+        }
+        return registerPassword;
+    }
+    synchronized void setRegisterPassword(String s){
+        registerPassword = s;
+        notifyAll();
+    }
 
     synchronized String getStartGroup() throws InterruptedException {
         // value not ready
@@ -34,6 +72,7 @@ public class GameStateModel {
     // client
     synchronized void setStartGroup(String s){
         this.startGroup = s;
+        notifyAll();
     }
 }
 
