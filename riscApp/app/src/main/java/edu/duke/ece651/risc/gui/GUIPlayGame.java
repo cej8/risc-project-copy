@@ -30,6 +30,7 @@ public class GUIPlayGame extends Thread{
     private List<OrderInterface> orders;
     boolean alive;
     private boolean gotBoard;
+    private boolean turnOver = false;
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
@@ -57,6 +58,7 @@ public class GUIPlayGame extends Thread{
     public boolean getAlive(){
         return this.alive;
     }
+    public boolean getTurnOver(){return this.turnOver;}
 
     public boolean timeOut(long startTime, long maxTime){
         // If too long --> kill player (prevent trying to write to closed pipe)
@@ -127,7 +129,6 @@ public class GUIPlayGame extends Thread{
     public void playGame() {
         try {
             while (true) {
-
                 while (true) {
 //                    // Next server sends board
 //                    board = (Board) (connection.receiveObject());
@@ -200,6 +201,7 @@ public class GUIPlayGame extends Thread{
             serverDisplayBoard();
         } else {
             playGame();
+            turnOver = true;
         }
     }
 }

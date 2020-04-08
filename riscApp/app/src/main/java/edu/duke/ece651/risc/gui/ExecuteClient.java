@@ -157,14 +157,6 @@ public class ExecuteClient {
         //client.start();
     }
 
-    /*public Boolean getLoginResult() {
-        return this.loginResult;
-    }
-
-    public void setLoginResult(Boolean login) {
-        this.loginResult = login;
-    }*/
-
     public String getHelpText() {
         return this.helpText;
     }
@@ -237,8 +229,8 @@ public void showStartBoard(TextView boardView) {
             @Override
             public void run() {
                // boolean gotBoard = guiPlayGame.isGotBoard();
-                Intent newGame= new Intent(act, DisplayMapActivity.class);
-                 act.startActivity(newGame);
+                Intent firstUnits= new Intent(act, PlaceUnitsActivity.class);
+                 act.startActivity(firstUnits);
             }
         },3000);
     }
@@ -246,15 +238,33 @@ public void showStartBoard(TextView boardView) {
         clientOutput = new GUITextDisplay(helpText, act);
         final GUIPlayGame guiPlayGame = new GUIPlayGame(orders,false, connection, clientInput, clientOutput, act);
         guiPlayGame.start();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(act,WaitActivity.class);
-                act.startActivity(intent);
-            }
-        },6000);
+        while (!guiPlayGame.getTurnOver()){
+            // wait for it to return
+        }
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Intent intent = new Intent(act,WaitActivity.class);
+//                act.startActivity(intent);
+//            }
+//        },6000);
+        ParentActivity parentActivity = new ParentActivity();
+        parentActivity.resetOrders();
+        Intent intent = new Intent(act,WaitActivity.class);
+        act.startActivity(intent);
     }
     public void placementOrder(){
-
+        GUIClientPlacementSelection guiClientPlacementSelection = new GUIClientPlacementSelection(connection,clientInput,clientOutput,act);
+        guiClientPlacementSelection.start();
+        while(!guiClientPlacementSelection.getPlacement()) {
+            //wait for thread to return
+        }
+        // reset Orders list
+        ParentActivity parentActivity = new ParentActivity();
+        parentActivity.resetOrders();
+        Log.d("Placements Completed",guiClientPlacementSelection.getPlacement().toString());
+        // display map
+        Intent newGame= new Intent(act, DisplayMapActivity.class);
+        act.startActivity(newGame);
     }
 }

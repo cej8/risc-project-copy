@@ -44,12 +44,15 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         executeClient.setConnection(connection);
         board = ParentActivity.getBoard();
         regionList = board.getRegions();
-       // player = ParentActivity.getPlayer();
-        // TODO: update player to above
-        player = new HumanPlayer("Player 1");
+        player = ParentActivity.getPlayer();
         getRegionByOwner();
         displayText();
     }
+//    @Override
+////    protected void onStart() {
+////        super.onStart();
+////
+////    }
 
     public void sendPlacements(View view){
         makePlacements();
@@ -96,8 +99,8 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         planetUnits.add(r4);
         planetUnits.add(r5);
         planetUnits.add(r6);
-        //for (int j = 0; j < playerRegions.size(); j++){
-            for (int j = 0; j < 6; j++){
+        for (int j = 0; j < playerRegions.size(); j++){
+           // for (int j = 0; j < 6; j++){
             planetName.get(j).setVisibility(View.VISIBLE);
             planetUnits.get(j).setVisibility(View.VISIBLE);
             planetName.get(j).setText(playerRegions.get(j).getName());
