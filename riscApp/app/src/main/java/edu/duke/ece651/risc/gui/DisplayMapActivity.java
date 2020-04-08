@@ -109,11 +109,11 @@ public class DisplayMapActivity extends AppCompatActivity {
         startActivity(unitBoost);
     }
 
-   /* public void techBoostOrder(View view){
+    public void techBoostOrder(View view){
         Intent techBoostSetup = new Intent(this,TechBoostActivity.class);
         techBoostSetup.putExtra("ORDER","techBoost");
         startActivity(techBoostSetup);
-    }*/
+    }
     public Region getRegionByName(Board board, String name){
         Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
         for (Region r : board.getRegions()){

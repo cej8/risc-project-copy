@@ -31,6 +31,7 @@ public class GUIPlayGame extends Thread{
     boolean alive;
     private boolean gotBoard;
     private boolean turnOver = false;
+    private String winnerPrompt=null;
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
@@ -70,6 +71,12 @@ public class GUIPlayGame extends Thread{
         }
         return false;
     }
+    public void setWinner(String prompt){
+        this.winnerPrompt=prompt;
+    }
+    public String getWinner(){
+        return this.winnerPrompt;
+    }
     public void serverDisplayBoard(){
         try {
            // while (true) {
@@ -89,8 +96,9 @@ public class GUIPlayGame extends Thread{
                 if (!start.equals("Continue")) {
                     // If not continue then someone won --> print and exit
                   //  clientOutput.displayString(start);  // help text on map
-                    connection.closeAll();
-                    clientInput.close();
+                    setWinner(start);
+                 //   connection.closeAll();
+                 //   clientInput.close();
                     return;
                 }
                 // Next is alive status for player
