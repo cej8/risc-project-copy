@@ -100,6 +100,7 @@ public class Client extends Thread implements ClientInterface {
   
   public boolean timeOut(long startTime, long maxTime){
     // If too long --> kill player (prevent trying to write to closed pipe)
+    //System.out.println(System.currentTimeMillis() + " - " + startTime + " > " + maxTime);
     if (System.currentTimeMillis() - startTime > maxTime) {
       clientOutput.displayString("Player took too long, killing connection");
       connection.closeAll();
@@ -238,11 +239,11 @@ public class Client extends Thread implements ClientInterface {
  
   public void playGame() {
     try {
+      //Set timeout to START_WAIT plus a little buffer
+      setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
       player = (HumanPlayer) (connection.receiveObject());
       clientOutput.displayString("Successfully connected, you are named: " + player.getName());
       clientOutput.displayString("Please wait for more players to connect");
-      //Set timeout to START_WAIT plus a little buffer
-      setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
       //If notStarted
       if(firstCall){
         if(!chooseRegions()) {return; }
@@ -286,6 +287,7 @@ public class Client extends Thread implements ClientInterface {
           if(!queryYNAndRespond("Would you like to keep spectating? [Y/N]")){
             connection.closeAll();
             clientInput.close();
+            return;
           }
         }
 
