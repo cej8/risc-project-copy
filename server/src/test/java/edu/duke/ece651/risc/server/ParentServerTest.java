@@ -218,49 +218,63 @@ public class ParentServerTest {
     assertEquals(16, regions.get(11).getUnits().getUnits().get(0));
   }
 
-   @Test
-   public void test_assorted(){
-   //Tests some random Parent/Child functionality
-   //Default constructor
-   ParentServer ps = new ParentServer();
-   //Try adding player to children
-   assertEquals(ps.getChildren(), new ArrayList<ChildServer>());
-   HumanPlayer debugPlayer = new HumanPlayer("test");
-   List<ChildServer> cs = new ArrayList<ChildServer>();
-   cs.add(new ChildServer(debugPlayer, ps));
-   ps.addPlayer(cs.get(0));
-   assertEquals(ps.getChildren(), cs);
-   assertEquals(ps.getChildren().get(0).getPlayer().getName(), "test");
-   assertEquals(ps.getChildren().get(0).getParentServer(), ps);
-   assertEquals(ps.getChildren().get(0).getPlayer().getName(),
-   cs.get(0).getPlayer().getName());
-   assertEquals(ps.getChildren().get(0).getParentServer(),
-   cs.get(0).getParentServer());
-   Connection debugConn = new Connection();
-   ps.getChildren().get(0).setPlayerConnection(debugConn);
-   Connection outConn = ps.getChildren().get(0).getPlayerConnection();
-   assert(ps.numPlayersLeft() == 1);
-   assertEquals(ps.playersLeft().iterator().next().getName(),
-   ps.getChildren().get(0).getPlayer().getName());
+  // @Test
+  // public void test_assorted(){
+  // //Tests some random Parent/Child functionality
+  // //Default constructor
+  // ParentServer ps = new ParentServer();
+  // assertEquals(ps.getServerSocket(), null);
+  // try{
+  // //Try setting socket
+  // ps.setSocket(12345);
+  // assertEquals(ps.getServerSocket().getLocalPort(), 12345);
+  // //Try int constructor
+  // ps = new ParentServer(12346);
+  // assertEquals(ps.getServerSocket().getLocalPort(), 12346);
+  // //Try adding player to children
+  // assertEquals(ps.getChildren(), new ArrayList<ChildServer>());
+  // HumanPlayer debugPlayer = new HumanPlayer("test");
+  // List<ChildServer> cs = new ArrayList<ChildServer>();
+  // cs.add(new ChildServer(debugPlayer, ps));
+  // ps.addPlayer(cs.get(0));
+  // assertEquals(ps.getChildren(), cs);
+  // assertEquals(ps.getChildren().get(0).getPlayer().getName(), "test");
+  // assertEquals(ps.getChildren().get(0).getParentServer(), ps);
+  // assertEquals(ps.getChildren().get(0).getPlayer().getName(),
+  // cs.get(0).getPlayer().getName());
+  // assertEquals(ps.getChildren().get(0).getParentServer(),
+  // cs.get(0).getParentServer());
+  // Connection debugConn = new Connection();
+  // ps.getChildren().get(0).setPlayerConnection(debugConn);
+  // Connection outConn = ps.getChildren().get(0).getPlayerConnection();
+  // assert(ps.numPlayersLeft() == 1);
+  // assertEquals(ps.playersLeft().iterator().next().getName(),
+  // ps.getChildren().get(0).getPlayer().getName());
 
-   //Add another player
-   ps.addPlayer(new ChildServer(new HumanPlayer("test2"), ps));
-   //Check playersLeft
-   Set<AbstractPlayer> pleft = ps.playersLeft();
-   assert(ps.numPlayersLeft() == 2);
-   Iterator<AbstractPlayer> it = pleft.iterator();
-   String firstName = it.next().getName();
-   String secondName = it.next().getName();
-   assert(firstName.equals("test") || firstName.equals("test2"));
-   assert(secondName.equals("test") || secondName.equals("test2"));
-   assert(!firstName.equals(secondName));
+  // //Add another player
+  // ps.addPlayer(new ChildServer(new HumanPlayer("test2"), ps));
+  // //Check playersLeft
+  // Set<AbstractPlayer> pleft = ps.playersLeft();
+  // assert(ps.numPlayersLeft() == 2);
+  // Iterator<AbstractPlayer> it = pleft.iterator();
+  // String firstName = it.next().getName();
+  // String secondName = it.next().getName();
+  // assert(firstName.equals("test") || firstName.equals("test2"));
+  // assert(secondName.equals("test") || secondName.equals("test2"));
+  // assert(!firstName.equals(secondName));
 
-   ps.getChildren().get(0).getPlayer().setPlaying(false);
+  // ps.getChildren().get(0).getPlayer().setPlaying(false);
 
-   Set<AbstractPlayer> pleft2 = ps.playersLeft();
-   assert(ps.numPlayersLeft() == 1);
-   assert(pleft2.iterator().next().getName().equals("test2"));
-   }
+  // Set<AbstractPlayer> pleft2 = ps.playersLeft();
+  // assert(ps.numPlayersLeft() == 1);
+  // assert(pleft2.iterator().next().getName().equals("test2"));
+
+  // ps.closeAll();
+  // }
+  // catch(Exception e){
+  // e.printStackTrace();
+  // }
+  // }
 
   @Test
   public void test_assignGroups() {
@@ -324,8 +338,8 @@ public class ParentServerTest {
    //out.displayBoard(ps.getBoard());
    ps.addOrdersToMap(orders);
    Map<String, List<OrderInterface>> orderMap = ps.getOrderMap();
-   assert(orderMap.containsKey("PlacementOrder"));
-   assert(orderMap.get("PlacementOrder").size() == regions.size());
+   assert(orderMap.containsKey("NotCombat"));
+   assert(orderMap.get("NotCombat").size() == regions.size());
    ps.applyOrders();
    //System.out.println("Board after adding 1 to all regions");
    String placementEnd1 = out.createBoard(ps.getBoard());
@@ -364,11 +378,9 @@ public class ParentServerTest {
    //out.displayBoard(ps.getBoard());
    ps.addOrdersToMap(orders);
    orderMap = ps.getOrderMap();
-   assert(orderMap.keySet().size() == 2);
-   assert(orderMap.containsKey("PlacementOrder"));
-   assert(orderMap.get("PlacementOrder").size() == regions.size());
-   assert(orderMap.containsKey("MoveOrder"));
-   assert(orderMap.get("MoveOrder").size() == 5);
+   assert(orderMap.keySet().size() == 1);
+   assert(orderMap.containsKey("NotCombat"));
+   assert(orderMap.get("NotCombat").size() == regions.size()+5);
    ps.applyOrders();
    //System.out.println("Board after adding 1 to all regions");
    String moveEnd1 = out.createBoard(ps.getBoard());
@@ -412,13 +424,10 @@ public class ParentServerTest {
    //out.displayBoard(ps.getBoard());
    ps.addOrdersToMap(orders);
    orderMap = ps.getOrderMap();
-   assert(orderMap.keySet().size() == 4);
-   assert(orderMap.containsKey("PlacementOrder"));
-   assert(orderMap.get("PlacementOrder").size() == regions.size());
-   assert(orderMap.containsKey("MoveOrder"));
-   assert(orderMap.get("MoveOrder").size() == 5);
-   assert(orderMap.containsKey("AttackMove"));
-   assert(orderMap.get("AttackMove").size() == 2);
+System.out.println(orderMap.keySet());
+   assert(orderMap.keySet().size() == 2);
+   assert(orderMap.containsKey("NotCombat"));
+   assert(orderMap.get("NotCombat").size() == regions.size()+5+2);
    assert(orderMap.containsKey("AttackCombat"));
    assert(orderMap.get("AttackCombat").size() == 2);
 
@@ -869,5 +878,57 @@ public class ParentServerTest {
     c2in.close();
     c2out.close();
     }
+
+  @Test
+  public void test_NotCombat(){
+    //Test to make sure orders are properly cast and attackCombat are combined
+    AbstractPlayer player1 = new HumanPlayer("player1");
+    AbstractPlayer player2 = new HumanPlayer("player2");
+    Unit unit = new Unit(0);
+    Unit adjUnit = new Unit(10);
+    Region region1 = new Region(player1, unit);
+    region1.setName("Earth");
+    Region region2 = new Region(player2, adjUnit);
+    region2.setName("Wind");
+    List<Region> adjRegion1 = new ArrayList<Region>();
+    adjRegion1.add(region2);
+    region1.setAdjRegions(adjRegion1);
+    List<Region> adjRegion2 = new ArrayList<Region>();
+    adjRegion2.add(region1);
+    region2.setAdjRegions(adjRegion2);
+    List<Region> regions = new ArrayList<Region>();
+    regions.add(region1);
+    regions.add(region2);
+    Board board = new Board(regions);
+    //Above creations two regions, adjacent to each other
+    //Earth owned by player1 with 0 units
+    //Wind owned by player2 with 10 units
+    
+    ParentServer ps = new ParentServer();
+    ps.setBoard(board);
+    //Attack from Wind to Earth with 3 then 2 units, move 1 from Wind to Wind
+    //Expect two attackMoves (one with 3 one with 2) from Wind
+    //Expect one move
+    //Expect one attackCombat with 5 from Wind
+    List<OrderInterface> orders = new ArrayList<OrderInterface>();
+    orders.add(new AttackMove(regions.get(1), regions.get(0), new Unit(3)));
+    orders.add(new AttackCombat(regions.get(1), regions.get(0), new Unit(3)));
+    orders.add(new AttackMove(regions.get(1), regions.get(0), new Unit(2)));
+    orders.add(new AttackCombat(regions.get(1), regions.get(0), new Unit(2)));
+    orders.add(new MoveOrder(regions.get(1), regions.get(1), new Unit(1)));
+    ps.addOrdersToMap(orders);
+    Map<String, List<OrderInterface>> orderMap = ps.getOrderMap();
+    assert(orderMap.keySet().size() == 2);
+    assert(orderMap.get("NotCombat").size() == 3);
+    assert(orderMap.get("AttackCombat").size() == 1);
+    List<Integer> expUnits = new ArrayList<Integer>();
+    expUnits.add(new Integer(5));
+    for(int i = 0; i < 6; i++){ expUnits.add(new Integer(0)); }
+    SourceDestinationOrder attackOrder = (SourceDestinationOrder) orderMap.get("AttackCombat").get(0);
+    assert(attackOrder.getUnits().getUnits().equals(expUnits));
+    assert(orderMap.get("NotCombat").get(0) instanceof AttackMove);
+    assert(orderMap.get("NotCombat").get(1) instanceof AttackMove);
+    assert(orderMap.get("NotCombat").get(2) instanceof MoveOrder);
+  }
 
 }
