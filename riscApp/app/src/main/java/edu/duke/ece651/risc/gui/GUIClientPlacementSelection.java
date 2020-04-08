@@ -53,7 +53,7 @@ public class GUIClientPlacementSelection extends Thread implements ClientInterfa
                 // Wait for response
                 StringMessage responseMessage = (StringMessage) (connection.receiveObject());
                 String response = responseMessage.unpacker();
-                clientOutput.displayString(response);
+               // clientOutput.displayString(response);
                 if (response.matches("^Fail:.*$")) {
                     continue;
                 }

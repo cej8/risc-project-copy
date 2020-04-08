@@ -101,6 +101,9 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         planetUnits.add(r6);
         for (int j = 0; j < playerRegions.size(); j++){
            // for (int j = 0; j < 6; j++){
+            if (j > 6){
+                break;
+            }
             planetName.get(j).setVisibility(View.VISIBLE);
             planetUnits.get(j).setVisibility(View.VISIBLE);
             planetName.get(j).setText(playerRegions.get(j).getName());

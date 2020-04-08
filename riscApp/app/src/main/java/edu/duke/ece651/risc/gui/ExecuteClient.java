@@ -126,6 +126,7 @@ public class ExecuteClient {
         while (loginResult == null) {
             loginResult = clientLogin.getLoginResult();
         }
+        clientLogin.close();
             Log.d("Login Result", loginResult.toString());
 
             if (loginResult == false) {
@@ -197,7 +198,6 @@ public class ExecuteClient {
 public void showStartBoard(TextView boardView) {
     clientOutput = new GUITextDisplay(boardView, act);
     clientOutput.displayBoard(ParentActivity.getBoard());
-
 }
 
     public void chooseRegions(final TextView boardView, String regionGroup) {
@@ -206,7 +206,7 @@ public void showStartBoard(TextView boardView) {
         final GUIClientRegionSelection selection = new GUIClientRegionSelection(false,regionGroup, connection, clientInput, clientOutput, act);
         selection.start();
         while(!selection.getRegionChosen()) {
-        //wait for thread to return
+            //wait for thread to return
         }
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -214,9 +214,11 @@ public void showStartBoard(TextView boardView) {
                 // This method will be executed once the timer is over
         // TODO: change to placement selection activity
         Log.d("Game", "Starting");
-        clientOutput.displayString("Waiting for board from server");
+        //clientOutput.displayString("Waiting for board from server");
         clientOutput = new GUITextDisplay();
-        displayServerBoard(boardView);
+                Intent firstUnits= new Intent(act, PlaceUnitsActivity.class);
+                act.startActivity(firstUnits);
+        //displayServerBoard(boardView);
     }
 }, 2000);
     }
@@ -225,11 +227,14 @@ public void showStartBoard(TextView boardView) {
         clientOutput = new GUITextDisplay(helpText, act);
         final GUIPlayGame guiPlayGame = new GUIPlayGame(true,connection,clientInput,clientOutput,act);
         guiPlayGame.start();
+        while (!guiPlayGame.isGotBoard()){
+            // wait
+        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                // boolean gotBoard = guiPlayGame.isGotBoard();
-                Intent firstUnits= new Intent(act, PlaceUnitsActivity.class);
+                Intent firstUnits= new Intent(act, DisplayMapActivity.class);
                  act.startActivity(firstUnits);
             }
         },3000);
@@ -241,19 +246,13 @@ public void showStartBoard(TextView boardView) {
         while (!guiPlayGame.getTurnOver()){
             // wait for it to return
         }
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent intent = new Intent(act,WaitActivity.class);
-//                act.startActivity(intent);
-//            }
-//        },6000);
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.resetOrders();
         Intent intent = new Intent(act,WaitActivity.class);
         act.startActivity(intent);
     }
     public void placementOrder(){
+       // clientOutput = new GUITextDisplay(helpText, act);
         GUIClientPlacementSelection guiClientPlacementSelection = new GUIClientPlacementSelection(connection,clientInput,clientOutput,act);
         guiClientPlacementSelection.start();
         while(!guiClientPlacementSelection.getPlacement()) {
@@ -264,7 +263,7 @@ public void showStartBoard(TextView boardView) {
         parentActivity.resetOrders();
         Log.d("Placements Completed",guiClientPlacementSelection.getPlacement().toString());
         // display map
-        Intent newGame= new Intent(act, DisplayMapActivity.class);
+        Intent newGame= new Intent(act, WaitActivity.class);
         act.startActivity(newGame);
     }
 }

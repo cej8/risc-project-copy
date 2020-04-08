@@ -643,4 +643,12 @@
         app:layout_constraintTop_toTopOf="@+id/r6"
         app:layout_constraintVertical_bias="0.258" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="24dp"
+        tools:layout_editor_absoluteY="374dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
