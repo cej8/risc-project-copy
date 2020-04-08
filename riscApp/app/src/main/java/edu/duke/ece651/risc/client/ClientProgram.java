@@ -24,7 +24,11 @@ public class ClientProgram {
     }
     
     ConnectionManager makeConnection = new ConnectionManager(addr,port);
-    makeConnection.connectGame();
+    try {
+      makeConnection.connectGame();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
     Connection connection = makeConnection.getConnection();
     ClientLogin login = new ClientLogin(connection, clientInput, clientOutput);
     Client client = new Client(clientInput, clientOutput, connection, login.Login());

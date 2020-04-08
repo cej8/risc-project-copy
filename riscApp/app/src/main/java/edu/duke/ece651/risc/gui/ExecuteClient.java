@@ -26,17 +26,16 @@ public class ExecuteClient {
    // Boolean loginResult;
     Activity act;
     String helpText;
+    GameStateModel model;
 
     public ExecuteClient(Activity activity) {
         clientInput = new GUIEditTextInput(activity);
         clientOutput = new GUITextDisplay();
         this.act = activity;
+        this.model = new GameStateModel();
     }
 
-    //public void createGame(){
     public void createGame() {
-        //String addr = "172.74.90.68"; localhost
-        //String addr = "67.159.89.108"; old server
         String addr = "152.3.64.158";
         String portS = "12345";
         int port;
@@ -47,11 +46,10 @@ public class ExecuteClient {
             Log.d("Port", "Invalid");
             return;
         }
-        ConnectionManager makeConnection = new ConnectionManager(addr, port);
-        makeConnection.start();
-        this.connection = makeConnection.getConnection();
-        ParentActivity parentActivity = new ParentActivity();
-        parentActivity.setConnection(connection);
+        GUIClient guiClient = new GUIClient(clientInput,clientOutput,addr,port);
+        // Start Client thread with server
+        guiClient.start();
+        model.setConnection(true);
     }
 
     public Connection getConnection() {
@@ -126,7 +124,6 @@ public class ExecuteClient {
         while (loginResult == null) {
             loginResult = clientLogin.getLoginResult();
         }
-        clientLogin.close();
             Log.d("Login Result", loginResult.toString());
 
             if (loginResult == false) {
@@ -146,16 +143,6 @@ public class ExecuteClient {
                 //setLoginResult(loginResult);
                 act.startActivity(loginIntent);
             }
-    }
-
-    public void startGame(TextView textView, Activity act, EditText editText) {
-        //ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
-        //ClientOutputInterface clientOutput = new GUITextDisplay(textView,act);
-
-        Log.d("Test Connection", "Test Connection");
-        GUIClient client = new GUIClient(clientInput, clientOutput, connection);
-        //GUIClient client = new GUIClient(clientInput, clientOutput, addr, port);
-        //client.start();
     }
 
     public String getHelpText() {
@@ -201,7 +188,10 @@ public void showStartBoard(TextView boardView) {
 }
 
     public void chooseRegions(final TextView boardView, String regionGroup) {
-
+        // TODO:
+        // Model.setStartGroup(regionGroup);
+        // Model.setClientOutput();
+        // Model.getBoard(); // wait for board
        clientOutput = new GUITextDisplay(boardView, act);
         final GUIClientRegionSelection selection = new GUIClientRegionSelection(false,regionGroup, connection, clientInput, clientOutput, act);
         selection.start();
