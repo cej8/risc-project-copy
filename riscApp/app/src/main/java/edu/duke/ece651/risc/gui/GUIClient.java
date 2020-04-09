@@ -117,9 +117,9 @@ public class GUIClient extends Thread implements ClientInterface, edu.duke.ece65
             // 2) Perform login / registration
             LoginModel model = new LoginModel();
            // GUIClientLogin clientLogin = new GUIClientLogin(model,true,connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
-            GUIClientLogin clientLogin = new GUIClientLogin(model,model.getRegistrationAlert(),connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
+        //    GUIClientLogin clientLogin = new GUIClientLogin(model,model.getRegistrationAlert(),connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
          //   Log.d("Reg/Login", String.valueOf(model.getRegistrationAlert()));
-            clientLogin.performLogin();
+           // clientLogin.performLogin();
             //GUISelectGame selectGame=
 
             // 3) Perform select game

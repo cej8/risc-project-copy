@@ -22,11 +22,11 @@ public class GameTypeActivity extends AppCompatActivity {
         executeClient.setConnection(connection);
     }
     // Take me to page displaying new games to join
-    public void gameNew(View view){
+    public void gameNew(View view) throws InterruptedException {
         executeClient.getGames(false,true);
     }
     // Take me to screen displaying games I previously joined
-    public void gameOld(View view){
+    public void gameOld(View view) throws InterruptedException {
         executeClient.getGames(true,true);
     }
 }

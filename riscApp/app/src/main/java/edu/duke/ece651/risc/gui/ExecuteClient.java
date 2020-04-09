@@ -51,7 +51,7 @@ public class ExecuteClient {
     }
 
 
-    public void createGame() {
+    public void createGame() throws InterruptedException {
         String addr = "152.3.64.158";
         String portS = "12345";
         int port;
@@ -62,10 +62,18 @@ public class ExecuteClient {
             Log.d("Port", "Invalid");
             return;
         }
-        GUIClient guiClient = new GUIClient(clientInput,clientOutput,addr,port);
+        //GUIClient guiClient = new GUIClient(clientInput,clientOutput,addr,port);
         // Start Client thread with server
-        guiClient.start();
-        loginModel.setConnection(true);
+        //guiClient.start();
+        //loginModel.setConnection(true);
+        ConnectionManager makeConnection = new ConnectionManager(addr,port);
+        makeConnection.connectGame();
+        this.connection = ParentActivity.getConnection();
+     //   GUIClientLogin clientLogin = new GUIClientLogin(loginModel,loginModel.getRegistrationAlert(),connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
+        ClientGUI clientGUI= new ClientGUI(clientInput,clientOutput,this.connection);
+        clientGUI.start();
+
+
     }
     public void registrationAlert(boolean registrationAlert){
         loginModel.setRegistrationAlert(registrationAlert);
@@ -80,7 +88,8 @@ public class ExecuteClient {
     public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
         loginModel.setLoginUsername(username);
         loginModel.setLoginPassword(password);
-        Log.d("line test","sadsalsaldkj");
+
+      //  Log.d("line test","sadsalsaldkj");
        // if(model.getLoginResult()) {
         // TODO: error handling if wrong login, currently still sends you to GameTypeActivity.class
             Intent loginIntent = new Intent(act, GameTypeActivity.class);
@@ -109,7 +118,7 @@ public class ExecuteClient {
           //  gotGames = selectGame.getGotGames();
         //}
         String games = gameStartModel.getGameList();
-        //Log.d("Game List", games);
+        Log.d("Game List", games);
         Intent gamesIntent = new Intent(act, NewGameActivity.class);
         gamesIntent.putExtra("GAMELIST", games);
         act.startActivity(gamesIntent);
@@ -127,6 +136,57 @@ public class ExecuteClient {
         //placement.putExtra("GAMELIST", games);
         act.startActivity(lobby);
     }
+    public void getBoardAssignments(TextView helpText) throws InterruptedException {
+      //  clientOutput = new GUITextDisplay(helpText);
+       // final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(connection, clientInput, clientOutput, act);
+        //initializeBoard.start();
+        boolean ready= gameStartModel.readyToBegin();
+
+
+    }
+
+    public void startPlacement() throws InterruptedException {
+      //  Board board = ParentActivity.getBoard();
+        Board board=gameStartModel.getStartBoard();
+                    // This method will be executed once the timer is over
+                    // TODO: where we actually play the game - DisplayMapActivity.java
+                    Log.d("Game", "Received board");
+          //          clientOutput = new GUITextDisplay();
+                    Intent newGame= new Intent(act, ChooseRegionsActivity.class);
+                    act.startActivity(newGame);
+
+
+    }
+
+    public void showStartBoard(TextView boardView) {
+        clientOutput = new GUITextDisplay(boardView);
+        clientOutput.displayBoard(ParentActivity.getBoard());
+    }
+    public void chooseRegions(final TextView boardView, String regionGroup) throws InterruptedException {
+        // TODO:
+         gameStartModel.setStartGroup(regionGroup);
+        // Model.setClientOutput();
+        gameStartModel.getStartBoard(); // wait for board
+       // clientOutput = new GUITextDisplay(boardView);
+        //final GUIClientRegionSelection selection = new GUIClientRegionSelection(false,regionGroup, connection, clientInput, clientOutput, act);
+        //selection.start();
+        //while(!selection.getRegionChosen()) {
+            //wait for thread to return
+        //}
+        //new Handler().postDelayed(new Runnable() {
+           // @Override
+            //public void run() {
+                // This method will be executed once the timer is over
+                // TODO: change to placement selection activity
+                Log.d("Game", "Starting");
+                //clientOutput.displayString("Waiting for board from server");
+                clientOutput = new GUITextDisplay();
+                Intent firstUnits= new Intent(act, PlaceUnitsActivity.class);
+                act.startActivity(firstUnits);
+                //displayServerBoard(boardView);
+          //  }
+        //}, 2000);
+    }
     public String getHelpText() {
         return this.helpText;
     }
@@ -135,65 +195,7 @@ public class ExecuteClient {
         this.helpText = text;
     }
 
-    public void startPlacement(){
-        Board board = ParentActivity.getBoard();
-        if(board!=null) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // This method will be executed once the timer is over
-                    // TODO: where we actually play the game - DisplayMapActivity.java
-                    Log.d("Game", "Received board");
-                    clientOutput = new GUITextDisplay();
-                    Intent newGame= new Intent(act, ChooseRegionsActivity.class);
-                    act.startActivity(newGame);
-                }
-            }, 2000);
-        }
 
-
-    }
-    public void getBoardAssignments(TextView helpText) {
-        clientOutput = new GUITextDisplay(helpText);
-        final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(connection, clientInput, clientOutput, act);
-        initializeBoard.start();
-
-        while(!initializeBoard.getDoneRunning()){
-//wait for board to come in
-
-        }
-
-    }
-public void showStartBoard(TextView boardView) {
-    clientOutput = new GUITextDisplay(boardView);
-    clientOutput.displayBoard(ParentActivity.getBoard());
-}
-
-    public void chooseRegions(final TextView boardView, String regionGroup) {
-        // TODO:
-        // Model.setStartGroup(regionGroup);
-        // Model.setClientOutput();
-        // Model.getBoard(); // wait for board
-       clientOutput = new GUITextDisplay(boardView);
-        final GUIClientRegionSelection selection = new GUIClientRegionSelection(false,regionGroup, connection, clientInput, clientOutput, act);
-        selection.start();
-        while(!selection.getRegionChosen()) {
-            //wait for thread to return
-        }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-        // TODO: change to placement selection activity
-        Log.d("Game", "Starting");
-        //clientOutput.displayString("Waiting for board from server");
-        clientOutput = new GUITextDisplay();
-                Intent firstUnits= new Intent(act, PlaceUnitsActivity.class);
-                act.startActivity(firstUnits);
-        //displayServerBoard(boardView);
-    }
-}, 2000);
-    }
     //set master board
     public void displayServerBoard(TextView helpText){
         clientOutput = new GUITextDisplay(helpText);

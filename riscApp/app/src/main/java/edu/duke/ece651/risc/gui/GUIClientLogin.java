@@ -24,7 +24,8 @@ public class GUIClientLogin {//extends Thread{
     LoginModel model;
 
     // Login constructor
-    public GUIClientLogin(LoginModel model,boolean registeredUser,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+   /*public GUIClientLogin(LoginModel model,boolean registeredUser,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -32,6 +33,27 @@ public class GUIClientLogin {//extends Thread{
         this.loginResult = null;
         this.registeredUser = registeredUser;
         this.model = model;
+    }*/
+    // Login constructor
+    public GUIClientLogin(LoginModel model,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
+        this.connection = connect;
+        this.clientInput = input;
+        this.clientOutput = output;
+        this.activity = act;
+        this.loginResult = null;
+        this.model = model;
+    }
+        public boolean Login(){// throws IOException, ClassNotFoundException{
+        boolean firstCall = true;
+        try {
+            performLogin();
+            firstCall = performSelectGame();
+        } catch (Exception e) {
+            e.printStackTrace();
+            connection.closeAll();
+            clientInput.close();
+        }
+        return firstCall;
     }
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
@@ -47,8 +69,9 @@ public class GUIClientLogin {//extends Thread{
         //String initalSuccess = receiveAndDisplayString();
         StringMessage message = (StringMessage) (connection.receiveObject());
         String str = message.unpacker();
-      //  while(true){
-            connection.sendObject(new ConfirmationMessage(registeredUser));
+       while(true){
+           boolean loginBoolean = model.getRegistrationAlert();
+            connection.sendObject(new ConfirmationMessage(loginBoolean));
            //connection.sendObject(new StringMessage(username));
 
             //---Login blocking start
@@ -107,13 +130,13 @@ public class GUIClientLogin {//extends Thread{
                 model.setLoginResult(false);
                 clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
                 Log.d("GUIClientLogin", loginResult.toString());
-              // continue;
+               continue;
             }
             if (response.matches("^Success:.*$")) {
                this.loginResult = true;
                 model.setLoginResult(true);
                 Log.d("GUIClientLogin", loginResult.toString());
-             //  break;
+               break;
 
             }
         //Log.d("GUIClientLogin", loginResult.toString());
@@ -121,10 +144,10 @@ public class GUIClientLogin {//extends Thread{
 
         //At this point user is logged in (either old or new)
 
-  //  }
+    }
 
     //Method to mesh with selectGame() in loginServer
-    public void performSelectGame() throws IOException, ClassNotFoundException{
+    public boolean performSelectGame() throws IOException, ClassNotFoundException{
         while(true){
             boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
 
@@ -156,6 +179,7 @@ public class GUIClientLogin {//extends Thread{
                 break;
             }
         }
+        return ((ConfirmationMessage)connection.receiveObject()).unpacker();
     }
 
     //Helper method to ask YN and send back ConfirmationMessage

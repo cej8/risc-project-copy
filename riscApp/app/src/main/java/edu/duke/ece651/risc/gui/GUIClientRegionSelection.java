@@ -24,7 +24,7 @@ import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.StringMessage;
 import edu.duke.ece651.risc.shared.ConfirmationMessage;
 
-public class GUIClientRegionSelection extends Thread implements ClientInterface {
+public class GUIClientRegionSelection {//extends Thread implements ClientInterface {
     private Connection connection;
     private Board board;
     private ClientInputInterface clientInput;
@@ -33,8 +33,7 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
     private Activity activity;
     private String regionGroup;
     private boolean firstCall;
-    private boolean regionChosen=false;
-    //private boolean waitingForPlayers;
+    private GameStartModel model;
 
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
@@ -42,7 +41,7 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
 
 
-    public GUIClientRegionSelection(boolean begin, String region, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
+    public GUIClientRegionSelection(GameStartModel m,boolean begin, String region, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -50,6 +49,7 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
         this.regionGroup = region;
         this.board= ParentActivity.getBoard();
         this.player=ParentActivity.getPlayer();
+        this.model=m;
     }
 
     public void setSocketTimeout(int timeout) throws SocketException {
@@ -64,7 +64,7 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                     //     Print prompt and get group name
                    // clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
 
-                    String groupName = this.regionGroup;
+                    String groupName = model.getStartGroup();
                     //String groupName = Model.getGroupName();
                     //if (timeOut(startTime, maxTime)) {
                     if(timeOut(ParentActivity.getStartTime(),ParentActivity.getMaxTime())){
@@ -80,13 +80,17 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                         continue;
                     }
                     if (response.matches("^Success:.*$")) {
+
                         break;
                     }
 
                 }
+                model.isRegionChosen(true);
                 ParentActivity parentActivity = new ParentActivity();
                 parentActivity.setBoard((Board) (connection.receiveObject()));
+
                 this.board = ParentActivity.getBoard();
+                model.setStartBoard(this.board);
             } catch (Exception e) {
 
 
@@ -103,37 +107,16 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
         }
         return false;
     }
-    public boolean getRegionChosen(){
-        return regionChosen;
-    }
-    @Override
+   //  @Override
     public void run() {
         try {
             if (chooseStartGroup()) {
-                regionChosen=true;
+            //    regionChosen=true;
             }
         } catch (Exception e) {
 
         }
     }
 
-        @Override
-    public ClientOutputInterface getClientOutput() {
-        return clientOutput;
-    }
 
-    @Override
-    public ClientInputInterface getClientInput() {
-        return clientInput;
-    }
-
-    @Override
-    public Board getBoard() {
-        return board;
-    }
-
-    @Override
-    public AbstractPlayer getPlayer() {
-        return player;
-    }
 }

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.net.Socket;
 
-import edu.duke.ece651.risc.gui.GameStateModel;
+import edu.duke.ece651.risc.gui.LoginModel;
 import edu.duke.ece651.risc.gui.ParentActivity;
 import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.Constants;
@@ -50,8 +50,8 @@ public class ConnectionManager {
   public void connectGame() throws InterruptedException{
           if(connection.getSocket() == null){
               //---- block ConnectionManager until true (ready to connect)
-              GameStateModel model = new GameStateModel();
-              model.getConnection();
+              LoginModel model = new LoginModel();
+           //   model.getConnection();
               //---- unblock ConnectionManager
               makeConnection(address,port);
               // Set connection in client
