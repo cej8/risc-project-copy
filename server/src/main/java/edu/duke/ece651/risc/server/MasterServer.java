@@ -91,6 +91,10 @@ public class MasterServer extends Thread{
     return parentServers.get(gameID);
   }
 
+  public void setLoginFile(String loginFile){
+    this.loginFile = loginFile;
+  }
+
   //Method to add new username/password to map
   //Only adds if user not already there then attempts to save to disk
   public synchronized boolean addLogin(String user, Pair<String, String> hashedPasswordAndSalt){

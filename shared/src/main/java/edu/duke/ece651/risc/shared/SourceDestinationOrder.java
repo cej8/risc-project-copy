@@ -23,6 +23,11 @@ public abstract class SourceDestinationOrder implements RegionOrder {
   public Unit getUnits(){
     return units;
   }
+
+  public void setUnits(Unit units){
+    this.units = units;
+  }
+
   //@Override
   //abstract public String doSourceAction();
 

@@ -218,49 +218,63 @@ public class ParentServerTest {
     assertEquals(16, regions.get(11).getUnits().getUnits().get(0));
   }
 
-   @Test
-   public void test_assorted(){
-   //Tests some random Parent/Child functionality
-   //Default constructor
-   ParentServer ps = new ParentServer();
-   //Try adding player to children
-   assertEquals(ps.getChildren(), new ArrayList<ChildServer>());
-   HumanPlayer debugPlayer = new HumanPlayer("test");
-   List<ChildServer> cs = new ArrayList<ChildServer>();
-   cs.add(new ChildServer(debugPlayer, ps));
-   ps.addPlayer(cs.get(0));
-   assertEquals(ps.getChildren(), cs);
-   assertEquals(ps.getChildren().get(0).getPlayer().getName(), "test");
-   assertEquals(ps.getChildren().get(0).getParentServer(), ps);
-   assertEquals(ps.getChildren().get(0).getPlayer().getName(),
-   cs.get(0).getPlayer().getName());
-   assertEquals(ps.getChildren().get(0).getParentServer(),
-   cs.get(0).getParentServer());
-   Connection debugConn = new Connection();
-   ps.getChildren().get(0).setPlayerConnection(debugConn);
-   Connection outConn = ps.getChildren().get(0).getPlayerConnection();
-   assert(ps.numPlayersLeft() == 1);
-   assertEquals(ps.playersLeft().iterator().next().getName(),
-   ps.getChildren().get(0).getPlayer().getName());
+  // @Test
+  // public void test_assorted(){
+  // //Tests some random Parent/Child functionality
+  // //Default constructor
+  // ParentServer ps = new ParentServer();
+  // assertEquals(ps.getServerSocket(), null);
+  // try{
+  // //Try setting socket
+  // ps.setSocket(12345);
+  // assertEquals(ps.getServerSocket().getLocalPort(), 12345);
+  // //Try int constructor
+  // ps = new ParentServer(12346);
+  // assertEquals(ps.getServerSocket().getLocalPort(), 12346);
+  // //Try adding player to children
+  // assertEquals(ps.getChildren(), new ArrayList<ChildServer>());
+  // HumanPlayer debugPlayer = new HumanPlayer("test");
+  // List<ChildServer> cs = new ArrayList<ChildServer>();
+  // cs.add(new ChildServer(debugPlayer, ps));
+  // ps.addPlayer(cs.get(0));
+  // assertEquals(ps.getChildren(), cs);
+  // assertEquals(ps.getChildren().get(0).getPlayer().getName(), "test");
+  // assertEquals(ps.getChildren().get(0).getParentServer(), ps);
+  // assertEquals(ps.getChildren().get(0).getPlayer().getName(),
+  // cs.get(0).getPlayer().getName());
+  // assertEquals(ps.getChildren().get(0).getParentServer(),
+  // cs.get(0).getParentServer());
+  // Connection debugConn = new Connection();
+  // ps.getChildren().get(0).setPlayerConnection(debugConn);
+  // Connection outConn = ps.getChildren().get(0).getPlayerConnection();
+  // assert(ps.numPlayersLeft() == 1);
+  // assertEquals(ps.playersLeft().iterator().next().getName(),
+  // ps.getChildren().get(0).getPlayer().getName());
 
-   //Add another player
-   ps.addPlayer(new ChildServer(new HumanPlayer("test2"), ps));
-   //Check playersLeft
-   Set<AbstractPlayer> pleft = ps.playersLeft();
-   assert(ps.numPlayersLeft() == 2);
-   Iterator<AbstractPlayer> it = pleft.iterator();
-   String firstName = it.next().getName();
-   String secondName = it.next().getName();
-   assert(firstName.equals("test") || firstName.equals("test2"));
-   assert(secondName.equals("test") || secondName.equals("test2"));
-   assert(!firstName.equals(secondName));
+  // //Add another player
+  // ps.addPlayer(new ChildServer(new HumanPlayer("test2"), ps));
+  // //Check playersLeft
+  // Set<AbstractPlayer> pleft = ps.playersLeft();
+  // assert(ps.numPlayersLeft() == 2);
+  // Iterator<AbstractPlayer> it = pleft.iterator();
+  // String firstName = it.next().getName();
+  // String secondName = it.next().getName();
+  // assert(firstName.equals("test") || firstName.equals("test2"));
+  // assert(secondName.equals("test") || secondName.equals("test2"));
+  // assert(!firstName.equals(secondName));
 
-   ps.getChildren().get(0).getPlayer().setPlaying(false);
+  // ps.getChildren().get(0).getPlayer().setPlaying(false);
 
-   Set<AbstractPlayer> pleft2 = ps.playersLeft();
-   assert(ps.numPlayersLeft() == 1);
-   assert(pleft2.iterator().next().getName().equals("test2"));
-   }
+  // Set<AbstractPlayer> pleft2 = ps.playersLeft();
+  // assert(ps.numPlayersLeft() == 1);
+  // assert(pleft2.iterator().next().getName().equals("test2"));
+
+  // ps.closeAll();
+  // }
+  // catch(Exception e){
+  // e.printStackTrace();
+  // }
+  // }
 
   @Test
   public void test_assignGroups() {
@@ -324,8 +338,8 @@ public class ParentServerTest {
    //out.displayBoard(ps.getBoard());
    ps.addOrdersToMap(orders);
    Map<String, List<OrderInterface>> orderMap = ps.getOrderMap();
-   assert(orderMap.containsKey("PlacementOrder"));
-   assert(orderMap.get("PlacementOrder").size() == regions.size());
+   assert(orderMap.containsKey("NotCombat"));
+   assert(orderMap.get("NotCombat").size() == regions.size());
    ps.applyOrders();
    //System.out.println("Board after adding 1 to all regions");
    String placementEnd1 = out.createBoard(ps.getBoard());
@@ -364,11 +378,9 @@ public class ParentServerTest {
    //out.displayBoard(ps.getBoard());
    ps.addOrdersToMap(orders);
    orderMap = ps.getOrderMap();
-   assert(orderMap.keySet().size() == 2);
-   assert(orderMap.containsKey("PlacementOrder"));
-   assert(orderMap.get("PlacementOrder").size() == regions.size());
-   assert(orderMap.containsKey("MoveOrder"));
-   assert(orderMap.get("MoveOrder").size() == 5);
+   assert(orderMap.keySet().size() == 1);
+   assert(orderMap.containsKey("NotCombat"));
+   assert(orderMap.get("NotCombat").size() == regions.size()+5);
    ps.applyOrders();
    //System.out.println("Board after adding 1 to all regions");
    String moveEnd1 = out.createBoard(ps.getBoard());
@@ -412,13 +424,10 @@ public class ParentServerTest {
    //out.displayBoard(ps.getBoard());
    ps.addOrdersToMap(orders);
    orderMap = ps.getOrderMap();
-   assert(orderMap.keySet().size() == 4);
-   assert(orderMap.containsKey("PlacementOrder"));
-   assert(orderMap.get("PlacementOrder").size() == regions.size());
-   assert(orderMap.containsKey("MoveOrder"));
-   assert(orderMap.get("MoveOrder").size() == 5);
-   assert(orderMap.containsKey("AttackMove"));
-   assert(orderMap.get("AttackMove").size() == 2);
+System.out.println(orderMap.keySet());
+   assert(orderMap.keySet().size() == 2);
+   assert(orderMap.containsKey("NotCombat"));
+   assert(orderMap.get("NotCombat").size() == regions.size()+5+2);
    assert(orderMap.containsKey("AttackCombat"));
    assert(orderMap.get("AttackCombat").size() == 2);
 
@@ -821,7 +830,7 @@ public class ParentServerTest {
 
     //P2 suddenly closes
     cout.displayString("P2 suddenly closes");
-    cout.displayString("We expect two stacktraces here.\n One will be for the childserver of connection reset. This is the thread realizing the socket is dead. Look for ThreadPoolExecutor near end.\n Two will be for the ParentServer of socket closed. This is when it is closing everything and it tries to close the pre-closed childserver connection.\n");
+    cout.displayString("We expect childserver of connection reset. This is the thread realizing the socket is dead.\n");
     c2.close();
 
     cout.displayString("After waiting for timeout moves will be applied");
@@ -868,6 +877,671 @@ public class ParentServerTest {
     c1out.close();
     c2in.close();
     c2out.close();
+    }
+
+  @Test
+  public void test_NotCombat(){
+    //Test to make sure orders are properly cast and attackCombat are combined
+    AbstractPlayer player1 = new HumanPlayer("player1");
+    AbstractPlayer player2 = new HumanPlayer("player2");
+    Unit unit = new Unit(0);
+    Unit adjUnit = new Unit(10);
+    Region region1 = new Region(player1, unit);
+    region1.setName("Earth");
+    Region region2 = new Region(player2, adjUnit);
+    region2.setName("Wind");
+    List<Region> adjRegion1 = new ArrayList<Region>();
+    adjRegion1.add(region2);
+    region1.setAdjRegions(adjRegion1);
+    List<Region> adjRegion2 = new ArrayList<Region>();
+    adjRegion2.add(region1);
+    region2.setAdjRegions(adjRegion2);
+    List<Region> regions = new ArrayList<Region>();
+    regions.add(region1);
+    regions.add(region2);
+    Board board = new Board(regions);
+    //Above creations two regions, adjacent to each other
+    //Earth owned by player1 with 0 units
+    //Wind owned by player2 with 10 units
+    
+    ParentServer ps = new ParentServer();
+    ps.setBoard(board);
+    //Attack from Wind to Earth with 3 then 2 units, move 1 from Wind to Wind
+    //Expect two attackMoves (one with 3 one with 2) from Wind
+    //Expect one move
+    //Expect one attackCombat with 5 from Wind
+    List<OrderInterface> orders = new ArrayList<OrderInterface>();
+    orders.add(new AttackMove(regions.get(1), regions.get(0), new Unit(3)));
+    orders.add(new AttackCombat(regions.get(1), regions.get(0), new Unit(3)));
+    orders.add(new AttackMove(regions.get(1), regions.get(0), new Unit(2)));
+    orders.add(new AttackCombat(regions.get(1), regions.get(0), new Unit(2)));
+    orders.add(new MoveOrder(regions.get(1), regions.get(1), new Unit(1)));
+    ps.addOrdersToMap(orders);
+    Map<String, List<OrderInterface>> orderMap = ps.getOrderMap();
+    assert(orderMap.keySet().size() == 2);
+    assert(orderMap.get("NotCombat").size() == 3);
+    assert(orderMap.get("AttackCombat").size() == 1);
+    List<Integer> expUnits = new ArrayList<Integer>();
+    expUnits.add(new Integer(5));
+    for(int i = 0; i < 6; i++){ expUnits.add(new Integer(0)); }
+    SourceDestinationOrder attackOrder = (SourceDestinationOrder) orderMap.get("AttackCombat").get(0);
+    assert(attackOrder.getUnits().getUnits().equals(expUnits));
+    assert(orderMap.get("NotCombat").get(0) instanceof AttackMove);
+    assert(orderMap.get("NotCombat").get(1) instanceof AttackMove);
+    assert(orderMap.get("NotCombat").get(2) instanceof MoveOrder);
+  }
+
+    @Test
+    void test_spectate() throws IOException, ClassNotFoundException,
+    InterruptedException{
+    TextDisplay cout = new TextDisplay();
+
+    //Set to 2 players so we don't have to wait forever...
+    int port = 12352;
+    MasterServer ms = new MasterServer("", port);
+    ParentServer server = new ParentServer(1, ms);
+    ms.addParentServer(server);
+    server.setMAX_PLAYERS(3);
+
+    AbstractPlayer player1 = new HumanPlayer("Group A");
+    AbstractPlayer player2 = new HumanPlayer("Group B");
+    AbstractPlayer player3 = new HumanPlayer("Group C");
+    Region region1 = new Region(player1, new Unit(0));
+    region1.setName("A");
+    Region region2 = new Region(player2, new Unit(0));
+    region2.setName("B");
+    Region region3 = new Region(player3, new Unit(0));
+    region3.setName("C");
+    List<Region> adjRegion1 = new ArrayList<Region>();
+    adjRegion1.add(region2);
+    adjRegion1.add(region3);
+    region1.setAdjRegions(adjRegion1);
+    List<Region> adjRegion2 = new ArrayList<Region>();
+    adjRegion2.add(region1);
+    adjRegion2.add(region3);
+    region2.setAdjRegions(adjRegion2);
+    List<Region> adjRegion3 = new ArrayList<Region>();
+    adjRegion3.add(region1);
+    adjRegion3.add(region2);
+    region3.setAdjRegions(adjRegion3);
+    List<Region> regions = new ArrayList<Region>();
+    regions.add(region1);
+    regions.add(region2);
+    regions.add(region3);
+    Board boardNew = new Board(regions);
+    //Above creates 3 regions in triangle
+
+    //Set max turn time to 10 seconds...
+    server.setTURN_WAIT_MINUTES(10.0/60);
+    Thread masterThread = new Thread(ms);
+    Thread serverThread = new Thread(server);
+    ms.start();
+    serverThread.start();
+
+    Thread.sleep(1000);
+    //Headless sockets connect
+    Socket c1 = new Socket("localhost", port);
+    ObjectInputStream c1in = new ObjectInputStream(c1.getInputStream());
+    ObjectOutputStream c1out = new ObjectOutputStream(c1.getOutputStream());
+    Thread.sleep(5000);
+    Socket c2 = new Socket("localhost", port);
+    ObjectInputStream c2in = new ObjectInputStream(c2.getInputStream());
+    ObjectOutputStream c2out = new ObjectOutputStream(c2.getOutputStream());
+    Thread.sleep(5000);
+    Socket c3 = new Socket("localhost", port);
+    ObjectInputStream c3in = new ObjectInputStream(c3.getInputStream());
+    ObjectOutputStream c3out = new ObjectOutputStream(c3.getOutputStream());
+
+    Board board;
+    ConfirmationMessage confirmation;
+    StringMessage string;
+    HumanPlayer player;
+
+    //After connection need to register as new players (player1, player2);
+    //Player 1 register
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+    c1out.writeObject(new ConfirmationMessage(false));
+    c1out.writeObject(new StringMessage("Player 1"));
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("Salt");
+    cout.displayString(string.unpacker());
+    c1out.writeObject(new StringMessage("123"));
+    c1out.writeObject(new StringMessage("123"));
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+
+    //Player 2 register
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+    c2out.writeObject(new ConfirmationMessage(false));
+    c2out.writeObject(new StringMessage("Player 2"));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Salt");
+    cout.displayString(string.unpacker());
+    c2out.writeObject(new StringMessage("123"));
+    c2out.writeObject(new StringMessage("123"));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+
+    //Player 3 register
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+    c3out.writeObject(new ConfirmationMessage(false));
+    c3out.writeObject(new StringMessage("Player 3"));
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("Salt");
+    cout.displayString(string.unpacker());
+    c3out.writeObject(new StringMessage("123"));
+    c3out.writeObject(new StringMessage("123"));
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+
+    //Player 1 joins, player 2 joins
+    c1out.writeObject(new ConfirmationMessage(false));
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("Games List");
+    cout.displayString(string.unpacker());
+    c1out.writeObject(new IntegerMessage(1));
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c1in.readObject());
+
+    //Player 2 join
+    c2out.writeObject(new ConfirmationMessage(false));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Games List");
+    cout.displayString(string.unpacker());
+    c2out.writeObject(new IntegerMessage(1));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c2in.readObject());
+
+    //Player 3 join
+    c3out.writeObject(new ConfirmationMessage(false));
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("Games List");
+    cout.displayString(string.unpacker());
+    c3out.writeObject(new IntegerMessage(1));
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c3in.readObject());
+
+    //After connection should send HumanPlayer for the child
+    //c2 waits 5 seconds, should be second
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+
+    player = (HumanPlayer)(c2in.readObject());
+    cout.displayString("c2 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 2", player.getName());
+
+    player = (HumanPlayer)(c3in.readObject());
+    cout.displayString("c3 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 3", player.getName());
+
+    Thread.sleep(2000);
+    server.setBoard(boardNew);
+
+    //Next firstCall of run()
+    //First sends board with Group names --> should be same
+    board = (Board)(c1in.readObject());
+    cout.displayString("c1 board initial");
+    cout.displayBoard(board);
+    board = (Board)(c2in.readObject());
+    cout.displayString("c2 board initial");
+    cout.displayBoard(board);
+    board = (Board)(c3in.readObject());
+    cout.displayString("c3 board initial");
+    cout.displayBoard(board);
+
+    //Player 2 selects group B
+    c2out.writeObject(new StringMessage("Group B"));
+    //Server sees good --> success message
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 response expected success");
+    cout.displayString(string.unpacker());
+    //Server sends back with player 2 for B groups
+    board = (Board)(c2in.readObject());
+    cout.displayString("c2 board after take group b");
+    cout.displayBoard(board);
+
+    //Now player 1 tries to take group q (invalid input)
+    c1out.writeObject(new StringMessage("Group Q"));
+    //Should fail
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 response expected fail");
+    cout.displayString(string.unpacker());
+    //Resends updated map where Group B --> player 2
+    board = (Board)(c1in.readObject());
+    cout.displayString("c1 board after c2 takes group b");
+    cout.displayBoard(board);
+    //Take Group A
+    c1out.writeObject(new StringMessage("Group A"));
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 response expected success");
+    cout.displayString(string.unpacker());
+    //Server sends board
+    board = (Board)(c1in.readObject());
+    cout.displayString("c1 board after take group a");
+    cout.displayBoard(board);
+    //Take Group C
+    c3out.writeObject(new StringMessage("Group C"));
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 response expected success");
+    cout.displayString(string.unpacker());
+    //Server sends board
+    board = (Board)(c3in.readObject());
+    cout.displayString("c3 board after take group c");
+    cout.displayBoard(board);
+
+    //Now both players would be creating placement orders...
+    //Create disconnected client object for generating order lists...
+    ClientInputInterface clientIn = getClientIn("");
+    ClientOutputInterface writeToNothing = new TextDisplay(new PrintWriter(new
+    PrintStream(new ByteArrayOutputStream())));
+    Client fakeClient = new Client(clientIn, writeToNothing, null);
+
+    OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", fakeClient);
+    OrderHelper orderhelper = new OrderHelper(fakeClient);
+
+    //Both clients asked create placements...
+    //Player 1 will place 3 on all
+    //Need to set board/player for client placements
+    fakeClient.setBoard(board);
+    fakeClient.setPlayer(new HumanPlayer("Player 1"));
+    String placements;
+    List<OrderInterface> initialPlacements = new ArrayList<OrderInterface>();
+    placements = "3\n";
+    fakeClient.setClientInput(getClientIn(placements));
+    placement.addToOrderList(initialPlacements);
+    c1out.writeObject(initialPlacements);
+    //Player 1 will get success
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 placements expected success");
+    cout.displayString(string.unpacker());
+
+    //p2 place 3
+    fakeClient.setPlayer(new HumanPlayer("Player 2"));
+    initialPlacements = new ArrayList<OrderInterface>();
+    placements = "3\n";
+    fakeClient.setClientInput(getClientIn(placements));
+    placement.addToOrderList(initialPlacements);
+    c2out.writeObject(initialPlacements);
+    //Player 2 will get success
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 placements expected success");
+    cout.displayString(string.unpacker());
+
+    //p3 place 3
+    fakeClient.setPlayer(new HumanPlayer("Player 3"));
+    initialPlacements = new ArrayList<OrderInterface>();
+    placements = "3\n";
+    fakeClient.setClientInput(getClientIn(placements));
+    placement.addToOrderList(initialPlacements);
+    c3out.writeObject(initialPlacements);
+    //Player 2 will get success
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 placements expected success");
+    cout.displayString(string.unpacker());
+
+    //Parent should wait --> apply all
+    //Now should be in main game loop (past this point client doesn't care about
+    //board/player)
+    //Both should get "Continue", true alive message, and board
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c1in.readObject());
+    cout.displayString("c1 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c1in.readObject());
+    cout.displayString("c1 board");
+    cout.displayBoard(board);
+
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c2in.readObject());
+    cout.displayString("c2 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c2in.readObject());
+    cout.displayString("c2 board");
+    cout.displayBoard(board);
+    
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c3in.readObject());
+    cout.displayString("c3 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c3in.readObject());
+    cout.displayString("c3 board");
+    cout.displayBoard(board);
+
+    //Now give player 1 100 units
+    board = server.getBoard();
+    board.getRegions().get(0).setUnits(new Unit(100));
+    board.getRegions().get(0).getOwner().setPlayerResource(new PlayerResources(100000,100000));
+    server.setBoard(board);
+
+    //Now input moves...
+    List<OrderInterface> orders;
+    fakeClient.setBoard(board);
+
+    cout.displayString("P1 nothing");
+    String p1move = "D\n";
+    fakeClient.setClientInput(getClientIn(p1move));
+    orders = orderhelper.createOrders();
+    c1out.writeObject(orders);
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 order expected success");
+    cout.displayString(string.unpacker());
+
+    cout.displayString("P2 nothing");
+    String p2move = "D\n";
+    fakeClient.setClientInput(getClientIn(p2move));
+    orders = orderhelper.createOrders();
+    c2out.writeObject(orders);
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 order expected success");
+    cout.displayString(string.unpacker());
+
+    
+    cout.displayString("P3 nothing");
+    String p3move = "D\n";
+    fakeClient.setClientInput(getClientIn(p3move));
+    orders = orderhelper.createOrders();
+    c3out.writeObject(orders);
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 order expected success");
+    cout.displayString(string.unpacker());
+    
+
+    //Start turn stuff
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c1in.readObject());
+    cout.displayString("c1 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c1in.readObject());
+    cout.displayString("c1 board");
+    cout.displayBoard(board);
+
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c2in.readObject());
+    cout.displayString("c2 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c2in.readObject());
+    cout.displayString("c2 board");
+    cout.displayBoard(board);
+    
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c3in.readObject());
+    cout.displayString("c3 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c3in.readObject());
+    cout.displayString("c3 board");
+    cout.displayBoard(board);
+
+    fakeClient.setBoard(board);
+
+    //P2 does nothing
+    cout.displayString("P2 does nothing");
+    p2move = "D\n";
+    fakeClient.setClientInput(getClientIn(p2move));
+    orders = orderhelper.createOrders();
+    c2out.writeObject(orders);
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 order expected success");
+    cout.displayString(string.unpacker());
+    
+    cout.displayString("P3 nothing");
+    p3move = "D\n";
+    fakeClient.setClientInput(getClientIn(p3move));
+    orders = orderhelper.createOrders();
+    c3out.writeObject(orders);
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 order success");
+    cout.displayString(string.unpacker());
+
+    //P1 attacks C with 99
+    cout.displayString("P1 attacks c with 99");
+    p1move = "A\nA\nC\n99\n" +"D\n";
+    fakeClient.setClientInput(getClientIn(p1move));
+    orders = orderhelper.createOrders();
+    c1out.writeObject(orders);
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 order expected success");
+    cout.displayString(string.unpacker());
+
+    //Turn ends....
+    cout.displayString("Parent now applies orders...");
+    cout.displayString("C should taken by A");
+
+    //Start turn stuff
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c1in.readObject());
+    cout.displayString("c1 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c1in.readObject());
+    cout.displayString("c1 board");
+    cout.displayBoard(board);
+
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c2in.readObject());
+    cout.displayString("c2 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c2in.readObject());
+    cout.displayString("c2 board");
+    cout.displayBoard(board);
+
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c3in.readObject());
+    cout.displayString("c3 alive expected false");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+
+    fakeClient.setBoard(board);
+
+    //P2 does nothing
+    cout.displayString("P2 does nothing");
+    p2move = "D\n";
+    fakeClient.setClientInput(getClientIn(p2move));
+    orders = orderhelper.createOrders();
+    c2out.writeObject(orders);
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("c2 order expected success");
+    cout.displayString(string.unpacker());
+
+    //P1 does nothing
+    cout.displayString("P1 does nothing");
+    p1move = "D\n";
+    fakeClient.setClientInput(getClientIn(p1move));
+    orders = orderhelper.createOrders();
+    c1out.writeObject(orders);
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 order expected success");
+    cout.displayString(string.unpacker());
+
+    //P3 will spectate
+    //Send back true and get board
+    c3out.writeObject(new ConfirmationMessage(true));
+    board = (Board)(c3in.readObject());
+    cout.displayString("c3 board");
+    cout.displayBoard(board);
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 spectate success");
+    cout.displayString(string.unpacker());
+
+    //P1 does start turn
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c1in.readObject());
+    cout.displayString("c1 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c1in.readObject());
+    cout.displayString("c1 board");
+    cout.displayBoard(board);
+
+
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c3in.readObject());
+    cout.displayString("c3 alive expected false");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c3in.readObject());
+    cout.displayString("c3 board");
+    cout.displayBoard(board);
+
+    //P1 does nothing
+    cout.displayString("P1 moves does nothing");
+    p1move = "D\n";
+    fakeClient.setClientInput(getClientIn(p1move));
+    orders = orderhelper.createOrders();
+    c1out.writeObject(orders);
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 order expected success");
+    cout.displayString(string.unpacker());
+
+    //P3 spectate
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 spectate success");
+    cout.displayString(string.unpacker());
+
+    //P2 suddenly closes
+    cout.displayString("P2 suddenly closes");
+    cout.displayString("We expect childserver of connection reset. This is the thread realizing the socket is dead.\n");
+    c2.close();
+
+    cout.displayString("After waiting for timeout moves will be applied");
+    cout.displayString("Server should wait until MAX_MISSED then inform player 1 that they won and close socket");
+
+    for(int i = 0; i < Constants.MAX_MISSED; i++){
+    //P1 does start turn
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c1in.readObject());
+    cout.displayString("c1 alive expected true");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c1in.readObject());
+    cout.displayString("c1 board");
+    cout.displayBoard(board);
+
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn start");
+    cout.displayString(string.unpacker());
+    confirmation = (ConfirmationMessage)(c3in.readObject());
+    cout.displayString("c3 alive expected false");
+    cout.displayString(String.valueOf(confirmation.unpacker()));
+    board = (Board)(c3in.readObject());
+    cout.displayString("c3 board");
+    cout.displayBoard(board);
+
+    //P1 does nothing
+    cout.displayString("P1 moves does nothing");
+    p1move = "D\n";
+    fakeClient.setClientInput(getClientIn(p1move));
+    orders = orderhelper.createOrders();
+    c1out.writeObject(orders);
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 order expected success");
+    cout.displayString(string.unpacker());
+
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 spectate expected success");
+    cout.displayString(string.unpacker());
+    }
+
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString(string.unpacker());
+
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 turn message");
+    cout.displayString(string.unpacker());
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString(string.unpacker());
+
+    Thread.sleep(500);
+
+    assert(c1.getInputStream().read() == -1);
+
+    c1.close();
+    c1in.close();
+    c1out.close();
+    c2in.close();
+    c2out.close();
+    c3.close();
+    c3in.close();
+    c3out.close();
     }
 
 }

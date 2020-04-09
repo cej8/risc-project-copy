@@ -399,11 +399,43 @@ public class ParentServer extends Thread{
 
       String className = castOrder.getClass().getName();
       className = className.substring(className.lastIndexOf('.') + 1);
+      //Handle non-combat in order
+      if(!className.equals("AttackCombat")){
+        className = "NotCombat";
+      }
 
       // Add list if not present for order type
       if (!orderMap.containsKey(className)) {
         orderMap.put(className, new ArrayList<OrderInterface>());
       }
+
+      //Combine attacks to same region by same player
+      if(className.equals("AttackCombat")){
+        boolean foundOrder = false;
+        SourceDestinationOrder sdOrderNew = (SourceDestinationOrder) castOrder;
+        //Create copy of source to prevent A-->B, B-->C issue where B is taken by A (then B->C would be A's)
+        sdOrderNew.setSource((Region)DeepCopy.deepCopy(sdOrderNew.getSource()));
+        for(OrderInterface combatOrder : orderMap.get("AttackCombat")){
+          if(foundOrder){ break; }
+          //If both have same source owner and go to same region
+          //Then order in list gets new order's units added to it
+          SourceDestinationOrder sdOrderOld = (SourceDestinationOrder) combatOrder;
+           if(sdOrderNew.getSource().getOwner().getName().equals(sdOrderOld.getSource().getOwner().getName()) &&
+             sdOrderNew.getDestination().getName().equals(sdOrderOld.getDestination().getName())){
+             List<Integer> oldOrderUnits = sdOrderOld.getUnits().getUnits();
+             List<Integer> newOrderUnits = sdOrderNew.getUnits().getUnits();
+             //Add newOrderUnits to oldOrderUnits
+             for(int i = 0; i < newOrderUnits.size(); i++){
+               oldOrderUnits.set(i, oldOrderUnits.get(i)+newOrderUnits.get(i));
+             }
+             //Set oldOrderUnits to sum
+             foundOrder = true;
+          }
+        }
+        //if found then do not add (immediately continue)
+        if(foundOrder){ continue; }
+      }
+
       // Add order to list
       orderMap.get(className).add(castOrder);
     }
@@ -416,6 +448,7 @@ public class ParentServer extends Thread{
     turnResults = new StringBuilder("Turn " + turnNumber + ":\n");
 
     // Reshuffle all subLists
+    /*
     for (String key : orderMap.keySet()) {
       List<OrderInterface> orders = orderMap.get(key);
 
@@ -438,7 +471,16 @@ public class ParentServer extends Thread{
     }
           if (orderMap.containsKey("TechBoost")) {
       applyOrderList(orderMap.get("TechBoost"));
+    }*/
+    //Do all not combat first then attackCombat random ordered
+    if(orderMap.containsKey("NotCombat")){
+      applyOrderList(orderMap.get("NotCombat"));
     }
+    if(orderMap.containsKey("AttackCombat")){
+      Collections.shuffle(orderMap.get("AttackCombat"));
+      applyOrderList(orderMap.get("AttackCombat"));
+    }
+
   }
 
   public void applyOrderList(List<OrderInterface> orders) {
