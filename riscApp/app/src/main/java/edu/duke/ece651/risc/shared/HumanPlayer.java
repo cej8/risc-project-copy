@@ -6,14 +6,16 @@ import java.io.*;
 public class HumanPlayer extends AbstractPlayer {
   private static final long serialVersionUID = 6L;
   public HumanPlayer(){
-    
+    this.isPlaying = true;
+    this.playerResource = new PlayerResources(Constants.STARTING_FUEL_PRODUCTION, Constants.STARTING_TECH_PRODUCTION);
+    maxTechLevel = new TechnologyLevel();
   }
 
   public HumanPlayer(String name) {//testing construcotr for tests that do no dpend on socket connection
     this.isPlaying = true;
     this.name = name;
     maxTechLevel = new TechnologyLevel();
-    this.playerResource = new PlayerResources(Constants.STARTING_FOOD, Constants.STARTING_TECH);
+    this.playerResource = new PlayerResources(Constants.STARTING_FUEL_PRODUCTION, Constants.STARTING_TECH_PRODUCTION);
 
   }
   

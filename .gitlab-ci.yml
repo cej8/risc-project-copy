@@ -8,8 +8,11 @@ before_script:
 stages:
    - build
    - test
-   - coverage
    - deploy
+   - build_stable
+   - test_stable
+   - coverage_stable
+   - deploy_stable
   # - test-deployment
    
 build:
@@ -18,32 +21,64 @@ build:
   stage: build
   script: docker build --build-arg LOCAL_USER_ID=`id -u`  --tag citest .
 
+
 test:
   tags:
      - ece651
   stage: test
   script: scripts/run-tests-in-docker.sh
-  artifacts:
-    paths:
-      - coverage
-      
-pages:
- stage: coverage
- tags:
-     - ece651
- dependencies:
-   - test
- script:
-   - mv coverage public/
- artifacts:
-   paths:
-     - public
 
 deploy:
  tags:
    - ece651
  stage: deploy
- script: ./scripts/redeploy.sh  
+ script: ./scripts/redeploy.sh
+
+build_stable:
+  tags:
+     - host-server
+  stage: build_stable
+  script: docker build --build-arg LOCAL_USER_ID=`id -u`  --tag citest .
+  only:
+    refs:
+     - master
+
+
+test_stable:
+  tags:
+     - host-server
+  stage: test_stable
+  script: scripts/run-tests-in-docker.sh
+  artifacts:
+    paths:
+      - coverage
+  only:
+    refs:
+      - master
+      
+pages:
+ stage: coverage_stable
+ tags:
+     - host-server
+ dependencies:
+   - test_stable
+ script:
+   - mv coverage public/
+ artifacts:
+   paths:
+     - public
+ only:
+   refs:
+     - master
+
+deploy_stable:
+ tags:
+   - host-server
+ stage: deploy_stable
+ script: ./scripts/redeploy.sh
+ only:
+   refs:
+     - master
 
 #test-deployment:
  #tags:

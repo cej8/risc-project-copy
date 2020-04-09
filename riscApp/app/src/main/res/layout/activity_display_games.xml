@@ -6,13 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".DisplayGamesActivity">
 
+    <TextView
+        android:id="@+id/idHelpText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity=""
+        android:text="Enter a game ID to start playing"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </TextView>
+
     <ScrollView
-        android:layout_width="409dp"
-        android:layout_height="559dp"
+        android:id="@+id/scrollView2"
+        android:layout_width="422dp"
+        android:layout_height="439dp"
+        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.228">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,26 +37,26 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/joinGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginLeft="35dp"
-        android:layout_marginBottom="100dp"
-        android:text="Join Game"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:onClick="joinGame"/>
-
-    <Button
-        android:id="@+id/newGame"
+        android:id="@+id/startGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="35dp"
         android:layout_marginRight="35dp"
         android:layout_marginBottom="100dp"
-        android:text="New Game"
+        android:text="Start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:onClick="newGame"/>
+
+    <EditText
+        android:id="@+id/gameID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:text="ID"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent">
+    </EditText>
 </androidx.constraintlayout.widget.ConstraintLayout>

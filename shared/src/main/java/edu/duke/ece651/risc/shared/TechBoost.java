@@ -4,7 +4,7 @@ public class TechBoost implements PlayerOrder {
   //this class represents an upgrade order that is issued by a player to increase their maximum technology level
   private static final long serialVersionUID = 15L;
   
-  AbstractPlayer player;
+private  AbstractPlayer player;
   public TechBoost(AbstractPlayer p){
     setPlayer(p);
   }
@@ -15,7 +15,9 @@ public class TechBoost implements PlayerOrder {
       //increase level
     player.getMaxTechLevel().upgradeLevel();
     
-		return null;
+	  StringBuilder sb = new StringBuilder(player.getName() + " upgrade to tech level " + player.getMaxTechLevel().getMaxTechLevel()+" \n");
+    return sb.toString();
+
 	}
 
 	@Override

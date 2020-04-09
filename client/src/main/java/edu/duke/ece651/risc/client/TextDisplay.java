@@ -44,7 +44,7 @@ public class TextDisplay implements ClientOutputInterface {
     List<AbstractPlayer> players = new ArrayList<AbstractPlayer>(playerRegionMap.keySet());
     Collections.sort(players);
     for(AbstractPlayer player : players) { //for each entry in the map
-      boardText.append(player.getName() + ": \n---------\n"); //append player name
+      boardText.append(player.getName() + ": \nFuel: " + player.getResources().getFuelResource().getFuel() + "  Tech: " + player.getResources().getTechResource().getTech()+ "\n------------------\n"); //append player name
       for (Region r : playerRegionMap.get(player)){ //for each region the player has
         boardText.append(this.printRegionInfo(r)); //add its info to board
       }
