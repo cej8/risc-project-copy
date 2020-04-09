@@ -251,6 +251,9 @@ public class ClientGUI extends Thread implements ClientInterface {
         try {
 
             player = (HumanPlayer) (connection.receiveObject());
+            // set player
+            ParentActivity parentActivity = new ParentActivity();
+            parentActivity.setPlayer(player);
 
             clientOutput.displayString("Successfully connected, you are named: " + player.getName());
             clientOutput.displayString("Please wait for more players to connect");
@@ -336,8 +339,13 @@ public class ClientGUI extends Thread implements ClientInterface {
 
     @Override
     public void run(){
-        GUIClientLogin clientLogin = new GUIClientLogin(loginModel,connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
-        firstCall=clientLogin.Login();
+        try {
+            GUIClientLogin clientLogin = new GUIClientLogin(loginModel,ParentActivity.getConnection(), clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
+            String firstCallWait = loginModel.getFirstCall();
+            firstCall = clientLogin.Login();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         playGame();
     }
 }

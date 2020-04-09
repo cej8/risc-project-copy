@@ -1,13 +1,18 @@
 package edu.duke.ece651.risc.gui;
 
+import edu.duke.ece651.risc.shared.Connection;
+
 public class LoginModel {
     private static String startGroup = null;
     private static boolean startConnection = false;
     private static String loginUsername = null;
     private static String loginPassword = null;
     private static String registerPassword = null;
-    private static boolean loginResult = false;
-    private static boolean registrationAlert = false;
+    //private static boolean loginResult = false;
+    private static String loginResult = null;
+    private static String registrationAlert = null;
+    private static String firstCall = null;
+    private static Connection connection = null;
 
     //------- Connection blocking
     public synchronized boolean getConnection() throws InterruptedException {
@@ -20,12 +25,22 @@ public class LoginModel {
         startConnection = s;
         notifyAll();
     }
+//    synchronized Connection getConnection() throws InterruptedException{
+//        while (connection == null){
+//            wait();
+//        }
+//        return connection;
+//    }
+//    public synchronized void setConnection(Connection c){
+//        connection = c;
+//        notifyAll();
+//    }
     //-------- Login / Registration
-    public synchronized void setRegistrationAlert(boolean reg){
+    public synchronized void setRegistrationAlert(String reg){
         registrationAlert = reg;
     }
-    public synchronized boolean getRegistrationAlert() throws InterruptedException{
-        while(!registrationAlert){
+    public synchronized String getRegistrationAlert() throws InterruptedException{
+        while(registrationAlert == null){
             wait();
         }
         return registrationAlert;
@@ -51,15 +66,26 @@ public class LoginModel {
         loginUsername = s;
         notifyAll();
     }
-    synchronized boolean getLoginResult() throws InterruptedException{
-        while (!loginResult){
+    synchronized String getLoginResult() throws InterruptedException{
+        while (loginResult == null){
             wait();
         }
         return loginResult;
     }
-    synchronized void setLoginResult(Boolean r){
+    synchronized void setLoginResult(String r){
         loginResult = r;
         notifyAll();
+    }
+    //------- First Call
+    synchronized void setFirstCall(String s){
+        firstCall = s;
+        notifyAll();
+    }
+    synchronized String getFirstCall() throws InterruptedException{
+        while(firstCall == null){
+            wait();
+        }
+        return firstCall;
     }
     //------- Registration blocking
     synchronized String getConfirmationPassword() throws InterruptedException{

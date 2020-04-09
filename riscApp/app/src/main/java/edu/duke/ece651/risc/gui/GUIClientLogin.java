@@ -53,6 +53,7 @@ public class GUIClientLogin {//extends Thread{
             connection.closeAll();
             clientInput.close();
         }
+        model.setFirstCall(Boolean.toString(firstCall));
         return firstCall;
     }
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
@@ -70,7 +71,8 @@ public class GUIClientLogin {//extends Thread{
         StringMessage message = (StringMessage) (connection.receiveObject());
         String str = message.unpacker();
        while(true){
-           boolean loginBoolean = model.getRegistrationAlert();
+           String loginString = model.getRegistrationAlert();
+           boolean loginBoolean = Boolean.parseBoolean(loginString);
             connection.sendObject(new ConfirmationMessage(loginBoolean));
            //connection.sendObject(new StringMessage(username));
 
@@ -127,14 +129,14 @@ public class GUIClientLogin {//extends Thread{
             //Repeat if fail, continue if success
             if (response.matches("^Fail:.*$")) {
                this.loginResult = false;
-                model.setLoginResult(false);
+                model.setLoginResult(Boolean.toString(loginResult));
                 clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
                 Log.d("GUIClientLogin", loginResult.toString());
                continue;
             }
             if (response.matches("^Success:.*$")) {
                this.loginResult = true;
-                model.setLoginResult(true);
+                model.setLoginResult(Boolean.toString(loginResult));
                 Log.d("GUIClientLogin", loginResult.toString());
                break;
 

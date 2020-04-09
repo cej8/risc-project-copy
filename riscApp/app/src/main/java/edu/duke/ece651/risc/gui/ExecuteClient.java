@@ -58,26 +58,26 @@ public class ExecuteClient {
         try {
             port = Integer.parseInt(portS);
         } catch (NumberFormatException ne) {
-            //textView.setText("Port invalid");
             Log.d("Port", "Invalid");
             return;
         }
         //GUIClient guiClient = new GUIClient(clientInput,clientOutput,addr,port);
         // Start Client thread with server
         //guiClient.start();
-        //loginModel.setConnection(true);
+        loginModel.setConnection(true);
         ConnectionManager makeConnection = new ConnectionManager(addr,port);
         makeConnection.connectGame();
         this.connection = ParentActivity.getConnection();
      //   GUIClientLogin clientLogin = new GUIClientLogin(loginModel,loginModel.getRegistrationAlert(),connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
+        // TODO: nothing blocking it from starting playGame
         ClientGUI clientGUI= new ClientGUI(clientInput,clientOutput,this.connection);
         clientGUI.start();
 
 
     }
-    public void registrationAlert(boolean registrationAlert){
+    public void registrationAlert(String registrationAlert){
         loginModel.setRegistrationAlert(registrationAlert);
-        if (registrationAlert){
+        if (registrationAlert.equals("true")){
             Intent loginIntent = new Intent(act,LoginActivity.class);
             act.startActivity(loginIntent);
         } else {
@@ -91,6 +91,7 @@ public class ExecuteClient {
 
       //  Log.d("line test","sadsalsaldkj");
        // if(model.getLoginResult()) {
+        String loginResult = loginModel.getLoginResult();
         // TODO: error handling if wrong login, currently still sends you to GameTypeActivity.class
             Intent loginIntent = new Intent(act, GameTypeActivity.class);
             Log.d("Login", "true");
