@@ -130,7 +130,6 @@ public class ExecuteClient {
         //placement.putExtra("GAMELIST", games);
         act.startActivity(lobby);
     }
-
     public String getHelpText() {
         return this.helpText;
     }
@@ -203,8 +202,16 @@ public void showStartBoard(TextView boardView) {
         clientOutput = new GUITextDisplay(helpText);
         final GUIPlayGame guiPlayGame = new GUIPlayGame(true,connection,clientInput,clientOutput,act);
         guiPlayGame.start();
-        while (!guiPlayGame.isGotBoard()){
+        while (!guiPlayGame.isGotBoard()&&(guiPlayGame.getWinner()==null)){
             // wait
+        }
+        if(guiPlayGame.getWinner()!=null){
+            //game over someone has won
+            Intent end = new Intent(act, EndGameActivity.class);
+            end.putExtra("WINNER", guiPlayGame.getWinner());
+            act.startActivity(end);
+            return;
+
         }
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -241,5 +248,12 @@ public void showStartBoard(TextView boardView) {
         // display map
         Intent newGame= new Intent(act, WaitActivity.class);
         act.startActivity(newGame);
+    }
+    public void endGame(){
+
+           connection.closeAll();
+           clientInput.close();
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(1);
     }
 }

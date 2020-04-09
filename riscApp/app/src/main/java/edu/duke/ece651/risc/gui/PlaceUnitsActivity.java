@@ -58,8 +58,8 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         Unit unit;
         Region region;
         for (int j = 0; j < playerRegions.size(); j++){
-            if (j > 5){
-                break;
+            if(j>5) {
+            break;
             }
             unitPlacement = planetUnits.get(j).getText().toString();
             unit = new Unit(Integer.parseInt(unitPlacement));

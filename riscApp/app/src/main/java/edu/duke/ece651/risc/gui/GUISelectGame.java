@@ -104,6 +104,7 @@ public class GUISelectGame extends Thread{
         }
 
 
+
     }
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
