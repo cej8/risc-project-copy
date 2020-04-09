@@ -26,17 +26,29 @@ public class ExecuteClient {
    // Boolean loginResult;
     Activity act;
     String helpText;
+    GameStateModel model;
 
     public ExecuteClient(Activity activity) {
         clientInput = new GUIEditTextInput(activity);
         clientOutput = new GUITextDisplay();
         this.act = activity;
+        ParentActivity parentActivity = new ParentActivity();
+        parentActivity.setActivity(act);
+        this.model = new GameStateModel();
+    }
+    public ExecuteClient(Activity activity, TextView textHelp){
+        clientInput = new GUIEditTextInput(activity);
+        //clientOutput = new GUITextDisplay();
+        this.act = activity;
+        ParentActivity parentActivity = new ParentActivity();
+        parentActivity.setActivity(act);
+        this.model = new GameStateModel();
+        clientOutput = new GUITextDisplay(textHelp);
+        parentActivity.setClientOutput(clientOutput);
     }
 
-    //public void createGame(){
+
     public void createGame() {
-        //String addr = "172.74.90.68"; localhost
-        //String addr = "67.159.89.108"; old server
         String addr = "152.3.64.158";
         String portS = "12345";
         int port;
@@ -47,11 +59,39 @@ public class ExecuteClient {
             Log.d("Port", "Invalid");
             return;
         }
-        ConnectionManager makeConnection = new ConnectionManager(addr, port);
-        makeConnection.start();
-        this.connection = makeConnection.getConnection();
-        ParentActivity parentActivity = new ParentActivity();
-        parentActivity.setConnection(connection);
+        GUIClient guiClient = new GUIClient(clientInput,clientOutput,addr,port);
+        // Start Client thread with server
+        guiClient.start();
+        model.setConnection(true);
+    }
+    public void registrationAlert(boolean registrationAlert){
+        model.setRegistrationAlert(registrationAlert);
+        if (registrationAlert){
+            Intent loginIntent = new Intent(act,LoginActivity.class);
+            act.startActivity(loginIntent);
+        } else {
+            Intent regIntent = new Intent(act,RegisterActivity.class);
+            act.startActivity(regIntent);
+        }
+    }
+    public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+        model.setLoginUsername(username);
+        model.setLoginPassword(password);
+        Log.d("line test","sadsalsaldkj");
+       // if(model.getLoginResult()) {
+        // TODO: error handling if wrong login, currently still sends you to GameTypeActivity.class
+            Intent loginIntent = new Intent(act, GameTypeActivity.class);
+            Log.d("Login", "true");
+            act.startActivity(loginIntent);
+        //}
+    }
+    public void registerLogin(String username, String password, String confirmPassword, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+        model.setLoginUsername(username);
+        model.setLoginPassword(password);
+        model.setRegisterPassword(confirmPassword);
+        Intent loginIntent = new Intent(act, GameTypeActivity.class);
+        Log.d("Register Login", "true");
+        act.startActivity(loginIntent);
     }
 
     public Connection getConnection() {
@@ -62,33 +102,6 @@ public class ExecuteClient {
         this.connection = connection;
     }
 
-    public void registerLogin(String username, String password, String confirmPassword, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
-        clientOutput = new GUITextDisplay(textHelp, act);
-        final GUIClientLogin clientLogin = new GUIClientLogin(connection, clientInput, clientOutput, username, password, act, confirmPassword);
-        clientLogin.start();
-        Boolean loginResult = clientLogin.getLoginResult();
-        while (loginResult == null){
-            loginResult = clientLogin.getLoginResult();
-        }
-        loginResult = clientLogin.getLoginResult();
-        Log.d("Login Result", loginResult.toString());
-
-        if (loginResult == false) {
-            // set help text
-            //helpText.setText("Username or password not found. Please register if needed.");
-            helpText = "User already exists. Please choose another username";
-            setHelpText(helpText);
-            Log.d("Login", "false");
-            Log.d("Helptext", helpText);
-           // setLoginResult(loginResult);
-        } else {
-            // start new intent aka display available games
-            Intent loginIntent = new Intent(act, GameTypeActivity.class);
-            Log.d("Login", "true");
-           // setLoginResult(loginResult);
-            act.startActivity(loginIntent);
-        }
-    }
 
     public void getGames(boolean gameType, boolean getgame) {
         // clientOutput = new GUITextDisplay(gameText,act);
@@ -117,47 +130,6 @@ public class ExecuteClient {
         //placement.putExtra("GAMELIST", games);
         act.startActivity(lobby);
     }
-
-    public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
-        clientOutput = new GUITextDisplay(textHelp, act);
-        final GUIClientLogin clientLogin = new GUIClientLogin(connection, clientInput, clientOutput, username, password, act);
-        clientLogin.start();
-        Boolean loginResult = clientLogin.getLoginResult();
-        while (loginResult == null) {
-            loginResult = clientLogin.getLoginResult();
-        }
-       // clientLogin.close();
-            Log.d("Login Result", loginResult.toString());
-
-            if (loginResult == false) {
-                // set help text
-                helpText = "Username or password not found. Please register if needed.";
-                clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
-                Log.d("Login", "false");
-                Log.d("Helptext", helpText);
-//                Intent loginFalse = new Intent(act,LoginActivity.class);
-//                loginFalse.putExtra("LOGIN","Username or password not found. Please register if needed.");
-//                act.startActivity(loginFalse);
-               // loginGame(reprompt,username,password,textHelp);
-            } else {
-                // start new intent aka display available games
-                Intent loginIntent = new Intent(act, GameTypeActivity.class);
-                Log.d("Login", "true");
-                //setLoginResult(loginResult);
-                act.startActivity(loginIntent);
-            }
-    }
-
-    public void startGame(TextView textView, Activity act, EditText editText) {
-        //ClientInputInterface clientInput = new GUIConsoleInput(editText,act);
-        //ClientOutputInterface clientOutput = new GUITextDisplay(textView,act);
-
-        Log.d("Test Connection", "Test Connection");
-        GUIClient client = new GUIClient(clientInput, clientOutput, connection);
-        //GUIClient client = new GUIClient(clientInput, clientOutput, addr, port);
-        //client.start();
-    }
-
     public String getHelpText() {
         return this.helpText;
     }
@@ -185,7 +157,7 @@ public class ExecuteClient {
 
     }
     public void getBoardAssignments(TextView helpText) {
-        clientOutput = new GUITextDisplay(helpText, act);
+        clientOutput = new GUITextDisplay(helpText);
         final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(connection, clientInput, clientOutput, act);
         initializeBoard.start();
 
@@ -196,13 +168,16 @@ public class ExecuteClient {
 
     }
 public void showStartBoard(TextView boardView) {
-    clientOutput = new GUITextDisplay(boardView, act);
+    clientOutput = new GUITextDisplay(boardView);
     clientOutput.displayBoard(ParentActivity.getBoard());
 }
 
     public void chooseRegions(final TextView boardView, String regionGroup) {
-
-       clientOutput = new GUITextDisplay(boardView, act);
+        // TODO:
+        // Model.setStartGroup(regionGroup);
+        // Model.setClientOutput();
+        // Model.getBoard(); // wait for board
+       clientOutput = new GUITextDisplay(boardView);
         final GUIClientRegionSelection selection = new GUIClientRegionSelection(false,regionGroup, connection, clientInput, clientOutput, act);
         selection.start();
         while(!selection.getRegionChosen()) {
@@ -224,7 +199,7 @@ public void showStartBoard(TextView boardView) {
     }
     //set master board
     public void displayServerBoard(TextView helpText){
-        clientOutput = new GUITextDisplay(helpText, act);
+        clientOutput = new GUITextDisplay(helpText);
         final GUIPlayGame guiPlayGame = new GUIPlayGame(true,connection,clientInput,clientOutput,act);
         guiPlayGame.start();
         while (!guiPlayGame.isGotBoard()&&(guiPlayGame.getWinner()==null)){
@@ -248,7 +223,7 @@ public void showStartBoard(TextView boardView) {
         },3000);
     }
     public void playGame(TextView helpText,List<OrderInterface> orders){
-        clientOutput = new GUITextDisplay(helpText, act);
+        clientOutput = new GUITextDisplay(helpText);
         final GUIPlayGame guiPlayGame = new GUIPlayGame(orders,false, connection, clientInput, clientOutput, act);
         guiPlayGame.start();
         while (!guiPlayGame.getTurnOver()){
