@@ -12,7 +12,7 @@ import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.IntegerMessage;
 import edu.duke.ece651.risc.shared.StringMessage;
 
-public class GUISelectGame {//extends Thread{
+public class GUISelectGame extends Thread{
     Activity activity;
     private Connection connection;
     private ClientInputInterface clientInput;
@@ -23,9 +23,8 @@ public class GUISelectGame {//extends Thread{
     private String gameList;
     private Boolean gotGames;
     private Boolean pickedGames;
-    GameStartModel model;
 
-    public GUISelectGame(GameStartModel m,boolean getGames, String gameID,boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUISelectGame(boolean getGames, String gameID,boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -35,10 +34,9 @@ public class GUISelectGame {//extends Thread{
         this.getGames = getGames;
         this.gotGames = null;
         this.pickedGames = null;
-        this.model= m;
     }
     // Get games
-    public GUISelectGame(GameStartModel m,boolean getGames, boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUISelectGame(boolean getGames, boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -47,7 +45,6 @@ public class GUISelectGame {//extends Thread{
         this.getGames = getGames;
         this.gotGames = null;
         this.pickedGames = null;
-        this.model=m;
     }
     public String getGameList(){
         return this.gameList;
@@ -64,7 +61,6 @@ public class GUISelectGame {//extends Thread{
         //Server then sends back list of games
         StringMessage message = (StringMessage) (connection.receiveObject());
         gameList = message.unpacker();
-        model.setGameList(gameList);
         //clientOutput.displayString(str);
         this.gotGames = true;
     }
@@ -138,7 +134,7 @@ public class GUISelectGame {//extends Thread{
             clientOutput.displayString("Invalid input.");
         }
     }
-   // @Override
+    @Override
     public void run(){
         try {
             if (getGames == true) {

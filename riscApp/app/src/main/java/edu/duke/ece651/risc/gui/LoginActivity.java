@@ -40,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
         connection = ParentActivity.getConnection();
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
+//        Intent loginIntent = getIntent();
+//        loginResult = loginIntent.getStringExtra("LOGIN");
+//        helpText.setText(loginResult);
     }
 
     // TODO: on button press we send object to
