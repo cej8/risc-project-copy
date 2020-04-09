@@ -58,6 +58,9 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         Unit unit;
         Region region;
         for (int j = 0; j < playerRegions.size(); j++){
+            if (j > 5){
+                break;
+            }
             unitPlacement = planetUnits.get(j).getText().toString();
             unit = new Unit(Integer.parseInt(unitPlacement));
             region = getRegionByName(board,playerRegions.get(j).getName());
@@ -96,7 +99,7 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         planetUnits.add(r6);
         for (int j = 0; j < playerRegions.size(); j++){
            // for (int j = 0; j < 6; j++){
-            if (j > 6){
+            if (j > 5){
                 break;
             }
             planetName.get(j).setVisibility(View.VISIBLE);

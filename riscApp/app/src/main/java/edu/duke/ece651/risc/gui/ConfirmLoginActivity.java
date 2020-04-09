@@ -32,13 +32,13 @@ public class ConfirmLoginActivity extends AppCompatActivity {
     }
 
     public void login(View view){
-//        executeClient.registrationAlert(true);
-        Intent loginIntent = new Intent(this,LoginActivity.class);
-        startActivity(loginIntent);
+        executeClient.registrationAlert(true);
+//        Intent loginIntent = new Intent(this,LoginActivity.class);
+//        startActivity(loginIntent);
    }
     public void register(View view){
-      //  executeClient.registrationAlert(false);
-        Intent regIntent = new Intent(this,RegisterActivity.class);
-        startActivity(regIntent);
+        executeClient.registrationAlert(false);
+//        Intent regIntent = new Intent(this,RegisterActivity.class);
+//        startActivity(regIntent);
     }
 }

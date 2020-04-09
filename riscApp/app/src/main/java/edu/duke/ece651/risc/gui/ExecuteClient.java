@@ -75,49 +75,23 @@ public class ExecuteClient {
         }
     }
     public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
-       // clientOutput = new GUITextDisplay(textHelp);
-       // final GUIClientLogin clientLogin = new GUIClientLogin(connection, clientInput, clientOutput, act);
-        //clientLogin.start();
         model.setLoginUsername(username);
-        //model.setLoginPassword(password);
-        //Boolean loginResult = clientLogin.getLoginResult();
-//        while (loginResult == null) {
-//            loginResult = clientLogin.getLoginResult();
-//        }
-       // Log.d("Login Result", loginResult.toString());
-//        boolean loginResult = model.getLoginResult();
-//        if (loginResult) {
-//            Intent loginIntent = new Intent(act, GameTypeActivity.class);
-//            Log.d("Login", "true");
-//            act.startActivity(loginIntent);
-//        }
-    }
-    public void registerLogin(String username, String password, String confirmPassword, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
-        clientOutput = new GUITextDisplay(textHelp);
-        final GUIClientLogin clientLogin = new GUIClientLogin(false,connection, clientInput, clientOutput,act);
-        // clientLogin.start();
-        Boolean loginResult = clientLogin.getLoginResult();
-        while (loginResult == null){
-            loginResult = clientLogin.getLoginResult();
-        }
-        loginResult = clientLogin.getLoginResult();
-        Log.d("Login Result", loginResult.toString());
-
-        if (!loginResult) {
-            // set help text
-            //helpText.setText("Username or password not found. Please register if needed.");
-            helpText = "User already exists. Please choose another username";
-            setHelpText(helpText);
-            Log.d("Login", "false");
-            Log.d("Helptext", helpText);
-            // setLoginResult(loginResult);
-        } else {
-            // start new intent aka display available games
+        model.setLoginPassword(password);
+        Log.d("line test","sadsalsaldkj");
+       // if(model.getLoginResult()) {
+        // TODO: error handling if wrong login, currently still sends you to GameTypeActivity.class
             Intent loginIntent = new Intent(act, GameTypeActivity.class);
             Log.d("Login", "true");
-            // setLoginResult(loginResult);
             act.startActivity(loginIntent);
-        }
+        //}
+    }
+    public void registerLogin(String username, String password, String confirmPassword, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+        model.setLoginUsername(username);
+        model.setLoginPassword(password);
+        model.setRegisterPassword(confirmPassword);
+        Intent loginIntent = new Intent(act, GameTypeActivity.class);
+        Log.d("Register Login", "true");
+        act.startActivity(loginIntent);
     }
 
     public Connection getConnection() {

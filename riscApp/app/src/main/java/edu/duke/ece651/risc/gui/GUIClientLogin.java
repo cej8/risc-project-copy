@@ -21,15 +21,17 @@ public class GUIClientLogin {//extends Thread{
     Activity activity;
     Boolean loginResult;
     Boolean registeredUser;
+    GameStateModel model;
 
     // Login constructor
-    public GUIClientLogin(boolean registeredUser,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUIClientLogin(GameStateModel model,boolean registeredUser,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
         this.activity = act;
         this.loginResult = null;
         this.registeredUser = registeredUser;
+        this.model = model;
     }
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
@@ -50,7 +52,7 @@ public class GUIClientLogin {//extends Thread{
            //connection.sendObject(new StringMessage(username));
 
             //---Login blocking start
-            GameStateModel model = new GameStateModel();
+           // GameStateModel model = new GameStateModel();
             String username = model.getLoginUsername();
             connection.sendObject(new StringMessage(username));
             Log.d("Login","Username sent");
