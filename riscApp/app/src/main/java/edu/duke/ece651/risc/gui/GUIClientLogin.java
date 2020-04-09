@@ -45,7 +45,7 @@ public class GUIClientLogin {//extends Thread{
         //String initalSuccess = receiveAndDisplayString();
         StringMessage message = (StringMessage) (connection.receiveObject());
         String str = message.unpacker();
-        while(true){
+      //  while(true){
             connection.sendObject(new ConfirmationMessage(registeredUser));
            //connection.sendObject(new StringMessage(username));
 
@@ -105,13 +105,13 @@ public class GUIClientLogin {//extends Thread{
                 model.setLoginResult(false);
                 clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
                 Log.d("GUIClientLogin", loginResult.toString());
-               continue;
+              // continue;
             }
             if (response.matches("^Success:.*$")) {
                this.loginResult = true;
                 model.setLoginResult(true);
                 Log.d("GUIClientLogin", loginResult.toString());
-               break;
+             //  break;
 
             }
         //Log.d("GUIClientLogin", loginResult.toString());
@@ -119,7 +119,7 @@ public class GUIClientLogin {//extends Thread{
 
         //At this point user is logged in (either old or new)
 
-    }
+  //  }
 
     //Method to mesh with selectGame() in loginServer
     public void performSelectGame() throws IOException, ClassNotFoundException{

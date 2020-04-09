@@ -64,12 +64,22 @@ public class ExecuteClient {
         guiClient.start();
         model.setConnection(true);
     }
+    public void registrationAlert(boolean registrationAlert){
+        model.setRegistrationAlert(registrationAlert);
+        if (registrationAlert){
+            Intent loginIntent = new Intent(act,LoginActivity.class);
+            act.startActivity(loginIntent);
+        } else {
+            Intent regIntent = new Intent(act,RegisterActivity.class);
+            act.startActivity(regIntent);
+        }
+    }
     public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
        // clientOutput = new GUITextDisplay(textHelp);
        // final GUIClientLogin clientLogin = new GUIClientLogin(connection, clientInput, clientOutput, act);
         //clientLogin.start();
         model.setLoginUsername(username);
-        model.setLoginPassword(password);
+        //model.setLoginPassword(password);
         //Boolean loginResult = clientLogin.getLoginResult();
 //        while (loginResult == null) {
 //            loginResult = clientLogin.getLoginResult();

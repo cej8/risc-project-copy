@@ -7,6 +7,7 @@ public class GameStateModel {
     private static String loginPassword = null;
     private static String registerPassword = null;
     private static boolean loginResult = false;
+    private static boolean registrationAlert = false;
 
     //------- Connection blocking
     public synchronized boolean getConnection() throws InterruptedException {
@@ -18,6 +19,16 @@ public class GameStateModel {
     public synchronized void setConnection(boolean s){
         startConnection = s;
         notifyAll();
+    }
+    //-------- Login / Registration
+    public synchronized void setRegistrationAlert(boolean reg){
+        registrationAlert = reg;
+    }
+    public synchronized boolean getRegistrationAlert() throws InterruptedException{
+        while(!registrationAlert){
+            wait();
+        }
+        return registrationAlert;
     }
     //------- Login blocking
     synchronized String getLoginPassword() throws InterruptedException{
