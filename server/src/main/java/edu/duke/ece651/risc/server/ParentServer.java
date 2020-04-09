@@ -413,6 +413,8 @@ public class ParentServer extends Thread{
       if(className.equals("AttackCombat")){
         boolean foundOrder = false;
         SourceDestinationOrder sdOrderNew = (SourceDestinationOrder) castOrder;
+        //Create copy of source to prevent A-->B, B-->C issue where B is taken by A (then B->C would be A's)
+        sdOrderNew.setSource((Region)DeepCopy.deepCopy(sdOrderNew.getSource()));
         for(OrderInterface combatOrder : orderMap.get("AttackCombat")){
           if(foundOrder){ break; }
           //If both have same source owner and go to same region
