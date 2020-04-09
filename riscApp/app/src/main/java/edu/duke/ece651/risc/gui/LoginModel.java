@@ -13,6 +13,7 @@ public class LoginModel {
     private static String registrationAlert = null;
     private static String firstCall = null;
     private static Connection connection = null;
+    private static boolean loginBooleanReady=false;
 
     //------- Connection blocking
     public synchronized boolean getConnection() throws InterruptedException {
@@ -35,6 +36,7 @@ public class LoginModel {
 //        connection = c;
 //        notifyAll();
 //    }
+    public synchronized void isLoginBooleanReady(boolean l){this.loginBooleanReady=l;}
     //-------- Login / Registration
     public synchronized void setRegistrationAlert(String reg){
         registrationAlert = reg;
