@@ -20,8 +20,10 @@ public class GUIClientLogin {//extends Thread{
     private ClientOutputInterface clientOutput;
     Activity activity;
     Boolean loginResult;
+
    // Boolean registeredUser;
     LoginModel model;
+    GameStartModel gameModel;
 
     // Login constructor
    /*public GUIClientLogin(LoginModel model,boolean registeredUser,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
@@ -58,7 +60,7 @@ public class GUIClientLogin {//extends Thread{
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
         String str = message.unpacker();
-        clientOutput.displayString(str);
+      //  ParentActivity.getClientOutput().displayString(str);
         return str;
     }
     public Boolean getLoginResult(){
@@ -66,9 +68,9 @@ public class GUIClientLogin {//extends Thread{
     }
     //Method to mesh with loginProcess() in loginServer
     public void performLogin() throws IOException, ClassNotFoundException,InterruptedException{
-        //String initalSuccess = receiveAndDisplayString();
-        StringMessage message = (StringMessage) (connection.receiveObject());
-        String str = message.unpacker();
+        String initalSuccess = receiveAndDisplayString();
+      //  StringMessage message = (StringMessage) (connection.receiveObject());
+      //  String str = message.unpacker();
        while(true){
            boolean loginBoolean = model.getRegistrationAlert();
             connection.sendObject(new ConfirmationMessage(loginBoolean));
@@ -128,13 +130,15 @@ public class GUIClientLogin {//extends Thread{
             if (response.matches("^Fail:.*$")) {
                this.loginResult = false;
                 model.setLoginResult(false);
-                clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
+                model.setLoginResultReady(true);
+                ParentActivity.getClientOutput().displayString("Incorrect username or password. If you are not registered please do so now.");
                 Log.d("GUIClientLogin", loginResult.toString());
                continue;
             }
             if (response.matches("^Success:.*$")) {
                this.loginResult = true;
                 model.setLoginResult(true);
+                model.setLoginResultReady(true);
                 Log.d("GUIClientLogin", loginResult.toString());
                break;
 
@@ -147,21 +151,25 @@ public class GUIClientLogin {//extends Thread{
     }
 
     //Method to mesh with selectGame() in loginServer
-    public boolean performSelectGame() throws IOException, ClassNotFoundException{
+    public boolean performSelectGame() throws IOException, ClassNotFoundException, InterruptedException {
         while(true){
-            boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
-
+            boolean oldBoolean = gameModel.getOldBoolean();// queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
+            connection.sendObject(new ConfirmationMessage(oldBoolean));
             //Server then sends back list of games
-            String list = receiveAndDisplayString();
+           //String list = receiveAndDisplayString();
+            StringMessage message = (StringMessage) (connection.receiveObject());
+            String gameList = message.unpacker();
+            gameModel.setGameList(gameList);
+
             Integer gameID;
             while(true){
-                clientOutput.displayString("Pick a game via ID");
+            //    clientOutput.displayString("Pick a game via ID");
                 try{
-                    gameID = Integer.parseInt(clientInput.readInput());
+                    gameID = Integer.parseInt(gameModel.getGameNumber());
                 }
-                catch (NumberFormatException ne) {
+                catch (NumberFormatException | InterruptedException ne) {
                     // ne.printStackTrace();
-                    clientOutput.displayString("That was not an integer.");
+                   // clientOutput.displayString("That was not an integer.");
                     continue;
                 }
                 break;
@@ -170,7 +178,8 @@ public class GUIClientLogin {//extends Thread{
             connection.sendObject(new IntegerMessage(gameID));
 
             //Get back response
-            String response = receiveAndDisplayString();
+            StringMessage m = (StringMessage) (connection.receiveObject());
+            String response = m.unpacker();
             //Repeat if fail, continue if success
             if (response.matches("^Fail:.*$")) {
                 continue;
@@ -186,7 +195,7 @@ public class GUIClientLogin {//extends Thread{
     public boolean queryYNAndRespond(String query) throws IOException {
         while(true){
             // Request input
-            clientOutput.displayString(query);
+            ParentActivity.getClientOutput().displayString(query);
             String spectateResponse = clientInput.readInput();
 
             spectateResponse = spectateResponse.toUpperCase();
@@ -201,7 +210,7 @@ public class GUIClientLogin {//extends Thread{
                 }
             }
             // Otherwise repeat
-            clientOutput.displayString("Invalid input.");
+            ParentActivity.getClientOutput().displayString("Invalid input.");
         }
     }
    // @Override

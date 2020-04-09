@@ -1,5 +1,7 @@
 package edu.duke.ece651.risc.gui;
 
+import edu.duke.ece651.risc.shared.Connection;
+
 public class LoginModel {
     private static String startGroup = null;
     private static boolean startConnection = false;
@@ -7,30 +9,50 @@ public class LoginModel {
     private static String loginPassword = null;
     private static String registerPassword = null;
     private static boolean loginResult = false;
+    private static boolean loginResultReady=false;
     private static boolean registrationAlert = false;
     private static boolean loginBooleanReady=false;
+    private static Connection connection=null;
+    private static boolean registrationReady=false;
 
     //------- Connection blocking
-    public synchronized boolean getConnection() throws InterruptedException {
+    public synchronized boolean getStartConnection() throws InterruptedException {
         while (!startConnection){
             wait();
         }
         return startConnection;
     }
-    public synchronized void setConnection(boolean s){
+    public synchronized void setStartConnection(boolean s){
         startConnection = s;
         notifyAll();
     }
-    public synchronized void isLoginBooleanReady(boolean l){this.loginBooleanReady=l;}
+    public synchronized Connection getConnection() throws InterruptedException {
+        while(connection==null){
+            wait();
+        }
+        return connection;
+    }
+    public synchronized void setConnection(Connection c){
+        this.connection=c;
+        notifyAll();
+
+    }
+    public synchronized void isLoginBooleanReady(boolean l){
+        this.loginBooleanReady=l;
+        notifyAll();}
     //-------- Login / Registration
     public synchronized void setRegistrationAlert(boolean reg){
-        registrationAlert = reg;
+        registrationAlert = reg; notifyAll();
     }
     public synchronized boolean getRegistrationAlert() throws InterruptedException{
-        while(!loginBooleanReady){
+        while(!registrationReady){
             wait();
         }
         return registrationAlert;
+    }
+    public synchronized void setRegistrationReady(boolean ready){
+        registrationReady = ready;
+        notifyAll();
     }
     //------- Login blocking
     synchronized String getLoginPassword() throws InterruptedException{
@@ -53,8 +75,12 @@ public class LoginModel {
         loginUsername = s;
         notifyAll();
     }
+    synchronized void setLoginResultReady(boolean r){
+        this.loginResultReady=r;
+        notifyAll();
+    }
     synchronized boolean getLoginResult() throws InterruptedException{
-        while (!loginResult){
+        while (!loginResultReady){
             wait();
         }
         return loginResult;

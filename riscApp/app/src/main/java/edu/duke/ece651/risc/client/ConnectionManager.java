@@ -13,6 +13,8 @@ public class ConnectionManager {
    private Connection connection;
     private String address;
     private int port;
+    LoginModel model ;
+
 
   public ConnectionManager(){
     connection = new Connection();
@@ -22,6 +24,16 @@ public class ConnectionManager {
       this();
       this.address = address;
         this.port = port;
+
+
+    }
+    public ConnectionManager(LoginModel m, String address, int port){
+        //connection = new Connection();
+        this();
+        this.address = address;
+        this.port = port;
+        this.model =m;
+
     }
     public Connection getConnection() {
         return connection;
@@ -41,6 +53,7 @@ public class ConnectionManager {
             connection.setSocket(socket);
             connection.getStreamsFromSocket();
             socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
+            model.setConnection(connection);
             Log.d("Connection","True");
             } catch (Exception e) {
             e.printStackTrace(System.out);
@@ -50,13 +63,14 @@ public class ConnectionManager {
   public void connectGame() throws InterruptedException{
           if(connection.getSocket() == null){
               //---- block ConnectionManager until true (ready to connect)
-              LoginModel model = new LoginModel();
-           //   model.getConnection();
+                        //   model.getConnection();
               //---- unblock ConnectionManager
               makeConnection(address,port);
               // Set connection in client
               ParentActivity parentActivity = new ParentActivity();
               parentActivity.setConnection(connection);
+         //     model.setConnection(connection);
+
         }
   
   }

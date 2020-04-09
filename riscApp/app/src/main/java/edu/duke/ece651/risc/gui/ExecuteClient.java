@@ -28,6 +28,8 @@ public class ExecuteClient {
     String helpText;
     LoginModel loginModel;
     GameStartModel gameStartModel;
+    boolean firstCall;
+    ParentActivity parentActivity;
 
     public ExecuteClient(Activity activity) {
         clientInput = new GUIEditTextInput(activity);
@@ -42,7 +44,7 @@ public class ExecuteClient {
         clientInput = new GUIEditTextInput(activity);
         //clientOutput = new GUITextDisplay();
         this.act = activity;
-        ParentActivity parentActivity = new ParentActivity();
+        parentActivity = new ParentActivity();
         parentActivity.setActivity(act);
         this.loginModel = new LoginModel();
         clientOutput = new GUITextDisplay(textHelp);
@@ -62,21 +64,15 @@ public class ExecuteClient {
             Log.d("Port", "Invalid");
             return;
         }
-        //GUIClient guiClient = new GUIClient(clientInput,clientOutput,addr,port);
-        // Start Client thread with server
-        //guiClient.start();
-        //loginModel.setConnection(true);
-        ConnectionManager makeConnection = new ConnectionManager(addr,port);
-        makeConnection.connectGame();
-        this.connection = ParentActivity.getConnection();
-     //   GUIClientLogin clientLogin = new GUIClientLogin(loginModel,loginModel.getRegistrationAlert(),connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
-        ClientGUI clientGUI= new ClientGUI(clientInput,clientOutput,this.connection);
+
+        ClientGUI clientGUI= new ClientGUI(loginModel,clientInput,clientOutput,addr,port);
         clientGUI.start();
 
 
     }
     public void registrationAlert(boolean registrationAlert){
         loginModel.setRegistrationAlert(registrationAlert);
+        loginModel.setRegistrationReady(true);
         if (registrationAlert){
             Intent loginIntent = new Intent(act,LoginActivity.class);
             act.startActivity(loginIntent);
@@ -86,41 +82,44 @@ public class ExecuteClient {
         }
     }
     public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+       //parentActivity.setClientOutput(new GUITextDisplay(textHelp));
         loginModel.setLoginUsername(username);
         loginModel.setLoginPassword(password);
        // loginModel.setRegistrationAlert(true);
         loginModel.isLoginBooleanReady(true);
-
-
-      //  Log.d("line test","sadsalsaldkj");
-       // if(model.getLoginResult()) {
+           //  Log.d("line test","sadsalsaldkj");
+        if(loginModel.getLoginResult()) {
         // TODO: error handling if wrong login, currently still sends you to GameTypeActivity.class
             Intent loginIntent = new Intent(act, GameTypeActivity.class);
             Log.d("Login", "true");
             act.startActivity(loginIntent);
-        //}
+        }
     }
     public void registerLogin(String username, String password, String confirmPassword, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+      //  parentActivity.setClientOutput(new GUITextDisplay(textHelp));
         loginModel.setLoginUsername(username);
         loginModel.setLoginPassword(password);
         loginModel.setRegisterPassword(confirmPassword);
         loginModel.isLoginBooleanReady(true);
-        Intent loginIntent = new Intent(act, GameTypeActivity.class);
-        Log.d("Register Login", "true");
-        act.startActivity(loginIntent);
+        if(loginModel.getLoginResult()) {
+            Intent loginIntent = new Intent(act, GameTypeActivity.class);
+            Log.d("Register Login", "true");
+            act.startActivity(loginIntent);
+        }
     }
 
 
 
 
     public void getGames(boolean gameType, boolean getgame) throws InterruptedException {
-        // clientOutput = new GUITextDisplay(gameText,act);
+     //   parentActivity.setClientOutput = new GUITextDisplay(gameText,act);
         //final GUISelectGame selectGame = new GUISelectGame(getgame, gameType, connection, clientInput, clientOutput, act);
        // selectGame.start();
        // Boolean gotGames = selectGame.getGotGames();
         //while (gotGames == null){
           //  gotGames = selectGame.getGotGames();
         //}
+        gameStartModel.setOldBoolean(gameType);
         String games = gameStartModel.getGameList();
         Log.d("Game List", games);
         Intent gamesIntent = new Intent(act, NewGameActivity.class);
@@ -129,7 +128,10 @@ public class ExecuteClient {
     }
 
     public void pickGame(boolean gameType, String id, boolean getgame, String gameList) {
-       // GUISelectGame selectGame = new GUISelectGame(getgame, id, gameType, connection, clientInput, clientOutput, act);
+        gameStartModel.setOldBoolean(gameType);
+        gameStartModel.setGameList(gameList);
+        gameStartModel.setGameNumber(id);
+    // GUISelectGame selectGame = new GUISelectGame(getgame, id, gameType, connection, clientInput, clientOutput, act);
         //selectGame.start();
         //Boolean pickedGames = selectGame.getPickedGames();
         //while (pickedGames == null){
@@ -141,7 +143,7 @@ public class ExecuteClient {
         act.startActivity(lobby);
     }
     public void getBoardAssignments(TextView helpText) throws InterruptedException {
-      //  clientOutput = new GUITextDisplay(helpText);
+        parentActivity.setClientOutput(new GUITextDisplay(helpText));
        // final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(connection, clientInput, clientOutput, act);
         //initializeBoard.start();
         boolean ready= gameStartModel.readyToBegin();

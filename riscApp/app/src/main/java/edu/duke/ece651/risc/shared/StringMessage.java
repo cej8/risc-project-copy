@@ -6,7 +6,7 @@ public class StringMessage implements MessageInterface<String> {
   public StringMessage(String m){
     this.message = m;
   }
-  
+
   @Override
   public String unpacker() {
     return message;

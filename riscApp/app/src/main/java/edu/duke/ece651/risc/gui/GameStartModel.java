@@ -10,6 +10,9 @@ public class GameStartModel {
     private static boolean readyToBegin=false;
     private static HumanPlayer player=null;
     private static boolean regionChosen=false;
+    private static String gameNumber=null;
+    private static boolean oldBoolean=false;
+    private static boolean oldBooleanReady=false;
 
     public synchronized String getGameList() throws InterruptedException {
         while(gameList==null){
@@ -43,6 +46,16 @@ public class GameStartModel {
         }
         return startBoard;
 
+    }
+    public synchronized boolean getOldBoolean() throws InterruptedException {
+        while(!oldBooleanReady){
+            wait();
+        }
+        return oldBoolean;
+    }
+    public synchronized  void setOldBoolean(boolean b){
+        this.oldBoolean =b;
+        notifyAll();
     }
     public synchronized void isReadyToBegin(boolean r){
         this.readyToBegin=r;
@@ -78,7 +91,17 @@ public class GameStartModel {
         return true;
 
     }
+    public synchronized String getGameNumber() throws InterruptedException {
+        while(gameNumber==null){
+            wait();
+        }
+        return gameNumber;
 
+    }
+    public synchronized void setGameNumber(String list){
+        this.gameNumber=list;
+        notifyAll();
+    }
 
 
 

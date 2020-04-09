@@ -3,6 +3,7 @@ package edu.duke.ece651.risc.gui;
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
+import edu.duke.ece651.risc.client.ConnectionManager;
 import edu.duke.ece651.risc.client.ConsoleInput;
 import edu.duke.ece651.risc.client.OrderCreator;
 import edu.duke.ece651.risc.client.OrderFactoryProducer;
@@ -25,6 +26,8 @@ public class ClientGUI extends Thread implements ClientInterface {
     private String address;
     private int port;
     private LoginModel loginModel;
+    private GameStartModel gameStartModel;
+
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
@@ -52,13 +55,14 @@ public class ClientGUI extends Thread implements ClientInterface {
         this.firstCall = true;
     }*/
     // constructor for abstracted out makeConnection class
-    public ClientGUI(ClientInputInterface clientInput, ClientOutputInterface clientOutput,Connection connection) {
+    public ClientGUI(LoginModel lm,ClientInputInterface clientInput, ClientOutputInterface clientOutput,String addr, int port) throws InterruptedException {
         board = new Board();
         this.clientInput = clientInput;
         this.clientOutput = clientOutput;
-        this.connection = connection;
-      ///  this.firstCall = firstCall;
-        this.loginModel=new LoginModel();
+         this.loginModel= lm;
+         this.gameStartModel= new GameStartModel();
+         this.address=addr;
+         this.port=port;
 
     }
 
@@ -163,9 +167,9 @@ public class ClientGUI extends Thread implements ClientInterface {
                 }
 
                 // Output board
-                clientOutput.displayBoard(board);
+                ParentActivity.getClientOutput().displayBoard(board);
                 // Print prompt and get group name
-                clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
+                ParentActivity.getClientOutput().displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
                 String groupName = clientInput.readInput();
                 if(timeOut(startTime, maxTime)) { return false; }
                 connection.sendObject(new StringMessage(groupName));
@@ -173,7 +177,7 @@ public class ClientGUI extends Thread implements ClientInterface {
                 // Wait for response
                 StringMessage responseMessage = (StringMessage) (connection.receiveObject());
                 String response = responseMessage.unpacker();
-                clientOutput.displayString(response);
+                ParentActivity.getClientOutput().displayString(response);
                 if (response.matches("^Fail:.*$")) {
                     continue;
                 }
@@ -186,7 +190,7 @@ public class ClientGUI extends Thread implements ClientInterface {
                 board = (Board) (connection.receiveObject());
 
                 // Display and move into placements
-                clientOutput.displayBoard(board);
+                ParentActivity.getClientOutput().displayBoard(board);
                 OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", this);
                 if (placement == null) {
                     continue;
@@ -199,7 +203,7 @@ public class ClientGUI extends Thread implements ClientInterface {
                 // Wait for response
                 StringMessage responseMessage = (StringMessage) (connection.receiveObject());
                 String response = responseMessage.unpacker();
-                clientOutput.displayString(response);
+                ParentActivity.getClientOutput().displayString(response);
                 if (response.matches("^Fail:.*$")) {
                     continue;
                 }
@@ -219,7 +223,7 @@ public class ClientGUI extends Thread implements ClientInterface {
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
         String str = message.unpacker();
-        clientOutput.displayString(str);
+        ParentActivity.getClientOutput().displayString(str);
         return str;
     }
 
@@ -227,7 +231,7 @@ public class ClientGUI extends Thread implements ClientInterface {
     public boolean queryYNAndRespond(String query) throws IOException{
         while(true){
             // Request input
-            clientOutput.displayString(query);
+            ParentActivity.getClientOutput().displayString(query);
             String spectateResponse = clientInput.readInput();
 
             spectateResponse = spectateResponse.toUpperCase();
@@ -251,9 +255,11 @@ public class ClientGUI extends Thread implements ClientInterface {
         try {
 
             player = (HumanPlayer) (connection.receiveObject());
+            gameStartModel.setPlayer(player);
 
-            clientOutput.displayString("Successfully connected, you are named: " + player.getName());
-            clientOutput.displayString("Please wait for more players to connect");
+
+         //   clientOutput.displayString("Successfully connected, you are named: " + player.getName());
+            //clientOutput.displayString("Please wait for more players to connect");
             //Set timeout to START_WAIT plus a little buffer
             setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
             //If notStarted
@@ -277,7 +283,7 @@ public class ClientGUI extends Thread implements ClientInterface {
                 String start = startMessage.unpacker();
                 if (!start.equals("Continue")) {
                     // If not continue then someone won --> print and exit
-                    clientOutput.displayString(start);
+                    ParentActivity.getClientOutput().displayString(start);
                     connection.closeAll();
                     clientInput.close();
                     return;
@@ -306,7 +312,7 @@ public class ClientGUI extends Thread implements ClientInterface {
                     // Next server sends board
                     board = (Board) (connection.receiveObject());
                     // Display board
-                    clientOutput.displayBoard(board);
+                    ParentActivity.getClientOutput().displayBoard(board);
                     // Client generates orders --> sends
                     if (alive) {
                         //new OrderCreator
@@ -335,9 +341,21 @@ public class ClientGUI extends Thread implements ClientInterface {
     }
 
     @Override
-    public void run(){
-        GUIClientLogin clientLogin = new GUIClientLogin(loginModel,connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
-        firstCall=clientLogin.Login();
+    public void run() {
+        ConnectionManager makeConnection = new ConnectionManager(loginModel,address,port);
+
+        try {
+            makeConnection.connectGame();
+            this.connection = loginModel.getConnection();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        GUIClientLogin clientLogin = new GUIClientLogin(loginModel,connection, clientInput, clientOutput, ParentActivity.getActivity());
+        firstCall = clientLogin.Login();
         playGame();
     }
 }
