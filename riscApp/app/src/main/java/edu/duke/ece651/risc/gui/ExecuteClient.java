@@ -88,6 +88,9 @@ public class ExecuteClient {
     public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
         loginModel.setLoginUsername(username);
         loginModel.setLoginPassword(password);
+       // loginModel.setRegistrationAlert(true);
+        loginModel.isLoginBooleanReady(true);
+
 
       //  Log.d("line test","sadsalsaldkj");
        // if(model.getLoginResult()) {
@@ -101,6 +104,7 @@ public class ExecuteClient {
         loginModel.setLoginUsername(username);
         loginModel.setLoginPassword(password);
         loginModel.setRegisterPassword(confirmPassword);
+        loginModel.isLoginBooleanReady(true);
         Intent loginIntent = new Intent(act, GameTypeActivity.class);
         Log.d("Register Login", "true");
         act.startActivity(loginIntent);

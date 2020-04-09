@@ -20,7 +20,7 @@ public class GUIClientLogin {//extends Thread{
     private ClientOutputInterface clientOutput;
     Activity activity;
     Boolean loginResult;
-    Boolean registeredUser;
+   // Boolean registeredUser;
     LoginModel model;
 
     // Login constructor
@@ -107,7 +107,7 @@ public class GUIClientLogin {//extends Thread{
 
             //If true then has login (nothing extra)
             //If false then registering (need second password entry)
-            if(!registeredUser){
+            if(!loginBoolean){
             //Request repeat of password
             //clientOutput.displayString("Password (again):");
 

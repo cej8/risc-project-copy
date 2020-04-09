@@ -8,6 +8,7 @@ public class LoginModel {
     private static String registerPassword = null;
     private static boolean loginResult = false;
     private static boolean registrationAlert = false;
+    private static boolean loginBooleanReady=false;
 
     //------- Connection blocking
     public synchronized boolean getConnection() throws InterruptedException {
@@ -20,12 +21,13 @@ public class LoginModel {
         startConnection = s;
         notifyAll();
     }
+    public synchronized void isLoginBooleanReady(boolean l){this.loginBooleanReady=l;}
     //-------- Login / Registration
     public synchronized void setRegistrationAlert(boolean reg){
         registrationAlert = reg;
     }
     public synchronized boolean getRegistrationAlert() throws InterruptedException{
-        while(!registrationAlert){
+        while(!loginBooleanReady){
             wait();
         }
         return registrationAlert;
