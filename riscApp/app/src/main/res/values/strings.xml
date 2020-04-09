@@ -3,4 +3,7 @@
     <string name="more">More Info</string>
     <string name="cancel">cancel</string>
     <string name="accept">accept</string>
+    <string name="click_to_continue">Click anywhere to continue</string>
+    <string name="textButtonMain">ATTENTION:\nYou may only do this once per turn</string>
+    <string name="boost_tech">BOOST MAX TECH LEVEL?</string>
 </resources>
