@@ -1,0 +1,15 @@
+package edu.duke.ece651.risc.server;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+import edu.duke.ece651.risc.shared.*;
+
+public class LoginServerTest {
+  @Test
+  public void test_() {
+
+  }
+
+}

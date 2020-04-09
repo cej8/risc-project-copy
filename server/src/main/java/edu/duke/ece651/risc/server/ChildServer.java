@@ -5,14 +5,35 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+/*Thread to handle communication to client, run() called once per turn.
+
+Attempts to handle all message passing between client/server for single turn within a game.
+
+Has handling for missing client connections (not connected to this thread/game) and deals with timeouts internally.
+*/
+
 // Class that handles each child implemtation for game (i.e. each player has their own ChildServer)
 public class ChildServer implements Runnable{
-  private AbstractPlayer player;  
-  private ParentServer parent;
+  //Player object for client
+  private AbstractPlayer player;
+  //ParentServer that owns this child
+  private ParentServer parent; 
+  //Connection for player
   private Connection playerConnection;
+  //Message to send for turn
   private String turnMessage = "";
 
+  //Boolean for if firstCall of threads (placement)
   private boolean firstCall = true;
+  //Boolean for if connection has failed (playerConnection null/DC'ed)
+  private boolean connectionFailed = false;
+
+  //Number of turns without input successful
+  private int missedTurns = 0;
+  //Time for turn start
+  private long startTime;
+  //Maximum time for turn
+  private long maxTime;
 
   public ChildServer(AbstractPlayer player, ParentServer parent){
     this.player = player;
@@ -25,45 +46,53 @@ public class ChildServer implements Runnable{
     this.parent = parent;
   }
 
-  public void setTurnMessage(String turnMessage){
-    this.turnMessage = turnMessage;
-  }
   
   // Getters & setters
-  public Connection getPlayerConnection(){
-    return playerConnection;
+  public AbstractPlayer getPlayer(){
+    return player;
   }
-  public void setPlayerConnection(Connection playerConnection){
-    this.playerConnection = playerConnection;
-  }
+
   public ParentServer getParentServer(){
     return parent;
   }
   public void setParentServer(ParentServer parent){
     this.parent = parent;
   }
-  public AbstractPlayer getPlayer(){
-    return player;
+
+  public Connection getPlayerConnection(){
+    return playerConnection;
   }
-  
-  // end of getters & setters
-  // enables ChildServer to be runnable
-  @Override
-  public void run(){
-    long startTime = System.currentTimeMillis();
-    //Timeout is Socket's timeout
-    long maxTime = (long)(parent.getTURN_WAIT_MINUTES()*60*1000);
-    
+  public void setPlayerConnection(Connection playerConnection){
+    this.playerConnection = playerConnection;
+  }
+
+  public void setTurnMessage(String turnMessage){
+    this.turnMessage = turnMessage;
+  }
+
+  public boolean getFirstCall(){
+    return firstCall;
+  }
+
+  //Method to call turn, return true if "successful"
+  //Return false if socket has exception
+  public boolean performTurn(){
     //If player isn't playing or isn't watching then skip them
     if(!player.isPlaying()){
-      if(!player.isWatching()){
-        return;
+      //if not playing then previously was --> not first call
+      firstCall = false;
+      if(player.isWatching() != null && !player.isWatching()){
+        return true;
       }
+    }
+    //If no connection then fails
+    if(playerConnection == null){
+      return false;
     }
     
     ValidatorHelper validator;
     try{
-      System.out.println(player.getName() + " enter thread");
+      System.out.println(parent.getGameID() + " : (" + player.getName() + ") enter thread");
       playerConnection.getSocket().setSoTimeout((int)maxTime);
       if(firstCall){
         //Prompt for region --> placement
@@ -164,9 +193,13 @@ public class ChildServer implements Runnable{
             
             //Get confirmation message
             ConfirmationMessage spectateMessage = (ConfirmationMessage)(playerConnection.receiveObject());
+            boolean spectate = Boolean.valueOf(spectateMessage.getMessage());
             //Set watching boolean
             //player.setWatching(new Boolean(spectateMessage.getMessage()));
-            player.setWatching(Boolean.valueOf(spectateMessage.getMessage()));
+            player.setWatching(spectate);
+            if(spectate == false){
+              parent.removePlayer(player.getName());
+            }
           }
           //If watching then send board (otherwise client disconnected)
           if(player.isWatching()){
@@ -178,15 +211,44 @@ public class ChildServer implements Runnable{
       }
     }
     catch(Exception e){
-      //If anything fails then kill player
-      //Server only so actually not huge concern the readability of this
-      //TODO: make this more human readable
-      System.out.println(player.getName() + " exception encountered, killing connection");
-      //e.printStackTrace();
-      player.setPlaying(false);
+      System.out.println(parent.getGameID() + " : (" + player.getName() + ") had some issue, disconnected");
+      if(!(e instanceof SocketTimeoutException)){
+        e.printStackTrace();
+      }
       playerConnection.closeAll();
-      return;
+      playerConnection = null;
+      parent.getMasterServer().removePlayer(player.getName(), parent.getGameID());
+      player.setWatchingNull();
+      return false;
     }
-    System.out.println(player.getName() + " exiting thread gracefully");
+    System.out.println(parent.getGameID() + " : (" + player.getName() + ") exiting thread gracefully");
+    return true;
+  }
+  
+  // end of getters & setters
+  // enables ChildServer to be runnable
+  @Override
+  public void run(){
+    startTime = System.currentTimeMillis();
+    //Timeout is Socket's timeout
+    maxTime = (long)(parent.getTURN_WAIT_MINUTES()*60*1000);
+    //If turn fails --> socket failed or not connected
+    while(maxTime > (System.currentTimeMillis() - startTime)){
+      if(performTurn()){
+        //If successful then decrement missed turns to zero
+        missedTurns = (missedTurns > 0) ? (missedTurns - 1) : (0);
+        System.out.println(parent.getGameID() + " : (" + player.getName() + ") input turn, missed now " + missedTurns);
+        return;
+      }
+    }
+    //If exits then never successfully performTurn
+    //Increment missedTurns
+    missedTurns++;
+    System.out.println(parent.getGameID() + " : (" + player.getName() + ") did not input turn, missed now " + missedTurns);
+    //If past maximum then mark as not playing
+    if(missedTurns > Constants.MAX_MISSED){
+      System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed more than " + Constants.MAX_MISSED + " turns, marking as dead");
+      player.setPlaying(false);
+    }
   }
 }

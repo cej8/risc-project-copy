@@ -1,0 +1,41 @@
+package edu.duke.ece651.risc.client;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+public class LoginTest {
+  @Test
+  public void test_LoginTest() {
+    
+     ArrayList<Object> objs = new ArrayList<Object>();
+    //First connect success
+    objs.add(new StringMessage("Success: connected"));
+    //Send "salt"
+    objs.add(new StringMessage(BCrypt.gensalt()));
+    //Send fail
+    objs.add(new StringMessage("Fail: invalid user/password"));
+    //Send "salt"
+    objs.add(new StringMessage(BCrypt.gensalt()));
+    //Send fail
+    objs.add(new StringMessage("Fail: user already exists"));
+    //Send "salt"
+    objs.add(new StringMessage(BCrypt.gensalt()));
+    //Send fail
+    objs.add(new StringMessage("Success: login"));
+    //Send games
+    objs.add(new StringMessage("games...."));
+    //Send fail
+    objs.add(new StringMessage("Fail: bad gameid"));
+    //Send games
+    objs.add(new StringMessage("games...."));
+    //Send success
+    objs.add(new StringMessage("Success: good game"));
+    //Send firstturn
+    objs.add(new ConfirmationMessage(true));
+
+    Socket mockSocket = MockTests.setupMockSocket(objs);
+    
+  }
+
+}

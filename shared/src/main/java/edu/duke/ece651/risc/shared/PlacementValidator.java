@@ -21,7 +21,7 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
     }
     return false;
   }
-  	@Override
+  //  	@Override
     public boolean validateRegions(List<PlacementOrder> placementList) {
       for (PlacementOrder place : placementList) {
         if (!isValidPlacement(place, this.player)) {
@@ -39,13 +39,13 @@ public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
       return validRegions && validUnits;
     }
 
-  	@Override
+  //	@Override
     public boolean validateUnits(List<PlacementOrder> orders) {
     int totalUnits = this.playerUnits.getTotalUnits();
     for (PlacementOrder p : orders) {
-      Region tempDest = tempBoard.getRegionByName(p.getDestination().getName());
+      Region tempDest = p.getDestination().getRegionByName(tempBoard, p.getDestination().getName());
 
-      Unit placementUnits =  new Unit(p.getUnits().getTotalUnits()); //TODO this is fine? bc placing new units?
+      Unit placementUnits =  new Unit(p.getUnits().getTotalUnits()); //TODO this is fine? bc placing new units? --> YES FINE -CJ
       PlacementOrder placementCopy = new PlacementOrder(tempDest, placementUnits);
       // make sure at least 1 placementUnit and totalUnits > 0 and placementUnits < totalUnits
       if ((placementUnits.getTotalUnits() <= totalUnits) && (placementUnits.getTotalUnits() > 0) && (totalUnits > 0)) {

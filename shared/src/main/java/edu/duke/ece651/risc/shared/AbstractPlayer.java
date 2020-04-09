@@ -35,6 +35,9 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
   public void setWatching(boolean isWatching){
     this.isWatching = Boolean.valueOf(isWatching); //new Boolean(isWatching);
   }
+  public void setWatchingNull(){
+    this.isWatching = null;
+  }
   @Override
   public int compareTo(AbstractPlayer p){
     return this.name.compareTo(p.getName());
@@ -42,6 +45,10 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
 public TechnologyLevel getMaxTechLevel() {
 	return maxTechLevel;
 }
+
+  public void setPlayerResource(PlayerResources playerResource){
+    this.playerResource = playerResource;
+  }
 
 }
 
