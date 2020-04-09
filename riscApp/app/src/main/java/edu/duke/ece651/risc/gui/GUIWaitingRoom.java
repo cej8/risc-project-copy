@@ -96,10 +96,12 @@ public class GUIWaitingRoom extends Thread {
             e.printStackTrace();
             connection.closeAll();
         }
-
-           waitingToStart();
+    if(firstCall){
+        waitingToStart();
       getInitialBoard();
       doneRunning =true;
-            return;
+      return;
+    }
+    doneRunning=true;
         }
 }
