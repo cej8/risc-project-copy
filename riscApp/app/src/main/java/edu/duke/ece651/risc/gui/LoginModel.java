@@ -1,6 +1,6 @@
 package edu.duke.ece651.risc.gui;
 
-public class GameStateModel {
+public class LoginModel {
     private static String startGroup = null;
     private static boolean startConnection = false;
     private static String loginUsername = null;

@@ -26,7 +26,8 @@ public class ExecuteClient {
    // Boolean loginResult;
     Activity act;
     String helpText;
-    GameStateModel model;
+    LoginModel loginModel;
+    GameStartModel gameStartModel;
 
     public ExecuteClient(Activity activity) {
         clientInput = new GUIEditTextInput(activity);
@@ -34,7 +35,8 @@ public class ExecuteClient {
         this.act = activity;
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.setActivity(act);
-        this.model = new GameStateModel();
+        this.loginModel = new LoginModel();
+        this.gameStartModel= new GameStartModel();
     }
     public ExecuteClient(Activity activity, TextView textHelp){
         clientInput = new GUIEditTextInput(activity);
@@ -42,9 +44,10 @@ public class ExecuteClient {
         this.act = activity;
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.setActivity(act);
-        this.model = new GameStateModel();
+        this.loginModel = new LoginModel();
         clientOutput = new GUITextDisplay(textHelp);
         parentActivity.setClientOutput(clientOutput);
+        this.gameStartModel= new GameStartModel();
     }
 
 
@@ -62,10 +65,10 @@ public class ExecuteClient {
         GUIClient guiClient = new GUIClient(clientInput,clientOutput,addr,port);
         // Start Client thread with server
         guiClient.start();
-        model.setConnection(true);
+        loginModel.setConnection(true);
     }
     public void registrationAlert(boolean registrationAlert){
-        model.setRegistrationAlert(registrationAlert);
+        loginModel.setRegistrationAlert(registrationAlert);
         if (registrationAlert){
             Intent loginIntent = new Intent(act,LoginActivity.class);
             act.startActivity(loginIntent);
@@ -75,8 +78,8 @@ public class ExecuteClient {
         }
     }
     public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
-        model.setLoginUsername(username);
-        model.setLoginPassword(password);
+        loginModel.setLoginUsername(username);
+        loginModel.setLoginPassword(password);
         Log.d("line test","sadsalsaldkj");
        // if(model.getLoginResult()) {
         // TODO: error handling if wrong login, currently still sends you to GameTypeActivity.class
@@ -86,45 +89,39 @@ public class ExecuteClient {
         //}
     }
     public void registerLogin(String username, String password, String confirmPassword, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
-        model.setLoginUsername(username);
-        model.setLoginPassword(password);
-        model.setRegisterPassword(confirmPassword);
+        loginModel.setLoginUsername(username);
+        loginModel.setLoginPassword(password);
+        loginModel.setRegisterPassword(confirmPassword);
         Intent loginIntent = new Intent(act, GameTypeActivity.class);
         Log.d("Register Login", "true");
         act.startActivity(loginIntent);
     }
 
-    public Connection getConnection() {
-        return this.connection;
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
 
 
-    public void getGames(boolean gameType, boolean getgame) {
+
+    public void getGames(boolean gameType, boolean getgame) throws InterruptedException {
         // clientOutput = new GUITextDisplay(gameText,act);
-        final GUISelectGame selectGame = new GUISelectGame(getgame, gameType, connection, clientInput, clientOutput, act);
-        selectGame.start();
-        Boolean gotGames = selectGame.getGotGames();
-        while (gotGames == null){
-            gotGames = selectGame.getGotGames();
-        }
-        String games = selectGame.getGameList();
-        Log.d("Game List", games);
+        //final GUISelectGame selectGame = new GUISelectGame(getgame, gameType, connection, clientInput, clientOutput, act);
+       // selectGame.start();
+       // Boolean gotGames = selectGame.getGotGames();
+        //while (gotGames == null){
+          //  gotGames = selectGame.getGotGames();
+        //}
+        String games = gameStartModel.getGameList();
+        //Log.d("Game List", games);
         Intent gamesIntent = new Intent(act, NewGameActivity.class);
         gamesIntent.putExtra("GAMELIST", games);
         act.startActivity(gamesIntent);
     }
 
     public void pickGame(boolean gameType, String id, boolean getgame, String gameList) {
-        GUISelectGame selectGame = new GUISelectGame(getgame, id, gameType, connection, clientInput, clientOutput, act);
-        selectGame.start();
-        Boolean pickedGames = selectGame.getPickedGames();
-        while (pickedGames == null){
-            pickedGames = selectGame.getPickedGames();
-        }
+       // GUISelectGame selectGame = new GUISelectGame(getgame, id, gameType, connection, clientInput, clientOutput, act);
+        //selectGame.start();
+        //Boolean pickedGames = selectGame.getPickedGames();
+        //while (pickedGames == null){
+          //  pickedGames = selectGame.getPickedGames();
+        //}
         Log.d("Game", "Waitiing for players");
         Intent lobby= new Intent(act, PlayerLobbyActivity.class);
         //placement.putExtra("GAMELIST", games);
@@ -228,6 +225,7 @@ public void showStartBoard(TextView boardView) {
         guiPlayGame.start();
         while (!guiPlayGame.getTurnOver()){
             // wait for it to return
+
         }
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.resetOrders();
@@ -255,5 +253,13 @@ public void showStartBoard(TextView boardView) {
            clientInput.close();
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(1);
+    }
+
+    public Connection getConnection() {
+        return this.connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 }

@@ -21,10 +21,10 @@ public class GUIClientLogin {//extends Thread{
     Activity activity;
     Boolean loginResult;
     Boolean registeredUser;
-    GameStateModel model;
+    LoginModel model;
 
     // Login constructor
-    public GUIClientLogin(GameStateModel model,boolean registeredUser,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUIClientLogin(LoginModel model,boolean registeredUser,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
