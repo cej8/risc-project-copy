@@ -48,6 +48,11 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         getRegionByOwner();
         displayText();
     }
+//    @Override
+////    protected void onStart() {
+////        super.onStart();
+////
+////    }
 
     public void sendPlacements(View view){
         makePlacements();

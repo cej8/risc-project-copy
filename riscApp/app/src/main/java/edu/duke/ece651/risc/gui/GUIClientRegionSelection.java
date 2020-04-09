@@ -65,7 +65,6 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                    // clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
 
                     String groupName = this.regionGroup;
-                    //String groupName = Model.getGroupName();
                     //if (timeOut(startTime, maxTime)) {
                     if(timeOut(ParentActivity.getStartTime(),ParentActivity.getMaxTime())){
                         return false;
