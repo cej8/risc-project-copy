@@ -1,11 +1,15 @@
 package edu.duke.ece651.risc.client;
 
+import android.util.Log;
+
 import java.net.Socket;
 
+import edu.duke.ece651.risc.gui.GameStateModel;
+import edu.duke.ece651.risc.gui.ParentActivity;
 import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.Constants;
 
-public class ConnectionManager extends Thread {
+public class ConnectionManager {
    private Connection connection;
     private String address;
     private int port;
@@ -37,21 +41,24 @@ public class ConnectionManager extends Thread {
             connection.setSocket(socket);
             connection.getStreamsFromSocket();
             socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
+            Log.d("Connection","True");
             } catch (Exception e) {
             e.printStackTrace(System.out);
+            Log.d("Connection","false");
         }
     }
-  public void connectGame(){
+  public void connectGame() throws InterruptedException{
           if(connection.getSocket() == null){
-            makeConnection(address,port);
+              //---- block ConnectionManager until true (ready to connect)
+              GameStateModel model = new GameStateModel();
+              model.getConnection();
+              //---- unblock ConnectionManager
+              makeConnection(address,port);
+              // Set connection in client
+              ParentActivity parentActivity = new ParentActivity();
+              parentActivity.setConnection(connection);
         }
   
   }
-    @Override
-    public void run(){
-        if(connection.getSocket() == null){
-            makeConnection(address,port);
-        }
-    }
 }
 
