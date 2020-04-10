@@ -227,25 +227,22 @@ public void showStartBoard(TextView boardView) {
         clientOutput = new GUITextDisplay(helpText, act);
         final GUIPlayGame guiPlayGame = new GUIPlayGame(true,connection,clientInput,clientOutput,act);
         guiPlayGame.start();
-        while (!guiPlayGame.isGotBoard()&&(guiPlayGame.getWinner()==null)){
+        boolean play = guiPlayGame.isGotBoard();
+        String winner = guiPlayGame.getWinner();
+        while (!play&&(winner==null)){
             // wait
+            play = guiPlayGame.isGotBoard();
+            winner = guiPlayGame.getWinner();
         }
         if(guiPlayGame.getWinner()!=null){
             //game over someone has won
             Intent end = new Intent(act, EndGameActivity.class);
             end.putExtra("WINNER", guiPlayGame.getWinner());
             act.startActivity(end);
-            return;
-
+            //return;
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-               // boolean gotBoard = guiPlayGame.isGotBoard();
                 Intent firstUnits= new Intent(act, DisplayMapActivity.class);
                  act.startActivity(firstUnits);
-            }
-        },3000);
     }
     public void playGame(TextView helpText,List<OrderInterface> orders){
         clientOutput = new GUITextDisplay(helpText, act);
@@ -253,7 +250,6 @@ public void showStartBoard(TextView boardView) {
         guiPlayGame.start();
         while (!guiPlayGame.getTurnOver()){
             // wait for it to return
-
         }
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.resetOrders();
