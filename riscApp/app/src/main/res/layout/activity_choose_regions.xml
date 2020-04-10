@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.739"
-        app:srcCompat="@drawable/line1" />
+        app:srcCompat="@drawable/lineangleleft" />
 
     <ImageView
         android:id="@+id/line2"
@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.228"
-        app:srcCompat="@drawable/line2" />
+        app:srcCompat="@drawable/lineangleleft" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -250,7 +250,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.187"
-        app:srcCompat="@drawable/lineangleright35" />
+        app:srcCompat="@drawable/lineangleright" />
    <!-- <ImageButton
         android:id="@+id/Caprica"
         android:tooltipText="Caprica"
@@ -350,7 +350,6 @@
 
     <Button
         android:id="@+id/Ego"
-        android:text="Ego"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="148dp"
@@ -358,6 +357,9 @@
         android:background="@drawable/p6nb"
         android:padding="0dp"
         android:scaleType="fitCenter"
+        android:text="Ego"
+        android:textColor="#000000"
+        android:textColorHighlight="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

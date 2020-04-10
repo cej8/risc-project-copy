@@ -40,7 +40,7 @@ public class TechBoostActivity extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_tech_boost);
-            player = ParentActivity.getPlayer();
+            player = ParentActivity.getPlayer(); //comment out to test
             //player = new HumanPlayer("bob"); //player to pass in for testing
             yourFuel = findViewById(R.id.insertYourFuel);
             fuelCost = findViewById(R.id.insertFuelCost);
@@ -65,7 +65,7 @@ public class TechBoostActivity extends AppCompatActivity {
             super.onStart();
             setFields();
            yourLevel = player.getMaxTechLevel().getMaxTechLevel();
-            //yourLevel = 6;// uncomment out to just pass in a value for testing
+           // yourLevel = 5;// uncomment out to just pass in a value for testing
             unlockLevel();
 
         }
@@ -81,7 +81,7 @@ public class TechBoostActivity extends AppCompatActivity {
         public void yesButton(View view) {
             int before = player.getMaxTechLevel().getMaxTechLevel();
             TechBoost techBoost = new TechBoost(player);
-            //techBoost.doAction();
+           // techBoost.doAction();
             int after = player.getMaxTechLevel().getMaxTechLevel();
             Log.d("no button", "player level went from " + before + " to " + after);
             ParentActivity pa = new ParentActivity();
