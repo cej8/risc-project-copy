@@ -109,6 +109,7 @@ public class GUIPlayGame extends Thread{
                 }
                 // Get primitive
                 alive = isAlive.getMessage();
+                parentActivity.setAlive(alive);
                 // If not same then player died on previous turn --> get spectate message
                 if (alive != isPlaying) {
                     isPlaying = alive;
@@ -138,7 +139,7 @@ public class GUIPlayGame extends Thread{
     }
     public void playGame() {
         try {
-            while (true) {
+           // while (true) {
                 while (true) {
 //                    // Next server sends board
 //                    board = (Board) (connection.receiveObject());
@@ -149,7 +150,8 @@ public class GUIPlayGame extends Thread{
                    // clientOutput.displayBoard(board);
                     // Client generates orders --> sends
                     /////TODO probably seperate this part
-                    if (alive) {
+                    //if (alive) {
+                    if(ParentActivity.getAlive()){
                         //new OrderCreator
                        // OrderHelper orderhelper = new OrderHelper((edu.duke.ece651.risc.client.ClientInterface) this);
                         //List<OrderInterface> orders = orderhelper.createOrders();
@@ -166,7 +168,7 @@ public class GUIPlayGame extends Thread{
                         break;
                     }
                 }
-            }
+           // }
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
