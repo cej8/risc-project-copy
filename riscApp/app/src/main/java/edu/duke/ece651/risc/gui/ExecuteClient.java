@@ -241,14 +241,8 @@ public void showStartBoard(TextView boardView) {
             act.startActivity(end);
             //return;
         }
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-               // boolean gotBoard = guiPlayGame.isGotBoard();
                 Intent firstUnits= new Intent(act, DisplayMapActivity.class);
                  act.startActivity(firstUnits);
-//            }
-//        },3000);
     }
     public void playGame(TextView helpText,List<OrderInterface> orders){
         clientOutput = new GUITextDisplay(helpText, act);

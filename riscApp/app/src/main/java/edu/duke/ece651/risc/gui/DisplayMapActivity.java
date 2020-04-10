@@ -56,6 +56,11 @@ public class DisplayMapActivity extends AppCompatActivity {
         // temp for testing
         getOrders();
     }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        executeClient.showStartBoard(helpText);
+//    }
     public void getOrders(){
         Intent i = getIntent();
         String order = i.getStringExtra("ORDER");
