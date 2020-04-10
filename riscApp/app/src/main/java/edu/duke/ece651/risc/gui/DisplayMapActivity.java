@@ -45,7 +45,8 @@ public class DisplayMapActivity extends AppCompatActivity {
         setContentView(R.layout.map);
         executeClient = new ExecuteClient(this);
         helpText = findViewById(R.id.helpText);
-        executeClient.displayServerBoard(helpText);
+        executeClient.setConnection(ParentActivity.getConnection());
+      //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
         //generateBoard();

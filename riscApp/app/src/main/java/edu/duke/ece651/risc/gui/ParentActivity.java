@@ -15,6 +15,14 @@ public final class ParentActivity {
     private static List<OrderInterface> orders = new ArrayList<OrderInterface>();
     private static long startTime;
     private static long maxTime;
+    private static boolean isAlive;
+
+    public void setAlive(boolean a){
+        isAlive = a;
+    }
+    public static boolean getAlive(){
+        return isAlive;
+    }
 
     final static long getMaxTime(){return maxTime;}
     public void setMaxTime(long t){this.maxTime=t;}

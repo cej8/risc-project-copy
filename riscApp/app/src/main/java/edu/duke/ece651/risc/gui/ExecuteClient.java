@@ -256,7 +256,6 @@ public void showStartBoard(TextView boardView) {
         guiPlayGame.start();
         while (!guiPlayGame.getTurnOver()){
             // wait for it to return
-
         }
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.resetOrders();
