@@ -70,16 +70,13 @@ public class GUIClientLogin {//extends Thread{
     //Method to mesh with loginProcess() in loginServer
     public void performLogin() throws IOException, ClassNotFoundException,InterruptedException{
         String initialSuccess = receiveAndDisplayString();
-      //  StringMessage message = (StringMessage) (connection.receiveObject());
-      //  String str = message.unpacker();
        while(true){
-           boolean loginBoolean = model.getRegistrationAlert();
+           boolean loginBoolean = model.getRegistrationAlert();//wait for UI thread to set whether the user is logging in or registering as a new user
             connection.sendObject(new ConfirmationMessage(loginBoolean));
-           //connection.sendObject(new StringMessage(username));
 
             //---Login blocking start
-           // GameStateModel model = new GameStateModel();
-            String username = model.getLoginUsername();
+
+            String username = model.getLoginUsername();//wait for UI thread to set username
             connection.sendObject(new StringMessage(username));
             Log.d("Login","Username sent");
             //---Login blocking end

@@ -16,7 +16,7 @@ import java.util.*;
 import java.io.*;
 import org.mindrot.jbcrypt.*;
 
-public class ClientGUI extends Thread implements ClientInterface {
+public class ClientGUI extends Thread implements ClientInterface{//,Runnable {
     private Connection connection;
     private Board board;
     private boolean isPlaying = true;
@@ -342,6 +342,8 @@ public class ClientGUI extends Thread implements ClientInterface {
 
     @Override
     public void run() {
+    //    android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+      //  executeClient.setImageDecodeThread(Thread.currentThread());
         ConnectionManager makeConnection = new ConnectionManager(loginModel,address,port);
 
         try {

@@ -15,7 +15,7 @@ public class Connection implements Serializable{
 
   public Connection(){
   }
-  
+
   public Connection(Socket socket){
     this.socket = socket;
   }
@@ -41,7 +41,7 @@ public class Connection implements Serializable{
   public ObjectOutputStream getOutputStream() {
     return outputStream;
   }
-  // Close inputStream, outputStream, and socket 
+  // Close inputStream, outputStream, and socket
   public void closeAll() {
     try {
       if(inputStream != null) { inputStream.close(); }
@@ -80,5 +80,5 @@ public class Connection implements Serializable{
     this.outputStream = new ObjectOutputStream(socket.getOutputStream());
     this.inputStream = new ObjectInputStream(socket.getInputStream());
   }
-  
+
 }

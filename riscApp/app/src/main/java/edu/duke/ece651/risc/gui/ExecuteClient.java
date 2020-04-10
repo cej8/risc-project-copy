@@ -53,7 +53,7 @@ public class ExecuteClient {
     }
 
 
-    public void createGame() throws InterruptedException {
+    public void createGame(){
         String addr = "152.3.64.158";
         String portS = "12345";
         int port;
@@ -64,9 +64,14 @@ public class ExecuteClient {
             Log.d("Port", "Invalid");
             return;
         }
+try {
+    ClientGUI clientGUI = new ClientGUI(loginModel, gameStartModel, clientInput, clientOutput, addr, port);
+    clientGUI.start();
+}
+catch (Exception e){
+    e.printStackTrace();
+}
 
-        ClientGUI clientGUI= new ClientGUI(loginModel,gameStartModel,clientInput,clientOutput,addr,port);
-        clientGUI.start();
 
 
     }
@@ -82,10 +87,10 @@ public class ExecuteClient {
         }
     }
     public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
-       //parentActivity.setClientOutput(new GUITextDisplay(textHelp));
+
         loginModel.setLoginUsername(username);
         loginModel.setLoginPassword(password);
-       // loginModel.setRegistrationAlert(true);
+
         loginModel.isLoginBooleanReady(true);
            //  Log.d("line test","sadsalsaldkj");
         if(loginModel.getLoginResult()) {

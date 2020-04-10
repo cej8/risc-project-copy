@@ -1,5 +1,7 @@
 package edu.duke.ece651.risc.gui;
 
+import android.util.Log;
+
 import edu.duke.ece651.risc.shared.Connection;
 
 public class LoginModel {
@@ -45,11 +47,15 @@ public class LoginModel {
     public synchronized void setRegistrationAlert(boolean reg){
         registrationAlert = reg;
         notifyAll();
+        Log.i("MODEL","Setting registration alert to "+reg);
     }
     public synchronized boolean getRegistrationAlert() throws InterruptedException{
         while(!registrationReady){
+            Log.i("MODEL","Waiting for registration alert to be ready");
             wait();
         }
+      Log.i("MODEL","Returning registration alert");
+
         return registrationAlert;
     }
     public synchronized void setRegistrationReady(boolean ready){
@@ -59,23 +65,28 @@ public class LoginModel {
     //------- Login blocking
     public synchronized String getLoginPassword() throws InterruptedException{
         while ((loginPassword == null)){
-            wait();
+             wait();
         }
         return loginPassword;
     }
     public synchronized String getLoginUsername() throws InterruptedException{
         while (loginUsername == null){
+            Log.i("MODEL","Waiting for username to be set");
             wait();
         }
+        Log.i("MODEL","Returning username "+ loginUsername);
+
         return loginUsername;
     }
     public synchronized void setLoginPassword(String s){
         loginPassword = s;
         notifyAll();
+
     }
     public synchronized void setLoginUsername(String s){
         loginUsername = s;
         notifyAll();
+        Log.i("MODEL","Setting login to "+s);
     }
     public synchronized void setLoginResultReady(boolean r){
         this.loginResultReady=r;
@@ -83,6 +94,7 @@ public class LoginModel {
     }
     public synchronized boolean getLoginResult() throws InterruptedException{
         while (!loginResultReady){
+            Log.i("MODEL","Waiting on outcome of login(success/ failure)");
             wait();
         }
         return loginResult;

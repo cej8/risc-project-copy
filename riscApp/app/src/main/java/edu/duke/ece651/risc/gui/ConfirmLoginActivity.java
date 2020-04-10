@@ -28,19 +28,21 @@ public class ConfirmLoginActivity extends AppCompatActivity {
        // ParentActivity parentActivity = new ParentActivity();
        // parentActivity.generateOrders();
         executeClient = new ExecuteClient(this);
-        try {
-            executeClient.createGame();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+       // try {
+      //      executeClient.createGame();
+       // } catch (InterruptedException e) {
+          //  e.printStackTrace();
+        //}
     }
 
     public void login(View view){
+        executeClient.createGame();
         executeClient.registrationAlert(true);
 //        Intent loginIntent = new Intent(this,LoginActivity.class);
 //        startActivity(loginIntent);
    }
     public void register(View view){
+        executeClient.createGame();
         executeClient.registrationAlert(false);
 //        Intent regIntent = new Intent(this,RegisterActivity.class);
 //        startActivity(regIntent);
