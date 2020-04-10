@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
                 // This method will be executed once the timer is over
                 // Start your app main activity
               Intent i = new Intent(MainActivity.this, ConfirmLoginActivity.class);
-                 //Intent i = new Intent(MainActivity.this, ChooseRegionsActivity.class);
+               //Intent i = new Intent(MainActivity.this, DisplayMapActivity.class);
                 startActivity(i);
                 // close this activity
                 finish();
