@@ -47,6 +47,10 @@ public class GameStartModel {
         return startBoard;
 
     }
+    public synchronized void isOldBooleanReady(boolean b){
+        this.oldBooleanReady=b;
+        notifyAll();
+    }
     public synchronized boolean getOldBoolean() throws InterruptedException {
         while(!oldBooleanReady){
             wait();
@@ -68,7 +72,6 @@ public class GameStartModel {
         return true;
 
     }
-
     public synchronized void setPlayer(HumanPlayer p){
         this.player=p;
         notifyAll();

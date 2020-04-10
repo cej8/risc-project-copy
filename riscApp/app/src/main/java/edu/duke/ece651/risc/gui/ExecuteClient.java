@@ -65,7 +65,7 @@ public class ExecuteClient {
             return;
         }
 
-        ClientGUI clientGUI= new ClientGUI(loginModel,clientInput,clientOutput,addr,port);
+        ClientGUI clientGUI= new ClientGUI(loginModel,gameStartModel,clientInput,clientOutput,addr,port);
         clientGUI.start();
 
 
@@ -94,6 +94,10 @@ public class ExecuteClient {
             Log.d("Login", "true");
             act.startActivity(loginIntent);
         }
+        else{
+            Intent loginIntent = new Intent(act,LoginActivity.class);
+            act.startActivity(loginIntent);
+        }
     }
     public void registerLogin(String username, String password, String confirmPassword, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
       //  parentActivity.setClientOutput(new GUITextDisplay(textHelp));
@@ -120,6 +124,7 @@ public class ExecuteClient {
           //  gotGames = selectGame.getGotGames();
         //}
         gameStartModel.setOldBoolean(gameType);
+        gameStartModel.isOldBooleanReady(true);
         String games = gameStartModel.getGameList();
         Log.d("Game List", games);
         Intent gamesIntent = new Intent(act, NewGameActivity.class);

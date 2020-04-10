@@ -37,13 +37,14 @@ public class GUIClientLogin {//extends Thread{
         this.model = model;
     }*/
     // Login constructor
-    public GUIClientLogin(LoginModel model,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
+    public GUIClientLogin(LoginModel model,GameStartModel g,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
         this.activity = act;
         this.loginResult = null;
         this.model = model;
+        this.gameModel=g;
     }
         public boolean Login(){// throws IOException, ClassNotFoundException{
         boolean firstCall = true;
@@ -68,7 +69,7 @@ public class GUIClientLogin {//extends Thread{
     }
     //Method to mesh with loginProcess() in loginServer
     public void performLogin() throws IOException, ClassNotFoundException,InterruptedException{
-        String initalSuccess = receiveAndDisplayString();
+        String initialSuccess = receiveAndDisplayString();
       //  StringMessage message = (StringMessage) (connection.receiveObject());
       //  String str = message.unpacker();
        while(true){
@@ -131,7 +132,7 @@ public class GUIClientLogin {//extends Thread{
                this.loginResult = false;
                 model.setLoginResult(false);
                 model.setLoginResultReady(true);
-                ParentActivity.getClientOutput().displayString("Incorrect username or password. If you are not registered please do so now.");
+             //   ParentActivity.getClientOutput().displayString("Incorrect username or password. If you are not registered please do so now.");
                 Log.d("GUIClientLogin", loginResult.toString());
                continue;
             }
@@ -195,7 +196,7 @@ public class GUIClientLogin {//extends Thread{
     public boolean queryYNAndRespond(String query) throws IOException {
         while(true){
             // Request input
-            ParentActivity.getClientOutput().displayString(query);
+          //  ParentActivity.getClientOutput().displayString(query);
             String spectateResponse = clientInput.readInput();
 
             spectateResponse = spectateResponse.toUpperCase();

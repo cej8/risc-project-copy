@@ -55,12 +55,12 @@ public class ClientGUI extends Thread implements ClientInterface {
         this.firstCall = true;
     }*/
     // constructor for abstracted out makeConnection class
-    public ClientGUI(LoginModel lm,ClientInputInterface clientInput, ClientOutputInterface clientOutput,String addr, int port) throws InterruptedException {
+    public ClientGUI(LoginModel lm,GameStartModel gm,ClientInputInterface clientInput, ClientOutputInterface clientOutput,String addr, int port) throws InterruptedException {
         board = new Board();
         this.clientInput = clientInput;
         this.clientOutput = clientOutput;
          this.loginModel= lm;
-         this.gameStartModel= new GameStartModel();
+         this.gameStartModel= gm;
          this.address=addr;
          this.port=port;
 
@@ -354,7 +354,7 @@ public class ClientGUI extends Thread implements ClientInterface {
 
 
 
-        GUIClientLogin clientLogin = new GUIClientLogin(loginModel,connection, clientInput, clientOutput, ParentActivity.getActivity());
+        GUIClientLogin clientLogin = new GUIClientLogin(loginModel,gameStartModel,connection, clientInput, clientOutput, ParentActivity.getActivity());
         firstCall = clientLogin.Login();
         playGame();
     }

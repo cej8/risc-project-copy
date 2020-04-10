@@ -39,10 +39,12 @@ public class LoginModel {
     }
     public synchronized void isLoginBooleanReady(boolean l){
         this.loginBooleanReady=l;
-        notifyAll();}
+        notifyAll();
+    }
     //-------- Login / Registration
     public synchronized void setRegistrationAlert(boolean reg){
-        registrationAlert = reg; notifyAll();
+        registrationAlert = reg;
+        notifyAll();
     }
     public synchronized boolean getRegistrationAlert() throws InterruptedException{
         while(!registrationReady){
@@ -55,53 +57,53 @@ public class LoginModel {
         notifyAll();
     }
     //------- Login blocking
-    synchronized String getLoginPassword() throws InterruptedException{
+    public synchronized String getLoginPassword() throws InterruptedException{
         while ((loginPassword == null)){
             wait();
         }
         return loginPassword;
     }
-    synchronized String getLoginUsername() throws InterruptedException{
+    public synchronized String getLoginUsername() throws InterruptedException{
         while (loginUsername == null){
             wait();
         }
         return loginUsername;
     }
-    synchronized void setLoginPassword(String s){
+    public synchronized void setLoginPassword(String s){
         loginPassword = s;
         notifyAll();
     }
-    synchronized void setLoginUsername(String s){
+    public synchronized void setLoginUsername(String s){
         loginUsername = s;
         notifyAll();
     }
-    synchronized void setLoginResultReady(boolean r){
+    public synchronized void setLoginResultReady(boolean r){
         this.loginResultReady=r;
         notifyAll();
     }
-    synchronized boolean getLoginResult() throws InterruptedException{
+    public synchronized boolean getLoginResult() throws InterruptedException{
         while (!loginResultReady){
             wait();
         }
         return loginResult;
     }
-    synchronized void setLoginResult(Boolean r){
+    public synchronized void setLoginResult(Boolean r){
         loginResult = r;
         notifyAll();
     }
     //------- Registration blocking
-    synchronized String getConfirmationPassword() throws InterruptedException{
+    public synchronized String getConfirmationPassword() throws InterruptedException{
         while (registerPassword == null){
             wait();
         }
         return registerPassword;
     }
-    synchronized void setRegisterPassword(String s){
+    public synchronized void setRegisterPassword(String s){
         registerPassword = s;
         notifyAll();
     }
 
-    synchronized String getStartGroup() throws InterruptedException {
+    public synchronized String getStartGroup() throws InterruptedException {
         // value not ready
         while (startGroup == null){
             wait();
@@ -109,7 +111,7 @@ public class LoginModel {
         return startGroup;
     }
     // client
-    synchronized void setStartGroup(String s){
+    public synchronized void setStartGroup(String s){
         this.startGroup = s;
         notifyAll();
     }
