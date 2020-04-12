@@ -1,6 +1,12 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+
+import java.net.SocketException;
 
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
@@ -21,6 +27,10 @@ public class GUIWaitingRoom extends Thread {
     private boolean firstCall;
     //private boolean waitingForPlayers;
     private boolean doneRunning=false;
+    private int waitingTime=0;
+    private Handler handler;
+   private Button startGame;
+   private ProgressBar status;
 
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
@@ -28,19 +38,22 @@ public class GUIWaitingRoom extends Thread {
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
     private long startTime=-1;
     private long maxTime=-1;
-    public GUIWaitingRoom(Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
+    public GUIWaitingRoom(ProgressBar p,Button b, Handler h, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
         this.activity = act;
-        // this.board= ParentActivity.getBoard();
-        //this.player=ParentActivity.getPlayer();
-        //this.firstCall=begin;
-        //this.waitingForPlayers = begin;
+        this.handler=h;
+        this.startGame= b;
+        this.status=p;
+
     }
-    public boolean getDoneRunning(){
-        return doneRunning;
-    }
+  /*  public int getWaitingTime() throws InterruptedException {
+       // while(waitingTime==0){
+         //   wait();
+        //}
+        return waitingTime;
+    }*/
     public void getInitialBoard(){
         long startTime = -1;
         long maxTime = -1;
@@ -83,6 +96,9 @@ public class GUIWaitingRoom extends Thread {
             connection.closeAll();
         }
     }
+    public void setSocketTimeout(int timeout) throws SocketException {
+        connection.getSocket().setSoTimeout(timeout);
+    }
     public void run() {
         try {
             //firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
@@ -90,17 +106,30 @@ public class GUIWaitingRoom extends Thread {
             //pa.setFirstCall(firstCall);
             pa.setPlayer((HumanPlayer) connection.receiveObject());
             this.player = ParentActivity.getPlayer();
+            setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
         }
         catch(Exception e) {
             e.printStackTrace();
             connection.closeAll();
         }
-   // if(firstCall){
+
         waitingToStart();
-      getInitialBoard();
-      doneRunning =true;
-      //return;
-    //}
-   // doneRunning=true;
-        }
+        getInitialBoard();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    waitingTime=connection.getSocket().getSoTimeout();
+                    status.setVisibility(View.INVISIBLE);
+                    startGame.setEnabled(true);
+
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+    }
 }
