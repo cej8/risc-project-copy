@@ -37,8 +37,6 @@ public class GUIWaitingRoom extends Thread {
         //this.player=ParentActivity.getPlayer();
         //this.firstCall=begin;
         //this.waitingForPlayers = begin;
-
-
     }
     public boolean getDoneRunning(){
         return doneRunning;
@@ -87,8 +85,9 @@ public class GUIWaitingRoom extends Thread {
     }
     public void run() {
         try {
-            firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
+            //firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
             ParentActivity pa = new ParentActivity();
+            //pa.setFirstCall(firstCall);
             pa.setPlayer((HumanPlayer) connection.receiveObject());
             this.player = ParentActivity.getPlayer();
         }
@@ -96,12 +95,12 @@ public class GUIWaitingRoom extends Thread {
             e.printStackTrace();
             connection.closeAll();
         }
-    if(firstCall){
+   // if(firstCall){
         waitingToStart();
       getInitialBoard();
       doneRunning =true;
-      return;
-    }
-    doneRunning=true;
+      //return;
+    //}
+   // doneRunning=true;
         }
 }

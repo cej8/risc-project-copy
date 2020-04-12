@@ -1,6 +1,8 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,15 +36,14 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
     private String regionGroup;
     private boolean firstCall;
     private boolean regionChosen=false;
-    //private boolean waitingForPlayers;
-
+    private Handler handler;
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES + .1;
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
 
 
-    public GUIClientRegionSelection(boolean begin, String region, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
+    public GUIClientRegionSelection(Handler regionHandler,boolean begin, String region, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -50,6 +51,7 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
         this.regionGroup = region;
         this.board= ParentActivity.getBoard();
         this.player=ParentActivity.getPlayer();
+        this.handler = regionHandler;
     }
 
     public void setSocketTimeout(int timeout) throws SocketException {
@@ -87,8 +89,6 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                 parentActivity.setBoard((Board) (connection.receiveObject()));
                 this.board = ParentActivity.getBoard();
             } catch (Exception e) {
-
-
             }
             return true;
     }
@@ -109,7 +109,14 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
     public void run() {
         try {
             if (chooseStartGroup()) {
-                regionChosen=true;
+               // regionChosen=true;
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent firstUnits= new Intent(activity, PlaceUnitsActivity.class);
+                        activity.startActivity(firstUnits);
+                    }
+                });
             }
         } catch (Exception e) {
 

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ public class JoinGameActivity extends AppCompatActivity {
     EditText gameID;
     String gameList;
     TextView textView;
+    private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,6 @@ public class JoinGameActivity extends AppCompatActivity {
 
     public void joinGame(View view){
         String idGame = gameID.getText().toString();
-        executeClient.pickGame(true,idGame,false,gameList);
+        executeClient.pickGame(handler,true,idGame,false,gameList);
     }
 }

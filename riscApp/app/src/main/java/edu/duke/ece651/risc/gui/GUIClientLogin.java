@@ -1,6 +1,8 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -24,7 +26,33 @@ public class GUIClientLogin extends Thread{
     Activity activity;
     Boolean loginResult;
     Boolean registeredUser;
-
+    private Handler loginHandler;
+    // Handler constructor
+    public GUIClientLogin(Handler loginHandler,Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act){
+        this.connection = connect;
+        this.clientInput = input;
+        this.clientOutput = output;
+        this.activity = act;
+        this.username = username;
+        this.password = password;
+        this.loginResult = null;
+        this.registeredUser = true;
+        this.confirmPassword = null;
+        this.loginHandler = loginHandler;
+    }
+    // register handler constructor
+    public GUIClientLogin(Handler regHandler,Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act, String password2){
+        this.connection = connect;
+        this.clientInput = input;
+        this.clientOutput = output;
+        this.activity = act;
+        this.username = username;
+        this.password = password;
+        this.loginResult = null;
+        this.registeredUser = false;
+        this.confirmPassword = password2;
+        this.loginHandler = regHandler;
+    }
     // Login constructor
     public GUIClientLogin(Connection connect, ClientInputInterface input, ClientOutputInterface output, String username, String password, Activity act){
         this.connection = connect;
@@ -108,8 +136,7 @@ public class GUIClientLogin extends Thread{
             String hashPassword2 = BCrypt.hashpw(password2, salt);
             //Send copy back
             connection.sendObject(new StringMessage(hashPassword2));
-
-        }
+            }
 
             //Get back response - checks login
             String response = receiveAndDisplayString();
@@ -126,11 +153,6 @@ public class GUIClientLogin extends Thread{
                // break;
 
             }
-        //Log.d("GUIClientLogin", loginResult.toString());
-       // }
-
-        //At this point user is logged in (either old or new)
-
     }
 
     //Method to mesh with selectGame() in loginServer
@@ -193,7 +215,23 @@ public class GUIClientLogin extends Thread{
     @Override
     public void run(){
         try {
-                performLogin();
+            performLogin();
+            loginHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (loginResult){
+                        // send to GameTypeActivity.class
+                        Intent loginIntent = new Intent(activity, GameTypeActivity.class);
+                        Log.d("Login", "true");
+                        activity.startActivity(loginIntent);
+                    } else {
+                        // reprompt
+                        clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
+                        Intent confirmLogin = new Intent(activity, ConfirmLoginActivity.class);
+                        activity.startActivity(confirmLogin);
+                    }
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

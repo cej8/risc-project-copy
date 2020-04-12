@@ -1,6 +1,8 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,12 +34,13 @@ public class GUIPlayGame extends Thread{
     private boolean gotBoard;
     private boolean turnOver = false;
     private String winnerPrompt=null;
+    private Handler handler;
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
     // display board constructor
-    public GUIPlayGame(boolean displayBoard,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUIPlayGame(Handler handler,boolean displayBoard,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -45,9 +48,10 @@ public class GUIPlayGame extends Thread{
         this.board = ParentActivity.getBoard();
         this.displayBoard = displayBoard;
         this.gotBoard = false;
+        this.handler = handler;
     }
     // send orders
-    public GUIPlayGame(List<OrderInterface> orders,boolean displayBoard,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUIPlayGame(Handler handler,List<OrderInterface> orders,boolean displayBoard,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -55,6 +59,7 @@ public class GUIPlayGame extends Thread{
         this.board = ParentActivity.getBoard();
         this.displayBoard = displayBoard;
         this.orders = orders;
+        this.handler = handler;
     }
     public boolean getAlive(){
         return this.alive;
@@ -211,9 +216,33 @@ public class GUIPlayGame extends Thread{
     public void run(){
         if (displayBoard == true) {
             serverDisplayBoard();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(getWinner()!=null){
+                        //game over someone has won
+                        Intent end = new Intent(activity, EndGameActivity.class);
+                        end.putExtra("WINNER", getWinner());
+                        activity.startActivity(end);
+                        //return;
+                    } else {
+                        Intent firstUnits = new Intent(activity, DisplayMapActivity.class);
+                        activity.startActivity(firstUnits);
+                    }
+                }
+            });
         } else {
             playGame();
-            turnOver = true;
+           // turnOver = true;
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    ParentActivity parentActivity = new ParentActivity();
+                    parentActivity.resetOrders();
+                    Intent intent = new Intent(activity,WaitActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
 }
