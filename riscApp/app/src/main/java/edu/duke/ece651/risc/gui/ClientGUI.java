@@ -1,4 +1,4 @@
-package edu.duke.ece651.risc.gui;
+/*package edu.duke.ece651.risc.gui;
 
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientInterface;
@@ -24,7 +24,7 @@ public class ClientGUI extends Thread implements ClientInterface {
     private HumanPlayer player;
     private String address;
     private int port;
-    private LoginModel loginModel;
+  //  private LoginModel loginModel;
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
@@ -50,7 +50,7 @@ public class ClientGUI extends Thread implements ClientInterface {
         this.clientOutput = clientOutput;
         this.connection = connection;
         this.firstCall = true;
-    }*/
+    }
     // constructor for abstracted out makeConnection class
     public ClientGUI(ClientInputInterface clientInput, ClientOutputInterface clientOutput,Connection connection) {
         board = new Board();
@@ -340,6 +340,4 @@ public class ClientGUI extends Thread implements ClientInterface {
         firstCall=clientLogin.Login();
         playGame();
     }
-}
-
-
+}*/
