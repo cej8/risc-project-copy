@@ -118,14 +118,14 @@ public class GUIWaitingRoom extends Thread {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                try {
-                    waitingTime=connection.getSocket().getSoTimeout();
+             //   try {
+                 //   waitingTime=connection.getSocket().getSoTimeout();
                     status.setVisibility(View.INVISIBLE);
                     startGame.setEnabled(true);
 
-                } catch (SocketException e) {
-                    e.printStackTrace();
-                }
+               // } catch (SocketException e) {
+                 //   e.printStackTrace();
+                //}
             }
         });
 
