@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +40,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     TextView helpText;
     List<OrderInterface> orders;
     Board board;
+    private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +58,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         // temp for testing
         getOrders();
     }
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        executeClient.showStartBoard(helpText);
-//    }
+
     public void getOrders(){
         Intent i = getIntent();
         String order = i.getStringExtra("ORDER");
@@ -99,6 +97,12 @@ public class DisplayMapActivity extends AppCompatActivity {
             }
         }
     }
+    // SUBMIT ORDERS!!!!!!!!!!!!!
+    public void submitAll(View view){
+        // TODO: execute client when done
+        orders = ParentActivity.getOrders();
+        executeClient.playGame(handler,helpText,orders);
+    }
     public void moveOrder(View view){
         Intent attackSetup = new Intent(this,OrderActivity.class);
         attackSetup.putExtra("ORDER","move");
@@ -127,11 +131,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         }
         return nameToRegionMap.get(name);
     }
-    public void submitAll(View view){
-        // TODO: execute client when done
-        orders = ParentActivity.getOrders();
-        executeClient.playGame(helpText,orders);
-    }
+
     public void planetOne(View view){
           Region region = regions.get(10);
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),region.getOwner());

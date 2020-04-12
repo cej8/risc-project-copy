@@ -16,6 +16,14 @@ public final class ParentActivity {
     private static long startTime;
     private static long maxTime;
     private static boolean isAlive;
+    private static boolean firstCall;
+
+    public void setFirstCall(boolean f){
+        firstCall = f;
+    }
+    public static boolean getFirstCall(){
+        return firstCall;
+    }
 
     public void setAlive(boolean a){
         isAlive = a;

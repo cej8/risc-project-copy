@@ -35,15 +35,12 @@ public class ExecuteClient {
 
     //public void createGame(){
     public void createGame() {
-        //String addr = "172.74.90.68"; localhost
-        //String addr = "67.159.89.108"; old server
         String addr = "152.3.64.158";
         String portS = "12345";
         int port;
         try {
             port = Integer.parseInt(portS);
         } catch (NumberFormatException ne) {
-            //textView.setText("Port invalid");
             Log.d("Port", "Invalid");
             return;
         }
@@ -62,11 +59,11 @@ public class ExecuteClient {
         this.connection = connection;
     }
 
-    public void registerLogin(String username, String password, String confirmPassword, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+    public void registerLogin(Handler regHandler,String username, String password, String confirmPassword, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
         clientOutput = new GUITextDisplay(textHelp, act);
-        final GUIClientLogin clientLogin = new GUIClientLogin(connection, clientInput, clientOutput, username, password, act, confirmPassword);
+        final GUIClientLogin clientLogin = new GUIClientLogin(regHandler,connection, clientInput, clientOutput, username, password, act, confirmPassword);
         clientLogin.start();
-        Boolean loginResult = clientLogin.getLoginResult();
+      /*  Boolean loginResult = clientLogin.getLoginResult();
         while (loginResult == null){
             loginResult = clientLogin.getLoginResult();
         }
@@ -87,14 +84,13 @@ public class ExecuteClient {
             Log.d("Login", "true");
            // setLoginResult(loginResult);
             act.startActivity(loginIntent);
-        }
+        }*/
     }
 
-    public void getGames(boolean gameType, boolean getgame) {
-        // clientOutput = new GUITextDisplay(gameText,act);
-        final GUISelectGame selectGame = new GUISelectGame(getgame, gameType, connection, clientInput, clientOutput, act);
+    public void getGames(Handler gameHandler, boolean gameType, boolean getgame) {
+        final GUISelectGame selectGame = new GUISelectGame(gameHandler,getgame, gameType, connection, clientInput, clientOutput, act);
         selectGame.start();
-        Boolean gotGames = selectGame.getGotGames();
+        /*Boolean gotGames = selectGame.getGotGames();
         while (gotGames == null){
             gotGames = selectGame.getGotGames();
         }
@@ -102,30 +98,30 @@ public class ExecuteClient {
         Log.d("Game List", games);
         Intent gamesIntent = new Intent(act, NewGameActivity.class);
         gamesIntent.putExtra("GAMELIST", games);
-        act.startActivity(gamesIntent);
+        act.startActivity(gamesIntent);*/
     }
 
-    public void pickGame(boolean gameType, String id, boolean getgame, String gameList) {
-        GUISelectGame selectGame = new GUISelectGame(getgame, id, gameType, connection, clientInput, clientOutput, act);
+    public void pickGame(Handler newGameHandler,boolean gameType, String id, boolean getgame, String gameList) {
+        GUISelectGame selectGame = new GUISelectGame(newGameHandler,getgame, id, gameType, connection, clientInput, clientOutput, act);
         selectGame.start();
-        Boolean pickedGames = selectGame.getPickedGames();
+      /*  Boolean pickedGames = selectGame.getPickedGames();
         while (pickedGames == null){
             pickedGames = selectGame.getPickedGames();
         }
         Log.d("Game", "Waitiing for players");
         Intent lobby= new Intent(act, PlayerLobbyActivity.class);
-        //placement.putExtra("GAMELIST", games);
-        act.startActivity(lobby);
+        act.startActivity(lobby);*/
     }
 
-    public void loginGame(String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
+    public void loginGame(Handler loginHandler,String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
         clientOutput = new GUITextDisplay(textHelp, act);
-        final GUIClientLogin clientLogin = new GUIClientLogin(connection, clientInput, clientOutput, username, password, act);
+        final GUIClientLogin clientLogin = new GUIClientLogin(loginHandler,connection, clientInput, clientOutput, username, password, act);
         clientLogin.start();
-        Boolean loginResult = clientLogin.getLoginResult();
+      /*  Boolean loginResult = clientLogin.getLoginResult();
         while (loginResult == null) {
             loginResult = clientLogin.getLoginResult();
         }
+
        // clientLogin.close();
             Log.d("Login Result", loginResult.toString());
 
@@ -135,17 +131,13 @@ public class ExecuteClient {
                 clientOutput.displayString("Incorrect username or password. If you are not registered please do so now.");
                 Log.d("Login", "false");
                 Log.d("Helptext", helpText);
-//                Intent loginFalse = new Intent(act,LoginActivity.class);
-//                loginFalse.putExtra("LOGIN","Username or password not found. Please register if needed.");
-//                act.startActivity(loginFalse);
-               // loginGame(reprompt,username,password,textHelp);
             } else {
                 // start new intent aka display available games
                 Intent loginIntent = new Intent(act, GameTypeActivity.class);
                 Log.d("Login", "true");
                 //setLoginResult(loginResult);
                 act.startActivity(loginIntent);
-            }
+            }*/
     }
 
     public void startGame(TextView textView, Activity act, EditText editText) {
@@ -166,7 +158,7 @@ public class ExecuteClient {
         this.helpText = text;
     }
 
-    public void startPlacement(){
+   /* public void startPlacement(){
         Board board = ParentActivity.getBoard();
         if(board!=null) {
             new Handler().postDelayed(new Runnable() {
@@ -181,31 +173,26 @@ public class ExecuteClient {
                 }
             }, 2000);
         }
-
-
-    }
+    }*/
     public void getBoardAssignments(TextView helpText) {
         clientOutput = new GUITextDisplay(helpText, act);
         final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(connection, clientInput, clientOutput, act);
         initializeBoard.start();
-
-        while(!initializeBoard.getDoneRunning()){
+        /*while(!initializeBoard.getDoneRunning()){
 //wait for board to come in
-
-        }
+        }*/
 
     }
-public void showStartBoard(TextView boardView) {
-    clientOutput = new GUITextDisplay(boardView, act);
-    clientOutput.displayBoard(ParentActivity.getBoard());
-}
+    public void showStartBoard(TextView boardView) {
+        clientOutput = new GUITextDisplay(boardView, act);
+        clientOutput.displayBoard(ParentActivity.getBoard());
+    }
 
-    public void chooseRegions(final TextView boardView, String regionGroup) {
-
+    public void chooseRegions(Handler handler,final TextView boardView, String regionGroup) {
        clientOutput = new GUITextDisplay(boardView, act);
-        final GUIClientRegionSelection selection = new GUIClientRegionSelection(false,regionGroup, connection, clientInput, clientOutput, act);
+        final GUIClientRegionSelection selection = new GUIClientRegionSelection(handler,false,regionGroup, connection, clientInput, clientOutput, act);
         selection.start();
-        while(!selection.getRegionChosen()) {
+      /*  while(!selection.getRegionChosen()) {
             //wait for thread to return
         }
         new Handler().postDelayed(new Runnable() {
@@ -220,14 +207,14 @@ public void showStartBoard(TextView boardView) {
                 act.startActivity(firstUnits);
         //displayServerBoard(boardView);
     }
-}, 2000);
+}, 2000);*/
     }
     //set master board
-    public void displayServerBoard(TextView helpText){
+    public void displayServerBoard(Handler handler,TextView helpText){
         clientOutput = new GUITextDisplay(helpText, act);
-        final GUIPlayGame guiPlayGame = new GUIPlayGame(true,connection,clientInput,clientOutput,act);
+        final GUIPlayGame guiPlayGame = new GUIPlayGame(handler,true,connection,clientInput,clientOutput,act);
         guiPlayGame.start();
-        boolean play = guiPlayGame.isGotBoard();
+      /*  boolean play = guiPlayGame.isGotBoard();
         String winner = guiPlayGame.getWinner();
         while (!play&&(winner==null)){
             // wait
@@ -242,25 +229,25 @@ public void showStartBoard(TextView boardView) {
             //return;
         }
                 Intent firstUnits= new Intent(act, DisplayMapActivity.class);
-                 act.startActivity(firstUnits);
+                 act.startActivity(firstUnits);*/
     }
-    public void playGame(TextView helpText,List<OrderInterface> orders){
+    public void playGame(Handler handler,TextView helpText,List<OrderInterface> orders){
         clientOutput = new GUITextDisplay(helpText, act);
-        final GUIPlayGame guiPlayGame = new GUIPlayGame(orders,false, connection, clientInput, clientOutput, act);
+        final GUIPlayGame guiPlayGame = new GUIPlayGame(handler,orders,false, connection, clientInput, clientOutput, act);
         guiPlayGame.start();
-        while (!guiPlayGame.getTurnOver()){
+       /* while (!guiPlayGame.getTurnOver()){
             // wait for it to return
         }
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.resetOrders();
         Intent intent = new Intent(act,WaitActivity.class);
-        act.startActivity(intent);
+        act.startActivity(intent);*/
     }
-    public void placementOrder(){
+    public void placementOrder(Handler handler){
        // clientOutput = new GUITextDisplay(helpText, act);
-        GUIClientPlacementSelection guiClientPlacementSelection = new GUIClientPlacementSelection(connection,clientInput,clientOutput,act);
+        GUIClientPlacementSelection guiClientPlacementSelection = new GUIClientPlacementSelection(handler,connection,clientInput,clientOutput,act);
         guiClientPlacementSelection.start();
-        while(!guiClientPlacementSelection.getPlacement()) {
+        /*while(!guiClientPlacementSelection.getPlacement()) {
             //wait for thread to return
         }
         // reset Orders list
@@ -269,8 +256,9 @@ public void showStartBoard(TextView boardView) {
         Log.d("Placements Completed",guiClientPlacementSelection.getPlacement().toString());
         // display map
         Intent newGame= new Intent(act, WaitActivity.class);
-        act.startActivity(newGame);
+        act.startActivity(newGame);*/
     }
+
     public void endGame(){
 
            connection.closeAll();
