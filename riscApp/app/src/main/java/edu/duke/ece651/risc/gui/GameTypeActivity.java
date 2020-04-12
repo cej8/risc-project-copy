@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ public class GameTypeActivity extends AppCompatActivity {
     Connection connection;
     ExecuteClient executeClient;
     TextView textView;
+    private Handler gametypeHandler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,11 +24,11 @@ public class GameTypeActivity extends AppCompatActivity {
         executeClient.setConnection(connection);
     }
     // Take me to page displaying new games to join
-    public void gameNew(View view) throws InterruptedException {
-        executeClient.getGames(false,true);
+    public void gameNew(View view){
+        executeClient.getGames(gametypeHandler,false,true);
     }
     // Take me to screen displaying games I previously joined
-    public void gameOld(View view) throws InterruptedException {
-        executeClient.getGames(true,true);
+    public void gameOld(View view){
+        executeClient.getGames(gametypeHandler,true,true);
     }
 }

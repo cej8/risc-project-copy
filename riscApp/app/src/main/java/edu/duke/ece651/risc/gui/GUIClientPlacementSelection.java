@@ -1,6 +1,8 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -26,8 +28,9 @@ public class GUIClientPlacementSelection extends Thread implements ClientInterfa
     HumanPlayer player;
     List<OrderInterface> placementOrders;
     private boolean placement = false;
+    private Handler handler;
 
-    public GUIClientPlacementSelection(Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUIClientPlacementSelection(Handler handler,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -35,25 +38,18 @@ public class GUIClientPlacementSelection extends Thread implements ClientInterfa
         this.board = ParentActivity.getBoard();
         this.player = ParentActivity.getPlayer();
         this.placementOrders = ParentActivity.getOrders();
+        this.handler = handler;
     }
     public boolean chooseRegions() {
         try {
             while (true) {
 
-                // Display and move into placements
-                // TODO: not actually displaying board??
-                //clientOutput.displayBoard(board);//should be in onStart() of placement activity
-               //OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", (edu.duke.ece651.risc.client.ClientInterface) this);
-               // List<OrderInterface> placementOrders = new ArrayList<OrderInterface>();
-                //placement.addToOrderList(placementOrders);
-                //  if(timeOut(startTime, maxTime)) { return false; }
                 if(timeOut(ParentActivity.getStartTime(), ParentActivity.getMaxTime())) { return false; }
                 connection.sendObject(placementOrders);
 
                 // Wait for response
                 StringMessage responseMessage = (StringMessage) (connection.receiveObject());
                 String response = responseMessage.unpacker();
-               // clientOutput.displayString(response);
                 if (response.matches("^Fail:.*$")) {
                     continue;
                 }
@@ -86,8 +82,18 @@ public class GUIClientPlacementSelection extends Thread implements ClientInterfa
     public void run() {
         try {
             if (chooseRegions()) {
-                placement = true;
+                //placement = true;
                 Log.d("Placement Order", "Successful");
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ParentActivity parentActivity = new ParentActivity();
+                        parentActivity.resetOrders();
+                        // display map
+                        Intent newGame= new Intent(activity, WaitActivity.class);
+                        activity.startActivity(newGame);
+                    }
+                });
             }
         } catch (Exception e) {
         }

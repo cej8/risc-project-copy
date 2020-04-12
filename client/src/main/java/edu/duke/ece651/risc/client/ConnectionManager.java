@@ -49,9 +49,7 @@ public class ConnectionManager extends Thread {
   }
     @Override
     public void run(){
-        if(connection.getSocket() == null){
-            makeConnection(address,port);
-        }
+      connectGame();
     }
 }
 

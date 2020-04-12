@@ -1,6 +1,5 @@
 package edu.duke.ece651.risc.gui;
 
-import android.app.Activity;
 import android.util.Log;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -11,11 +10,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.duke.ece651.risc.client.Client;
 import edu.duke.ece651.risc.client.ClientInputInterface;
-import edu.duke.ece651.risc.client.ClientLogin;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
-import edu.duke.ece651.risc.client.ConnectionManager;
 import edu.duke.ece651.risc.client.ConsoleInput;
 import edu.duke.ece651.risc.client.OrderCreator;
 import edu.duke.ece651.risc.client.OrderFactoryProducer;
@@ -67,13 +63,23 @@ public class GUIClient extends Thread implements ClientInterface, edu.duke.ece65
         }
 
         // Constructor needed for Android threads
-        public GUIClient(ClientInputInterface clientInput, ClientOutputInterface clientOutput, String address, int port) {
+        public GUIClient(ClientInputInterface clientInput, ClientOutputInterface clientOutput,String address, int port) {
             this();
             this.clientInput = clientInput;
             this.clientOutput = clientOutput;
             this.address = address;
             this.port = port;
         }
+
+    public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
+        this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
+    }
+    public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES){
+        this.START_WAIT_MINUTES = START_WAIT_MINUTES;
+    }
+    public void setLOGIN_WAIT_MINUTES(double LOGIN_WAIT_MINUTES){
+        this.LOGIN_WAIT_MINUTES = LOGIN_WAIT_MINUTES;
+    }
 
     public void setBoard(Board board) {
         this.board = board;
@@ -108,21 +114,222 @@ public class GUIClient extends Thread implements ClientInterface, edu.duke.ece65
         return this.player;
     }
 
-    public void playGame() throws InterruptedException {
-        // 1) Connection
-        ConnectionManager makeConnection = new ConnectionManager(address,port);
-        makeConnection.connectGame();
-        this.connection = ParentActivity.getConnection();
-        try {
-            // 2) Perform login / registration
-            LoginModel model = new LoginModel();
-           // GUIClientLogin clientLogin = new GUIClientLogin(model,true,connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
-        //    GUIClientLogin clientLogin = new GUIClientLogin(model,model.getRegistrationAlert(),connection, clientInput, ParentActivity.getClientOutput(), ParentActivity.getActivity());
-         //   Log.d("Reg/Login", String.valueOf(model.getRegistrationAlert()));
-           // clientLogin.performLogin();
-            //GUISelectGame selectGame=
+    public void setSocketTimeout(int timeout) throws SocketException {
+        connection.getSocket().setSoTimeout(timeout);
+    }
 
-            // 3) Perform select game
+    public boolean timeOut(long startTime, long maxTime){
+        // If too long --> kill player (prevent trying to write to closed pipe)
+        if (System.currentTimeMillis() - startTime > maxTime) {
+            clientOutput.displayString("Player took too long, killing connection");
+            connection.closeAll();
+            clientInput.close();
+            return true;
+        }
+        return false;
+    }
+
+    public void updateClientBoard() {
+        Board masterBoard = null;
+        try {
+            // masterBoard = (Board) fromServer.readObject();
+            masterBoard = (Board) connection.getInputStream().readObject();
+            this.setBoard(masterBoard);
+            this.board.setRegions(masterBoard.getRegions());
+        } catch (IOException e) {
+            System.out.println("IOException is caught");
+        } catch (ClassNotFoundException e) {
+            System.out.println("ClassNotFoundException is caught");
+        }
+    }
+
+    public boolean chooseRegions() {
+
+        //Initial to -1 for timers, don't set until turn actually starts
+        long startTime = -1;
+        long maxTime = -1;
+
+        try {
+            // Set timeout to constant, wait this long for game start
+            // This will block on FIRST board = ...
+            connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
+            while (true) {
+                // Game starts with board message
+                board = (Board) (connection.receiveObject());
+                // Return timeout to smaller value
+                connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
+
+                //Set max/start first time board received (start of turn)
+                if(maxTime == -1){
+                    maxTime = (long) (connection.getSocket().getSoTimeout());
+                    //Catch case for issues in testing, should never really happen
+                    if (maxTime == 0) {
+                        maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
+                    }
+                }
+                if(startTime == -1){
+                    startTime = System.currentTimeMillis();
+                }
+
+                // Output board
+                clientOutput.displayBoard(board);
+                // Print prompt and get group name
+                clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
+                String groupName = clientInput.readInput();
+                if(timeOut(startTime, maxTime)) { return false; }
+                connection.sendObject(new StringMessage(groupName));
+
+                // Wait for response
+                StringMessage responseMessage = (StringMessage) (connection.receiveObject());
+                String response = responseMessage.unpacker();
+                clientOutput.displayString(response);
+                if (response.matches("^Fail:.*$")) {
+                    continue;
+                }
+                if (response.matches("^Success:.*$")) {
+                    break;
+                }
+            }
+            while (true) {
+                // Server then sends board again
+                board = (Board) (connection.receiveObject());
+
+                // Display and move into placements
+                clientOutput.displayBoard(board);
+                OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", (edu.duke.ece651.risc.client.ClientInterface) this);
+                List<OrderInterface> placementOrders = new ArrayList<OrderInterface>();
+                placement.addToOrderList(placementOrders);
+                if(timeOut(startTime, maxTime)) { return false; }
+                connection.sendObject(placementOrders);
+
+                // Wait for response
+                StringMessage responseMessage = (StringMessage) (connection.receiveObject());
+                String response = responseMessage.unpacker();
+                clientOutput.displayString(response);
+                if (response.matches("^Fail:.*$")) {
+                    continue;
+                }
+                if (response.matches("^Success:.*$")) {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            connection.closeAll();
+            return false;
+        }
+
+        return true;
+    }
+
+    public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
+        StringMessage message = (StringMessage) (connection.receiveObject());
+        String str = message.unpacker();
+        clientOutput.displayString(str);
+        return str;
+    }
+
+    //Helper method to ask YN and send back ConfirmationMessage
+    public boolean queryYNAndRespond(String query) throws IOException{
+        while(true){
+            // Request input
+            clientOutput.displayString(query);
+            String spectateResponse = clientInput.readInput();
+
+            spectateResponse = spectateResponse.toUpperCase();
+            // If valid then do work
+            if (spectateResponse.length() == 1) {
+                if (spectateResponse.charAt(0) == 'Y') {
+                    connection.sendObject(new ConfirmationMessage(true));
+                    return true;
+                } else if (spectateResponse.charAt(0) == 'N') {
+                    connection.sendObject(new ConfirmationMessage(false));
+                    return false;
+                }
+            }
+            // Otherwise repeat
+            clientOutput.displayString("Invalid input.");
+        }
+    }
+
+
+    public void playGame() {
+        try {
+           // player = (HumanPlayer) (connection.receiveObject());
+          //  clientOutput.displayString("Successfully connected, you are named: " + player.getName());
+           // clientOutput.displayString("Please wait for more players to connect");
+            //Set timeout to START_WAIT plus a little buffer
+           // setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
+            //If notStarted
+           // if(firstCall){
+             //   if(!chooseRegions()) {return; }
+           // }
+            while (true) {
+
+                String turn = receiveAndDisplayString();
+
+                long startTime = System.currentTimeMillis();
+                long maxTime = (long) (connection.getSocket().getSoTimeout());
+                //Catch case for issues in testing, should never really happen
+                if (maxTime == 0) {
+                    maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
+                }
+
+                // Start of each turn will have continue message if game still going
+                // Otherwise is winner message
+                StringMessage startMessage = (StringMessage) (connection.receiveObject());
+                String start = startMessage.unpacker();
+                if (!start.equals("Continue")) {
+                    // If not continue then someone won --> print and exit
+                    clientOutput.displayString(start);
+                    connection.closeAll();
+                    clientInput.close();
+                    return;
+                }
+
+                // Next is alive status for player
+                ConfirmationMessage isAlive = (ConfirmationMessage) (connection.receiveObject());
+                // If null then something wrong
+                if (isAlive == null) {
+                    return;
+                }
+                // Get primitive
+                boolean alive = isAlive.getMessage();
+                // If not same then player died on previous turn --> get spectate message
+                if (alive != isPlaying) {
+                    isPlaying = alive;
+                    //Query for spectating
+                    //If no then kill connection
+                    if(!queryYNAndRespond("Would you like to keep spectating? [Y/N]")){
+                        connection.closeAll();
+                        clientInput.close();
+                    }
+                }
+
+                while (true) {
+                    // Next server sends board
+                    board = (Board) (connection.receiveObject());
+                    // Display board
+                    clientOutput.displayBoard(board);
+                    // Client generates orders --> sends
+                    if (alive) {
+                        //new OrderCreator
+                        OrderHelper orderhelper = new OrderHelper(this);
+                        List<OrderInterface> orders = orderhelper.createOrders();
+                        //If too long --> kill player
+                        if(timeOut(startTime, maxTime)){ return;}
+                        connection.sendObject(orders);
+                    }
+
+                    String response = receiveAndDisplayString();
+                    if (response.matches("^Fail:.*$")) {
+                        continue;
+                    }
+                    if (response.matches("^Success:.*$")) {
+                        break;
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
@@ -133,11 +340,7 @@ public class GUIClient extends Thread implements ClientInterface, edu.duke.ece65
 
     @Override
     public void run(){
-        try {
-            playGame();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        playGame();
     }
     }
 

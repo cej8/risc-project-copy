@@ -13,15 +13,15 @@ public class ValidatorHelper {
 
   public ValidatorHelper(AbstractPlayer player, Board currentBoard) {
     this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
-    this.player = (AbstractPlayer)DeepCopy.deepCopy(player);
-    this.moveValidator = new MoveValidator(player, tempBoard);
-    this.attackValidator = new AttackValidator(player, tempBoard);
-    this.techBoostValidator= new TechBoostValidator(player, tempBoard);
-    this.unitBoostValidator= new UnitBoostValidator(player, tempBoard);
+    this.player = (AbstractPlayer) DeepCopy.deepCopy(player);
+    this.moveValidator = new MoveValidator(this.player, tempBoard);
+    this.attackValidator = new AttackValidator(this.player, tempBoard);
+    this.techBoostValidator= new TechBoostValidator(this.player, tempBoard);
+    this.unitBoostValidator= new UnitBoostValidator(this.player, tempBoard);
   }
 
   public ValidatorHelper(AbstractPlayer player, Unit u, Board currentBoard) {
-    this.player = (AbstractPlayer)DeepCopy.deepCopy(player);
+    this.player = player;
     this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
     this.placementValidator = new PlacementValidator(player, u, currentBoard);
   }
@@ -30,6 +30,7 @@ public class ValidatorHelper {
     for(int i = 0; i < orders.size(); i++){
        orders.get(i).findValuesInBoard(tempBoard);
     }
+    /*
     List<AttackMove> attackMoveList = new ArrayList<AttackMove>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
     List<UnitBoost>unitBoostList= new ArrayList<UnitBoost>();
@@ -62,8 +63,43 @@ public class ValidatorHelper {
     boolean validUnitBoost= unitBoostValidator.validateOrders(unitBoostList);
 
     boolean validTechBoost = techBoostValidator.validateOrders(techBoostList);
+    */
 
-    return validMoves && validAttacks && validTechBoost && validUnitBoost;
+    
+    boolean validMove = true;
+    boolean validAttackMove = true;
+    boolean validUnitBoost= true;
+    boolean validTechBoost = true;
+
+    List<AttackMove> attackMoveList = new ArrayList<AttackMove>();
+    List<MoveOrder> moveList = new ArrayList<MoveOrder>();
+    List<UnitBoost> unitBoostList= new ArrayList<UnitBoost>();
+    List<TechBoost> techBoostList= new ArrayList<TechBoost>();
+
+    for(OrderInterface order : orders){
+      if (order.getPriority() == Constants.ATTACK_MOVE_PRIORITY) {
+        attackMoveList.clear();
+        attackMoveList.add((AttackMove)order);
+        validAttackMove = validAttackMove && attackValidator.validateOrders(attackMoveList);
+      }
+      else if (order.getPriority() == Constants.MOVE_PRIORITY) {
+        moveList.clear();
+        moveList.add((MoveOrder)order);
+        validMove = validMove && moveValidator.validateOrders(moveList);
+      }
+      else if (order.getPriority() == Constants.UPGRADE_TECH_PRIORITY) {
+        techBoostList.clear();
+        techBoostList.add((TechBoost)order);
+        validTechBoost = validTechBoost && techBoostValidator.validateOrders(techBoostList);
+      }
+      else if (order.getPriority() == Constants.UPGRADE_UNITS_PRIORITY){
+        unitBoostList.clear();
+        unitBoostList.add((UnitBoost)order);
+        validUnitBoost = validUnitBoost && unitBoostValidator.validateOrders(unitBoostList);
+      }
+    }
+
+    return validMove && validAttackMove && validTechBoost && validUnitBoost;
 
   }
   // checks all placement are valid per player

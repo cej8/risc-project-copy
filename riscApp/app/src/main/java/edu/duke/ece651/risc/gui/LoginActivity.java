@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     ExecuteClient executeClient;
     Connection connection;
     String loginResult;
+    private Handler loginHandler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         helpText.setText("");
         String username = editUsername.getText().toString();
         String password = editPassword.getText().toString();
-        executeClient.loginGame(username, password, helpText);
+        executeClient.loginGame(loginHandler,username, password, helpText);
     }
 }
 

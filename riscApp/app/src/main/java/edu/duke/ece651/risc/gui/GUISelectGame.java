@@ -1,18 +1,22 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Handler;
+import android.util.Log;
 
 import java.io.IOException;
 
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
+import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.ConfirmationMessage;
 import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.IntegerMessage;
 import edu.duke.ece651.risc.shared.StringMessage;
 
-public class GUISelectGame {//extends Thread{
+public class GUISelectGame extends Thread{
     Activity activity;
     private Connection connection;
     private ClientInputInterface clientInput;
@@ -23,9 +27,9 @@ public class GUISelectGame {//extends Thread{
     private String gameList;
     private Boolean gotGames;
     private Boolean pickedGames;
-    GameStartModel model;
+    private Handler handler;
 
-    public GUISelectGame(GameStartModel m,boolean getGames, String gameID,boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUISelectGame(Handler newGameHandler,boolean getGames, String gameID,boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -35,10 +39,10 @@ public class GUISelectGame {//extends Thread{
         this.getGames = getGames;
         this.gotGames = null;
         this.pickedGames = null;
-        this.model= m;
+        this.handler = newGameHandler;
     }
     // Get games
-    public GUISelectGame(GameStartModel m,boolean getGames, boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUISelectGame(Handler gameHandler, boolean getGames, boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -47,7 +51,7 @@ public class GUISelectGame {//extends Thread{
         this.getGames = getGames;
         this.gotGames = null;
         this.pickedGames = null;
-        this.model=m;
+        this.handler = gameHandler;
     }
     public String getGameList(){
         return this.gameList;
@@ -64,7 +68,6 @@ public class GUISelectGame {//extends Thread{
         //Server then sends back list of games
         StringMessage message = (StringMessage) (connection.receiveObject());
         gameList = message.unpacker();
-        model.setGameList(gameList);
         //clientOutput.displayString(str);
         this.gotGames = true;
     }
@@ -106,9 +109,9 @@ public class GUISelectGame {//extends Thread{
                 break;
             }
         }
-
-
-
+        boolean firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
+        ParentActivity pa = new ParentActivity();
+        pa.setFirstCall(firstCall);
     }
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
@@ -138,13 +141,51 @@ public class GUISelectGame {//extends Thread{
             clientOutput.displayString("Invalid input.");
         }
     }
-   // @Override
+    @Override
     public void run(){
         try {
             if (getGames == true) {
                 performGetGame();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String games = getGameList();
+                        Log.d("Game List", games);
+                        Intent gamesIntent = new Intent(activity, NewGameActivity.class);
+                        gamesIntent.putExtra("GAMELIST", games);
+                        activity.startActivity(gamesIntent);
+                    }
+                });
             } else {
                 performSelectGame();
+                if (ParentActivity.getFirstCall()) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("Game", "Waiting for players");
+                            Intent lobby = new Intent(activity, PlayerLobbyActivity.class);
+                            activity.startActivity(lobby);
+                        }
+                    });
+                } else {
+                    // not first time entering
+//                    ParentActivity parentActivity = new ParentActivity();
+//                    parentActivity.setPlayer((HumanPlayer) (connection.receiveObject()));
+//                    StringMessage responseMessage = (StringMessage) (connection.receiveObject());
+//                    String response = responseMessage.unpacker();
+//                    parentActivity.setBoard((Board) (connection.receiveObject()));
+                    HumanPlayer player = (HumanPlayer) (connection.receiveObject());
+                    ParentActivity pa = new ParentActivity();
+                    pa.setPlayer(player);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("Game", "Previously joined");
+                            Intent lobby = new Intent(activity, WaitActivity.class);
+                            activity.startActivity(lobby);
+                        }
+                    });
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

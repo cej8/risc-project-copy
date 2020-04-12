@@ -50,7 +50,7 @@ public class OrderActivity extends AppCompatActivity {
         }
     }
     public void planetOne(View view){
-        Region r = regions.get(0);
+        Region r = regions.get(10);
         name.setText(r.getName());
         String o = "Owner: " + r.getOwner().getName();
         owner.setText(o);
@@ -68,7 +68,7 @@ public class OrderActivity extends AppCompatActivity {
         this.planetName = r.getName();
     }
     public void planetThree(View view){
-        Region r = regions.get(2);
+        Region r = regions.get(6);
         name.setText(r.getName());
         String o = "Owner: " +r.getOwner().getName();
         owner.setText(o);
@@ -77,7 +77,7 @@ public class OrderActivity extends AppCompatActivity {
         this.planetName = r.getName();
     }
     public void planetFour(View view){
-        Region r = regions.get(3);
+        Region r = regions.get(11);
         name.setText(r.getName());
         String o = "Owner: " +r.getOwner().getName();
         owner.setText(o);
@@ -86,7 +86,7 @@ public class OrderActivity extends AppCompatActivity {
         this.planetName = r.getName();
     }
     public void planetFive(View view){
-        Region r = regions.get(4);
+        Region r = regions.get(0);
         name.setText(r.getName());
         String o = "Owner: " +r.getOwner().getName();
         owner.setText(o);
@@ -104,7 +104,7 @@ public class OrderActivity extends AppCompatActivity {
         this.planetName = r.getName();
     }
     public void planetSeven(View view){
-        Region r = regions.get(6);
+        Region r = regions.get(2);
         name.setText(r.getName());
         String o = "Owner: " +r.getOwner().getName();
         owner.setText(o);
@@ -113,15 +113,6 @@ public class OrderActivity extends AppCompatActivity {
         this.planetName = r.getName();
     }
     public void planetEight(View view){
-        Region r = regions.get(7);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetNine(View view){
         Region r = regions.get(8);
         name.setText(r.getName());
         String o = "Owner: " +r.getOwner().getName();
@@ -130,7 +121,7 @@ public class OrderActivity extends AppCompatActivity {
         numUnits.setText(u);
         this.planetName = r.getName();
     }
-    public void planetTen(View view){
+    public void planetNine(View view){
         Region r = regions.get(9);
         name.setText(r.getName());
         String o = "Owner: " +r.getOwner().getName();
@@ -139,8 +130,17 @@ public class OrderActivity extends AppCompatActivity {
         numUnits.setText(u);
         this.planetName = r.getName();
     }
+    public void planetTen(View view){
+        Region r = regions.get(3);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+    }
     public void planetEleven(View view){
-        Region r = regions.get(10);
+        Region r = regions.get(4);
         name.setText(r.getName());
         String o = "Owner: " +r.getOwner().getName();
         owner.setText(o);
@@ -149,7 +149,7 @@ public class OrderActivity extends AppCompatActivity {
         this.planetName = r.getName();
     }
     public void planetTwelve(View view){
-        Region r = regions.get(11);
+        Region r = regions.get(7);
         name.setText(r.getName());
         String o = "Owner: " +r.getOwner().getName();
         owner.setText(o);

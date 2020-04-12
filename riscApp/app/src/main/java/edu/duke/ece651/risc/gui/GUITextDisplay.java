@@ -27,10 +27,10 @@ public class GUITextDisplay extends Thread implements ClientOutputInterface {
             e.printStackTrace();
         }
     }
-    public GUITextDisplay(TextView textView) {
+    public GUITextDisplay(TextView textView, Activity act) {
         this.outputTextView = textView;
         //outputTextView = outputTextView.findViewById(R.id.popUpText);
-        this.activity = ParentActivity.getActivity();
+        this.activity = act;
     }
     @Override
     //prints the board info to stdout

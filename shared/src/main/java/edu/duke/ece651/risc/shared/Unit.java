@@ -53,6 +53,11 @@ public class Unit implements Serializable {
     this.setEvenDistribution(7, 0);
     this.addUnits(numUnits, 0);
   }
+  
+  // Initialize numUnits units all with bonus 0
+  public Unit(int numUnits) {
+    this(new Integer(numUnits));
+  }
 
   public Unit(List<Integer> unitList) {
     units = new ArrayList<Integer>();
