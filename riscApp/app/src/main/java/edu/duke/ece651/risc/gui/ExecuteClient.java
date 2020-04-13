@@ -75,9 +75,8 @@ public class ExecuteClient {
     }
 
     public void pickGame(Handler newGameHandler,boolean gameType, String id, boolean getgame, String gameList) {
-        GUISelectGame selectGame = new GUISelectGame(newGameHandler,getgame, id, gameType, connection, clientInput, clientOutput, act);
+        GUISelectGame selectGame = new GUISelectGame(gameList,newGameHandler,getgame, id, gameType, connection, clientInput, clientOutput, act);
         selectGame.start();
-
     }
 
     public void loginGame(Handler loginHandler,String username, String password, TextView textHelp) throws IOException, ClassNotFoundException, InterruptedException {
