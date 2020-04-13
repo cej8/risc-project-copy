@@ -48,9 +48,9 @@ public class ExecuteClient {
         }
         ConnectionManager makeConnection = new ConnectionManager(addr, port);
         makeConnection.start();
-        this.connection = makeConnection.getConnection();
+      /*  this.connection = makeConnection.getConnection();
         ParentActivity parentActivity = new ParentActivity();
-        parentActivity.setConnection(connection);
+        parentActivity.setConnection(connection);*/
     }
 
     public Connection getConnection() {
@@ -105,12 +105,12 @@ public class ExecuteClient {
     }
 
 
-    public void getBoardAssignments(ProgressBar status, Button start, Handler handler, TextView helpText) throws InterruptedException {
+    public void getBoardAssignments(TextView helpText) {
         clientOutput = new GUITextDisplay(helpText, act);
-        final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(status, start,handler,connection, clientInput, clientOutput, act);
+        final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(connection, clientInput, clientOutput, act);
         initializeBoard.start();
-
     }
+
     public void showStartBoard(TextView boardView) {
         clientOutput = new GUITextDisplay(boardView, act);
         clientOutput.displayBoard(ParentActivity.getBoard());

@@ -1,12 +1,6 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
-
-import java.net.SocketException;
 
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
@@ -27,10 +21,6 @@ public class GUIWaitingRoom extends Thread {
     private boolean firstCall;
     //private boolean waitingForPlayers;
     private boolean doneRunning=false;
-    private int waitingTime=0;
-    private Handler handler;
-   private Button startGame;
-   private ProgressBar status;
 
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
@@ -38,22 +28,19 @@ public class GUIWaitingRoom extends Thread {
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
     private long startTime=-1;
     private long maxTime=-1;
-    public GUIWaitingRoom(ProgressBar p,Button b, Handler h, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
+    public GUIWaitingRoom(Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
         this.activity = act;
-        this.handler=h;
-        this.startGame= b;
-        this.status=p;
-
+        // this.board= ParentActivity.getBoard();
+        //this.player=ParentActivity.getPlayer();
+        //this.firstCall=begin;
+        //this.waitingForPlayers = begin;
     }
-  /*  public int getWaitingTime() throws InterruptedException {
-       // while(waitingTime==0){
-         //   wait();
-        //}
-        return waitingTime;
-    }*/
+    public boolean getDoneRunning(){
+        return doneRunning;
+    }
     public void getInitialBoard(){
         long startTime = -1;
         long maxTime = -1;
@@ -66,7 +53,7 @@ public class GUIWaitingRoom extends Thread {
 
             //Set max/start first time board received (start of turn)
             if (maxTime == -1) {
-               // maxTime=(long) (connection.getSocket().getSoTimeout());
+                // maxTime=(long) (connection.getSocket().getSoTimeout());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));
                 //Catch case for issues in testing, should never really happen
                 if (maxTime == 0) {
@@ -78,26 +65,23 @@ public class GUIWaitingRoom extends Thread {
                 //startTime = System.currentTimeMillis();
                 parentActivity.setStartTime(System.currentTimeMillis());
             }
-           // return this.board;
+            // return this.board;
         }
- catch(Exception e) {
-                e.printStackTrace();
-                connection.closeAll();
-            }
+        catch(Exception e) {
+            e.printStackTrace();
+            connection.closeAll();
+        }
 //return null;
 
-        }
+    }
 
-            public void waitingToStart() {
+    public void waitingToStart() {
         try {
             connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
         }
-    }
-    public void setSocketTimeout(int timeout) throws SocketException {
-        connection.getSocket().setSoTimeout(timeout);
     }
     public void run() {
         try {
@@ -106,30 +90,17 @@ public class GUIWaitingRoom extends Thread {
             //pa.setFirstCall(firstCall);
             pa.setPlayer((HumanPlayer) connection.receiveObject());
             this.player = ParentActivity.getPlayer();
-            setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
         }
         catch(Exception e) {
             e.printStackTrace();
             connection.closeAll();
         }
-
+        // if(firstCall){
         waitingToStart();
         getInitialBoard();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-             //   try {
-                 //   waitingTime=connection.getSocket().getSoTimeout();
-                    status.setVisibility(View.INVISIBLE);
-                    startGame.setEnabled(true);
-
-               // } catch (SocketException e) {
-                 //   e.printStackTrace();
-                //}
-            }
-        });
-
-
-
+        doneRunning =true;
+        //return;
+        //}
+        // doneRunning=true;
     }
 }

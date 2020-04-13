@@ -4,19 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 import edu.duke.ece651.risc.shared.Connection;
 
@@ -27,15 +23,13 @@ public class PlayerLobbyActivity extends AppCompatActivity {
     private TextView userPrompt;
     private Button begin;
     private Button ready;
-   private Handler handler = new Handler();
-   private ProgressBar status;
-
+    // private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_lobby);
-    status= findViewById(R.id.ctrlActivityIndicator);
+        ready= findViewById(R.id.ready);
         begin = findViewById(R.id.begin);
         begin.setEnabled(false);
         connection = ParentActivity.getConnection();
@@ -43,27 +37,18 @@ public class PlayerLobbyActivity extends AppCompatActivity {
         userPrompt.setText("WAITING FOR OTHER PLAYERS TO JOIN......");
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
-
     }
-
-@Override
-protected void onStart(){
-        super.onStart();
-    try {
-        executeClient.getBoardAssignments(status,begin,handler,userPrompt);
-    } catch (InterruptedException e) {
-        e.printStackTrace();
+    public void playerReady(View view)throws IOException, ClassNotFoundException, InterruptedException{
+        userPrompt.setText("READY TO BEGIN!");
+        executeClient.getBoardAssignments(userPrompt);
+        begin.setEnabled(true);
     }
-}
     public void beginGame(View view)throws IOException, ClassNotFoundException, InterruptedException {
-       // userPrompt.setText("WAITING FOR OTHER PLAYERS TO JOIN......");
+        // userPrompt.setText("WAITING FOR OTHER PLAYERS TO JOIN......");
         // executeClient.startPlacement(handler);
         Log.d("Game", "Received board");
         //clientOutput = new GUITextDisplay();
         Intent newGame= new Intent(this, ChooseRegionsActivity.class);
         startActivity(newGame);
     }
-
-
-    }
-
+}

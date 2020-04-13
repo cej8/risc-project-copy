@@ -113,34 +113,7 @@ public class GUISelectGame extends Thread{
         ParentActivity pa = new ParentActivity();
         pa.setFirstCall(firstCall);
     }
-    public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
-        StringMessage message = (StringMessage) (connection.receiveObject());
-        String str = message.unpacker();
-        clientOutput.displayString(str);
-        return str;
-    }
-    //Helper method to ask YN and send back ConfirmationMessage
-    public boolean queryYNAndRespond(String query) throws IOException {
-        while(true){
-            // Request input
-            clientOutput.displayString(query);
-            String spectateResponse = clientInput.readInput();
 
-            spectateResponse = spectateResponse.toUpperCase();
-            // If valid then do work
-            if (spectateResponse.length() == 1) {
-                if (spectateResponse.charAt(0) == 'Y') {
-                    connection.sendObject(new ConfirmationMessage(true));
-                    return true;
-                } else if (spectateResponse.charAt(0) == 'N') {
-                    connection.sendObject(new ConfirmationMessage(false));
-                    return false;
-                }
-            }
-            // Otherwise repeat
-            clientOutput.displayString("Invalid input.");
-        }
-    }
     @Override
     public void run(){
         try {
@@ -169,11 +142,6 @@ public class GUISelectGame extends Thread{
                     });
                 } else {
                     // not first time entering
-//                    ParentActivity parentActivity = new ParentActivity();
-//                    parentActivity.setPlayer((HumanPlayer) (connection.receiveObject()));
-//                    StringMessage responseMessage = (StringMessage) (connection.receiveObject());
-//                    String response = responseMessage.unpacker();
-//                    parentActivity.setBoard((Board) (connection.receiveObject()));
                     HumanPlayer player = (HumanPlayer) (connection.receiveObject());
                     ParentActivity pa = new ParentActivity();
                     pa.setPlayer(player);
