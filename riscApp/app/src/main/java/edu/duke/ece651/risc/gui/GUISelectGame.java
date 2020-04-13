@@ -101,7 +101,7 @@ public class GUISelectGame extends Thread{
             //Repeat if fail, continue if success
             if (response.matches("^Fail:.*$")) {
                // continue;
-                // TODO: wrong ID entered 
+                // TODO: wrong ID entered
                /* handler.post(new Runnable() {
                     @Override
                     public void run() {
