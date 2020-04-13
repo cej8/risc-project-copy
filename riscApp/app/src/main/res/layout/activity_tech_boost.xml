@@ -7,22 +7,6 @@
     android:background="@drawable/spacebackground"
     tools:context=".TechBoostActivity">
 
-    <ImageView
-        android:id="@+id/level6w"
-        android:layout_width="60dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="8dp"
-        android:background="@android:color/transparent"
-        android:padding="0dp"
-        android:scaleType="fitCenter"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/level5w"
-        app:layout_constraintTop_toTopOf="@+id/level5w"
-        app:srcCompat="@drawable/level6w" />
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -83,7 +67,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/cost"
         android:layout_width="146dp"
         android:layout_height="49dp"
         android:layout_marginStart="150dp"
@@ -115,21 +99,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="146dp"
-        android:layout_height="29dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginLeft="148dp"
-        android:layout_marginBottom="157dp"
-        android:gravity="center_horizontal"
-        android:text="FUEL  COST TO BOOST"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/yourfuel"
         android:layout_width="146dp"
         android:layout_height="49dp"
         android:layout_marginTop="112dp"
@@ -142,21 +112,6 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="146dp"
-        android:layout_height="29dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginRight="148dp"
-        android:layout_marginBottom="154dp"
-        android:foregroundGravity="bottom"
-        android:gravity="center_horizontal"
-        android:text="YOUR TOTAL FUEL"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/insertYourFuel"
@@ -191,7 +146,7 @@
 
 
     <ImageView
-        android:id="@+id/level1w"
+        android:id="@+id/level0w"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="16dp"
@@ -199,13 +154,27 @@
         android:padding="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/level2w"
+        app:layout_constraintEnd_toStartOf="@+id/level1w"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/level1w" />
+        app:srcCompat="@drawable/level0w" />
 
     <ImageView
-        android:id="@+id/level1w2"
+        android:id="@+id/level0w2"
+        android:layout_width="60dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/level1w2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/level0w" />
+
+    <ImageView
+        android:id="@+id/level1w"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="16dp"
@@ -215,61 +184,80 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lock2"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/level0w"
+        app:layout_constraintTop_toTopOf="@+id/level0w"
+        app:srcCompat="@drawable/level1w" />
+
+    <ImageView
+        android:id="@+id/level1w2"
+        android:layout_width="60dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/level2w"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/level0w2"
         app:srcCompat="@drawable/level1w" />
 
     <ImageView
         android:id="@+id/level2w"
         android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/level1w"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/level3w"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/level1w"
-        app:layout_constraintTop_toTopOf="@+id/level1w"
+        app:layout_constraintStart_toEndOf="@+id/level1w2"
         app:srcCompat="@drawable/level2w" />
 
     <ImageView
         android:id="@+id/lock2"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lock3"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/level1w2"
-        app:layout_constraintTop_toTopOf="@+id/level1w2"
+        app:layout_constraintStart_toEndOf="@+id/level1w"
+        app:layout_constraintTop_toTopOf="@+id/level1w"
         app:srcCompat="@drawable/lock" />
 
     <ImageView
         android:id="@+id/level3w"
         android:layout_width="60dp"
         android:layout_height="75dp"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/level2w"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/level4w"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/level2w"
-        app:layout_constraintTop_toTopOf="@+id/level2w"
         app:srcCompat="@drawable/level3w" />
 
     <ImageView
         android:id="@+id/lock3"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lock4"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/lock2"
@@ -280,25 +268,27 @@
         android:id="@+id/level4w"
         android:layout_width="60dp"
         android:layout_height="75dp"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/level3w"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/level5w"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/level3w"
-        app:layout_constraintTop_toTopOf="@+id/level3w"
         app:srcCompat="@drawable/level4w" />
 
     <ImageView
         android:id="@+id/lock4"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lock5"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/lock3"
@@ -309,25 +299,28 @@
         android:id="@+id/level5w"
         android:layout_width="60dp"
         android:layout_height="75dp"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/level4w"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/level6w"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/level4w"
-        app:layout_constraintTop_toTopOf="@+id/level4w"
         app:srcCompat="@drawable/level5w" />
+
 
     <ImageView
         android:id="@+id/lock5"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lock6"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/lock4"
@@ -338,18 +331,31 @@
         android:id="@+id/lock6"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
         android:padding="0dp"
         android:scaleType="fitCenter"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/lock5"
         app:layout_constraintTop_toTopOf="@+id/lock5"
         app:srcCompat="@drawable/lock" />
 
+
+    <ImageView
+        android:id="@+id/level6w"
+        android:layout_width="60dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/level5w"
+        app:srcCompat="@drawable/level6w" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -362,7 +368,8 @@
         android:id="@+id/barrier3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:barrierDirection="top" />
+        app:barrierDirection="top"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
