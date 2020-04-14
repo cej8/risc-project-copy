@@ -105,9 +105,9 @@ public class ExecuteClient {
     }
 
 
-    public void getBoardAssignments(ProgressBar status, Button start, Handler handler, TextView helpText) throws InterruptedException {
+    public void getBoardAssignments(Button ready,ProgressBar status, Button start, Handler handler, TextView helpText) throws InterruptedException {
         clientOutput = new GUITextDisplay(helpText, act);
-        final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(status, start,handler,connection, clientInput, clientOutput, act);
+        final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(ready,status, start,handler,connection, clientInput, clientOutput, act);
         initializeBoard.start();
 
     }
