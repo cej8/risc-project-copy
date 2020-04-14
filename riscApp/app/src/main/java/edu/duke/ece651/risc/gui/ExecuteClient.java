@@ -103,7 +103,6 @@ public class ExecuteClient {
         this.helpText = text;
     }
 
-
     public void getBoardAssignments(TextView helpText) {
         clientOutput = new GUITextDisplay(helpText, act);
         final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(connection, clientInput, clientOutput, act);

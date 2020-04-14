@@ -29,7 +29,7 @@ public class PlayerLobbyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_lobby);
-        ready= findViewById(R.id.ready);
+        ready = findViewById(R.id.ready);
         begin = findViewById(R.id.begin);
         begin.setEnabled(false);
         connection = ParentActivity.getConnection();
@@ -46,6 +46,7 @@ public class PlayerLobbyActivity extends AppCompatActivity {
     public void beginGame(View view)throws IOException, ClassNotFoundException, InterruptedException {
         // userPrompt.setText("WAITING FOR OTHER PLAYERS TO JOIN......");
         // executeClient.startPlacement(handler);
+        //begin.setEnabled(true);
         Log.d("Game", "Received board");
         //clientOutput = new GUITextDisplay();
         Intent newGame= new Intent(this, ChooseRegionsActivity.class);

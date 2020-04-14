@@ -1,6 +1,8 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.util.Log;
 
 import edu.duke.ece651.risc.client.ClientInputInterface;
 import edu.duke.ece651.risc.client.ClientOutputInterface;
@@ -26,6 +28,7 @@ public class GUIWaitingRoom extends Thread {
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES + .1;
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
+
     private long startTime=-1;
     private long maxTime=-1;
     public GUIWaitingRoom(Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
