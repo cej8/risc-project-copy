@@ -62,7 +62,7 @@ public class GUISelectGame extends Thread{
     public Boolean getPickedGames(){
         return this.pickedGames;
     }
-    public void performGetGame() throws IOException,ClassNotFoundException{
+    public void performGetGame() throws IOException, ClassNotFoundException{
         // boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
         connection.sendObject(new ConfirmationMessage(oldBoolean));
         //Server then sends back list of games
@@ -112,6 +112,9 @@ public class GUISelectGame extends Thread{
         boolean firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
         ParentActivity pa = new ParentActivity();
         pa.setFirstCall(firstCall);
+        pa.setPlayer((HumanPlayer) connection.receiveObject());
+        //this.player = ParentActivity.getPlayer();
+        Log.d("Player",ParentActivity.getPlayer().getName());
     }
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
@@ -169,11 +172,6 @@ public class GUISelectGame extends Thread{
                     });
                 } else {
                     // not first time entering
-//                    ParentActivity parentActivity = new ParentActivity();
-//                    parentActivity.setPlayer((HumanPlayer) (connection.receiveObject()));
-//                    StringMessage responseMessage = (StringMessage) (connection.receiveObject());
-//                    String response = responseMessage.unpacker();
-//                    parentActivity.setBoard((Board) (connection.receiveObject()));
                     HumanPlayer player = (HumanPlayer) (connection.receiveObject());
                     ParentActivity pa = new ParentActivity();
                     pa.setPlayer(player);
@@ -189,8 +187,10 @@ public class GUISelectGame extends Thread{
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d("GUISelectGame","IOException, run");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            Log.d("GUISelectGame","ClassNotFoundException, run");
         }
     }
 }
