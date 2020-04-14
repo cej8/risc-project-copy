@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -48,8 +46,6 @@ public class PlayerLobbyActivity extends AppCompatActivity {
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
     }
-
-
     public void readyGame(View view){
                 try {
             executeClient.getBoardAssignments(ready,status,begin,handler,userPrompt);
@@ -64,4 +60,3 @@ public class PlayerLobbyActivity extends AppCompatActivity {
         startActivity(newGame);
     }
 }
-

@@ -33,6 +33,7 @@ public class GUIWaitingRoom extends Thread {
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES + .1;
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
+
     private long startTime=-1;
     private long maxTime=-1;
     public GUIWaitingRoom(Button ready,ProgressBar p,Button b, Handler h, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
@@ -61,7 +62,7 @@ public class GUIWaitingRoom extends Thread {
 
             //Set max/start first time board received (start of turn)
             if (maxTime == -1) {
-               // maxTime=(long) (connection.getSocket().getSoTimeout());
+                // maxTime=(long) (connection.getSocket().getSoTimeout());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));
                 //Catch case for issues in testing, should never really happen
                 if (maxTime == 0) {
@@ -73,26 +74,14 @@ public class GUIWaitingRoom extends Thread {
                 //startTime = System.currentTimeMillis();
                 parentActivity.setStartTime(System.currentTimeMillis());
             }
-           // return this.board;
+            // return this.board;
         }
         catch(Exception e) {
-                e.printStackTrace();
-                Log.d("GetInitialBoard","exception");
-                connection.closeAll();
-            }
-
-
-        }
-
-     /*       public void waitingToStart() {
-        try {
-            connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
-        } catch (Exception e) {
             e.printStackTrace();
-            Log.d("WaitingToStart","exception");
             connection.closeAll();
         }
-    }*/
+    }
+
     public void setSocketTimeout(int timeout) throws SocketException {
         connection.getSocket().setSoTimeout(timeout);
     }
@@ -105,6 +94,11 @@ public class GUIWaitingRoom extends Thread {
             }
         });
         try {
+          ParentActivity pa = new ParentActivity();
+          pa.setPlayer((HumanPlayer) connection.receiveObject());
+               this.player = ParentActivity.getPlayer();
+               Log.d("Player",ParentActivity.getPlayer().getName());
+   
             setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
         }
         catch(Exception e) {
@@ -124,8 +118,5 @@ public class GUIWaitingRoom extends Thread {
                     startGame.setEnabled(true);
             }
         });
-
-
-
     }
 }

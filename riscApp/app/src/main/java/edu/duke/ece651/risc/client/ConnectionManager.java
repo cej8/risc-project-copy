@@ -1,7 +1,10 @@
 package edu.duke.ece651.risc.client;
 
+import android.util.Log;
+
 import java.net.Socket;
 
+import edu.duke.ece651.risc.gui.ParentActivity;
 import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.Constants;
 
@@ -37,8 +40,12 @@ public class ConnectionManager extends Thread {
             connection.setSocket(socket);
             connection.getStreamsFromSocket();
             socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
+            ParentActivity parentActivity = new ParentActivity();
+            parentActivity.setConnection(connection);
+            Log.d("Connection","True");
             } catch (Exception e) {
             e.printStackTrace(System.out);
+            Log.d("Connection","False");
         }
     }
   public void connectGame(){

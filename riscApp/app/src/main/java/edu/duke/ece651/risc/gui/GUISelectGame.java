@@ -29,7 +29,7 @@ public class GUISelectGame extends Thread{
     private Boolean pickedGames;
     private Handler handler;
 
-    public GUISelectGame(Handler newGameHandler,boolean getGames, String gameID,boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
+    public GUISelectGame(String gameList, Handler newGameHandler,boolean getGames, String gameID,boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -40,6 +40,7 @@ public class GUISelectGame extends Thread{
         this.gotGames = null;
         this.pickedGames = null;
         this.handler = newGameHandler;
+        this.gameList = gameList;
     }
     // Get games
     public GUISelectGame(Handler gameHandler, boolean getGames, boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
@@ -73,11 +74,8 @@ public class GUISelectGame extends Thread{
     }
     //Method to mesh with selectGame() in loginServer
     public void performSelectGame() throws IOException, ClassNotFoundException{
-        while(true){
-//           // boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
-//            connection.sendObject(new ConfirmationMessage(oldBoolean));
-//            //Server then sends back list of games
-//            String list = receiveAndDisplayString();
+       // while(true){
+
             Integer gameID;
             while(true){
                 //clientOutput.displayString("Pick a game via ID");
@@ -102,48 +100,28 @@ public class GUISelectGame extends Thread{
             //clientOutput.displayString(response);
             //Repeat if fail, continue if success
             if (response.matches("^Fail:.*$")) {
-                continue;
+               // continue;
+                // TODO: wrong ID entered
+               /* handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("Game", "Waiting for players");
+                        Intent pickGameAgain = new Intent(activity, NewGameActivity.class);
+                        pickGameAgain.putExtra("GAMELIST", gameList);
+                        activity.startActivity(pickGameAgain);
+                    }
+                });*/
             }
             if (response.matches("^Success:.*$")) {
                 this.pickedGames = true;
-                break;
+               //break;
             }
-        }
+        //}
         boolean firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
         ParentActivity pa = new ParentActivity();
         pa.setFirstCall(firstCall);
-        pa.setPlayer((HumanPlayer) connection.receiveObject());
-        //this.player = ParentActivity.getPlayer();
-        Log.d("Player",ParentActivity.getPlayer().getName());
     }
-    public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
-        StringMessage message = (StringMessage) (connection.receiveObject());
-        String str = message.unpacker();
-        clientOutput.displayString(str);
-        return str;
-    }
-    //Helper method to ask YN and send back ConfirmationMessage
-    public boolean queryYNAndRespond(String query) throws IOException {
-        while(true){
-            // Request input
-            clientOutput.displayString(query);
-            String spectateResponse = clientInput.readInput();
 
-            spectateResponse = spectateResponse.toUpperCase();
-            // If valid then do work
-            if (spectateResponse.length() == 1) {
-                if (spectateResponse.charAt(0) == 'Y') {
-                    connection.sendObject(new ConfirmationMessage(true));
-                    return true;
-                } else if (spectateResponse.charAt(0) == 'N') {
-                    connection.sendObject(new ConfirmationMessage(false));
-                    return false;
-                }
-            }
-            // Otherwise repeat
-            clientOutput.displayString("Invalid input.");
-        }
-    }
     @Override
     public void run(){
         try {

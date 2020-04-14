@@ -28,7 +28,7 @@ public class ChooseRegionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_regions);
         submit= findViewById(R.id.submit);
         boardView= findViewById(R.id.showBoard);
-         connection = ParentActivity.getConnection();
+        connection = ParentActivity.getConnection();
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
         editRegionGroup= findViewById(R.id.regionName);
