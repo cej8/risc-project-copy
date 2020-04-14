@@ -49,15 +49,6 @@ public class PlayerLobbyActivity extends AppCompatActivity {
         executeClient.setConnection(connection);
     }
 
-//    @Override
-//    protected void onStart(){
-//       super.onStart();
-//        try {
-//            executeClient.getBoardAssignments(status,begin,handler,userPrompt);
-//        } catch (InterruptedException e) {
-//         e.printStackTrace();
-//        }
-//    }
 
     public void readyGame(View view){
                 try {
@@ -68,11 +59,8 @@ public class PlayerLobbyActivity extends AppCompatActivity {
     }
 
     public void beginGame(View view)throws IOException, ClassNotFoundException, InterruptedException {
-       // userPrompt.setText("WAITING FOR OTHER PLAYERS TO JOIN......");
-        // executeClient.startPlacement(handler);
-        Log.d("Game", "Received board");
-        //clientOutput = new GUITextDisplay();
-        Intent newGame= new Intent(this, ChooseRegionsActivity.class);
+
+       Intent newGame= new Intent(this, ChooseRegionsActivity.class);
         startActivity(newGame);
     }
 }

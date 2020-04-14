@@ -214,6 +214,7 @@ public class GUIClientLogin extends Thread{
     }
     @Override
     public void run(){
+
         try {
             performLogin();
             loginHandler.post(new Runnable() {
