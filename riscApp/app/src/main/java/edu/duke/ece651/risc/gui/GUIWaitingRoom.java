@@ -32,6 +32,7 @@ public class GUIWaitingRoom extends Thread {
     private Handler handler;
    private Button startGame;
    private ProgressBar status;
+   private Button ready;
 
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
@@ -39,7 +40,7 @@ public class GUIWaitingRoom extends Thread {
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
     private long startTime=-1;
     private long maxTime=-1;
-    public GUIWaitingRoom(ProgressBar p,Button b, Handler h, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
+    public GUIWaitingRoom(Button ready,ProgressBar p,Button b, Handler h, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act) {
         this.connection = connect;
         this.clientInput = input;
         this.clientOutput = output;
@@ -48,6 +49,7 @@ public class GUIWaitingRoom extends Thread {
         this.startGame= b;
         this.status=p;
         this.player = ParentActivity.getPlayer();
+        this.ready = ready;
     }
   /*  public int getWaitingTime() throws InterruptedException {
        // while(waitingTime==0){
@@ -107,6 +109,12 @@ public class GUIWaitingRoom extends Thread {
         connection.getSocket().setSoTimeout(timeout);
     }
     public void run() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                ready.setVisibility(View.INVISIBLE);
+            }
+        });
         try {
             setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
         }
@@ -115,20 +123,15 @@ public class GUIWaitingRoom extends Thread {
             Log.d("SetSocketTimeout","Exception");
             connection.closeAll();
         }
+
         Log.d("Connection",ParentActivity.getConnection().toString());
        //waitingToStart();
         getInitialBoard();
         handler.post(new Runnable() {
             @Override
             public void run() {
-             //   try {
-                 //   waitingTime=connection.getSocket().getSoTimeout();
                     status.setVisibility(View.INVISIBLE);
                     startGame.setEnabled(true);
-
-               // } catch (SocketException e) {
-                 //   e.printStackTrace();
-                //}
             }
         });
 

@@ -61,7 +61,7 @@ public class PlayerLobbyActivity extends AppCompatActivity {
 
     public void readyGame(View view){
                 try {
-            executeClient.getBoardAssignments(status,begin,handler,userPrompt);
+            executeClient.getBoardAssignments(ready,status,begin,handler,userPrompt);
         } catch (InterruptedException e) {
          e.printStackTrace();
         }
