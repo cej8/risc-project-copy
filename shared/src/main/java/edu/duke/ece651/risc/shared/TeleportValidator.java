@@ -1,7 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.List;
-
+// Validation class for teleport move
 public class TeleportValidator implements ValidatorInterface<TeleportOrder> {
   private Board tempBoard;
   private AbstractPlayer player;

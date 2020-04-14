@@ -3,7 +3,7 @@ import edu.duke.ece651.risc.shared.*;
 import java.util.List;
 
 import edu.duke.ece651.risc.shared.OrderInterface;
-
+// Creates teleport order based on "teleport" keyword
 public class TeleportOrderCreator extends OrderCreator {
   public TeleportOrderCreator(ClientInterface c){
     this.client = c;
