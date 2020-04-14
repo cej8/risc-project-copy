@@ -247,8 +247,8 @@ public class ValidatorTest {
     ordersValid.add(move21);
     ordersValid.add(move41);
     ValidatorHelper vh = new ValidatorHelper(p1, b);
-    //  assertEquals(false, vh.allOrdersValid(orders));
-    // assertEquals(true, vh.allOrdersValid(ordersValid));
+      assertEquals(false, vh.allOrdersValid(orders));
+     assertEquals(true, vh.allOrdersValid(ordersValid));
     ValidatorHelper th = new ValidatorHelper(p1, b);
     assertEquals(true, th.allOrdersValid(getValidTeleport(regions)));
     
