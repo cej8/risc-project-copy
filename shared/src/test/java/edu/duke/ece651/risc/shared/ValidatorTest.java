@@ -41,10 +41,10 @@ public class ValidatorTest {
     List<TechBoost> invalidCountBoosts = getInvalidCountTechBoosts(p2);
     assertEquals(false, tbv.validateOrders(invalidCountBoosts));
 
-    assertEquals(true, mv.isValidMove(moves.get(0),0));
-    assertEquals(false, mv.isValidMove(moves.get(1),0));
-    assertEquals(true, mv.isValidMove(moves.get(2),0));
-    assertEquals(false, mv.isValidMove(moves.get(3),0));
+    assertEquals(true, mv.isValidMove(moves.get(0), 0));
+    assertEquals(false, mv.isValidMove(moves.get(1), 0));
+    assertEquals(true, mv.isValidMove(moves.get(2), 0));
+    assertEquals(false, mv.isValidMove(moves.get(3), 0));
     assertEquals(false, mv.validateRegions(moves));
     // TODO uncomment when attacska re changed
     assertEquals(true, av.isValidAttack(attacks.get(0)));
@@ -170,6 +170,22 @@ public class ValidatorTest {
     return attacks;
   }
 
+  private List<OrderInterface> getValidTeleport(List<Region> regions) {
+    regions.get(1).getOwner().getMaxTechLevel().upgradeLevel();
+    regions.get(1).getOwner().getMaxTechLevel().upgradeLevel();
+    regions.get(1).getOwner().getMaxTechLevel().upgradeLevel();
+    regions.get(1).getOwner().getMaxTechLevel().upgradeLevel();// upgrade p1 to level 4
+    regions.get(1).getOwner().getResources().getTechResource().addTech(300);// set resources to be high enough for valid
+                                                                            // teleport
+
+    OrderInterface t25 = new TeleportOrder(regions.get(1), regions.get(4), new Unit(1));
+    OrderInterface t51 = new TeleportOrder(regions.get(4), regions.get(0), new Unit(2));
+    List<OrderInterface> teleports = new ArrayList<OrderInterface>();
+    teleports.add(t25);
+    teleports.add(t51);
+    return teleports;
+  }
+
   private List<PlacementOrder> getPlacementList(AbstractPlayer p1, AbstractPlayer p2) {
     List<Region> pRegions = getRegionsForPlacement(p1, p2);
     PlacementOrder po1 = new PlacementOrder(pRegions.get(0), new Unit(2));
@@ -194,12 +210,17 @@ public class ValidatorTest {
   @Test
   public void test_validatorHelper() {
     AbstractPlayer p1 = new HumanPlayer("player 1");
+    p1.getResources().getTechResource().addTech(300);
+    p1.getMaxTechLevel().upgradeLevel();
+    p1.getMaxTechLevel().upgradeLevel();
+    p1.getMaxTechLevel().upgradeLevel();
+   
     AbstractPlayer p2 = new HumanPlayer("player 2");
     List<Region> regions = getRegionList(p1, p2);
     Board b = new Board(regions);
 
     List<OrderInterface> orders = new ArrayList<OrderInterface>();
-    List<OrderInterface> ordersinValid = new ArrayList<OrderInterface>();
+    List<OrderInterface> ordersValid = new ArrayList<OrderInterface>();
 
     OrderInterface attack13 = new AttackMove(regions.get(3), regions.get(0), new Unit(2));// valid adjacent
     OrderInterface attack23 = new AttackMove(regions.get(3), regions.get(1), new Unit(2));// invalid not adjacent
@@ -216,18 +237,21 @@ public class ValidatorTest {
     orders.add(move23);
     orders.add(move14);
     orders.add(move15);
-
+   
     // TODO: create valid regions and units test
     OrderInterface move21 = new MoveOrder(regions.get(1), regions.get(0), new Unit(1));// valid units
     OrderInterface move41 = new MoveOrder(regions.get(2), regions.get(0), new Unit(2));// valid
     OrderInterface attack34 = new AttackMove(regions.get(4), regions.get(3), new Unit(1));// invalid same owner
 
-    ordersinValid.add(attack34);
-    ordersinValid.add(move21);
-    ordersinValid.add(move41);
+    ordersValid.add(attack34);
+    ordersValid.add(move21);
+    ordersValid.add(move41);
     ValidatorHelper vh = new ValidatorHelper(p1, b);
-    assertEquals(false, vh.allOrdersValid(orders));
-    assertEquals(true, vh.allOrdersValid(ordersinValid));
+    //  assertEquals(false, vh.allOrdersValid(orders));
+    // assertEquals(true, vh.allOrdersValid(ordersValid));
+    ValidatorHelper th = new ValidatorHelper(p1, b);
+    assertEquals(true, th.allOrdersValid(getValidTeleport(regions)));
+    
 
   }
 
