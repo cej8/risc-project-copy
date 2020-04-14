@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -46,7 +47,7 @@ public class GUIWaitingRoom extends Thread {
         this.handler=h;
         this.startGame= b;
         this.status=p;
-
+        this.player = ParentActivity.getPlayer();
     }
   /*  public int getWaitingTime() throws InterruptedException {
        // while(waitingTime==0){
@@ -58,9 +59,13 @@ public class GUIWaitingRoom extends Thread {
         long startTime = -1;
         long maxTime = -1;
         try {
+            connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
+           // Log.d("ConnectionSocket",ParentActivity.getConnection().toString());
+            this.board = (Board) (connection.receiveObject());
             ParentActivity parentActivity = new ParentActivity();
-            parentActivity.setBoard((Board) (connection.receiveObject()));
-            this.board = ParentActivity.getBoard();
+            //parentActivity.setBoard((Board) (connection.receiveObject()));
+            parentActivity.setBoard(board);
+           // this.board = ParentActivity.getBoard();
             // Return timeout to smaller value
             connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
 
@@ -80,8 +85,9 @@ public class GUIWaitingRoom extends Thread {
             }
            // return this.board;
         }
- catch(Exception e) {
+        catch(Exception e) {
                 e.printStackTrace();
+                Log.d("GetInitialBoard","exception");
                 connection.closeAll();
             }
 //return null;
@@ -93,6 +99,7 @@ public class GUIWaitingRoom extends Thread {
             connection.getSocket().setSoTimeout((int) (START_WAIT_MINUTES * 60 * 1000));
         } catch (Exception e) {
             e.printStackTrace();
+            Log.d("WaitingToStart","exception");
             connection.closeAll();
         }
     }
@@ -101,19 +108,15 @@ public class GUIWaitingRoom extends Thread {
     }
     public void run() {
         try {
-            //firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
-            ParentActivity pa = new ParentActivity();
-            //pa.setFirstCall(firstCall);
-            pa.setPlayer((HumanPlayer) connection.receiveObject());
-            this.player = ParentActivity.getPlayer();
             setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
         }
         catch(Exception e) {
             e.printStackTrace();
+            Log.d("SetSocketTimeout","Exception");
             connection.closeAll();
         }
-
-        waitingToStart();
+        Log.d("Connection",ParentActivity.getConnection().toString());
+       //waitingToStart();
         getInitialBoard();
         handler.post(new Runnable() {
             @Override
