@@ -63,7 +63,7 @@ public class GUISelectGame extends Thread{
     public Boolean getPickedGames(){
         return this.pickedGames;
     }
-    public void performGetGame() throws IOException,ClassNotFoundException{
+    public void performGetGame() throws IOException, ClassNotFoundException{
         // boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
         connection.sendObject(new ConfirmationMessage(oldBoolean));
         //Server then sends back list of games
@@ -165,8 +165,10 @@ public class GUISelectGame extends Thread{
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d("GUISelectGame","IOException, run");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            Log.d("GUISelectGame","ClassNotFoundException, run");
         }
     }
 }

@@ -102,10 +102,9 @@ public class ExecuteClient {
     public void setHelpText(String text) {
         this.helpText = text;
     }
-
-    public void getBoardAssignments(TextView helpText) {
+    public void getBoardAssignments(Button ready,ProgressBar status, Button start, Handler handler, TextView helpText) throws InterruptedException {
         clientOutput = new GUITextDisplay(helpText, act);
-        final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(connection, clientInput, clientOutput, act);
+        final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(ready,status, start,handler,connection, clientInput, clientOutput, act);
         initializeBoard.start();
     }
 
@@ -129,28 +128,11 @@ public class ExecuteClient {
         clientOutput = new GUITextDisplay(helpText, act);
         final GUIPlayGame guiPlayGame = new GUIPlayGame(handler,orders,false, connection, clientInput, clientOutput, act);
         guiPlayGame.start();
-       /* while (!guiPlayGame.getTurnOver()){
-            // wait for it to return
-        }
-        ParentActivity parentActivity = new ParentActivity();
-        parentActivity.resetOrders();
-        Intent intent = new Intent(act,WaitActivity.class);
-        act.startActivity(intent);*/
     }
     public void placementOrder(Handler handler){
        // clientOutput = new GUITextDisplay(helpText, act);
         GUIClientPlacementSelection guiClientPlacementSelection = new GUIClientPlacementSelection(handler,connection,clientInput,clientOutput,act);
         guiClientPlacementSelection.start();
-        /*while(!guiClientPlacementSelection.getPlacement()) {
-            //wait for thread to return
-        }
-        // reset Orders list
-        ParentActivity parentActivity = new ParentActivity();
-        parentActivity.resetOrders();
-        Log.d("Placements Completed",guiClientPlacementSelection.getPlacement().toString());
-        // display map
-        Intent newGame= new Intent(act, WaitActivity.class);
-        act.startActivity(newGame);*/
     }
 
     public void endGame(){
