@@ -28,8 +28,10 @@ public final class Constants {
   public static final int PLACEMENT_PRIORITY = 1;
   public static final int UPGRADE_UNITS_PRIORITY = 500;
   public static final int UPGRADE_TECH_PRIORITY = 9000;
+  public static final int TELEPORT_ORDER_PRIORITY = 11000;
   // cost to attack - food 
   public static final int ATTACK_COST = 1;
+  public static final int TELEPORT_COST = 50;
   public static final int STARTING_FUEL_PRODUCTION = 50;
   public static final int STARTING_TECH_PRODUCTION = 30;
   //board values
