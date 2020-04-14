@@ -39,8 +39,9 @@ public class OrderHelper {
     boolean orderSelect = true;
     while (orderSelect) {
       // prompt user
+
       client.getClientOutput().displayString("You are " + client.getPlayer().getName()
-          + ", what would you like to do?\n (M)ove\n (A)ttack\n (U)nit Boost\n (T)ech Boost\n (D)one");
+          + ", what would you like to do?\n (M)ove\n (A)ttack\n (U)nit Boost\n (T)ech Boost\n T(E)leport\n (D)one");
       response = client.getClientInput().readInput();
       orderSelect = getOrderList(orderList, response);
     }
