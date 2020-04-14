@@ -80,12 +80,6 @@ public class GUIWaitingRoom extends Thread {
             e.printStackTrace();
             connection.closeAll();
         }
-        catch(Exception e) {
-                e.printStackTrace();
-                Log.d("GetInitialBoard","exception");
-                connection.closeAll();
-            }
-
     }
 
     public void setSocketTimeout(int timeout) throws SocketException {

@@ -6,24 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".PlayerLobbyActivity"
     android:background="@drawable/spacebackground">
-
-<<<<<<< HEAD
-    <Button
-        android:id="@+id/ready"
-        android:layout_width="85dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="288dp"
-        android:background="@drawable/oval2"
-        android:onClick="playerReady"
-        android:text="Ready"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.871"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-=======
->>>>>>> 38c08cacfe25d5a278a99c32174980d41dbd1a27
-    <Button
+ <Button
         android:id="@+id/begin"
         android:layout_width="85dp"
         android:layout_height="41dp"
@@ -466,15 +449,6 @@
 
     <TextView
         android:id="@+id/helpText"
-<<<<<<< HEAD
-        android:layout_width="178dp"
-        android:layout_height="247dp"
-        android:layout_marginTop="32dp"
-        android:text=""
-        android:textColor="#ffffff"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.92"
-=======
         android:layout_width="159dp"
         android:layout_height="76dp"
         android:layout_marginTop="36dp"
@@ -507,7 +481,6 @@
         android:onClick="readyGame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.653"
->>>>>>> 38c08cacfe25d5a278a99c32174980d41dbd1a27
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
