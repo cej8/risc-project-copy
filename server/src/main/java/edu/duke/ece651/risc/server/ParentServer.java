@@ -569,7 +569,9 @@ public class ParentServer extends Thread{
       }
       turnNumber++;
       // Evolution 3: Plague
+      if(turnNumber>6){//
       applyPlague();
+      }
     }
     if (numPlayersLeft() == 1) {
       // If one player alive then create message --> send
