@@ -46,6 +46,10 @@ public TechnologyLevel getMaxTechLevel() {
 	return maxTechLevel;
 }
 
+  public void setPlayerResource(PlayerResources playerResource){
+    this.playerResource = playerResource;
+  }
+
 }
 
  
