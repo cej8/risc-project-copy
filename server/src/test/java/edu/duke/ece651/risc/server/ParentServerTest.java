@@ -135,7 +135,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     ps.setTurn(7);
     ps.growUnits();
     ps.applyPlague();
-    assertEquals(3400,player.getResources().getFuelResource().getFuel());
+    assertEquals(3450,player.getResources().getFuelResource().getFuel());
     System.out.println("PlaugeID: " + ps.getPlagueID());
     
   }
