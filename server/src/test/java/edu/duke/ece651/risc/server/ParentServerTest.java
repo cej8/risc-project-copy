@@ -79,7 +79,7 @@ public class ParentServerTest {
     assertEquals(5, b.getRegions().get(2).getUnits().getUnits().get(0));
 
   }
-  @Test
+  /* @Test
   public void test_plague(){
     ParentServer ps = new ParentServer();
     ps.addPlayer("player1", null);
@@ -138,7 +138,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     assertEquals(3400,player.getResources().getFuelResource().getFuel());
     System.out.println("PlaugeID: " + ps.getPlagueID());
     
-  }
+    }*/
  private List<Region> singleRegionList(AbstractPlayer p1) {
     Region r1 = new Region(p1, new Unit(1));
     r1.setName("r1");
