@@ -21,6 +21,7 @@ import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.Unit;
+import edu.duke.ece651.risc.shared.UnitBoost;
 
 public class UnitBoostActivity extends AppCompatActivity {
     TextView unitName0;
@@ -108,6 +109,8 @@ public class UnitBoostActivity extends AppCompatActivity {
         i.putExtra("ORDER",order);
         i.putExtra("ATTACKFROM",boostFrom);
         i.putIntegerArrayListExtra("UNITS",sendUnits);
+//        Orders orders = new Orders(boostFrom,order,sendUnits);
+//        orders.getOrders();
         startActivity(i);
     }
     public Region getRegionByName(Board board, String name){

@@ -31,6 +31,7 @@ import edu.duke.ece651.risc.shared.MoveOrder;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.TechBoost;
+import edu.duke.ece651.risc.shared.TeleportOrder;
 import edu.duke.ece651.risc.shared.Unit;
 import edu.duke.ece651.risc.shared.UnitBoost;
 
@@ -55,7 +56,6 @@ public class DisplayMapActivity extends AppCompatActivity {
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         Log.d("Inside map regions",regions.get(0).getName());
-        // temp for testing
         getOrders();
     }
 
@@ -88,6 +88,9 @@ public class DisplayMapActivity extends AppCompatActivity {
             }
             else if (order.equals("techBoost")) {
                 //i put my method in the techboost activity itself
+            } else if (order.equals("teleport")){
+                TeleportOrder teleportOrder = new TeleportOrder(source,destination,unit);
+                parentActivity.setOrders(teleportOrder);
             }
         }
         if (order != null) {
@@ -102,6 +105,11 @@ public class DisplayMapActivity extends AppCompatActivity {
         // TODO: execute client when done
         orders = ParentActivity.getOrders();
         executeClient.playGame(handler,helpText,orders);
+    }
+    public void teleportOrder(View view){
+        Intent teleport = new Intent(this,OrderActivity.class);
+        teleport.putExtra("ORDER","teleport");
+        startActivity(teleport);
     }
     public void moveOrder(View view){
         Intent attackSetup = new Intent(this,OrderActivity.class);

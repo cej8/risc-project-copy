@@ -14,6 +14,10 @@ public class ConsoleInput implements ClientInputInterface{
   public ConsoleInput(InputStream input){
     this.input = new Scanner(input);
   }
+
+  public ConsoleInput(Scanner input){
+    this.input = input;
+  }
   
   @Override
   public String readInput() {
