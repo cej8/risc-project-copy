@@ -50,7 +50,7 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
             ownerName = planetView.findViewById(R.id.ownerName);
             plague = planetView.findViewById(R.id.plague);
             if (hasPlague){
-                plague.setText("Your planet has the plague, you will produce no resources");
+                plague.setText("Your planet has the plague, it will produce no resources");
             }
             String unitString = Integer.toString(unit);
             unitNumbers.setText(unitString);
