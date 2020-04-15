@@ -56,7 +56,6 @@ public class ParentServerTest {
     assertEquals(10, regions.get(6).getSize());
     assertEquals(50, regions.get(6).getFuelProduction());
     assertEquals(30, regions.get(6).getTechProduction());
-
   }
 
   @Test
@@ -79,6 +78,169 @@ public class ParentServerTest {
     assertEquals(280, player.getResources().getTechResource().getTech()); 
     assertEquals(5, b.getRegions().get(2).getUnits().getUnits().get(0));
 
+  }
+  @Test
+  public void test_plague(){
+    ParentServer ps = new ParentServer();
+    ps.addPlayer("player1", null);
+    //ps.addPlayer("player2", null);
+    List<ChildServer> children = ps.getChildren();
+    AbstractPlayer player = children.get(0).getPlayer();
+    // AbstractPlayer player2 = children.get(1).getPlayer();;
+    Board b = new Board(singleRegionList(player));
+    
+    ps.setBoard(b);
+System.out.println("Starting fuel: " + player.getResources().getFuelResource().getFuel());
+    ps.setTurn(3);
+   
+    ps.growUnits();
+    ps.applyPlague();
+    
+    // first plague
+    int plagueID = ps.getPlagueID();
+    AbstractPlayer plaguePlayer = b.getRegions().get(plagueID).getOwner();
+   
+    System.out.println("PlagueID: " + ps.getPlagueID());
+    System.out.println("Turn 3 fuel: " + plaguePlayer.getResources().getFuelResource().getFuel());
+    int plagueFuel = plaguePlayer.getResources().getFuelResource().getFuel();
+    assertEquals(plagueID, ps.getPlagueID());
+    assertEquals(800,player.getResources().getFuelResource().getFuel());
+    ps.setTurn(4);
+    ps.growUnits();
+    ps.applyPlague();
+    // second plague
+    assertEquals(plagueID, ps.getPlagueID());
+    assertEquals(1450,player.getResources().getFuelResource().getFuel());
+    System.out.println("PlagueID: " + ps.getPlagueID());
+    System.out.println("Turn 4 fuel: " + plaguePlayer.getResources().getFuelResource().getFuel());
+   
+    plagueFuel = plaguePlayer.getResources().getFuelResource().getFuel();
+    ps.setTurn(5);
+    ps.growUnits();
+    //assertEquals(1100,plagueFuel);
+    System.out.println("PlagueID: " + ps.getPlagueID());
+    System.out.println("Turn 5 fuel: " + plaguePlayer.getResources().getFuelResource().getFuel());
+   
+    ps.applyPlague();
+    assertEquals(2100,player.getResources().getFuelResource().getFuel());
+    ps.setTurn(6);
+    ps.growUnits();
+     System.out.println("PlagueID: " + ps.getPlagueID());
+    System.out.println("Turn 6 fuel: " + plaguePlayer.getResources().getFuelResource().getFuel());
+   
+    assertEquals(plagueID, ps.getPlagueID());
+    // assertEquals(1700,plaguePlayer.getResources().getFuelResource().getFuel());
+    ps.applyPlague();
+    // new plague planet
+    ps.setTurn(7);
+    ps.growUnits();
+    ps.applyPlague();
+    assertEquals(3400,player.getResources().getFuelResource().getFuel());
+    System.out.println("PlaugeID: " + ps.getPlagueID());
+    
+  }
+ private List<Region> singleRegionList(AbstractPlayer p1) {
+    Region r1 = new Region(p1, new Unit(1));
+    r1.setName("r1");
+    r1.setSize(1);
+    r1.setFuelProduction(100);
+    r1.setTechProduction(100);
+
+    Region r2 = new Region(p1, new Unit(2));
+    r2.setName("r2");
+    r2.setSize(2);
+    r2.setFuelProduction(100);
+
+    Region r4 = new Region(p1, new Unit(4));
+    r4.setName("r4");
+    r4.setSize(4);
+    r4.setFuelProduction(100);
+
+    Region r5 = new Region(p1, new Unit(5));
+    r5.setName("r5");
+    r5.setSize(1);
+    r5.setFuelProduction(100);
+
+    Region r3 = new Region(p1, new Unit(3));
+    r3.setName("r3");
+    r3.setSize(1);
+    r3.setFuelProduction(100);
+
+    Region r6 = new Region(p1, new Unit(6));
+    r6.setName("r6");
+    r6.setSize(6);
+    r1.setFuelProduction(100);
+
+    Region r7 = new Region(p1, new Unit(7));
+    r7.setName("r7");
+    r7.setSize(5);
+    r7.setFuelProduction(100);
+
+    Region r8 = new Region(p1, new Unit(8));
+    r8.setName("r8");
+    r8.setSize(5);
+    r8.setFuelProduction(100);
+
+    List<Region> regions = new ArrayList<Region>();
+    regions.add(r1);
+    regions.add(r2);
+    regions.add(r4);
+    regions.add(r3);
+    regions.add(r5);
+    regions.add(r6);
+    regions.add(r7);
+    regions.add(r8);
+
+    List<Region> adj1 = new ArrayList<Region>();
+
+    adj1.add(r2);
+    adj1.add(r3);
+    adj1.add(r7);
+
+    r1.setAdjRegions(adj1);
+
+    List<Region> adj2 = new ArrayList<Region>();
+    adj2.add(r1);
+    adj2.add(r4);
+    r2.setAdjRegions(adj2);
+
+    List<Region> adj3 = new ArrayList<Region>();
+    adj3.add(r1);
+    adj3.add(r5);
+    adj3.add(r4);
+    r3.setAdjRegions(adj3);
+
+    List<Region> adj4 = new ArrayList<Region>();
+    adj4.add(r2);
+    adj4.add(r6);
+    adj4.add(r3);
+    adj4.add(r7);
+
+    r4.setAdjRegions(adj4);
+
+    List<Region> adj5 = new ArrayList<Region>();
+    adj5.add(r3);
+    adj5.add(r6);
+    r5.setAdjRegions(adj5);
+
+    List<Region> adj6 = new ArrayList<Region>();
+    adj6.add(r4);
+    adj6.add(r5);
+    adj6.add(r8);
+
+    r6.setAdjRegions(adj6);
+
+    List<Region> adj7 = new ArrayList<Region>();
+    adj7.add(r4);
+    adj7.add(r1);
+    adj7.add(r8);
+    r7.setAdjRegions(adj7);
+
+    List<Region> adj8 = new ArrayList<Region>();
+    adj8.add(r7);
+    adj8.add(r6);
+    r8.setAdjRegions(adj8);
+    return regions;
   }
 
   private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2) {
