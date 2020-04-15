@@ -530,6 +530,9 @@ public class ParentServer extends Thread{
   }
   // method to apply plague to region
   public void applyPlague(){
+    if(turnNumber<6){
+      return;//only begin after turn 6
+    }
     if (turnNumber%3 == 0){
       // reset past plague to false
       board.getRegions().get(plagueID).setPlague(false);
@@ -570,6 +573,7 @@ public class ParentServer extends Thread{
       turnNumber++;
       // Evolution 3: Plague
       applyPlague();
+      
     }
     if (numPlayersLeft() == 1) {
       // If one player alive then create message --> send

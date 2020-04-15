@@ -110,7 +110,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     ps.applyPlague();
     // second plague
     assertEquals(plagueID, ps.getPlagueID());
-    assertEquals(1450,player.getResources().getFuelResource().getFuel());
+    assertEquals(1550,player.getResources().getFuelResource().getFuel());
     System.out.println("PlagueID: " + ps.getPlagueID());
     System.out.println("Turn 4 fuel: " + plaguePlayer.getResources().getFuelResource().getFuel());
    
@@ -122,7 +122,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     System.out.println("Turn 5 fuel: " + plaguePlayer.getResources().getFuelResource().getFuel());
    
     ps.applyPlague();
-    assertEquals(2100,player.getResources().getFuelResource().getFuel());
+    assertEquals(2300,player.getResources().getFuelResource().getFuel());
     ps.setTurn(6);
     ps.growUnits();
      System.out.println("PlagueID: " + ps.getPlagueID());
@@ -135,7 +135,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     ps.setTurn(7);
     ps.growUnits();
     ps.applyPlague();
-    assertEquals(3400,player.getResources().getFuelResource().getFuel());
+    assertEquals(3700,player.getResources().getFuelResource().getFuel());
     System.out.println("PlaugeID: " + ps.getPlagueID());
     
     }*/
