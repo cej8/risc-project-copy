@@ -59,6 +59,10 @@ public class TextDisplay implements ClientOutputInterface {
     String name = r.getName();
     StringBuilder sb = new StringBuilder(numUnits + " units in " + name); //add info on num units in region
     sb.append(this.printRegionAdjacencies(r)); //add adj info
+     if(r.getPlague()){
+      sb.append("(PLAGUED)\n");
+    }
+   
     return sb.toString();
   }
   
@@ -72,7 +76,7 @@ public class TextDisplay implements ClientOutputInterface {
         sb.append(","); //add a comma if not the last in list
       }
     }
-    sb.append(")\n"); //close parentheses
+    sb.append(")"); //close parentheses
     return sb.toString();
   }
       
