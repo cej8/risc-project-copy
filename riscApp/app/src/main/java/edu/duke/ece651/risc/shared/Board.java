@@ -66,6 +66,14 @@ public class Board implements Serializable {
         return allPlayers;
     }
 
-
+    //Creates a list (preserve order) of players on board.
+    public List<AbstractPlayer> getPlayerList(){
+        List<Region> allRegions = this.getRegions();
+        List<AbstractPlayer> allPlayers = new ArrayList<AbstractPlayer>();
+        for (Region r : allRegions){ //for each region on the board
+            allPlayers.add(r.getOwner()); //add that player's owner to the set
+        }
+        return allPlayers;
+    }
 
 }
