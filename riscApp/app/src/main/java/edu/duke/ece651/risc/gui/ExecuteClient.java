@@ -147,4 +147,12 @@ public class ExecuteClient {
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(1);
     }
+    public void endGameReturn(){
+        connection.closeAll();
+        clientInput.close();
+        Intent intent = new Intent(act,ConfirmLoginActivity.class);
+        act.startActivity(intent);
+        //android.os.Process.killProcess(android.os.Process.myPid());
+       // System.exit(1);
+    }
 }

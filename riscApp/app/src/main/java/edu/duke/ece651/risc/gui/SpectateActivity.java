@@ -3,6 +3,7 @@ package edu.duke.ece651.risc.gui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import java.util.List;
@@ -13,12 +14,17 @@ import edu.duke.ece651.risc.shared.Region;
 public class SpectateActivity extends AppCompatActivity {
     Board board;
     List<Region> regions;
+    ExecuteClient executeClient;
+    Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spectate);
         board = ParentActivity.getBoard();
         regions = board.getRegions();
+//        executeClient = new ExecuteClient(this);
+//        executeClient.setConnection(ParentActivity.getConnection());
+//        executeClient.spectate(false,handler);
     }
 
     public void planetOne(View view){

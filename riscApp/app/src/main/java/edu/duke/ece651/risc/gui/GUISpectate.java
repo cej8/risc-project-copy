@@ -148,6 +148,21 @@ public class GUISpectate extends Thread {
         if (ParentActivity.getSpectateFirstCall() == true){
             parentActivity.setSpectateFirstCall(false);
             serverDisplayBoard();
+           /* handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(getWinner()!=null){
+                        //game over someone has won
+                        Intent end = new Intent(activity, EndGameActivity.class);
+                        end.putExtra("WINNER", getWinner());
+                        activity.startActivity(end);
+                    } else {
+                        Intent firstUnits = new Intent(activity, SpectateActivity.class);
+                        activity.startActivity(firstUnits);
+                    }
+                }
+            });*/
+            playGame();
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -162,17 +177,31 @@ public class GUISpectate extends Thread {
                     }
                 }
             });
-            playGame();
-            handler.post(new Runnable() {
+            /*handler.post(new Runnable() {
                 @Override
                 public void run() {
                         Intent firstUnits = new Intent(activity, SpectateActivity.class);
                         activity.startActivity(firstUnits);
                 }
-            });
+            });*/
         } else {
             checkAlive();
             serverDisplayBoard();
+           /* handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(getWinner()!=null){
+                        //game over someone has won
+                        Intent end = new Intent(activity, EndGameActivity.class);
+                        end.putExtra("WINNER", getWinner());
+                        activity.startActivity(end);
+                    } else {
+                        Intent firstUnits = new Intent(activity, SpectateActivity.class);
+                        activity.startActivity(firstUnits);
+                    }
+                }
+            });*/
+            playGame();
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -187,14 +216,13 @@ public class GUISpectate extends Thread {
                     }
                 }
             });
-            playGame();
-            handler.post(new Runnable() {
+           /* handler.post(new Runnable() {
                 @Override
                 public void run() {
                     Intent firstUnits = new Intent(activity, SpectateActivity.class);
                     activity.startActivity(firstUnits);
                 }
-            });
+            });*/
         }
     }
 }
