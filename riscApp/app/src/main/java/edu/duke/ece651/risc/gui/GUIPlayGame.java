@@ -35,6 +35,7 @@ public class GUIPlayGame extends Thread{
     private boolean turnOver = false;
     private String winnerPrompt=null;
     private Handler handler;
+    private ParentActivity parentActivity = new ParentActivity();
 
     private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
@@ -84,9 +85,33 @@ public class GUIPlayGame extends Thread{
     }
     public void serverDisplayBoard(){
         try {
+            if (alive != isPlaying) {
+                isPlaying = alive;
+                //Query for spectating
+                //If no then kill connection
+                if (!queryYNAndRespond("Would you like to keep spectating? [Y/N]")) {
+                    // TODO: no spectating allowed for now
+                    connection.closeAll();
+                    clientInput.close();
+                }
+            }
+            // Next server sends board
+            board = (Board) (connection.receiveObject());
+            // ParentActivity parentActivity = new ParentActivity();
+            parentActivity.setBoard(board);
+            gotBoard = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            connection.closeAll();
+            clientInput.close();
+            return;
+        }
+    }
+    public void checkAlive(){
+        try {
            // while (true) {
                 String turn = receiveAndDisplayString();
-                ParentActivity parentActivity = new ParentActivity();
+               // ParentActivity parentActivity = new ParentActivity();
                 //startTime = System.currentTimeMillis();
                 parentActivity.setStartTime(System.currentTimeMillis());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));//(long) (connection.getSocket().getSoTimeout());
@@ -115,8 +140,9 @@ public class GUIPlayGame extends Thread{
                 // Get primitive
                 alive = isAlive.getMessage();
                 parentActivity.setAlive(alive);
+                /////------------------------///// Separate method
                 // If not same then player died on previous turn --> get spectate message
-                if (alive != isPlaying) {
+               /* if (alive != isPlaying) {
                     isPlaying = alive;
                     //Query for spectating
                     //If no then kill connection
@@ -130,7 +156,7 @@ public class GUIPlayGame extends Thread{
                 board = (Board) (connection.receiveObject());
                // ParentActivity parentActivity = new ParentActivity();
                 parentActivity.setBoard(board);
-                gotBoard = true;
+                gotBoard = true;*/
            // }
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,22 +170,9 @@ public class GUIPlayGame extends Thread{
     }
     public void playGame() {
         try {
-           // while (true) {
                 while (true) {
-//                    // Next server sends board
-//                    board = (Board) (connection.receiveObject());
-//                    ParentActivity parentActivity = new ParentActivity();
-//                    parentActivity.setBoard(board);
-                    // Board now saved globally
-                    // Display board
-                   // clientOutput.displayBoard(board);
-                    // Client generates orders --> sends
                     /////TODO probably seperate this part
-                    //if (alive) {
                     if(ParentActivity.getAlive()){
-                        //new OrderCreator
-                       // OrderHelper orderhelper = new OrderHelper((edu.duke.ece651.risc.client.ClientInterface) this);
-                        //List<OrderInterface> orders = orderhelper.createOrders();
                         //If too long --> kill player
                         if(timeOut(ParentActivity.getStartTime(), ParentActivity.getMaxTime())){ return;}
                         connection.sendObject(orders);
@@ -173,7 +186,6 @@ public class GUIPlayGame extends Thread{
                         break;
                     }
                 }
-           // }
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
@@ -215,25 +227,35 @@ public class GUIPlayGame extends Thread{
     @Override
     public void run(){
         if (displayBoard == true) {
-            serverDisplayBoard();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(getWinner()!=null){
-                        //game over someone has won
-                        Intent end = new Intent(activity, EndGameActivity.class);
-                        end.putExtra("WINNER", getWinner());
-                        activity.startActivity(end);
-                        //return;
-                    } else {
-                        Intent firstUnits = new Intent(activity, DisplayMapActivity.class);
-                        activity.startActivity(firstUnits);
+            checkAlive();
+            if (ParentActivity.getAlive() == true) {
+                serverDisplayBoard();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(getWinner()!=null){
+                            //game over someone has won
+                            Intent end = new Intent(activity, EndGameActivity.class);
+                            end.putExtra("WINNER", getWinner());
+                            activity.startActivity(end);
+                            //return;
+                        } else {
+                            Intent firstUnits = new Intent(activity, DisplayMapActivity.class);
+                            activity.startActivity(firstUnits);
+                        }
                     }
-                }
-            });
+                });
+            } else { // not alive, so ask if we want to spectate
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent spectateIntent = new Intent(activity,SpectateChoiceActivity.class);
+                        activity.startActivity(spectateIntent);
+                    }
+                });
+            }
         } else {
             playGame();
-           // turnOver = true;
             handler.post(new Runnable() {
                 @Override
                 public void run() {

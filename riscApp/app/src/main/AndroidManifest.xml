@@ -13,6 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".SpectateActivity"></activity>
+        <activity android:name=".SpectateChoiceActivity" />
         <activity android:name=".EndGameActivity" />
         <activity android:name=".PlayerLobbyActivity" />
         <activity

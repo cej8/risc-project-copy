@@ -134,9 +134,14 @@ public class ExecuteClient {
         GUIClientPlacementSelection guiClientPlacementSelection = new GUIClientPlacementSelection(handler,connection,clientInput,clientOutput,act);
         guiClientPlacementSelection.start();
     }
+    public void spectate(boolean response,Handler handler){
+        ParentActivity parentActivity = new ParentActivity();
+        parentActivity.setSpectate(response);
+        GUISpectate guiSpectate = new GUISpectate(handler,act,clientInput,clientOutput);
+        guiSpectate.start();
+    }
 
     public void endGame(){
-
            connection.closeAll();
            clientInput.close();
         android.os.Process.killProcess(android.os.Process.myPid());
