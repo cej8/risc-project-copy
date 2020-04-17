@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -41,6 +42,20 @@ public class DisplayMapActivity extends AppCompatActivity {
     TextView helpText;
     List<OrderInterface> orders;
     Board board;
+    ImageButton planet0;
+    ImageButton planet1;
+    ImageButton planet2;
+    ImageButton planet3;
+    ImageButton planet4;
+    ImageButton planet5;
+    ImageButton planet6;
+    ImageButton planet7;
+    ImageButton planet8;
+    ImageButton planet9;
+    ImageButton planet10;
+    ImageButton planet11;
+    ParentActivity parentActivity = new ParentActivity();
+
     private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +67,123 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        //generateBoard();
+        generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         Log.d("Inside map regions",regions.get(0).getName());
         getOrders();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setPlanets();
+    }
+
+    public void setPlanets() {
+        List<AbstractPlayer> players = board.getPlayerList();
+        List<Integer> planetDrawables = getPlanetDrawables();
+        Map<AbstractPlayer, Integer> playerToColorMap = getPlayerToColorMap();
+        Map<Region, ImageButton> regionToButtonMap = getRegionToButtonMap();
+        Map<AbstractPlayer, List<Region>> playerToRegionMap = board.getPlayerToRegionMap();
+        Map<Integer, String> intToColorMap = getIntToColorMap();
+        for (AbstractPlayer p : players) { //for each entry in the map
+            for (Region r : playerToRegionMap.get(p)) { //for each region the player has
+                System.out.println(p.getName() + "'s region " + r.getName() + " is " + intToColorMap.get(playerToColorMap.get(p)));
+                regionToButtonMap.get(r).setBackgroundResource(playerToColorMap.get(p)); //set the drawable of that region's corresponding image button to that player's color
+            }
+        }
+        //set all unowned regions to grey
+        for (Region r : regions) {
+            if (r.getOwner() == null) {
+                regionToButtonMap.get(r).setBackgroundResource(R.drawable.grey_planet);
+            }
+        }
+    }
+
+    public  Map<AbstractPlayer, Integer> getPlayerToColorMap(){
+        List<AbstractPlayer> players = board.getPlayerList();
+        System.out.println("num of players " + players.size());
+        for (AbstractPlayer p : players){
+            System.out.println("Player = " + p.getName());
+        }
+        List<Integer> planetDrawables = getPlanetDrawables();
+        Map<Integer, String> intToColorMap = getIntToColorMap();
+        Map<AbstractPlayer, Integer> playerToColorMap = new HashMap<AbstractPlayer, Integer>();
+        for (int i = 0; i < players.size(); i++){
+            playerToColorMap.put(players.get(i), planetDrawables.get(i));
+            Log.d(players.get(i).getName() + " is color ",  intToColorMap.get(playerToColorMap.get(players.get(i))));
+        }
+        return playerToColorMap;
+    }
+
+    //regions
+    public Map<Region, ImageButton> getRegionToButtonMap(){
+        Map<Region, ImageButton> regionToButtonMap = new HashMap<Region, ImageButton>();
+        List<ImageButton> planetButtons = getPlanetButtons();
+        System.out.println("Number of planet buttons " + planetButtons.size());
+        System.out.println("Number of regions " + regions.size());
+        for (int i = 0; i < planetButtons.size(); i++){
+            regionToButtonMap.put(board.getRegions().get(i), planetButtons.get(i));
+        }
+        return regionToButtonMap;
+    }
+
+    public Map<Integer, String> getIntToColorMap(){
+        Map<Integer, String> map = new HashMap<Integer, String>();
+        map.put(R.drawable.red_planet, "RED");
+        map.put(R.drawable.blue_planet, "BLUE");
+        map.put(R.drawable.green_planet, "GREEN");
+        map.put(R.drawable.sky_planet, "SKY");
+        map.put(R.drawable.pink_planet, "PINK");
+        return map;
+    }
+
+    public List<ImageButton> getPlanetButtons(){
+        List<ImageButton> planetButtons = new ArrayList<ImageButton>();
+        planet0 = findViewById(R.id.p0);
+        planet1 = findViewById(R.id.p1);
+        planet2 = findViewById(R.id.p2);
+        planet3 = findViewById(R.id.p3);
+        planet4 = findViewById(R.id.p4);
+        planet5 = findViewById(R.id.p5);
+        planet6 = findViewById(R.id.p6);
+        planet7 = findViewById(R.id.p7);
+        planet8 = findViewById(R.id.p8);
+        planet9 = findViewById(R.id.p9);
+        planet10 = findViewById(R.id.p10);
+        planet11 = findViewById(R.id.p11);
+        planetButtons.add(planet0);
+        planetButtons.add(planet1);
+        planetButtons.add(planet2);
+        planetButtons.add(planet3);
+        planetButtons.add(planet4);
+        planetButtons.add(planet5);
+        planetButtons.add(planet6);
+        planetButtons.add(planet7);
+        planetButtons.add(planet8);
+        planetButtons.add(planet9);
+        planetButtons.add(planet10);
+        planetButtons.add(planet11);
+        return planetButtons;
+    }
+
+    public List<Integer> getPlanetDrawables(){
+        Integer redPlanet = (R.drawable.red_planet);
+        Integer bluePlanet = (R.drawable.blue_planet);
+        Integer greenPlanet = (R.drawable.green_planet);
+        Integer skyPlanet = (R.drawable.sky_planet);
+        Integer pinkPlanet = (R.drawable.pink_planet);
+        List<Integer>  planetDrawables = new ArrayList<Integer>();
+        planetDrawables.add(redPlanet);
+        planetDrawables.add(bluePlanet);
+        planetDrawables.add(greenPlanet);
+        planetDrawables.add(skyPlanet);
+        planetDrawables.add(pinkPlanet);
+        //planetDrawables.add(greyPlanet);
+        return planetDrawables;
+    }
+
 
     public void getOrders(){
         Intent i = getIntent();
@@ -203,21 +329,38 @@ public class DisplayMapActivity extends AppCompatActivity {
     
     // Mock board
     public void generateBoard(){
-        List<Region> regions = getRegions(false);
+        List<Region> regions = getRegions(3);
         Board b = new Board(regions);
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.setBoard(b);
         Log.d("Earth",Integer.toString(regions.get(0).getUnits().getTotalUnits()));
     }
-    private List<Region> getRegions(boolean singleOwner) {
+    private List<Region> getRegions(int numPlayer) {
         AbstractPlayer p1 = new HumanPlayer("Player 1");
         AbstractPlayer p2 = new HumanPlayer("Player 2");
+        AbstractPlayer p3 = new HumanPlayer("Player 3");
+        AbstractPlayer p4 = new HumanPlayer("Player 4");
+        AbstractPlayer p5 = new HumanPlayer("Player 5");
         List<Region> regions = null;
         List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);
-        if (!singleOwner) {
-            regions = getRegionHelper(p1, p2, regionUnits);
-        } else {
-            regions = getRegionHelper(p1, p1, regionUnits);
+        switch (numPlayer) {
+            case 1:
+                regions = getRegionHelper(p1, p1, p1, p1, p1, regionUnits);
+                break;
+            case 2:
+                regions = getRegionHelper(p1, p1, p2, p2, p2, regionUnits);
+                break;
+            case 3:
+                regions = getRegionHelper(p1, p2, p2, p3, p3, regionUnits);
+                break;
+            case 4:
+                regions = getRegionHelper(p1, p2, p3, p4, p4, regionUnits);
+                break;
+            case 5:
+                regions = getRegionHelper(p1, p2, p3, p4, p5, regionUnits);
+                break;
+            default:
+                break;
         }
         return regions;
     }
@@ -256,31 +399,33 @@ public class DisplayMapActivity extends AppCompatActivity {
         return unit;
     }
 
-    private List<Region> getRegionHelper(AbstractPlayer p1, AbstractPlayer p2, List<Unit> units) {
+    private List<Region> getRegionHelper(AbstractPlayer p1, AbstractPlayer p2, AbstractPlayer p3, AbstractPlayer p4, AbstractPlayer p5, List<Unit> units) {
 
         Region r0 = new Region(p1, units.get(0));
         r0.setName("Caprica");
         Region r1 = new Region(p1, units.get(1));
         r1.setName("Hoth");
-        Region r2 = new Region(p1, units.get(2));
+        Region r2 = new Region(p2, units.get(2));
         r2.setName("Worlorn");
-        Region r3 = new Region(p1, units.get(3));
+        Region r3 = new Region(p2, units.get(3));
         r3.setName("Dagobah");
-        Region r4 = new Region(p2, units.get(4));
+
+
+        Region r4 = new Region(p3, units.get(4));
         r4.setName("Krypton");
-        Region r5 = new Region(p2, units.get(5));
+        Region r5 = new Region(p3, units.get(5));
         r5.setName("Ego");
-        Region r6 = new Region(p2, units.get(5));
+        Region r6 = new Region(p3, units.get(5));
         r6.setName("Terra Prime");
-        Region r7 = new Region(p2, units.get(5));
+        Region r7 = new Region(p4, units.get(5));
         r7.setName("Arda");
-        Region r8 = new Region(p2, units.get(5));
+        Region r8 = new Region(p4, units.get(5));
         r8.setName("Dune");
-        Region r9 = new Region(p2, units.get(5));
+        Region r9 = new Region(p4, units.get(5));
         r9.setName("Solaris");
-        Region r10 = new Region(p2, units.get(5));
+        Region r10 = new Region(p4, units.get(5));
         r10.setName("Gallifrey");
-        Region r11 = new Region(p2, units.get(5));
+        Region r11 = new Region(p5, units.get(5));
         r11.setName("Cybertron");
 
         List<Region> adj0 = new ArrayList<Region>();
