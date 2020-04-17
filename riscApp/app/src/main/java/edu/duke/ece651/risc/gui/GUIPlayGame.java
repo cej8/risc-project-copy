@@ -249,8 +249,16 @@ public class GUIPlayGame extends Thread{
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Intent spectateIntent = new Intent(activity,SpectateChoiceActivity.class);
-                        activity.startActivity(spectateIntent);
+                        if(getWinner()!=null){
+                            //game over someone has won
+                            Intent end = new Intent(activity, EndGameActivity.class);
+                            end.putExtra("WINNER", getWinner());
+                            activity.startActivity(end);
+                            //return;
+                        } else {
+                            Intent spectateIntent = new Intent(activity, SpectateChoiceActivity.class);
+                            activity.startActivity(spectateIntent);
+                        }
                     }
                 });
             }

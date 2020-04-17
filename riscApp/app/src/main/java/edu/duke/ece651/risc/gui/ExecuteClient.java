@@ -86,15 +86,6 @@ public class ExecuteClient {
 
     }
 
-    public void startGame(TextView textView, Activity act, EditText editText) {
-
-
-        Log.d("Test Connection", "Test Connection");
-        GUIClient client = new GUIClient(clientInput, clientOutput, connection);
-        //GUIClient client = new GUIClient(clientInput, clientOutput, addr, port);
-        //client.start();
-    }
-
     public String getHelpText() {
         return this.helpText;
     }
