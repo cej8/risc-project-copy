@@ -33,6 +33,11 @@ public class OrderFactoryProducer {
            factory = new TeleportOrderCreator(c);
          c.getClientOutput().displayString("You made a Teleport order, what else would you like to do?");
         break;
+         case "R":// teleport
+           factory = new ResourceBoostCreator(c);
+         c.getClientOutput().displayString("You made a Upgrade resource order, what else would you like to do?");
+        break;
+
     default:
        c.getClientOutput().displayString("Please select either T, M, A, U, E, or D");
         break;

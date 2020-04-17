@@ -35,13 +35,15 @@ public class TestOrderCreator {
     client.setPlayer(p1);
     OrderHelper oc = new OrderHelper(client);
     List<OrderInterface> orders = oc.createOrders();
-     assertEquals(6, orders.size());
+    assertEquals(7, orders.size());
      assertEquals(Constants.MOVE_PRIORITY, orders.get(0).getPriority());
     assertEquals(Constants.ATTACK_MOVE_PRIORITY, orders.get(1).getPriority());
     assertEquals(Constants.ATTACK_COMBAT_PRIORITY, orders.get(2).getPriority());
     assertEquals(Constants.UPGRADE_UNITS_PRIORITY,  orders.get(3).getPriority());
     assertEquals(Constants.UPGRADE_TECH_PRIORITY,  orders.get(4).getPriority());
     assertEquals(Constants.TELEPORT_ORDER_PRIORITY, orders.get(5).getPriority());
+    assertEquals(Constants.UPGRADE_RESOURCE_PRIORITY, orders.get(6).getPriority());
+   
     OrderCreator poc = OrderFactoryProducer.getOrderCreator("P", client);
     poc.addToOrderList(orders);
     
