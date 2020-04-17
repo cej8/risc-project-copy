@@ -10,8 +10,9 @@ public class ResourceBoost extends DestinationOrder {
 
   @Override
   public String doAction() {
-    // cost of a resource boost is size * total units * multiplier ****** should we multiply the cost by the multiplier as well?
-     int cost = destination.getSize() * destination.getUnits().getTotalUnits();
+    // cost of a resource boost is size * total units * multiplier ****** should we multiply the cost by the multiplier as well??
+    int cost =(int)(destination.getSize() * destination.getUnits().getTotalUnits()
+               * destination.getRegionLevel().getMultiplier());
      // remove cost of a resource boost from a player
      destination.getOwner().getResources().getTechResource().useTech(cost);
     // upgrade region level (increment level and update multiplier)
