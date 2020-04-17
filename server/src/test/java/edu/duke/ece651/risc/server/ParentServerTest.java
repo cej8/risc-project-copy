@@ -1086,7 +1086,7 @@ System.out.println(orderMap.keySet());
     List<Integer> expUnits = new ArrayList<Integer>();
     expUnits.add(new Integer(5));
     for(int i = 0; i < 6; i++){ expUnits.add(new Integer(0)); }
-    SourceDestinationOrder attackOrder = (SourceDestinationOrder) orderMap.get("AttackCombat").get(0);
+    SourceDestinationUnitOrder attackOrder = (SourceDestinationUnitOrder) orderMap.get("AttackCombat").get(0);
     assert(attackOrder.getUnits().getUnits().equals(expUnits));
     assert(orderMap.get("NotCombat").get(0) instanceof AttackMove);
     assert(orderMap.get("NotCombat").get(1) instanceof AttackMove);

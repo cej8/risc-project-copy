@@ -416,18 +416,18 @@ public class ParentServer extends Thread{
       //Combine attacks to same region by same player
       if(className.equals("AttackCombat")){
         boolean foundOrder = false;
-        SourceDestinationOrder sdOrderNew = (SourceDestinationOrder) castOrder;
+        SourceDestinationUnitOrder sduOrderNew = (SourceDestinationUnitOrder) castOrder;
         //Create copy of source to prevent A-->B, B-->C issue where B is taken by A (then B->C would be A's)
-        sdOrderNew.setSource((Region)DeepCopy.deepCopy(sdOrderNew.getSource()));
+        sduOrderNew.setSource((Region)DeepCopy.deepCopy(sduOrderNew.getSource()));
         for(OrderInterface combatOrder : orderMap.get("AttackCombat")){
           if(foundOrder){ break; }
           //If both have same source owner and go to same region
           //Then order in list gets new order's units added to it
-          SourceDestinationOrder sdOrderOld = (SourceDestinationOrder) combatOrder;
-           if(sdOrderNew.getSource().getOwner().getName().equals(sdOrderOld.getSource().getOwner().getName()) &&
-             sdOrderNew.getDestination().getName().equals(sdOrderOld.getDestination().getName())){
-             List<Integer> oldOrderUnits = sdOrderOld.getUnits().getUnits();
-             List<Integer> newOrderUnits = sdOrderNew.getUnits().getUnits();
+          SourceDestinationUnitOrder sduOrderOld = (SourceDestinationUnitOrder) combatOrder;
+           if(sduOrderNew.getSource().getOwner().getName().equals(sduOrderOld.getSource().getOwner().getName()) &&
+             sduOrderNew.getDestination().getName().equals(sduOrderOld.getDestination().getName())){
+             List<Integer> oldOrderUnits = sduOrderOld.getUnits().getUnits();
+             List<Integer> newOrderUnits = sduOrderNew.getUnits().getUnits();
              //Add newOrderUnits to oldOrderUnits
              for(int i = 0; i < newOrderUnits.size(); i++){
                oldOrderUnits.set(i, oldOrderUnits.get(i)+newOrderUnits.get(i));

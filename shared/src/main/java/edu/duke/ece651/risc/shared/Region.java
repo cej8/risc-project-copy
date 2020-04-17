@@ -14,6 +14,8 @@ public class Region implements Serializable {
   private int fuelProduction;
   private int technologyProduction;
   private boolean hasPlague;
+  private int cloakTurns;
+  private Map<String, List<Spy>> spies;
   // public Region() {
   // }
 
@@ -27,6 +29,8 @@ public class Region implements Serializable {
     setTechProduction(Constants.STARTING_TECH_PRODUCTION);
     setSize(Constants.REGION_SIZE);
     this.hasPlague = false;
+    this.cloakTurns = 0;
+    this.spies = new HashMap<String, List<Spy>>();
   }
 
   public Region(AbstractPlayer p, Unit u) {// will need to be modified
@@ -38,7 +42,46 @@ public class Region implements Serializable {
     setTechProduction(Constants.STARTING_TECH_PRODUCTION);
     setSize(Constants.REGION_SIZE);
     this.hasPlague = false;
+    this.cloakTurns = 0;
+    this.spies = new HashMap<String, List<Spy>>();
   }
+
+  public int getCloakTurns(){
+    return cloakTurns;
+  }
+
+  public void setCloakTurns(int cloakTurns){
+    this.cloakTurns = cloakTurns;
+  }
+
+  public Map<String, List<Spy>> getSpies(){
+    return spies;
+  }
+
+  public List<Spy> getSpies(String name){
+    return spies.get(name);
+  }
+
+  public void addSpyList(String name, List<Spy> list){
+    spies.put(name, list);
+  }
+
+  public void addSpy(String name, Spy spy){
+    if(!spies.containsKey(name)){
+      spies.put(name, new ArrayList<Spy>());
+    }
+    spies.get(name).add(spy);
+  }
+
+  public void setAllSpiesFalse(){
+    for(List<Spy> list : spies.values()){
+      for(Spy spy : list){
+        spy.setHasMoved(false);
+      }
+    }
+  }
+
+  
   public boolean getPlague(){
     return this.hasPlague;
   }

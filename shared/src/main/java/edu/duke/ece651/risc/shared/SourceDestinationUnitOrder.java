@@ -1,9 +1,11 @@
 package edu.duke.ece651.risc.shared;
 
-public abstract class SourceDestinationOrder implements RegionOrder {
-  private static final long serialVersionUID = 45L;
+public abstract class SourceDestinationUnitOrder implements RegionUnitOrder {
+  //this class contains relevant fields for order operations between two regions (source and destination)
+  private static final long serialVersionUID = 8L; 
   protected Region source;
   protected Region destination;
+  protected Unit units;
 
   public void setDestination(Region destination){
     this.destination = destination;
@@ -16,6 +18,14 @@ public abstract class SourceDestinationOrder implements RegionOrder {
   }
   public Region getSource(){
     return source;
+  }
+
+  public Unit getUnits(){
+    return units;
+  }
+
+  public void setUnits(Unit units){
+    this.units = units;
   }
 
   @Override
@@ -32,8 +42,8 @@ public abstract class SourceDestinationOrder implements RegionOrder {
       }
     }
   }
-  
-  @Override
-  abstract public String doAction();
+@Override
+abstract public String doAction();
+
 
 }

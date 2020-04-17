@@ -1,9 +1,10 @@
 package edu.duke.ece651.risc.shared;
 
-public abstract class SourceDestinationOrder implements RegionOrder {
-  private static final long serialVersionUID = 45L;
+public abstract class SourceDestinationPlayerOrder implements RegionPlayerOrder {
+  private static final long serialVersionUID = 48L;
   protected Region source;
   protected Region destination;
+  protected AbstractPlayer player;
 
   public void setDestination(Region destination){
     this.destination = destination;
@@ -17,6 +18,15 @@ public abstract class SourceDestinationOrder implements RegionOrder {
   public Region getSource(){
     return source;
   }
+
+  public void setPlayer(AbstractPlayer player){
+    this.player = player;
+  }
+  
+  public AbstractPlayer getPlayer(){
+    return player;
+  }
+
 
   @Override
   abstract public int getPriority();

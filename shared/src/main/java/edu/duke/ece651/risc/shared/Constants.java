@@ -22,13 +22,15 @@ public final class Constants {
   public static final int MAX_TECH_LEVEL = 6;
  
   //priorities for ordering moves 
-  public static final int ATTACK_COMBAT_PRIORITY=5000;
-  public static final int ATTACK_MOVE_PRIORITY = 3000;
-  public static final int MOVE_PRIORITY = 1000;
-  public static final int PLACEMENT_PRIORITY = 1;
-  public static final int UPGRADE_UNITS_PRIORITY = 500;
-  public static final int UPGRADE_TECH_PRIORITY = 9000;
-  public static final int TELEPORT_ORDER_PRIORITY = 11000;
+  public static final int ATTACK_COMBAT_PRIORITY = 70;
+  public static final int ATTACK_MOVE_PRIORITY = 50;
+  public static final int MOVE_PRIORITY = 30;
+  public static final int PLACEMENT_PRIORITY = 10;
+  public static final int UPGRADE_UNITS_PRIORITY = 20;
+  public static final int UPGRADE_TECH_PRIORITY = 60;
+  public static final int TELEPORT_ORDER_PRIORITY = 40;
+  public static final int SPYMOVE_PRIORITY = 65;
+  public static final int CLOAK_PRIORITY = 66;
   // cost to attack - food 
   public static final int ATTACK_COST = 1;
   public static final int TELEPORT_COST = 50;
