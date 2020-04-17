@@ -61,7 +61,7 @@ public class Board implements Serializable {
         List<Region> allRegions = this.getRegions();
         Set<AbstractPlayer> allPlayers = new HashSet<AbstractPlayer>();
         for (Region r : allRegions){ //for each region on the board
-            allPlayers.add(r.getOwner()); //add that player's owner to the set
+            allPlayers.add(r.getOwner()); //add that region's owner to the set
         }
         return allPlayers;
     }
@@ -69,9 +69,13 @@ public class Board implements Serializable {
     //Creates a list (preserve order) of players on board.
     public List<AbstractPlayer> getPlayerList(){
         List<Region> allRegions = this.getRegions();
+        Set<AbstractPlayer> addedPlayers = new HashSet<AbstractPlayer>();
         List<AbstractPlayer> allPlayers = new ArrayList<AbstractPlayer>();
-        for (Region r : allRegions){ //for each region on the board
-            allPlayers.add(r.getOwner()); //add that player's owner to the set
+        for (Region r : allRegions) { //for each region on the board
+            if (!(addedPlayers.contains(r.getOwner()))) { // if that player has not already been to list
+                allPlayers.add(r.getOwner()); //add that region's owner to the set
+                addedPlayers.add(r.getOwner());//add player to list of added players
+            }
         }
         return allPlayers;
     }
