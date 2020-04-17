@@ -31,11 +31,15 @@ public final class Constants {
   public static final int TELEPORT_ORDER_PRIORITY = 40;
   public static final int SPYMOVE_PRIORITY = 65;
   public static final int CLOAK_PRIORITY = 66;
+  public static final int SPYUPGRADE_PRIORITY = 64;
   // cost to attack - food 
   public static final int ATTACK_COST = 1;
   public static final int TELEPORT_COST = 50;
   public static final int STARTING_FUEL_PRODUCTION = 50;
   public static final int STARTING_TECH_PRODUCTION = 30;
+
+  public static final int CLOAK_COST = 100;
+  public static final int SPYUPGRADE_COST = 20;
   //board values
   public static final int REGION_SIZE = 10;
   // Technology Defaults

@@ -273,6 +273,23 @@ tasks.register("run-client") {
     description = 'Run the Client'
 }
 
+tasks.register("test-client") {
+    dependsOn project('client').getTasksByName('test',false)
+    group = 'Test Client/Server/Shared'
+    description = 'Run the Client tests'
+}
+
+tasks.register("test-server") {
+    dependsOn project('server').getTasksByName('test',false)
+    group = 'Test Client/Server/Shared'
+    description = 'Run the Server tests'
+}
+
+tasks.register("test-shared") {
+    dependsOn project('shared').getTasksByName('test',false)
+    group = 'Test Client/Server/Shared'
+    description = 'Run the Shared tests'
+}
 
 
 

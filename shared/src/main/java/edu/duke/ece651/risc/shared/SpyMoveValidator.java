@@ -49,7 +49,7 @@ public class SpyMoveValidator implements ValidatorInterface<SpyMoveOrder> {
     //Otherwise get first, since moved always added to end this should be the least recently moved
     Spy spy = start.getSpies(player.getName()).get(0);
     //If it has moved then all behind have...
-    if(!spy.getHasMoved()){
+    if(spy.getHasMoved()){
       return false;
     }
 
@@ -65,8 +65,8 @@ public class SpyMoveValidator implements ValidatorInterface<SpyMoveOrder> {
   }
 
   @Override
-  public boolean validateOrders(List<SpyMoveOrder> spyMoveList){
-    for(SpyMoveOrder move : spyMoveList){
+  public boolean validateOrders(List<SpyMoveOrder> orders){
+    for(SpyMoveOrder move : orders){
       if(!isValidMove(move)){
         return false;
       }

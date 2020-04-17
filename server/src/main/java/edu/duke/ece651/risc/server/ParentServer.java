@@ -525,6 +525,12 @@ public class ParentServer extends Thread{
         }
         r.getUnits().getUnits().set(0, r.getUnits().getUnits().get(0) + 1);
       }
+      //Set all spies as not moved for next turn
+      r.setAllSpiesFalse();
+      //decrease cloaking for cloaked by 1
+      if(r.getCloakTurns() > 0){
+        r.setCloakTurns(r.getCloakTurns()-1);
+      }
     }
 
   }
@@ -556,6 +562,7 @@ public class ParentServer extends Thread{
     
     //While regions not owned all by one player
     createStartingGroups();
+    board.initializeSpies(players);
     while (turnNumber == 1 || numPlayersLeft() > 1) {
       try {
         // Prompt users

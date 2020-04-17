@@ -15,7 +15,7 @@ public class CloakOrder extends DestinationOrder {
   @Override
   public String doAction(){
     destination.setCloakTurns(destination.getCloakTurns() + 3);
-    destination.getOwner().getResources().getTechResource().useTech(100);
+    destination.getOwner().getResources().getTechResource().useTech(Constants.CLOAK_COST);
     return (destination.getOwner().getName() + " cloaked " + destination.getName() + " for three more turns.\n");
   }
 }

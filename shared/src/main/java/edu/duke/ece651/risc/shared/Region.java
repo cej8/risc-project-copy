@@ -81,6 +81,12 @@ public class Region implements Serializable {
     }
   }
 
+  public void initializeSpies(List<String> players){
+    for(String p : players){
+      spies.put(p, new ArrayList<Spy>());
+    }
+  }
+
   
   public boolean getPlague(){
     return this.hasPlague;

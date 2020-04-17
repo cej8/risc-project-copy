@@ -65,7 +65,34 @@ public class Board implements Serializable {
     }
     return allPlayers;
   }
+
+  public Set<Region> getVisibleRegions(String playerName){
+    Set<Region> visible = new HashSet<Region>();
+    //Add all visible regions to player to set
+    for(Region r : regions){
+      //If you own region --> visible
+      if(r.getOwner().getName().equals(playerName)){
+        visible.add(r);
+        //Check all adjacent, if not cloaked (turns == 0) then add to visible
+        for(Region adj : r.getAdjRegions()){
+          if(adj.getCloakTurns() == 0){
+            visible.add(adj);
+          }
+        }
+      }
+      //Finally if a spy is in region then visible
+      if(r.getSpies(playerName).size() > 0){
+        visible.add(r);
+      }
+    }
+    return visible;
+  }
   
+  public void initializeSpies(List<String> players){
+    for(Region r : regions){
+      r.initializeSpies(players);
+    }
+  }
   
   
 }

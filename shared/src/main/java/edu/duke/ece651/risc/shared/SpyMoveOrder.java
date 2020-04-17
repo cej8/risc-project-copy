@@ -25,8 +25,7 @@ public class SpyMoveOrder extends SourceDestinationPlayerOrder {
     if(!player.getName().equals(destination.getOwner().getName())){
       spy.setHasMoved(true);
     }
-    //Say nothing (otherwise pointless)
-    return "";
+    return player.getName() + " moved a spy from " + source.getName() + " to " + destination.getName() + "\n";
   }
 
 }
