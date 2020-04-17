@@ -14,7 +14,7 @@ public class RegionLevel implements Serializable {
   public RegionLevel() {
     this.regionLevel = Constants.STARTING_REGION_LEVEL;
     this.multiplierList = setMultipliers();
-    this.multiplier = multiplierList.get(regionLevel);
+    this.multiplier = multiplierList.get(regionLevel-1);
 
   }
 
@@ -38,6 +38,6 @@ public class RegionLevel implements Serializable {
 
   public void upgradeLevel() {
     regionLevel++;//incremtent regionLevel and set new respurce multiplier value
-    multiplier = multiplierList.get(regionLevel);
+    multiplier = multiplierList.get(regionLevel-1);
   }
 }
