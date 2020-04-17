@@ -18,6 +18,9 @@ public class SourceDestOrderFactory extends AbstractOrderFactory{
        case "attack combat":
       order = new AttackCombat(source, destination, units);
       break;
+       case "teleport":
+      order = new TeleportOrder(source, destination, units);
+      break;
   
    
     }

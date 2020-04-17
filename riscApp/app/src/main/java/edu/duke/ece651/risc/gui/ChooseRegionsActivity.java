@@ -3,6 +3,7 @@ package edu.duke.ece651.risc.gui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,19 +20,20 @@ public class ChooseRegionsActivity extends AppCompatActivity {
     private TextView userPrompt;
     private TextView boardView;
     private Button submit;
+    private Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_regions);
         submit= findViewById(R.id.submit);
         boardView= findViewById(R.id.showBoard);
-         connection = ParentActivity.getConnection();
+        connection = ParentActivity.getConnection();
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
         editRegionGroup= findViewById(R.id.regionName);
          userPrompt = findViewById(R.id.helpText);
         userPrompt.setText("Please select a starting group by typing in a group name (i.e. 'Group A')");
-
     }
     @Override
     protected void onStart() {
@@ -40,8 +42,7 @@ public class ChooseRegionsActivity extends AppCompatActivity {
     }
 
     public void chooseRegion(View view) throws IOException, ClassNotFoundException, InterruptedException{
-        //String regionGroup = view.getTag().toString();
         String regionGroup = editRegionGroup.getText().toString();
-        executeClient.chooseRegions(boardView, regionGroup);
+        executeClient.chooseRegions(handler,boardView, regionGroup);
     }
 }

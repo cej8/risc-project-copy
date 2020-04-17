@@ -28,12 +28,15 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
     TextView unit5;
     TextView unit6;
     Region region;
+    TextView plague;
+    private boolean hasPlague;
 
     public DisplayRegionInfoDialogFragment(Region region,String planetName, int unit, AbstractPlayer owner) {
         this.planetName = planetName;
         this.unit = unit;
         this.owner = owner.getName();
         this.region = region;
+        this.hasPlague = region.getPlague();
     }
         @Override
         public Dialog onCreateDialog(final Bundle savedInstanceState) {
@@ -45,6 +48,10 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
             View planetView = inflater.inflate(R.layout.planet_dialog,null);
             unitNumbers = planetView.findViewById(R.id.unitNumbers);
             ownerName = planetView.findViewById(R.id.ownerName);
+            plague = planetView.findViewById(R.id.plague);
+            if (hasPlague){
+                plague.setText("Your planet has the plague, it will produce no resources");
+            }
             String unitString = Integer.toString(unit);
             unitNumbers.setText(unitString);
             ownerName.setText(owner);

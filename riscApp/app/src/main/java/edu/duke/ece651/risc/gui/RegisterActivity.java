@@ -3,6 +3,7 @@ package edu.duke.ece651.risc.gui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button registerButton;
     private TextView welcomeText;
     Connection connection;
+    private Handler registerHandler = new Handler();
   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +42,6 @@ public class RegisterActivity extends AppCompatActivity {
         String username = editUsername.getText().toString();
         String password = editPassword.getText().toString();
         String confirmPassword= editConfirmPassword.getText().toString();
-        executeClient.registerLogin(username, password, confirmPassword,helpText);
+        executeClient.registerLogin(registerHandler,username, password, confirmPassword,helpText);
     }
 }

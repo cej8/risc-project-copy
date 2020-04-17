@@ -3,6 +3,7 @@ package edu.duke.ece651.risc.gui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.ResultReceiver;
 import android.view.View;
 import android.widget.EditText;
@@ -34,6 +35,7 @@ public class PlaceUnitsActivity extends AppCompatActivity {
     Connection connection;
     List<EditText> planetUnits = new ArrayList<EditText>();
     List<TextView> planetName = new ArrayList<TextView>();
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +50,11 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         getRegionByOwner();
         displayText();
     }
-
     public void sendPlacements(View view){
         makePlacements();
-        executeClient.placementOrder();
+        executeClient.placementOrder(handler);
     }
+
     public void makePlacements(){
         String unitPlacement;
         Unit unit;

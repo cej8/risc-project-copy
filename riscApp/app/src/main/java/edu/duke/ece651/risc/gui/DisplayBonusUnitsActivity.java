@@ -101,6 +101,8 @@ public class DisplayBonusUnitsActivity extends AppCompatActivity {
         intent.putExtra("ATTACKFROM",attackFrom);
         intent.putExtra("ATTACKTO",attackTo);
         intent.putExtra("ORDER",order);
+//        Orders orders = new Orders(attackFrom,attackTo,order,sendUnits);
+//        orders.getOrders();
         startActivity(intent);
     }
     public Region getRegionByName(Board board, String name){

@@ -13,7 +13,7 @@ public class Region implements Serializable {
   private int regionSize;
   private int fuelProduction;
   private int technologyProduction;
-
+  private boolean hasPlague;
   // public Region() {
   // }
 
@@ -26,6 +26,7 @@ public class Region implements Serializable {
     setFuelProduction(Constants.STARTING_FUEL_PRODUCTION);
     setTechProduction(Constants.STARTING_TECH_PRODUCTION);
     setSize(Constants.REGION_SIZE);
+    this.hasPlague = false;
   }
 
   public Region(AbstractPlayer p, Unit u) {// will need to be modified
@@ -36,6 +37,13 @@ public class Region implements Serializable {
     setFuelProduction(Constants.STARTING_FUEL_PRODUCTION);
     setTechProduction(Constants.STARTING_TECH_PRODUCTION);
     setSize(Constants.REGION_SIZE);
+    this.hasPlague = false;
+  }
+  public boolean getPlague(){
+    return this.hasPlague;
+  }
+  public void setPlague(boolean p){
+    this.hasPlague = p;
   }
 
   public Path findShortestPath(Region end) {

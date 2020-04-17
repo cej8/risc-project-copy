@@ -29,8 +29,12 @@ public class OrderFactoryProducer {
         factory = new TechBoostOrderCreator(c);
          c.getClientOutput().displayString("You made an Upgrade technology level order, this will not be active until your next turn. What else would you like to do?");
         break;
+         case "E":// teleport
+           factory = new TeleportOrderCreator(c);
+         c.getClientOutput().displayString("You made a Teleport order, what else would you like to do?");
+        break;
     default:
-       c.getClientOutput().displayString("Please select either T, M, A, U, or D");
+       c.getClientOutput().displayString("Please select either T, M, A, U, E, or D");
         break;
     }
     return factory;

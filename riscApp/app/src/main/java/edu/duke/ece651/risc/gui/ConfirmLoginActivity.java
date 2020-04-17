@@ -28,7 +28,11 @@ public class ConfirmLoginActivity extends AppCompatActivity {
        // ParentActivity parentActivity = new ParentActivity();
        // parentActivity.generateOrders();
         executeClient = new ExecuteClient(this);
-        executeClient.createGame();
+     //   try {
+            executeClient.createGame();
+       // } catch (InterruptedException e) {
+         //   e.printStackTrace();
+       // }
     }
 
     public void login(View view){

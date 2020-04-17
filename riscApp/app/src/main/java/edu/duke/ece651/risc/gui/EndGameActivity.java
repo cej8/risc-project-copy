@@ -32,6 +32,5 @@ public class EndGameActivity extends AppCompatActivity {
     }
     public void endGame(View view){
         executeClient.endGame();
-
     }
 }

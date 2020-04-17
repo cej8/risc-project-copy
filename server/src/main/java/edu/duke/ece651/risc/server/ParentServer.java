@@ -52,6 +52,9 @@ public class ParentServer extends Thread{
   //Time when waitingForPlayers started or game start
   private long gameStart;
 
+  // Value of plagueID representing which number planet in list has plague
+  private int plagueID;
+  
   public ParentServer(){
     BoardGenerator genBoard = new BoardGenerator();
     genBoard.createBoard();
@@ -60,6 +63,7 @@ public class ParentServer extends Thread{
     players = new ArrayList<String>();
     orderMap = new HashMap<String, List<OrderInterface>>();
     turnResults = new StringBuilder("Turn 0: Start of game\n");
+    this.plagueID = 0;
   }
 
   public ParentServer(int gameID, MasterServer masterServer){
@@ -515,14 +519,36 @@ public class ParentServer extends Thread{
     for (Region r : board.getRegions()) {
       // increment number of basic units
       if(players.contains(r.getOwner().getName())){
-        r.getOwner().getResources().getFuelResource().addFuel(r.getFuelProduction());
-        r.getOwner().getResources().getTechResource().addTech(r.getTechProduction());
+        if(!r.getPlague()){ // if plague == false on Region add production to player
+          r.getOwner().getResources().getFuelResource().addFuel(r.getFuelProduction());
+          r.getOwner().getResources().getTechResource().addTech(r.getTechProduction());
+        }
         r.getUnits().getUnits().set(0, r.getUnits().getUnits().get(0) + 1);
       }
     }
 
   }
-
+  // method to apply plague to region
+  public void applyPlague(){
+    if(turnNumber<6){
+      return;//only begin after turn 6
+    }
+    if (turnNumber%3 == 0){
+      // reset past plague to false
+      board.getRegions().get(plagueID).setPlague(false);
+      Random r = new Random();
+      this.plagueID = r.nextInt(board.getRegions().size());
+      board.getRegions().get(plagueID).setPlague(true);
+    }
+    // otherwise do nothing
+  }
+  // set turn used for testing
+  public void setTurn(int i){
+    this.turnNumber = i;
+  }
+  public int getPlagueID(){
+    return this.plagueID;
+  }
   // method that controls game play
   public void playGame(){
     //Wait for MAX_PLAYERS to connect or timeout
@@ -545,6 +571,9 @@ public class ParentServer extends Thread{
         growUnits();
       }
       turnNumber++;
+      // Evolution 3: Plague
+      applyPlague();
+      
     }
     if (numPlayersLeft() == 1) {
       // If one player alive then create message --> send
