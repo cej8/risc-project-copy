@@ -16,6 +16,9 @@ public class DestOrderFactory extends AbstractOrderFactory{
     case "upgrade unit":
       order = new UnitBoost(destination, units);
         break;
+    case "resource boost":
+      order = new ResourceBoost(destination);
+      break;
   
     }
     return order;   
