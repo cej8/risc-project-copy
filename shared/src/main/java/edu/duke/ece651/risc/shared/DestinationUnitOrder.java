@@ -18,19 +18,20 @@ public abstract class DestinationUnitOrder implements RegionUnitOrder {
     return units;
   }
 
-@Override
-abstract public int getPriority();
+  @Override
+  abstract public int getPriority();
 
 
   @Override
- public void findValuesInBoard(Board board){
-   for(Region r : board.getRegions()){
+  public void findValuesInBoard(Board board){
+    for(Region r : board.getRegions()){
       if(r.getName().equals(this.getDestination().getName())){
         this.setDestination(r);
       }
     }
   }
-@Override
-abstract public String doAction();
+
+  @Override
+  abstract public String doAction();
 
 }

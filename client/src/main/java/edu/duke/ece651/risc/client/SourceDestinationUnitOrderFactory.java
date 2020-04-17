@@ -5,24 +5,22 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-public class SourceDestOrderFactory extends AbstractOrderFactory{
-  public  static OrderInterface getOrder(String unitKeyWord, Region source, Region destination, Unit units){
+public class SourceDestinationUnitOrderFactory extends AbstractOrderFactory{
+  public static OrderInterface getOrder(String unitKeyWord, Region source, Region destination, Unit units){
     //   OrderInterface order = null;
     switch (unitKeyWord) {
-    case "move":
+      case "move":
       order = new MoveOrder(source, destination, units);
       break;
      case "attack move":
       order = new AttackMove(source, destination, units);
       break;
-       case "attack combat":
+     case "attack combat":
       order = new AttackCombat(source, destination, units);
       break;
-       case "teleport":
+     case "teleport":
       order = new TeleportOrder(source, destination, units);
-      break;
-  
-   
+      break;   
     }
     return order;   
   }
