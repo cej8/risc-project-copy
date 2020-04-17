@@ -13,7 +13,7 @@ public class MoveOrderCreator extends OrderCreator {
 
   public void moveHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord) {
     Region source = promptForRegion(sourceKeyWord);
-    Region destination = promptForRegion(sourceKeyWord);
+    Region destination = promptForRegion(destKeyWord);
 
     while (true) {
       try {

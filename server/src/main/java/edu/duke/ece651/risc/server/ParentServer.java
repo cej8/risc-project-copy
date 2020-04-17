@@ -396,6 +396,10 @@ public class ParentServer extends Thread{
        else if (order instanceof TechBoost) {
         castOrder = (TechBoost) (order);
       }
+         else if (order instanceof ResourceBoost) {
+        castOrder = (ResourceBoost) (order);
+      }
+   
      
       else {
         continue;
@@ -513,15 +517,21 @@ public class ParentServer extends Thread{
     threads.invokeAll(todo);
     System.out.println(gameID + " : " + "Threads finished");
   }
+  public void growResources(Region r){
+    //grow resources by fuel production times mulitplier for region level
+    double multiplier=r.getRegionLevel().getMultiplier();
+    r.getOwner().getResources().getFuelResource().addFuel((int)(r.getFuelProduction()*multiplier));
+    r.getOwner().getResources().getTechResource().addTech((int)(r.getTechProduction()*multiplier));
+   
 
+  }
   // method to add additional unit after round complete to all regions on board
   public void growUnits() {
     for (Region r : board.getRegions()) {
       // increment number of basic units
       if(players.contains(r.getOwner().getName())){
         if(!r.getPlague()){ // if plague == false on Region add production to player
-          r.getOwner().getResources().getFuelResource().addFuel(r.getFuelProduction());
-          r.getOwner().getResources().getTechResource().addTech(r.getTechProduction());
+            growResources(r);
         }
         r.getUnits().getUnits().set(0, r.getUnits().getUnits().get(0) + 1);
       }
