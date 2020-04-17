@@ -59,7 +59,7 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
     }
     public boolean chooseStartGroup() {
             try {
-                while(true) {
+                //while(true) {
                     //Output board
 
                 //    clientOutput.displayBoard(board);
@@ -78,13 +78,14 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                     String response = responseMessage.unpacker();
                    // clientOutput.displayString(response);
                     if (response.matches("^Fail:.*$")) {
-                        continue;
+                       // continue;
+                        return false;
                     }
                     if (response.matches("^Success:.*$")) {
-                        break;
+                       // break;
                     }
 
-                }
+               // }
                 ParentActivity parentActivity = new ParentActivity();
                 parentActivity.setBoard((Board) (connection.receiveObject()));
                 this.board = ParentActivity.getBoard();
@@ -115,6 +116,14 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                     public void run() {
                         Intent firstUnits= new Intent(activity, PlaceUnitsActivity.class);
                         activity.startActivity(firstUnits);
+                    }
+                });
+            } else {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent chooseRegions = new Intent(activity,ChooseRegionsActivity.class);
+                        activity.startActivity(chooseRegions);
                     }
                 });
             }
