@@ -28,6 +28,7 @@ public class GUISelectGame extends Thread{
     private Boolean gotGames;
     private Boolean pickedGames;
     private Handler handler;
+    private boolean correctID;
 
     public GUISelectGame(String gameList, Handler newGameHandler,boolean getGames, String gameID,boolean bool, Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
         this.connection = connect;
@@ -102,18 +103,12 @@ public class GUISelectGame extends Thread{
             if (response.matches("^Fail:.*$")) {
                // continue;
                 // TODO: wrong ID entered
-               /* handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("Game", "Waiting for players");
-                        Intent pickGameAgain = new Intent(activity, NewGameActivity.class);
-                        pickGameAgain.putExtra("GAMELIST", gameList);
-                        activity.startActivity(pickGameAgain);
-                    }
-                });*/
+                this.correctID = false;
+                return;
             }
             if (response.matches("^Success:.*$")) {
                 this.pickedGames = true;
+                this.correctID = true;
                //break;
             }
         //}
@@ -139,29 +134,45 @@ public class GUISelectGame extends Thread{
                 });
             } else {
                 performSelectGame();
-                if (ParentActivity.getFirstCall()) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d("Game", "Waiting for players");
-                            Intent lobby = new Intent(activity, PlayerLobbyActivity.class);
-                            activity.startActivity(lobby);
-                        }
-                    });
+                if (correctID) {
+                    if (ParentActivity.getFirstCall()) {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("Game", "Waiting for players");
+                                Intent lobby = new Intent(activity, PlayerLobbyActivity.class);
+                                activity.startActivity(lobby);
+                            }
+                        });
+
+                    } else {
+                        // not first time entering
+                        HumanPlayer player = (HumanPlayer) (connection.receiveObject());
+                        ParentActivity pa = new ParentActivity();
+                        pa.setPlayer(player);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("Game", "Previously joined");
+                                Intent lobby = new Intent(activity, WaitActivity.class);
+                                activity.startActivity(lobby);
+                            }
+                        });
+                    }
                 } else {
-                    // not first time entering
-                    HumanPlayer player = (HumanPlayer) (connection.receiveObject());
-                    ParentActivity pa = new ParentActivity();
-                    pa.setPlayer(player);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d("Game", "Previously joined");
-                            Intent lobby = new Intent(activity, WaitActivity.class);
-                            activity.startActivity(lobby);
-                        }
-                    });
-                }
+                    // entered wrong ID number
+                    performGetGame();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String games = getGameList();
+                        Log.d("Game List", games);
+                        Intent gamesIntent = new Intent(activity, NewGameActivity.class);
+                        gamesIntent.putExtra("GAMELIST", games);
+                        activity.startActivity(gamesIntent);
+                    }
+                });
+            }
             }
         } catch (IOException e) {
             e.printStackTrace();
