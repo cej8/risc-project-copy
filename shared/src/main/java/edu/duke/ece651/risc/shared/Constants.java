@@ -29,6 +29,7 @@ public final class Constants {
   public static final int UPGRADE_UNITS_PRIORITY = 500;
   public static final int UPGRADE_TECH_PRIORITY = 9000;
   public static final int TELEPORT_ORDER_PRIORITY = 11000;
+  public static final int UPGRADE_RESOURCE_PRIORITY = 13000;
   // cost to attack - food 
   public static final int ATTACK_COST = 1;
   public static final int TELEPORT_COST = 50;
@@ -39,4 +40,7 @@ public final class Constants {
   // Technology Defaults
   public static final int STARTING_TECH_LEVEL = 1;
   public static final int STARTING_UPGRADE_COST = 50;
+  //Region Level Defaults
+  public static final int STARTING_REGION_LEVEL = 1;
+
 }

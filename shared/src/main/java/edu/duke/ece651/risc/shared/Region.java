@@ -5,7 +5,7 @@ import java.util.*;
 
 // Class to handle keeping track of region owner, unit numbers, and adjacent regions
 public class Region implements Serializable {
-  private static final long serialVersionUID = 1L; // is there a more intuitive numbering we could use?
+  private static final long serialVersionUID = 1L; 
   private AbstractPlayer owner;
   private String name;
   private Unit units;
@@ -14,6 +14,7 @@ public class Region implements Serializable {
   private int fuelProduction;
   private int technologyProduction;
   private boolean hasPlague;
+  private RegionLevel regionLevel;
   // public Region() {
   // }
 
@@ -27,6 +28,7 @@ public class Region implements Serializable {
     setTechProduction(Constants.STARTING_TECH_PRODUCTION);
     setSize(Constants.REGION_SIZE);
     this.hasPlague = false;
+    this.regionLevel=new RegionLevel();
   }
 
   public Region(AbstractPlayer p, Unit u) {// will need to be modified
@@ -38,6 +40,8 @@ public class Region implements Serializable {
     setTechProduction(Constants.STARTING_TECH_PRODUCTION);
     setSize(Constants.REGION_SIZE);
     this.hasPlague = false;
+    this.regionLevel=new RegionLevel();
+
   }
   public boolean getPlague(){
     return this.hasPlague;
@@ -173,4 +177,12 @@ public class Region implements Serializable {
   public String getName() {
     return name;
   }
+
+public RegionLevel getRegionLevel() {
+	return regionLevel;
+}
+
+public void setRegionLevel(RegionLevel regionLevel) {
+	this.regionLevel = regionLevel;
+}
 }
