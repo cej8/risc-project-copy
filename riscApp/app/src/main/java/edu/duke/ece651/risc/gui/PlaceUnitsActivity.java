@@ -22,6 +22,7 @@ import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.PlacementOrder;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.Unit;
+import edu.duke.ece651.risc.shared.ValidatorHelper;
 
 public class PlaceUnitsActivity extends AppCompatActivity {
     TextView headerText,p1,p2,p3,p4,p5,p6;
@@ -36,6 +37,8 @@ public class PlaceUnitsActivity extends AppCompatActivity {
     List<EditText> planetUnits = new ArrayList<EditText>();
     List<TextView> planetName = new ArrayList<TextView>();
     private Handler handler = new Handler();
+    private ValidatorHelper validatorHelper;
+    private int startUnits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,33 +50,64 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         board = ParentActivity.getBoard();
         regionList = board.getRegions();
         player = ParentActivity.getPlayer();
+        startUnits = Constants.UNIT_START_MULTIPLIER * board.getNumRegionsOwned(player);
         getRegionByOwner();
         displayText();
+        validatorHelper = new ValidatorHelper(player,new Unit(startUnits), board);
     }
     public void sendPlacements(View view){
-        makePlacements();
-        executeClient.placementOrder(handler);
+        if (makePlacements()){
+            executeClient.placementOrder(handler);
+        } else {
+            return;
+        }
     }
-
-    public void makePlacements(){
+    public void resetSelections(){
+        for (int j = 0; j < playerRegions.size(); j++){
+            // for (int j = 0; j < 6; j++){
+            if (j > 5){
+                break;
+            }
+            planetUnits.get(j).setText("");
+            planetName.get(j).setText(playerRegions.get(j).getName());
+        }
+    }
+    public boolean makePlacements(){
         String unitPlacement;
         Unit unit;
         Region region;
-        for (int j = 0; j < playerRegions.size(); j++){
-            if(j>5) {
-            break;
+        if (startUnits == 36) {
+            unit = new Unit(3);
+            for (int i = 0; i < playerRegions.size();i++){
+                region = getRegionByName(board,playerRegions.get(i).getName());
+                PlacementOrder placementOrder = new PlacementOrder(region,unit);
+                ParentActivity parentActivity = new ParentActivity();
+                parentActivity.setOrders(placementOrder);
             }
-            unitPlacement = planetUnits.get(j).getText().toString();
-            unit = new Unit(Integer.parseInt(unitPlacement));
-            region = getRegionByName(board,playerRegions.get(j).getName());
-            PlacementOrder placementOrder = new PlacementOrder(region,unit);
-            ParentActivity parentActivity = new ParentActivity();
-            parentActivity.setOrders(placementOrder);
+        } else {
+            for (int j = 0; j < playerRegions.size(); j++) {
+                if (j > 5) {
+                    break;
+                }
+                unitPlacement = planetUnits.get(j).getText().toString();
+                unit = new Unit(Integer.parseInt(unitPlacement));
+                region = getRegionByName(board, playerRegions.get(j).getName());
+                PlacementOrder placementOrder = new PlacementOrder(region, unit);
+                ParentActivity parentActivity = new ParentActivity();
+                parentActivity.setOrders(placementOrder);
+            }
         }
+        if(!validatorHelper.allPlacementsValid(ParentActivity.getOrders())){
+            resetSelections();
+            ParentActivity parentActivity = new ParentActivity();
+            parentActivity.resetOrders();
+            return false;
+        }
+        return true;
     }
     public void displayText(){
         headerText = findViewById(R.id.headerText);
-        int startUnits = Constants.UNIT_START_MULTIPLIER * board.getNumRegionsOwned(player);
+       // int startUnits = Constants.UNIT_START_MULTIPLIER * board.getNumRegionsOwned(player);
         headerText.setText("You have You have " + startUnits + " units to place on your planets. Hit submit when finished!");
         p1 = findViewById(R.id.planet1);
         p2 = findViewById(R.id.planet2);
