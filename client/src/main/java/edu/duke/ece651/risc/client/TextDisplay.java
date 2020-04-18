@@ -36,17 +36,36 @@ public class TextDisplay implements ClientOutputInterface {
     output.println(str);
     output.flush();
   }
+  
+  @Override
+  public void displayBoard(Board b, String playerName, Set<String> visible){
+    String boardText = createBoard(b, playerName, visible);
+    output.println(boardText);
+    output.flush();
+  }
+
+  public String createBoard(Board b){
+    Set<String> visible = new HashSet<String>();
+    for(Region r : b.getRegions()){
+      visible.add(r.getName());
+    }
+    return createBoard(b, "", visible);
+  }
 
   //returns a String of all of the board info
-  public String createBoard(Board b){
+  public String createBoard(Board b, String playerName, Set<String> visible){
     StringBuilder boardText = new StringBuilder();
     Map<AbstractPlayer, List<Region>> playerRegionMap = b.getPlayerToRegionMap();
     List<AbstractPlayer> players = new ArrayList<AbstractPlayer>(playerRegionMap.keySet());
     Collections.sort(players);
     for(AbstractPlayer player : players) { //for each entry in the map
-      boardText.append(player.getName() + ": \nFuel: " + player.getResources().getFuelResource().getFuel() + "  Tech: " + player.getResources().getTechResource().getTech()+ "\n------------------\n"); //append player name
+      boardText.append(player.getName());
+      if(playerName.equals(player.getName())){
+        boardText.append(": \nFuel: " + player.getResources().getFuelResource().getFuel() + "  Tech: " + player.getResources().getTechResource().getTech() + " Tech Level: " + player.getMaxTechLevel().getMaxTechLevel());
+      }
+      boardText.append("\n------------------\n"); //append player name
       for (Region r : playerRegionMap.get(player)){ //for each region the player has
-        boardText.append(this.printRegionInfo(r)); //add its info to board
+        boardText.append(printRegionInfo(r, playerName, visible.contains(r.getName()))); //add its info to board
       }
       boardText.append("\n");
     }
@@ -54,16 +73,38 @@ public class TextDisplay implements ClientOutputInterface {
   }
 
  //returns String w board info for a given region
-  private String printRegionInfo(Region r){
-    int numUnits = r.getUnits().getTotalUnits();
-    String name = r.getName();
-    StringBuilder sb = new StringBuilder(numUnits + " units in " + name); //add info on num units in region
-    sb.append(this.printRegionAdjacencies(r)); //add adj info
-   
-   
+  private String printRegionInfo(Region r, String playerName, boolean visible){
+    StringBuilder sb = new StringBuilder();
+    if(!visible){
+      sb.append("Last known information: ");
+    }
+    sb.append(r.getUnits().getUnits() + " units in " + r.getName()); //add info on num units in region
+    sb.append(", ");
+    sb.append(getSpies(r, playerName));
+    sb.append(", ");
+    sb.append(printRegionAdjacencies(r)); //add adj info
+ 
+    if(r.getPlague()){
+      sb.append(" (PLAGUED)");
+    }
+    sb.append("\n");
     return sb.toString();
   }
   
+  private String getSpies(Region r, String playerName){
+    List<Spy> spyList = r.getSpies(playerName);
+    if(spyList == null || spyList.size() == 0){
+      return "No spies";
+    }
+    int haveMoved = 0;
+    for(Spy spy : spyList){
+      if(spy.getHasMoved()){
+        haveMoved++;
+      }
+    }
+    return haveMoved + " moved spies, " + (spyList.size() - haveMoved) + " ready spies";
+  }
+
    //returns String w adjacency info info for a given region  
   private String printRegionAdjacencies(Region r){
     StringBuilder sb = new StringBuilder(" (next to:");
@@ -75,9 +116,6 @@ public class TextDisplay implements ClientOutputInterface {
       }
     }
     sb.append(")"); //close parentheses
-      if(r.getPlague()){
-      sb.append("(PLAGUED)\n");
-      }  
     return sb.toString();
   }
 

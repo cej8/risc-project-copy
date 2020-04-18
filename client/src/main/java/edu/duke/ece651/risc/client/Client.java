@@ -249,7 +249,6 @@ public class Client extends Thread implements ClientInterface {
         if(!chooseRegions()) {return; }
       }
       while (true) {
-
         String turn = receiveAndDisplayString();
         
         long startTime = System.currentTimeMillis();
@@ -294,16 +293,22 @@ public class Client extends Thread implements ClientInterface {
         while (true) {
           // Next server sends board
           board = (Board) (connection.receiveObject());
-          // Display board
-          clientOutput.displayBoard(board);
-          // Client generates orders --> sends
+
           if (alive) {
+            //Server sends client-visible board (doesn't update regions cannot see)
+            //Push visible set to displayBoard to properly show what cannot be seen
+            Set<String> visible = board.getVisibleRegions(player.getName());
+            clientOutput.displayBoard(board, player.getName(), visible);
             //new OrderCreator
             OrderHelper orderhelper = new OrderHelper(this);
             List<OrderInterface> orders = orderhelper.createOrders();
             //If too long --> kill player
             if(timeOut(startTime, maxTime)){ return;}
             connection.sendObject(orders);
+          }
+          else{
+            //If spectate display entire board
+            clientOutput.displayBoard(board);
           }
 
           String response = receiveAndDisplayString();

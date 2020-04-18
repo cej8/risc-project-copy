@@ -366,7 +366,7 @@ public class ParentServer extends Thread{
   // returns boolean true if player owns a region
   public boolean playerHasARegion(AbstractPlayer player) {
     for (Region r : board.getRegions()) {
-      if (r.getOwner().getName() == player.getName()) {
+      if (r.getOwner().getName().equals(player.getName())) {
         return true;
       }
     }
@@ -395,6 +395,15 @@ public class ParentServer extends Thread{
       }
        else if (order instanceof TechBoost) {
         castOrder = (TechBoost) (order);
+      }
+       else if (order instanceof SpyUpgradeOrder) {
+        castOrder = (SpyUpgradeOrder) (order);
+      }
+       else if (order instanceof SpyMoveOrder) {
+        castOrder = (SpyMoveOrder) (order);
+      }
+       else if (order instanceof CloakOrder) {
+        castOrder = (CloakOrder) (order);
       }
      
       else {
@@ -451,31 +460,6 @@ public class ParentServer extends Thread{
 
     turnResults = new StringBuilder("Turn " + turnNumber + ":\n");
 
-    // Reshuffle all subLists
-    /*
-    for (String key : orderMap.keySet()) {
-      List<OrderInterface> orders = orderMap.get(key);
-
-      Collections.shuffle(orders);
-    }
-    if (orderMap.containsKey("PlacementOrder")) {
-      applyOrderList(orderMap.get("PlacementOrder"));
-    }
-    if (orderMap.containsKey("MoveOrder")) {
-      applyOrderList(orderMap.get("MoveOrder"));
-    }
-    if (orderMap.containsKey("AttackMove")) {
-      applyOrderList(orderMap.get("AttackMove"));
-    }
-      if (orderMap.containsKey("AttackCombat")) {
-      applyOrderList(orderMap.get("AttackCombat"));
-    }
-        if (orderMap.containsKey("UnitBoost")) {
-      applyOrderList(orderMap.get("UnitBoost"));
-    }
-          if (orderMap.containsKey("TechBoost")) {
-      applyOrderList(orderMap.get("TechBoost"));
-    }*/
     //Do all not combat first then attackCombat random ordered
     if(orderMap.containsKey("NotCombat")){
       applyOrderList(orderMap.get("NotCombat"));
@@ -492,9 +476,7 @@ public class ParentServer extends Thread{
     for (int i = 0; i < orders.size(); i++) {
       turnResults.append(orders.get(i).doAction());
     }
-    // for(int i = 0; i < orders.size(); i++){
-    // turnResults.append(orders.get(i).doDestinationAction());
-    // }
+
     orders.clear();
   }
 

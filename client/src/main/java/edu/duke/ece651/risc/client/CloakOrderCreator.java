@@ -11,6 +11,7 @@ public class CloakOrderCreator extends OrderCreator {
   public void cloakHelper(List<OrderInterface> orderList, String destKeyWord){
     Region destination = promptForRegion(destKeyWord);
     OrderInterface order = DestinationOrderFactory.getOrder("C", destination);
+    orderList.add(order);
   }
   
   @Override

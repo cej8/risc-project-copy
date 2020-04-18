@@ -30,16 +30,16 @@ public class SpyTest {
     board.setRegions(Arrays.asList(r1, r2, r3));
     board.initializeSpies(Arrays.asList("p1", "p2"));
     //Board is r1-r2-r3 where p1 owns r1, p2 owns r2, r3
-    Set<Region> p1Vis = board.getVisibleRegions("p1");
-    Set<Region> p2Vis = board.getVisibleRegions("p2");
+    Set<String> p1Vis = board.getVisibleRegions("p1");
+    Set<String> p2Vis = board.getVisibleRegions("p2");
     //p1 can see r1,r2
-    assert(p1Vis.contains(r1));
-    assert(p1Vis.contains(r2));
-    assert(!p1Vis.contains(r3));
+    assert(p1Vis.contains(r1.getName()));
+    assert(p1Vis.contains(r2.getName()));
+    assert(!p1Vis.contains(r3.getName()));
     //p2 can see all
-    assert(p2Vis.contains(r1));
-    assert(p2Vis.contains(r2));
-    assert(p2Vis.contains(r3));
+    assert(p2Vis.contains(r1.getName()));
+    assert(p2Vis.contains(r2.getName()));
+    assert(p2Vis.contains(r3.getName()));
     //Set cloaking on r2
     CloakOrder co = new CloakOrder(r2);
     assert(co.getDestination() == r2);
@@ -52,13 +52,13 @@ public class SpyTest {
     p1Vis = board.getVisibleRegions("p1");
     p2Vis = board.getVisibleRegions("p2");
     //p1 can see r1 (r2 is cloaked)
-    assert(p1Vis.contains(r1));
-    assert(!p1Vis.contains(r2));
-    assert(!p1Vis.contains(r3));
+    assert(p1Vis.contains(r1.getName()));
+    assert(!p1Vis.contains(r2.getName()));
+    assert(!p1Vis.contains(r3.getName()));
     //p2 can see all
-    assert(p2Vis.contains(r1));
-    assert(p2Vis.contains(r2));
-    assert(p2Vis.contains(r3));
+    assert(p2Vis.contains(r1.getName()));
+    assert(p2Vis.contains(r2.getName()));
+    assert(p2Vis.contains(r3.getName()));
 
     //p1 upgrades unit to spy
     SpyUpgradeOrder spo = new SpyUpgradeOrder(r1);
@@ -82,13 +82,13 @@ public class SpyTest {
     p1Vis = board.getVisibleRegions("p1");
     p2Vis = board.getVisibleRegions("p2");
     //p1 can see r1,r2 (r2 has spy)
-    assert(p1Vis.contains(r1));
-    assert(p1Vis.contains(r2));
-    assert(!p1Vis.contains(r3));
+    assert(p1Vis.contains(r1.getName()));
+    assert(p1Vis.contains(r2.getName()));
+    assert(!p1Vis.contains(r3.getName()));
     //p2 can see all
-    assert(p2Vis.contains(r1));
-    assert(p2Vis.contains(r2));
-    assert(p2Vis.contains(r3));
+    assert(p2Vis.contains(r1.getName()));
+    assert(p2Vis.contains(r2.getName()));
+    assert(p2Vis.contains(r3.getName()));
 
     
     //p1 moves spy to r2
@@ -103,13 +103,13 @@ public class SpyTest {
     p1Vis = board.getVisibleRegions("p1");
     p2Vis = board.getVisibleRegions("p2");
     //p1 can see r1,r3 (r3 has spy)
-    assert(p1Vis.contains(r1));
-    assert(!p1Vis.contains(r2));
-    assert(p1Vis.contains(r3));
+    assert(p1Vis.contains(r1.getName()));
+    assert(!p1Vis.contains(r2.getName()));
+    assert(p1Vis.contains(r3.getName()));
     //p2 can see all
-    assert(p2Vis.contains(r1));
-    assert(p2Vis.contains(r2));
-    assert(p2Vis.contains(r3));
+    assert(p2Vis.contains(r1.getName()));
+    assert(p2Vis.contains(r2.getName()));
+    assert(p2Vis.contains(r3.getName()));
   }
 
   @Test

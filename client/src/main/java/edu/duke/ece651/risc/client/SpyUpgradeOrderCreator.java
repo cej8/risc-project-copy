@@ -10,6 +10,7 @@ public class SpyUpgradeOrderCreator extends OrderCreator {
   public void spyUpgradeHelper(List<OrderInterface> orderList, String destKeyWord){
     Region destination = promptForRegion(destKeyWord);
     OrderInterface order = DestinationOrderFactory.getOrder("Y", destination);
+    orderList.add(order);
   }
   
   @Override

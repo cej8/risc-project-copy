@@ -54,6 +54,21 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
     this.playerResource = playerResource;
   }
 
+  @Override
+  public boolean equals(Object obj){
+    if(obj == null){
+      return false;
+    }
+
+    if(!AbstractPlayer.class.isAssignableFrom(obj.getClass())){
+      return false;
+    }
+
+    final AbstractPlayer comp = (AbstractPlayer) obj;
+    return comp.getName().equals(name);
+
+  }
+
 }
 
  

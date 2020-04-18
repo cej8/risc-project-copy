@@ -11,7 +11,8 @@ public class SpyMoveOrderCreator extends OrderCreator {
   public void spyMoveHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord){
     Region source = promptForRegion(sourceKeyWord);
     Region destination = promptForRegion(destKeyWord);
-    OrderInterface order = SourceDestinationPlayerOrderFactory.getOrder("Y", source, destination, client.getPlayer());
+    OrderInterface order = SourceDestinationPlayerOrderFactory.getOrder("V", source, destination, client.getPlayer());
+    orderList.add(order);
   }
   
   @Override

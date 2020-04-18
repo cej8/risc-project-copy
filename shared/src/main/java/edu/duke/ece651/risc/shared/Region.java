@@ -221,5 +221,21 @@ public class Region implements Serializable {
 
   public String getName() {
     return name;
+  }  
+
+
+  //Method to copy spies from another region (assumes same name/adjacent/etc.)
+  public void copySpies(Region regionCopy){
+    this.spies = (Map<String, List<Spy>>)DeepCopy.deepCopy(regionCopy.getSpies());
   }
+
+  //Method to copy information from another region (assumes same name/adjacent/etc.) that may change between turns
+  //This includes the owner, units, cloakTurns, hasPlague
+  public void copyInformation(Region regionCopy){
+    this.owner = (AbstractPlayer)DeepCopy.deepCopy(regionCopy.getOwner());
+    this.units = (Unit)DeepCopy.deepCopy(regionCopy.getUnits());
+    this.cloakTurns = regionCopy.getCloakTurns();
+    this.hasPlague = regionCopy.getPlague();
+  }
+
 }

@@ -35,6 +35,9 @@ public class ChildServer implements Runnable{
   //Maximum time for turn
   private long maxTime;
 
+  //Client's version of the board
+  private Board clientBoard;
+
   public ChildServer(AbstractPlayer player, ParentServer parent){
     this.player = player;
     this.parent = parent;
@@ -74,6 +77,58 @@ public class ChildServer implements Runnable{
     return firstCall;
   }
 
+  public void firstTurnCall() throws IOException, SocketException, ClassNotFoundException{
+    ValidatorHelper validator;
+    //Prompt for region --> placement
+    //Prompt for region
+    while(true){
+      //Decrease timeout to maxTime-(current-start)
+      //Ensures will time out at maxTime after start
+      playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));
+      //Send board to player
+      playerConnection.sendObject(parent.getBoard());
+      //Attempt to get groupName string
+      StringMessage groupNameMessage = (StringMessage)(playerConnection.receiveObject());
+      String groupName = groupNameMessage.unpacker();
+      //Return failure if not assignable
+      if(!parent.assignGroups(groupName, player)){
+        playerConnection.sendObject(new StringMessage("Fail: Group invalid or already taken."));
+        continue;
+      }
+      break;
+    }
+    //Otherwise succeeds
+    playerConnection.sendObject(new StringMessage("Success: Group assigned."));
+    int startUnits = Constants.UNIT_START_MULTIPLIER*parent.getBoard().getNumRegionsOwned(player);
+    
+    //Prompt for placement
+    while(true){
+      //Decrease timeout to maxTime-(current-start)
+      //Ensures will time out at maxTime after start
+      playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));     
+      //Send board
+      playerConnection.sendObject(parent.getBoard());
+      //Retrieve orders
+      List<OrderInterface> placementOrders;//changed for new order interface
+      placementOrders = (ArrayList<OrderInterface>)(playerConnection.receiveObject());
+      validator = new ValidatorHelper(player, new Unit(startUnits), parent.getBoard());
+      //Validate orders --> loop if fail
+      if(!validator.allPlacementsValid(placementOrders)){
+        playerConnection.sendObject(new StringMessage("Fail: placements invalid"));
+        continue;
+      }
+      
+      //Convert to parent's board
+      for(int i = 0; i < placementOrders.size(); i++){
+        placementOrders.get(i).findValuesInBoard(parent.getBoard());
+      }
+      parent.addOrdersToMap(placementOrders);
+      //Succeeds
+      playerConnection.sendObject(new StringMessage("Success: placements valid."));
+      break;
+    }
+  }
+
   //Method to call turn, return true if "successful"
   //Return false if socket has exception
   public boolean performTurn(){
@@ -95,58 +150,15 @@ public class ChildServer implements Runnable{
       System.out.println(parent.getGameID() + " : (" + player.getName() + ") enter thread");
       playerConnection.getSocket().setSoTimeout((int)maxTime);
       if(firstCall){
-        //Prompt for region --> placement
-        //Prompt for region
-        while(true){
-          //Decrease timeout to maxTime-(current-start)
-          //Ensures will time out at maxTime after start
-          playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));
-          //Send board to player
-          playerConnection.sendObject(parent.getBoard());
-          //Attempt to get groupName string
-          StringMessage groupNameMessage = (StringMessage)(playerConnection.receiveObject());
-          String groupName = groupNameMessage.unpacker();
-          //Return failure if not assignable
-          if(!parent.assignGroups(groupName, player)){
-            playerConnection.sendObject(new StringMessage("Fail: Group invalid or already taken."));
-            continue;
-          }
-          break;
-        }
-        //Otherwise succeeds
-        playerConnection.sendObject(new StringMessage("Success: Group assigned."));
-        int startUnits = Constants.UNIT_START_MULTIPLIER*parent.getBoard().getNumRegionsOwned(player);
-        
-        //Prompt for placement
-        while(true){
-          //Decrease timeout to maxTime-(current-start)
-          //Ensures will time out at maxTime after start
-          playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));     
-          //Send board
-          playerConnection.sendObject(parent.getBoard());
-          //Retrieve orders
-          List<OrderInterface> placementOrders;//changed for new order interface
-          placementOrders = (ArrayList<OrderInterface>)(playerConnection.receiveObject());
-          validator = new ValidatorHelper(player, new Unit(startUnits), parent.getBoard());
-          //TODO: Validate orders --> loop if fail
-          if(!validator.allPlacementsValid(placementOrders)){
-            playerConnection.sendObject(new StringMessage("Fail: placements invalid"));
-            continue;
-          }
-          
-          //Convert to parent's board
-          for(int i = 0; i < placementOrders.size(); i++){
-            placementOrders.get(i).findValuesInBoard(parent.getBoard());
-          }
-          parent.addOrdersToMap(placementOrders);
-          //Succeeds
-          playerConnection.sendObject(new StringMessage("Success: placements valid."));
-          break;
-        }
-        //Prevent initial call again
+        firstTurnCall();
+        //Prevent first turn again
         firstCall = false;
+        clientBoard = (Board)DeepCopy.deepCopy(parent.getBoard());
       }
       else{
+        //Get client's visible version of the board locally
+        Set<String> visible = parent.getBoard().getVisibleRegions(player.getName());
+        clientBoard.updateVisible(visible, parent.getBoard());
         //Send turn message
         playerConnection.sendObject(new StringMessage(turnMessage));
         //If called then new turn --> send continue
@@ -162,12 +174,12 @@ public class ChildServer implements Runnable{
             playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));
             
             //Send board
-            playerConnection.sendObject(parent.getBoard());
+            playerConnection.sendObject(clientBoard);
 
             //Prompt for orders
             List<OrderInterface> orders = (ArrayList<OrderInterface>)(playerConnection.receiveObject());
             validator = new ValidatorHelper(player, parent.getBoard());
-            //TODO: Validate orders --> loop if fail
+            //Validate orders --> loop if fail
             if(!validator.allOrdersValid(orders)){
               playerConnection.sendObject(new StringMessage("Fail: orders invalid"));
               continue;
