@@ -1,6 +1,6 @@
 package edu.duke.ece651.risc.shared;
 
-public class TeleportOrder extends SourceDestinationOrder {
+public class TeleportOrder extends SourceDestinationUnitOrder {
   //this class defines how to execute a teleport order of units from one region to another
    private static final long serialVersionUID = 22L;
   public TeleportOrder(Region s, Region d, Unit u){

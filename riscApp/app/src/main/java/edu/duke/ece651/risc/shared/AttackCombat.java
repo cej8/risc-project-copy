@@ -2,7 +2,7 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.Random;
 
-public class AttackCombat extends SourceDestinationOrder {
+public class AttackCombat extends SourceDestinationUnitOrder {
   // this class handles the actual combat resolution when an attack is issued by a
   // player
   // Repurposed code from doDestinationAction of AttackOrder
