@@ -25,6 +25,8 @@ public class ChildServer implements Runnable{
 
   //Boolean for if firstCall of threads (placement)
   private boolean firstCall = true;
+  //Boolean for first turn with actual moves, if true then get server's PlacementBoard
+  private boolean firstTurnWithMoves = true;
   //Boolean for if connection has failed (playerConnection null/DC'ed)
   private boolean connectionFailed = false;
 
@@ -153,11 +155,15 @@ public class ChildServer implements Runnable{
         firstTurnCall();
         //Prevent first turn again
         firstCall = false;
-        clientBoard = (Board)DeepCopy.deepCopy(parent.getBoard());
       }
       else{
         //Get client's visible version of the board locally
         if(parent.getFOG_OF_WAR()){
+          if(firstTurnWithMoves){ //If first turn with moves then get placement board
+System.out.println("getting clientB");
+            clientBoard = (Board)DeepCopy.deepCopy(parent.getBoard());
+          }
+System.out.println(player.getName());
           clientBoard.updateVisible(player.getName(), parent.getBoard());
         }
         else{
@@ -224,6 +230,7 @@ public class ChildServer implements Runnable{
             playerConnection.sendObject(new StringMessage("Success: spectate"));
           }
         }
+        firstTurnWithMoves = false;
       }
     }
     catch(Exception e){
@@ -264,6 +271,10 @@ public class ChildServer implements Runnable{
     //If past maximum then mark as not playing
     if(missedTurns > Constants.MAX_MISSED){
       System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed more than " + Constants.MAX_MISSED + " turns, marking as dead");
+      player.setPlaying(false);
+    }
+    if(missedTurns == 1 && firstCall == true){
+      System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed initial placements, marking as dead");
       player.setPlaying(false);
     }
   }
