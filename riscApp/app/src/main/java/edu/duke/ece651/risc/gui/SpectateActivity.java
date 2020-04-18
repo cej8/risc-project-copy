@@ -22,10 +22,15 @@ public class SpectateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_spectate);
         board = ParentActivity.getBoard();
         regions = board.getRegions();
-//        executeClient = new ExecuteClient(this);
-//        executeClient.setConnection(ParentActivity.getConnection());
-//        executeClient.spectate(false,handler);
+        executeClient = new ExecuteClient(this);
+        executeClient.setConnection(ParentActivity.getConnection());
+        executeClient.spectate(false,handler);  // problem is this keeps looping, doesn't do everything I need
     }
+//    @Override
+//    protected void onStart(){
+//        super.onStart();
+//        executeClient.spectate(false,handler);
+//    }
 
     public void planetOne(View view){
         Region region = regions.get(10);

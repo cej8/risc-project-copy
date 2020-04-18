@@ -12,13 +12,12 @@ public class PlacementOrderCreator extends OrderCreator {
     this.client = c;
   }
  
-    public void placementOrderHelper(List<OrderInterface> placementList, String regionName,
-      Region placement) {
+  public void placementOrderHelper(List<OrderInterface> placementList, String regionName, Region placement) {
     while (true) {
       try {
         client.getClientOutput().displayString("How many units would you like to place in " + regionName + "? (please enter a number)");
         Unit units = new Unit(Integer.parseInt(client.getClientInput().readInput()));
-         OrderInterface placementOrder = DestOrderFactory.getOrder("placement", placement, units);
+        OrderInterface placementOrder = DestinationUnitOrderFactory.getOrder("placement", placement, units);
         
         placementList.add(placementOrder);
         break;
@@ -47,11 +46,9 @@ public class PlacementOrderCreator extends OrderCreator {
     // return placementList;
   }
 
-@Override
-public void addToOrderList(List<OrderInterface> orderList) {
-	// TODO Auto-generated method stub
-  createPlacements(orderList);
-	
-}
+  @Override
+  public void addToOrderList(List<OrderInterface> orderList) {
+    createPlacements(orderList);
+  }
 
 }

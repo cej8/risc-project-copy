@@ -1,11 +1,8 @@
 package edu.duke.ece651.risc.shared;
 
-// Class contains relevant fields for order operations with only a destination
 public abstract class DestinationOrder implements RegionOrder {
-
-  private static final long serialVersionUID = 10L;
+  private static final long serialVersionUID = 40L;
   protected Region destination;
-  protected Unit units;
 
   public void setDestination(Region destination){
     this.destination = destination;
@@ -14,31 +11,16 @@ public abstract class DestinationOrder implements RegionOrder {
     return destination;
   }
 
-  public Unit getUnits(){
-    return units;
-  }
-  
-  //  @Override
-  // public String doSourceAction() {
-  // return "";
-  // };
-
-  // @Override
-  // abstract public String doDestinationAction();
-
-@Override
-abstract public int getPriority();
-
+  @Override
+  abstract public int getPriority();
 
   @Override
- public void findValuesInBoard(Board board){
-   for(Region r : board.getRegions()){
-      if(r.getName().equals(this.getDestination().getName())){
-        this.setDestination(r);
-      }
-    }
+  public void findValuesInBoard(Board board){
+    for(Region r : board.getRegions()){
+        if(r.getName().equals(this.destination.getName())){
+          this.destination = r;
+        }
+    }     
   }
-@Override
-abstract public String doAction();
 
 }
