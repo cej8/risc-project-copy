@@ -1,7 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.List;
-
+// Class validates that player own region, has enough tech, and has valid tech level to do action
 public class ResourceBoostValidator implements ValidatorInterface<ResourceBoost> {
     private Board tempBoard;
   private AbstractPlayer player;
