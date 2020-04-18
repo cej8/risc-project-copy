@@ -3,6 +3,7 @@ package edu.duke.ece651.risc.gui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,11 +107,40 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
     public boolean getRegionChosen(){
         return regionChosen;
     }
+    public void repromptChooseRegions(){
+        long startTime = -1;
+        long maxTime = -1;
+        try {
+            this.board = (Board) (connection.receiveObject());
+            Log.d("Game", "Received board");
+            ParentActivity parentActivity = new ParentActivity();
+            parentActivity.setBoard(board);
+            clientOutput.displayBoard(ParentActivity.getBoard());
+            // Return timeout to smaller value
+            connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
+
+            //Set max/start first time board received (start of turn)
+            if (maxTime == -1) {
+                // maxTime=(long) (connection.getSocket().getSoTimeout());
+                parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));
+                //Catch case for issues in testing, should never really happen
+                if (maxTime == 0) {
+                    //maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
+                    parentActivity.setMaxTime((long) (TURN_WAIT_MINUTES * 60 * 1000));
+                }
+            }
+            if (startTime == -1) {
+                //startTime = System.currentTimeMillis();
+                parentActivity.setStartTime(System.currentTimeMillis());
+            }
+        } catch (Exception e){
+
+        }
+    }
     @Override
     public void run() {
         try {
             if (chooseStartGroup()) {
-               // regionChosen=true;
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -119,10 +149,13 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                     }
                 });
             } else {
+                ParentActivity pa = new ParentActivity();
+                pa.setRepromptBoard("true");
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Intent chooseRegions = new Intent(activity,ChooseRegionsActivity.class);
+                        Intent chooseRegions = new Intent(activity,RepromptRegionsActivity.class);
+                       // Intent chooseRegions = new Intent(activity,PlayerLobbyActivity.class);
                         activity.startActivity(chooseRegions);
                     }
                 });

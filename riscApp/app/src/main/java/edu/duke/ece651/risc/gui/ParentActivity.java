@@ -19,6 +19,14 @@ public final class ParentActivity {
     private static boolean firstCall;
     private static boolean spectateFirstCall;
     private static boolean spectate;
+    private static String repromptBoard;
+
+    public static String getRepromptGroup(){
+        return repromptBoard;
+    }
+    public void setRepromptBoard(String b){
+        repromptBoard = b;
+    }
 
     public void setSpectate(boolean s){
         spectate = s;

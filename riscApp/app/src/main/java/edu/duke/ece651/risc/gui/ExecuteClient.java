@@ -93,6 +93,7 @@ public class ExecuteClient {
     public void setHelpText(String text) {
         this.helpText = text;
     }
+
     public void getBoardAssignments(Button ready,ProgressBar status, Button start, Handler handler, TextView helpText) throws InterruptedException {
         clientOutput = new GUITextDisplay(helpText, act);
         final GUIWaitingRoom initializeBoard = new GUIWaitingRoom(ready,status, start,handler,connection, clientInput, clientOutput, act);
