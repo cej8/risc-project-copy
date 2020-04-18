@@ -157,8 +157,7 @@ public class ChildServer implements Runnable{
       }
       else{
         //Get client's visible version of the board locally
-        Set<String> visible = parent.getBoard().getVisibleRegions(player.getName());
-        clientBoard.updateVisible(visible, parent.getBoard());
+        clientBoard.updateVisible(player.getName(), parent.getBoard());
         //Send turn message
         playerConnection.sendObject(new StringMessage(turnMessage));
         //If called then new turn --> send continue

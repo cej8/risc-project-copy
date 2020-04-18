@@ -38,8 +38,8 @@ public class TextDisplay implements ClientOutputInterface {
   }
   
   @Override
-  public void displayBoard(Board b, String playerName, Set<String> visible){
-    String boardText = createBoard(b, playerName, visible);
+  public void displayBoard(Board b, String playerName){
+    String boardText = createBoard(b, playerName, b.getVisibleRegions(playerName));
     output.println(boardText);
     output.flush();
   }
@@ -54,6 +54,7 @@ public class TextDisplay implements ClientOutputInterface {
 
   //returns a String of all of the board info
   public String createBoard(Board b, String playerName, Set<String> visible){
+System.out.println(visible);
     StringBuilder boardText = new StringBuilder();
     Map<AbstractPlayer, List<Region>> playerRegionMap = b.getPlayerToRegionMap();
     List<AbstractPlayer> players = new ArrayList<AbstractPlayer>(playerRegionMap.keySet());
@@ -76,7 +77,7 @@ public class TextDisplay implements ClientOutputInterface {
   private String printRegionInfo(Region r, String playerName, boolean visible){
     StringBuilder sb = new StringBuilder();
     //Say old if not visible or has cloaking and not owned by player
-    if(!visible || (r.getCloakTurns() > 0 && !r.getOwner().getName().equals(playerName))){
+    if(!visible){
       sb.append("Last known information: ");
     }
     //Add unit list

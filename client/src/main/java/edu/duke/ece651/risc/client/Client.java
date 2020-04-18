@@ -296,9 +296,7 @@ public class Client extends Thread implements ClientInterface {
 
           if (alive) {
             //Server sends client-visible board (doesn't update regions cannot see)
-            //Push visible set to displayBoard to properly show what cannot be seen
-            Set<String> visible = board.getVisibleRegions(player.getName());
-            clientOutput.displayBoard(board, player.getName(), visible);
+            clientOutput.displayBoard(board, player.getName());
             //new OrderCreator
             OrderHelper orderhelper = new OrderHelper(this);
             List<OrderInterface> orders = orderhelper.createOrders();

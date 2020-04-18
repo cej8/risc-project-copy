@@ -8,5 +8,5 @@ public interface ClientOutputInterface {
 
   public void displayBoard(Board b);
   public void displayString(String str);
-  public void displayBoard(Board b, String playerName, Set<String> visible);
+  public void displayBoard(Board b, String playerName);
 }

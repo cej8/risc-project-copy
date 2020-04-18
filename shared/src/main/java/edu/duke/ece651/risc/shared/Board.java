@@ -67,6 +67,14 @@ public class Board implements Serializable {
   }
 
   public Set<String> getVisibleRegions(String playerName){
+    return getRegionSet(playerName, false);
+  }
+
+  public Set<String> getVisibleRegionsIncludingCloaked(String playerName){
+    return getRegionSet(playerName, true);
+  }
+
+  public Set<String> getRegionSet(String playerName, boolean includeAdj){
     Set<String> visible = new HashSet<String>();
     //Add all visible regions to player to set
     for(Region r : regions){
@@ -75,7 +83,9 @@ public class Board implements Serializable {
         visible.add(r.getName());
         //Check all adjacent, if not cloaked (turns == 0) then add to visible
         for(Region adj : r.getAdjRegions()){
-          visible.add(adj.getName());
+          if(includeAdj || adj.getCloakTurns() == 0){
+            visible.add(adj.getName());
+          }
         }
       }
       //Finally if a spy is in region then visible
@@ -92,20 +102,23 @@ public class Board implements Serializable {
     }
   }
 
-  public void updateVisible(Set<String> visibleRegions, Board newBoard){
+  public void updateVisible(String playerName, Board newBoard){
     //Get newest version of players
     List<AbstractPlayer> players = new ArrayList<AbstractPlayer>(newBoard.getPlayerSet());
+    Set<String> allUpdate = newBoard.getVisibleRegionsIncludingCloaked(playerName);
+    Set<String> visible = newBoard.getVisibleRegions(playerName);
 
     //Iterate through board, for each value in visibleRegions --> update
     List<Region> newRegions = newBoard.getRegions();
     for(int i = 0; i < regions.size(); i++){
       //Always update spy information
       regions.get(i).copySpies(newRegions.get(i));
-      //If you can see they update rest of information
-      if(visibleRegions.contains(regions.get(i).getName())){
-        //if visible always update cloak
+      //If in allUpdate (visible + cloaked) then need to update stuff
+      if(allUpdate.contains(regions.get(i).getName())){
+        //Always update cloak
         regions.get(i).setCloakTurns(newRegions.get(i).getCloakTurns());
-        if(newRegions.get(i).getCloakTurns() == 0){
+        //If in visible (not cloaked) then update all
+        if(visible.contains(regions.get(i).getName())){
           regions.get(i).copyInformation(newRegions.get(i));
         }
       }

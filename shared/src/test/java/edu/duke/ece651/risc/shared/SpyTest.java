@@ -53,7 +53,7 @@ public class SpyTest {
     p2Vis = board.getVisibleRegions("p2");
     //p1 can see r1 (r2 is cloaked)
     assert(p1Vis.contains(r1.getName()));
-    assert(p1Vis.contains(r2.getName()));
+    assert(!p1Vis.contains(r2.getName()));
     assert(!p1Vis.contains(r3.getName()));
     //p2 can see all
     assert(p2Vis.contains(r1.getName()));
@@ -104,7 +104,7 @@ public class SpyTest {
     p2Vis = board.getVisibleRegions("p2");
     //p1 can see r1,r3 (r3 has spy)
     assert(p1Vis.contains(r1.getName()));
-    assert(p1Vis.contains(r2.getName()));
+    assert(!p1Vis.contains(r2.getName()));
     assert(p1Vis.contains(r3.getName()));
     //p2 can see all
     assert(p2Vis.contains(r1.getName()));
