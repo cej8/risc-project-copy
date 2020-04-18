@@ -5,7 +5,7 @@ public final class Constants {
   // time to wait for initial connection of players (must be > 0)
   public static final double START_WAIT_MINUTES = 2.5;
   // time to wait between turns (must be > 0)
-  public static final double TURN_WAIT_MINUTES = 3.0;
+  public static final double TURN_WAIT_MINUTES = 30.0;
   //Time to wait before connected to parentserver
   public static final double LOGIN_WAIT_MINUTES = 1.0;
   // max number of units per player (must be > 0)
@@ -20,20 +20,28 @@ public final class Constants {
   public static final int MAX_MISSED = 1;
   //max tech level for a player to achieve
   public static final int MAX_TECH_LEVEL = 6;
+  //Constant for use of FOW (if false then spies do nothing, vision like evo1/2)
+  public static final boolean FOG_OF_WAR = true;
  
   //priorities for ordering moves 
-  public static final int ATTACK_COMBAT_PRIORITY=5000;
-  public static final int ATTACK_MOVE_PRIORITY = 3000;
-  public static final int MOVE_PRIORITY = 1000;
-  public static final int PLACEMENT_PRIORITY = 1;
-  public static final int UPGRADE_UNITS_PRIORITY = 500;
-  public static final int UPGRADE_TECH_PRIORITY = 9000;
-  public static final int TELEPORT_ORDER_PRIORITY = 11000;
+  public static final int ATTACK_COMBAT_PRIORITY = 70;
+  public static final int ATTACK_MOVE_PRIORITY = 50;
+  public static final int MOVE_PRIORITY = 30;
+  public static final int PLACEMENT_PRIORITY = 10;
+  public static final int UPGRADE_UNITS_PRIORITY = 20;
+  public static final int UPGRADE_TECH_PRIORITY = 60;
+  public static final int TELEPORT_ORDER_PRIORITY = 40;
+  public static final int SPYMOVE_PRIORITY = 65;
+  public static final int CLOAK_PRIORITY = 66;
+  public static final int SPYUPGRADE_PRIORITY = 64;
   // cost to attack - food 
   public static final int ATTACK_COST = 1;
   public static final int TELEPORT_COST = 50;
   public static final int STARTING_FUEL_PRODUCTION = 50;
   public static final int STARTING_TECH_PRODUCTION = 30;
+
+  public static final int CLOAK_COST = 100;
+  public static final int SPYUPGRADE_COST = 20;
   //board values
   public static final int REGION_SIZE = 10;
   // Technology Defaults

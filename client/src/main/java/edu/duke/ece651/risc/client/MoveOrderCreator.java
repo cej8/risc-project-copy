@@ -13,13 +13,13 @@ public class MoveOrderCreator extends OrderCreator {
 
   public void moveHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord) {
     Region source = promptForRegion(sourceKeyWord);
-    Region destination = promptForRegion(sourceKeyWord);
+    Region destination = promptForRegion(destKeyWord);
 
     while (true) {
       try {
         Unit units = getOrderUnits(source);
 
-        OrderInterface order = SourceDestOrderFactory.getOrder("move", source, destination, units);
+        OrderInterface order = SourceDestinationUnitOrderFactory.getOrder("move", source, destination, units);
         if (order != null) { //should not ever be null -- would have gone to defaul in switch case instead of M
           orderList.add(order);
           break;
@@ -30,14 +30,10 @@ public class MoveOrderCreator extends OrderCreator {
       }
     }
   }
-
-
   
   @Override
   public void addToOrderList(List<OrderInterface> orderList) {
-    // TODO Auto-generated method stub
     moveHelper(orderList, "move units from", "move untis to");
-
   }
 
 }

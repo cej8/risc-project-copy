@@ -121,6 +121,7 @@ public class ClientTest {
     adjRegion.setAdjRegions(regions);
     //create board, make sure get/set works 
     Board board = new Board(regions);
+    board.initializeSpies(Arrays.asList(player1.getName()));
     return board;
   }
 
@@ -287,6 +288,7 @@ public class ClientTest {
     
     //create board, make sure get/set works 
     Board board = new Board(allRegions);
+    board.initializeSpies(Arrays.asList("Player 1", "Player 2"));
 
     Region region1b = new Region(player2, new Unit(0));
     region1b.setName("A");
@@ -314,6 +316,7 @@ public class ClientTest {
     allRegions2.add(region3b);
 
     Board board2 = new Board(allRegions2);
+    board2.initializeSpies(Arrays.asList("Player 1", "Player 2"));
 
     Region region1c = new Region(player2, new Unit(3));
     region1c.setName("A");
@@ -341,6 +344,7 @@ public class ClientTest {
     allRegions3.add(region3c);
 
     Board board3 = new Board(allRegions3);
+    board3.initializeSpies(Arrays.asList("Player 1", "Player 2"));
 
     ArrayList<Object> objs = new ArrayList<Object>();
     /* DEPRECATED LOGIN FLOW, NOW IN CLIENT LOGIN
@@ -479,6 +483,7 @@ public class ClientTest {
     
     //create board, make sure get/set works 
     Board board = new Board(allRegions);
+    board.initializeSpies(Arrays.asList(player1.getName(), player2.getName()));
 
     Region region1b = new Region(player2, new Unit(0));
     region1b.setName("A");
@@ -506,6 +511,7 @@ public class ClientTest {
     allRegions2.add(region3b);
 
     Board board2 = new Board(allRegions2);
+    board2.initializeSpies(Arrays.asList(player1.getName(), player2.getName()));
 
     Region region1c = new Region(player2, new Unit(3));
     region1c.setName("A");
@@ -533,6 +539,7 @@ public class ClientTest {
     allRegions3.add(region3c);
 
     Board board3 = new Board(allRegions3);
+    board3.initializeSpies(Arrays.asList(player1.getName(), player2.getName()));
 
     ArrayList<Object> objs = new ArrayList<Object>();
     /* DEPRECATED LOGIN FLOW, NOW IN CLIENT LOGIN
@@ -679,6 +686,7 @@ public class ClientTest {
     
     //create board, make sure get/set works 
     Board board = new Board(allRegions);
+    board.initializeSpies(Arrays.asList(player1.getName(), player2.getName()));
 
     Region region1b = new Region(player2, new Unit(0));
     region1b.setName("A");
@@ -706,6 +714,7 @@ public class ClientTest {
     allRegions2.add(region3b);
 
     Board board2 = new Board(allRegions2);
+    board2.initializeSpies(Arrays.asList(player1.getName(), player2.getName()));
 
     Region region1c = new Region(player2, new Unit(3));
     region1c.setName("A");
@@ -733,6 +742,7 @@ public class ClientTest {
     allRegions3.add(region3c);
 
     Board board3 = new Board(allRegions3);
+    board3.initializeSpies(Arrays.asList(player1.getName(), player2.getName()));
 
     ArrayList<Object> objs = new ArrayList<Object>();
     
@@ -821,6 +831,7 @@ public class ClientTest {
     
     //create board, make sure get/set works 
     Board board = new Board(allRegions);
+    board.initializeSpies(Arrays.asList(player1.getName(), player2.getName()));
 
     Region region1b = new Region(player2, new Unit(0));
     region1b.setName("A");
@@ -848,6 +859,7 @@ public class ClientTest {
     allRegions2.add(region3b);
 
     Board board2 = new Board(allRegions2);
+    board2.initializeSpies(Arrays.asList(player1.getName(), player2.getName()));
 
     
     ArrayList<Object> objs = new ArrayList<Object>();
@@ -937,6 +949,7 @@ public class ClientTest {
     
     //create board, make sure get/set works 
     Board board = new Board(allRegions);
+    board.initializeSpies(Arrays.asList("Player 1", "Player 2"));
 
     Region region1b = new Region(player2, new Unit(0));
     region1b.setName("A");
@@ -964,6 +977,7 @@ public class ClientTest {
     allRegions2.add(region3b);
 
     Board board2 = new Board(allRegions2);
+    board2.initializeSpies(Arrays.asList("Player 1", "Player 2"));
 
     Region region1c = new Region(player2, new Unit(3));
     region1c.setName("A");
@@ -991,6 +1005,7 @@ public class ClientTest {
     allRegions3.add(region3c);
 
     Board board3 = new Board(allRegions3);
+    board3.initializeSpies(Arrays.asList("Player 1", "Player 2"));
 
     ArrayList<Object> objs = new ArrayList<Object>();
     /* DEPRECATED LOGIN FLOW, NOW IN CLIENT LOGIN

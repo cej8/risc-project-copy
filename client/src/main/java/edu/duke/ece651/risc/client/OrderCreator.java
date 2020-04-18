@@ -17,7 +17,7 @@ public abstract class OrderCreator {
     Region r = null;
     while (r == null) {
       client.getClientOutput()
-          .displayString("What region do you want to " + keyWord + "  (please type a region name, i.e. 'A')");
+          .displayString("What region do you want to " + keyWord + "?  (please type a region name, i.e. 'A')");
       r = orderHelper(client.getClientInput().readInput());
     }
     return r;
