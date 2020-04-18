@@ -1,4 +1,7 @@
 package edu.duke.ece651.risc.shared;
+// Class to allow level 0 unit to upgrade to a Spy unit type
+
+// New spy started in region called in, spy can be moved on same turn as creation
 
 public class SpyUpgradeOrder extends DestinationOrder{
   private static final long serialVersionUID = 50L;

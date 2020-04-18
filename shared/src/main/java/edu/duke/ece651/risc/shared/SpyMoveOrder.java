@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.shared;
-
+// Class to allow moving of spies between regions
+// Unlimited movement within player's own regions, 1 region per turn into enemy regions per turn
 public class SpyMoveOrder extends SourceDestinationPlayerOrder {
   private static final long serialVersionUID = 46L; 
 

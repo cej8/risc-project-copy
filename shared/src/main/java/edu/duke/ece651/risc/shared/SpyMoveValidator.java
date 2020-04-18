@@ -1,7 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.*;
-
+// Class validates if Spy move is valid
 public class SpyMoveValidator implements ValidatorInterface<SpyMoveOrder> {
 
   private Board tempBoard;

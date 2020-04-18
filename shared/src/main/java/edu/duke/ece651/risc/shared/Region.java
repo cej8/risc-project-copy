@@ -16,8 +16,6 @@ public class Region implements Serializable {
   private boolean hasPlague;
   private int cloakTurns;
   private Map<String, List<Spy>> spies;
-  // public Region() {
-  // }
 
   // Constructor for assigning name to region (before Players are assigned)
   public Region(String n) {
