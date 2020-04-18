@@ -21,7 +21,7 @@ public final class Constants {
   //max tech level for a player to achieve
   public static final int MAX_TECH_LEVEL = 6;
   //Constant for use of FOW (if false then spies do nothing, vision like evo1/2)
-  public static final int FOG_OF_WAR = true;
+  public static final boolean FOG_OF_WAR = true;
  
   //priorities for ordering moves 
   public static final int ATTACK_COMBAT_PRIORITY = 70;
