@@ -3,7 +3,7 @@ package edu.duke.ece651.risc.shared;
 // Class to handle program constants
 public final class Constants {
   // time to wait for initial connection of players (must be > 0)
-  public static final double START_WAIT_MINUTES = 2.5;
+  public static final double START_WAIT_MINUTES = .5;
   // time to wait between turns (must be > 0)
   public static final double TURN_WAIT_MINUTES = 3.0;
   //Time to wait before connected to parentserver
