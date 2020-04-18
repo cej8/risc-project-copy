@@ -17,9 +17,9 @@ public class AttackOrderCreator extends OrderCreator{
     while (true) {
       try {
         Unit units = getOrderUnits(source);
-        OrderInterface order1 =SourceDestOrderFactory.getOrder("attack move", source, destination, units);
+        OrderInterface order1 =SourceDestinationUnitOrderFactory.getOrder("attack move", source, destination, units);
         if (order1 != null) { //should not ever be null -- would have gone to default in switch case instead of A
-          OrderInterface order2=SourceDestOrderFactory.getOrder("attack combat", source, destination, units);
+          OrderInterface order2=SourceDestinationUnitOrderFactory.getOrder("attack combat", source, destination, units);
           if (order2 != null) {
             orderList.add(order1);
             orderList.add(order2);
@@ -33,14 +33,8 @@ public class AttackOrderCreator extends OrderCreator{
     }
   }
 
- 
-@Override
-public void addToOrderList(List<OrderInterface> orderList) {
-	// TODO Auto-generated method stub
-  attackHelper(orderList, "attack from", "attack");
-	
-}
-
-
-
+  @Override
+  public void addToOrderList(List<OrderInterface> orderList) {
+    attackHelper(orderList, "attack from", "attack");
+  }
 }

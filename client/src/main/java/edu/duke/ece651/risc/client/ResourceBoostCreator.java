@@ -13,7 +13,7 @@ public class ResourceBoostCreator extends OrderCreator {
 
     while (true) {
       try {
-        OrderInterface order = DestOrderFactory.getOrder("resource boost",destination, new Unit(0));//pass in 0 for units to method
+        OrderInterface order = DestinationUnitOrderFactory.getOrder("resource boost",destination, new Unit(0));//pass in 0 for units to method
         if (order != null) { //should not ever be null -- would have gone to defaul in switch case instead of M
           orderList.add(order);
           break;

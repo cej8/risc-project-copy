@@ -20,6 +20,7 @@ public class Client extends Thread implements ClientInterface {
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
   private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
+  private boolean FOG_OF_WAR = Constants.FOG_OF_WAR;
 
   private boolean firstCall = true;
 
@@ -59,6 +60,10 @@ public class Client extends Thread implements ClientInterface {
   }
   public void setLOGIN_WAIT_MINUTES(double LOGIN_WAIT_MINUTES){
     this.LOGIN_WAIT_MINUTES = LOGIN_WAIT_MINUTES;
+  }
+
+  public void setFOG_OF_WAR(boolean FOG_OF_WAR){
+    this.FOG_OF_WAR = FOG_OF_WAR;
   }
 
   public void setBoard(Board board) {
@@ -249,7 +254,6 @@ public class Client extends Thread implements ClientInterface {
         if(!chooseRegions()) {return; }
       }
       while (true) {
-
         String turn = receiveAndDisplayString();
         
         long startTime = System.currentTimeMillis();
@@ -294,16 +298,25 @@ public class Client extends Thread implements ClientInterface {
         while (true) {
           // Next server sends board
           board = (Board) (connection.receiveObject());
-          // Display board
-          clientOutput.displayBoard(board);
-          // Client generates orders --> sends
+
           if (alive) {
+            //Server sends client-visible board (doesn't update regions cannot see)
+            if(FOG_OF_WAR){
+              clientOutput.displayBoard(board, player.getName());
+            }
+            else{
+              clientOutput.displayBoard(board);
+            }
             //new OrderCreator
             OrderHelper orderhelper = new OrderHelper(this);
             List<OrderInterface> orders = orderhelper.createOrders();
             //If too long --> kill player
             if(timeOut(startTime, maxTime)){ return;}
             connection.sendObject(orders);
+          }
+          else{
+            //If spectate display entire board
+            clientOutput.displayBoard(board);
           }
 
           String response = receiveAndDisplayString();

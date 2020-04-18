@@ -5,7 +5,7 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-public class DestOrderFactory extends AbstractOrderFactory{
+public class DestinationUnitOrderFactory extends AbstractOrderFactory{
   public static OrderInterface getOrder(String unitKeyWord, Region destination, Unit units){
     // OrderInterface order = null;
     switch (unitKeyWord) {
@@ -15,9 +15,6 @@ public class DestOrderFactory extends AbstractOrderFactory{
       break;
     case "upgrade unit":
       order = new UnitBoost(destination, units);
-        break;
-    case "resource boost":
-      order = new ResourceBoost(destination);
       break;
   
     }

@@ -1,6 +1,6 @@
 package edu.duke.ece651.risc.shared;
 
-public class AttackMove extends SourceDestinationOrder {
+public class AttackMove extends SourceDestinationUnitOrder {
   //this class handles the initial moving of units in preparation for an attack of a region
   //Repurposed code from doSourceaAction of AttackOrder
   private static final long serialVersionUID= 20L;

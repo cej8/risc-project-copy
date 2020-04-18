@@ -37,6 +37,7 @@ public class ParentServer extends Thread{
   private int MAX_PLAYERS = Constants.MAX_PLAYERS;
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
+  private boolean FOG_OF_WAR = Constants.FOG_OF_WAR;
   
   //boolean for if still in waitingForPlayers
   private boolean notStarted = true;
@@ -134,6 +135,16 @@ public class ParentServer extends Thread{
   //Used only for testing
   public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES) {
     this.START_WAIT_MINUTES = START_WAIT_MINUTES;
+  }
+
+  //Used only for testing
+  public boolean getFOG_OF_WAR(){
+    return FOG_OF_WAR;
+  }
+
+  //Used only for testing
+  public void setFOG_OF_WAR(boolean FOG_OF_WAR){
+    this.FOG_OF_WAR = FOG_OF_WAR;
   }
 
   public void setNotStarted(boolean notStarted){
@@ -366,7 +377,7 @@ public class ParentServer extends Thread{
   // returns boolean true if player owns a region
   public boolean playerHasARegion(AbstractPlayer player) {
     for (Region r : board.getRegions()) {
-      if (r.getOwner().getName() == player.getName()) {
+      if (r.getOwner().getName().equals(player.getName())) {
         return true;
       }
     }
@@ -400,6 +411,15 @@ public class ParentServer extends Thread{
         castOrder = (ResourceBoost) (order);
       }
    
+       else if (order instanceof SpyUpgradeOrder) {
+        castOrder = (SpyUpgradeOrder) (order);
+      }
+       else if (order instanceof SpyMoveOrder) {
+        castOrder = (SpyMoveOrder) (order);
+      }
+       else if (order instanceof CloakOrder) {
+        castOrder = (CloakOrder) (order);
+      }
      
       else {
         continue;
@@ -420,18 +440,18 @@ public class ParentServer extends Thread{
       //Combine attacks to same region by same player
       if(className.equals("AttackCombat")){
         boolean foundOrder = false;
-        SourceDestinationOrder sdOrderNew = (SourceDestinationOrder) castOrder;
+        SourceDestinationUnitOrder sduOrderNew = (SourceDestinationUnitOrder) castOrder;
         //Create copy of source to prevent A-->B, B-->C issue where B is taken by A (then B->C would be A's)
-        sdOrderNew.setSource((Region)DeepCopy.deepCopy(sdOrderNew.getSource()));
+        sduOrderNew.setSource((Region)DeepCopy.deepCopy(sduOrderNew.getSource()));
         for(OrderInterface combatOrder : orderMap.get("AttackCombat")){
           if(foundOrder){ break; }
           //If both have same source owner and go to same region
           //Then order in list gets new order's units added to it
-          SourceDestinationOrder sdOrderOld = (SourceDestinationOrder) combatOrder;
-           if(sdOrderNew.getSource().getOwner().getName().equals(sdOrderOld.getSource().getOwner().getName()) &&
-             sdOrderNew.getDestination().getName().equals(sdOrderOld.getDestination().getName())){
-             List<Integer> oldOrderUnits = sdOrderOld.getUnits().getUnits();
-             List<Integer> newOrderUnits = sdOrderNew.getUnits().getUnits();
+          SourceDestinationUnitOrder sduOrderOld = (SourceDestinationUnitOrder) combatOrder;
+           if(sduOrderNew.getSource().getOwner().getName().equals(sduOrderOld.getSource().getOwner().getName()) &&
+             sduOrderNew.getDestination().getName().equals(sduOrderOld.getDestination().getName())){
+             List<Integer> oldOrderUnits = sduOrderOld.getUnits().getUnits();
+             List<Integer> newOrderUnits = sduOrderNew.getUnits().getUnits();
              //Add newOrderUnits to oldOrderUnits
              for(int i = 0; i < newOrderUnits.size(); i++){
                oldOrderUnits.set(i, oldOrderUnits.get(i)+newOrderUnits.get(i));
@@ -455,31 +475,6 @@ public class ParentServer extends Thread{
 
     turnResults = new StringBuilder("Turn " + turnNumber + ":\n");
 
-    // Reshuffle all subLists
-    /*
-    for (String key : orderMap.keySet()) {
-      List<OrderInterface> orders = orderMap.get(key);
-
-      Collections.shuffle(orders);
-    }
-    if (orderMap.containsKey("PlacementOrder")) {
-      applyOrderList(orderMap.get("PlacementOrder"));
-    }
-    if (orderMap.containsKey("MoveOrder")) {
-      applyOrderList(orderMap.get("MoveOrder"));
-    }
-    if (orderMap.containsKey("AttackMove")) {
-      applyOrderList(orderMap.get("AttackMove"));
-    }
-      if (orderMap.containsKey("AttackCombat")) {
-      applyOrderList(orderMap.get("AttackCombat"));
-    }
-        if (orderMap.containsKey("UnitBoost")) {
-      applyOrderList(orderMap.get("UnitBoost"));
-    }
-          if (orderMap.containsKey("TechBoost")) {
-      applyOrderList(orderMap.get("TechBoost"));
-    }*/
     //Do all not combat first then attackCombat random ordered
     if(orderMap.containsKey("NotCombat")){
       applyOrderList(orderMap.get("NotCombat"));
@@ -496,9 +491,7 @@ public class ParentServer extends Thread{
     for (int i = 0; i < orders.size(); i++) {
       turnResults.append(orders.get(i).doAction());
     }
-    // for(int i = 0; i < orders.size(); i++){
-    // turnResults.append(orders.get(i).doDestinationAction());
-    // }
+
     orders.clear();
   }
 
@@ -535,6 +528,12 @@ public class ParentServer extends Thread{
         }
         r.getUnits().getUnits().set(0, r.getUnits().getUnits().get(0) + 1);
       }
+      //Set all spies as not moved for next turn
+      r.setAllSpiesFalse();
+      //decrease cloaking for cloaked by 1
+      if(r.getCloakTurns() > 0){
+        r.setCloakTurns(r.getCloakTurns()-1);
+      }
     }
 
   }
@@ -566,6 +565,7 @@ public class ParentServer extends Thread{
     
     //While regions not owned all by one player
     createStartingGroups();
+    board.initializeSpies(players);
     while (turnNumber == 1 || numPlayersLeft() > 1) {
       try {
         // Prompt users
@@ -611,6 +611,7 @@ public class ParentServer extends Thread{
     System.out.println(gameID + " : MAX_PLAYERS: " + MAX_PLAYERS);
     System.out.println(gameID + " : TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
     System.out.println(gameID + " : START_WAIT_MINUTES:" + START_WAIT_MINUTES);
+    System.out.println(gameID + " : FOG_OF_WAR:" + FOG_OF_WAR);
     playGame();
     System.out.println(gameID + " : Game ended");
   }
