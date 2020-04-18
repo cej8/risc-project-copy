@@ -37,6 +37,7 @@ public class ParentServer extends Thread{
   private int MAX_PLAYERS = Constants.MAX_PLAYERS;
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
+  private boolean FOG_OF_WAR = Constants.FOG_OF_WAR;
   
   //boolean for if still in waitingForPlayers
   private boolean notStarted = true;
@@ -134,6 +135,16 @@ public class ParentServer extends Thread{
   //Used only for testing
   public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES) {
     this.START_WAIT_MINUTES = START_WAIT_MINUTES;
+  }
+
+  //Used only for testing
+  public boolean getFOG_OF_WAR(){
+    return FOG_OF_WAR;
+  }
+
+  //Used only for testing
+  public void setFOG_OF_WAR(boolean FOG_OF_WAR){
+    this.FOG_OF_WAR = FOG_OF_WAR;
   }
 
   public void setNotStarted(boolean notStarted){
@@ -590,6 +601,7 @@ public class ParentServer extends Thread{
     System.out.println(gameID + " : MAX_PLAYERS: " + MAX_PLAYERS);
     System.out.println(gameID + " : TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
     System.out.println(gameID + " : START_WAIT_MINUTES:" + START_WAIT_MINUTES);
+    System.out.println(gameID + " : FOG_OF_WAR:" + FOG_OF_WAR);
     playGame();
     System.out.println(gameID + " : Game ended");
   }
