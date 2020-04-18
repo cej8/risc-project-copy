@@ -1131,6 +1131,7 @@ System.out.println(orderMap.keySet());
     regions.add(region2);
     regions.add(region3);
     Board boardNew = new Board(regions);
+    boardNew.initializeSpies(Arrays.asList("Player 1", "Player 2", "Player 3"));
     //Above creates 3 regions in triangle
 
     //Set max turn time to 10 seconds...
