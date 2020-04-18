@@ -35,8 +35,8 @@ public class TestOrderCreator {
     client.setPlayer(p1);
     OrderHelper oc = new OrderHelper(client);
     List<OrderInterface> orders = oc.createOrders();
-     assertEquals(6, orders.size());
-     assertEquals(Constants.MOVE_PRIORITY, orders.get(0).getPriority());
+    assertEquals(6, orders.size());
+    assertEquals(Constants.MOVE_PRIORITY, orders.get(0).getPriority());
     assertEquals(Constants.ATTACK_MOVE_PRIORITY, orders.get(1).getPriority());
     assertEquals(Constants.ATTACK_COMBAT_PRIORITY, orders.get(2).getPriority());
     assertEquals(Constants.UPGRADE_UNITS_PRIORITY,  orders.get(3).getPriority());
@@ -47,9 +47,34 @@ public class TestOrderCreator {
     
     Unit unit = poc.getOrderUnits(b.getRegions().get(1));
     assertEquals(7, unit.getUnits().size());
-  
- 
+  }
 
+  @Test
+  public void test_SpyCreator() throws FileNotFoundException{
+    InputStream input = new FileInputStream(new File("src/test/resources/SpyOrders.txt"));
+    TextDisplay td = new TextDisplay();
+    ConsoleInput ci = new ConsoleInput(input);
+    // Client client = new Client(ci, td);
+    ConnectionManager connect = new ConnectionManager();
+    Connection c = connect.getConnection();
+    Client client = new Client(ci, td, c);
+    HumanPlayer    p1 = new HumanPlayer("player 1");
+    HumanPlayer p2 = new HumanPlayer("player 2");
+    Board b= new Board(getRegionList(p1, p2));
+    client.setBoard(b);
+    client.setPlayer(p1);
+    OrderHelper oc = new OrderHelper(client);
+    List<OrderInterface> orders = oc.createOrders();
+    assertEquals(orders.size(), 4);
+    assertEquals(Constants.CLOAK_PRIORITY, orders.get(0).getPriority());
+    assertEquals("r1", ((CloakOrder)orders.get(0)).getDestination().getName());
+    assertEquals(Constants.SPYUPGRADE_PRIORITY, orders.get(1).getPriority());
+    assertEquals("r5", ((SpyUpgradeOrder)orders.get(1)).getDestination().getName());
+    assertEquals(Constants.SPYUPGRADE_PRIORITY, orders.get(2).getPriority());
+    assertEquals("r2", ((SpyUpgradeOrder)orders.get(2)).getDestination().getName());
+    assertEquals(Constants.SPYMOVE_PRIORITY, orders.get(3).getPriority());
+    assertEquals("r5", ((SpyMoveOrder)orders.get(3)).getSource().getName());
+    assertEquals("r1", ((SpyMoveOrder)orders.get(3)).getDestination().getName());
   }
 
   private List<Region> getRegionList(AbstractPlayer p1, AbstractPlayer p2) {
