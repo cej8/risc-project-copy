@@ -157,7 +157,7 @@ public class ChildServer implements Runnable{
       }
       else{
         //Get client's visible version of the board locally
-        if(parent.getFOG_OF_WAR){
+        if(parent.getFOG_OF_WAR()){
           clientBoard.updateVisible(player.getName(), parent.getBoard());
         }
         else{
