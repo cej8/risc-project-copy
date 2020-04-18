@@ -61,7 +61,7 @@ System.out.println(visible);
     Collections.sort(players);
     for(AbstractPlayer player : players) { //for each entry in the map
       boardText.append(player.getName());
-      if(playerName.equals(player.getName())){
+      if(playerName.equals(player.getName()) || playerName.equals("")){
         boardText.append(": \nFuel: " + player.getResources().getFuelResource().getFuel() + "  Tech: " + player.getResources().getTechResource().getTech() + " Tech Level: " + player.getMaxTechLevel().getMaxTechLevel());
       }
       boardText.append("\n------------------\n"); //append player name

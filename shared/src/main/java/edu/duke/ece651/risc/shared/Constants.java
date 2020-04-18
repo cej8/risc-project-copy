@@ -3,7 +3,7 @@ package edu.duke.ece651.risc.shared;
 // Class to handle program constants
 public final class Constants {
   // time to wait for initial connection of players (must be > 0)
-  public static final double START_WAIT_MINUTES = .5;
+  public static final double START_WAIT_MINUTES = 2.5;
   // time to wait between turns (must be > 0)
   public static final double TURN_WAIT_MINUTES = 30.0;
   //Time to wait before connected to parentserver
@@ -20,6 +20,8 @@ public final class Constants {
   public static final int MAX_MISSED = 1;
   //max tech level for a player to achieve
   public static final int MAX_TECH_LEVEL = 6;
+  //Constant for use of FOW (if false then spies do nothing, vision like evo1/2)
+  public static final boolean FOG_OF_WAR = true;
  
   //priorities for ordering moves 
   public static final int ATTACK_COMBAT_PRIORITY = 70;
