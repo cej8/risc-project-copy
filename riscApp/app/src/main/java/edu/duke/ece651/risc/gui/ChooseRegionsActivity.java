@@ -41,6 +41,15 @@ public class ChooseRegionsActivity extends AppCompatActivity {
         executeClient.showStartBoard(boardView);
     }
 
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+        // instead of going to new activity open up dialog fragment
+        BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
+        backButtonDialogFragment.show(getSupportFragmentManager(),"back");
+    }
+
     public void chooseRegion(View view) throws IOException, ClassNotFoundException, InterruptedException{
         String regionGroup = editRegionGroup.getText().toString();
         executeClient.chooseRegions(handler,boardView, regionGroup);

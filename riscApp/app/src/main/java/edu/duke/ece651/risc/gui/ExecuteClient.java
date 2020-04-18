@@ -48,9 +48,6 @@ public class ExecuteClient {
         }
         ConnectionManager makeConnection = new ConnectionManager(addr, port);
         makeConnection.start();
-      /*  this.connection = makeConnection.getConnection();
-        ParentActivity parentActivity = new ParentActivity();
-        parentActivity.setConnection(connection);*/
     }
 
     public Connection getConnection() {
@@ -136,8 +133,10 @@ public class ExecuteClient {
     public void endGame(){
            connection.closeAll();
            clientInput.close();
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(1);
+           Intent intent = new Intent(act,ConfirmLoginActivity.class);
+           act.startActivity(intent);
+        //android.os.Process.killProcess(android.os.Process.myPid());
+       // System.exit(1);
     }
     public void endGameReturn(){
         connection.closeAll();

@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -37,11 +38,24 @@ public class RegisterActivity extends AppCompatActivity {
       connection = ParentActivity.getConnection();
       executeClient.setConnection(connection);
     }
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        connection.closeAll();
+        startActivity(new Intent(this, ConfirmLoginActivity.class));
+        finish();
+    }
 
     public void userRegister(View view) throws IOException, ClassNotFoundException, InterruptedException{
         String username = editUsername.getText().toString();
         String password = editPassword.getText().toString();
         String confirmPassword= editConfirmPassword.getText().toString();
+        ParentActivity pa = new ParentActivity();
+        pa.setPassword1(password);
+        pa.setUsername(username);
+        pa.setPassword2(confirmPassword);
         executeClient.registerLogin(registerHandler,username, password, confirmPassword,helpText);
     }
 }

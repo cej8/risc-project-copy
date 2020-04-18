@@ -55,6 +55,16 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         displayText();
         validatorHelper = new ValidatorHelper(player,new Unit(startUnits), board);
     }
+
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+        // instead of going to new activity open up dialog fragment
+        BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
+        backButtonDialogFragment.show(getSupportFragmentManager(),"back");
+    }
+
     public void sendPlacements(View view){
         if (makePlacements()){
             executeClient.placementOrder(handler);

@@ -43,12 +43,23 @@ public class LoginActivity extends AppCompatActivity {
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
     }
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        connection.closeAll();
+        startActivity(new Intent(this, ConfirmLoginActivity.class));
+        finish();
+    }
 
-    // TODO: on button press we send object to
     public void userLogin(View view) throws IOException, ClassNotFoundException, InterruptedException{
         helpText.setText("");
         String username = editUsername.getText().toString();
         String password = editPassword.getText().toString();
+        ParentActivity pa = new ParentActivity();
+        pa.setPassword1(password);
+        pa.setUsername(username);
         executeClient.loginGame(loginHandler,username, password, helpText);
     }
 }
