@@ -7,10 +7,22 @@ public class TechnologyLevel implements Serializable {
   private static final long serialVersionUID = 14L;
   private int maxTechLevel;
   private int costToUpgrade;
+  private int maxRegionLevel;
+  
   public TechnologyLevel(){
     this.maxTechLevel = Constants.STARTING_TECH_LEVEL;
     this.costToUpgrade = Constants.STARTING_UPGRADE_COST;
+    this.maxRegionLevel = Constants.STARTING_REGION_LEVEL;
   }
+
+  public int getMaxTechLevel() {
+    return maxTechLevel;
+  }
+public int getMaxRegionLevel() {
+	return maxRegionLevel;
+}
+
+
   
   public TechnologyLevel(int maxTechLevel){
     this();
@@ -19,18 +31,25 @@ public class TechnologyLevel implements Serializable {
     }
   }
 
-  public int getMaxTechLevel() {
-    return maxTechLevel;
-  }
   
   public void upgradeLevel(){
     maxTechLevel++;
     costToUpgrade += 25 * (maxTechLevel-1);
+    setRegionUnlock();
   }
-  
-  public int getCostToUpgrade() {
-    return costToUpgrade;
+
+public int getCostToUpgrade() {
+	return costToUpgrade;
+}
+  private void setRegionUnlock(){
+    //upgrade region level on even tech levels
+    if(maxRegionLevel==4){
+      return;//cannot co past region level 4
+    }
+    if(maxTechLevel%2==0){
+      this.maxRegionLevel++;
+    }
+   
   }
-  
 
 }

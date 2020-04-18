@@ -242,10 +242,11 @@ public class ValidatorTest {
     OrderInterface move21 = new MoveOrder(regions.get(1), regions.get(0), new Unit(1));// valid units
     OrderInterface move41 = new MoveOrder(regions.get(2), regions.get(0), new Unit(2));// valid
     OrderInterface attack34 = new AttackMove(regions.get(4), regions.get(3), new Unit(1));// invalid same owner
-
+    OrderInterface rb4 = new ResourceBoost(regions.get(2));
     ordersValid.add(attack34);
     ordersValid.add(move21);
     ordersValid.add(move41);
+    ordersValid.add(rb4);
     ValidatorHelper vh = new ValidatorHelper(p1, b);
       assertEquals(false, vh.allOrdersValid(orders));
      assertEquals(true, vh.allOrdersValid(ordersValid));
