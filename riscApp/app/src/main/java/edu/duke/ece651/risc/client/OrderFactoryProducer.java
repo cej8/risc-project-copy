@@ -35,12 +35,17 @@ public class OrderFactoryProducer {
         factory = new SpyUpgradeOrderCreator(c);
         c.getClientOutput().displayString("You made a Spy Upgrade order, what else would you like to do?");
         break;
+         case "R":// resource boost
+           factory = new ResourceBoostCreator(c);
+         c.getClientOutput().displayString("You made a Upgrade resource order, what else would you like to do?");
+        break;
+
       case "V":// spy move
         factory = new SpyMoveOrderCreator(c);
         c.getClientOutput().displayString("You made a Spy Move order, what else would you like to do?");
         break;
       default:
-       c.getClientOutput().displayString("Please select either T, M, A, U, E, C, Y, V or D");
+       c.getClientOutput().displayString("Please select either T, M, A, U, E, R, C, Y, V or D");
        break;
     }
     return factory;
