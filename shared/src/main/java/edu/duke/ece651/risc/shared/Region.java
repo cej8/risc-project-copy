@@ -230,11 +230,10 @@ public class Region implements Serializable {
   }
 
   //Method to copy information from another region (assumes same name/adjacent/etc.) that may change between turns
-  //This includes the owner, units, cloakTurns, hasPlague
+  //This includes the owner, units, hasPlague
   public void copyInformation(Region regionCopy){
     this.owner = (AbstractPlayer)DeepCopy.deepCopy(regionCopy.getOwner());
     this.units = (Unit)DeepCopy.deepCopy(regionCopy.getUnits());
-    this.cloakTurns = regionCopy.getCloakTurns();
     this.hasPlague = regionCopy.getPlague();
   }
 

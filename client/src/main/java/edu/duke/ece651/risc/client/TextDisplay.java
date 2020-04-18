@@ -75,15 +75,25 @@ public class TextDisplay implements ClientOutputInterface {
  //returns String w board info for a given region
   private String printRegionInfo(Region r, String playerName, boolean visible){
     StringBuilder sb = new StringBuilder();
-    if(!visible){
+    //Say old if not visible or has cloaking and not owned by player
+    if(!visible || (r.getCloakTurns() > 0 && !r.getOwner().getName().equals(playerName))){
       sb.append("Last known information: ");
     }
-    sb.append(r.getUnits().getUnits() + " units in " + r.getName()); //add info on num units in region
+    //Add unit list
+    sb.append(r.getUnits().getUnits() + " units in " + r.getName());
     sb.append(", ");
+    //Add spy info
     sb.append(getSpies(r, playerName));
     sb.append(", ");
     sb.append(printRegionAdjacencies(r)); //add adj info
- 
+    sb.append(" (Size " + r.getSize() + ")");
+
+
+    //Add cloak info
+    if(r.getCloakTurns() > 0){
+      sb.append(" (Cloaked for " + r.getCloakTurns() + " more turns)");
+    }
+    //Add plague info
     if(r.getPlague()){
       sb.append(" (PLAGUED)");
     }

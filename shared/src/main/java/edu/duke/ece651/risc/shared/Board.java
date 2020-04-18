@@ -75,9 +75,7 @@ public class Board implements Serializable {
         visible.add(r.getName());
         //Check all adjacent, if not cloaked (turns == 0) then add to visible
         for(Region adj : r.getAdjRegions()){
-          if(adj.getCloakTurns() == 0){
-            visible.add(adj.getName());
-          }
+          visible.add(adj.getName());
         }
       }
       //Finally if a spy is in region then visible
@@ -105,7 +103,11 @@ public class Board implements Serializable {
       regions.get(i).copySpies(newRegions.get(i));
       //If you can see they update rest of information
       if(visibleRegions.contains(regions.get(i).getName())){
-        regions.get(i).copyInformation(newRegions.get(i));
+        //if visible always update cloak
+        regions.get(i).setCloakTurns(newRegions.get(i).getCloakTurns());
+        if(newRegions.get(i).getCloakTurns() == 0){
+          regions.get(i).copyInformation(newRegions.get(i));
+        }
       }
       //Replace region owner with equivalent player from newBoard (equals based on name)
       AbstractPlayer tempOwner = regions.get(i).getOwner();
