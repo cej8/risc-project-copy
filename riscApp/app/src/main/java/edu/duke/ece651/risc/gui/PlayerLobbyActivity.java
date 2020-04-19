@@ -46,6 +46,15 @@ public class PlayerLobbyActivity extends AppCompatActivity {
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
     }
+
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+      // instead of going to new activity open up dialog fragment
+        BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
+        backButtonDialogFragment.show(getSupportFragmentManager(),"back");
+    }
     public void readyGame(View view){
                 try {
             executeClient.getBoardAssignments(ready,status,begin,handler,userPrompt);

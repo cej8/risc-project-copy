@@ -82,10 +82,42 @@ public class GUIWaitingRoom extends Thread {
         }
     }
 
+    public void repromptInitialBoard(){
+        long startTime = -1;
+        long maxTime = -1;
+        try {
+            this.board = (Board) (connection.receiveObject());
+            Log.d("Game", "Received board");
+            ParentActivity parentActivity = new ParentActivity();
+            parentActivity.setBoard(board);
+            clientOutput.displayBoard(ParentActivity.getBoard());
+            // Return timeout to smaller value
+            connection.getSocket().setSoTimeout((int) (TURN_WAIT_MINUTES * 60 * 1000));
+
+            //Set max/start first time board received (start of turn)
+            if (maxTime == -1) {
+                // maxTime=(long) (connection.getSocket().getSoTimeout());
+                parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));
+                //Catch case for issues in testing, should never really happen
+                if (maxTime == 0) {
+                    //maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
+                    parentActivity.setMaxTime((long) (TURN_WAIT_MINUTES * 60 * 1000));
+                }
+            }
+            if (startTime == -1) {
+                //startTime = System.currentTimeMillis();
+                parentActivity.setStartTime(System.currentTimeMillis());
+            }
+        } catch (Exception e){
+
+        }
+    }
+
     public void setSocketTimeout(int timeout) throws SocketException {
         connection.getSocket().setSoTimeout(timeout);
     }
     public void run() {
+        if (ParentActivity.getRepromptGroup() == null) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -93,30 +125,40 @@ public class GUIWaitingRoom extends Thread {
                 status.setVisibility(View.VISIBLE);
             }
         });
-        try {
-          ParentActivity pa = new ParentActivity();
-          pa.setPlayer((HumanPlayer) connection.receiveObject());
-               this.player = ParentActivity.getPlayer();
-               Log.d("Player",ParentActivity.getPlayer().getName());
-   
-            setSocketTimeout((int)(60*START_WAIT_MINUTES*1000));
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            Log.d("SetSocketTimeout","Exception");
-            connection.closeAll();
-        }
+            try {
+                ParentActivity pa = new ParentActivity();
+                pa.setPlayer((HumanPlayer) connection.receiveObject());
+                this.player = ParentActivity.getPlayer();
+                Log.d("Player", ParentActivity.getPlayer().getName());
 
-        Log.d("Connection",ParentActivity.getConnection().toString());
-       //waitingToStart();
-        getInitialBoard();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
+                setSocketTimeout((int) (60 * START_WAIT_MINUTES * 1000));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("SetSocketTimeout", "Exception");
+                connection.closeAll();
+            }
+
+            Log.d("Connection", ParentActivity.getConnection().toString());
+            //waitingToStart();
+            getInitialBoard();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
 
                     status.setVisibility(View.INVISIBLE);
                     startGame.setEnabled(true);
-            }
-        });
+                }
+            });
+        } else {
+            repromptInitialBoard();
+           /* handler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    status.setVisibility(View.INVISIBLE);
+                    startGame.setEnabled(true);
+                }
+            });*/
+        }
     }
 }

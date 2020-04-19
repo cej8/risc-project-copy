@@ -19,6 +19,38 @@ public final class ParentActivity {
     private static boolean firstCall;
     private static boolean spectateFirstCall;
     private static boolean spectate;
+    private static String repromptBoard;
+
+    // login credentials
+    private static String username;
+    private static String password1;
+    private static String password2;
+
+    public static String getPassword1(){
+        return password1;
+    }
+    public static String getPassword2(){
+        return password2;
+    }
+    public static String getUsername(){
+        return username;
+    }
+    public void setPassword1(String p){
+        password1 = p;
+    }
+    public void setPassword2(String p){
+        password2 = p;
+    }
+    public void setUsername(String u){
+        username = u;
+    }
+
+    public static String getRepromptGroup(){
+        return repromptBoard;
+    }
+    public void setRepromptBoard(String b){
+        repromptBoard = b;
+    }
 
     public void setSpectate(boolean s){
         spectate = s;

@@ -84,6 +84,14 @@ public class DisplayMapActivity extends AppCompatActivity {
         Log.d("Inside map regions",regions.get(0).getName());
         getOrders();
     }
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+        // instead of going to new activity open up dialog fragment
+        BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
+        backButtonDialogFragment.show(getSupportFragmentManager(),"back");
+    }
 
     @Override
     protected void onStart() {

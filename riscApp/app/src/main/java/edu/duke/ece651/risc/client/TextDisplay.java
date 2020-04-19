@@ -54,7 +54,6 @@ public class TextDisplay implements ClientOutputInterface {
 
   //returns a String of all of the board info
   public String createBoard(Board b, String playerName, Set<String> visible){
-System.out.println(visible);
     StringBuilder boardText = new StringBuilder();
     Map<AbstractPlayer, List<Region>> playerRegionMap = b.getPlayerToRegionMap();
     List<AbstractPlayer> players = new ArrayList<AbstractPlayer>(playerRegionMap.keySet());
