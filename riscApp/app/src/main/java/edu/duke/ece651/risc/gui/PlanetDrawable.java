@@ -108,7 +108,8 @@ public class PlanetDrawable {
         //map.put(R.drawable.blue_planet, "BLUE");
         map.put(R.drawable.blue_planet_outline, "BLUE");
         map.put(R.drawable.green_planet, "GREEN");
-        map.put(R.drawable.sky_planet, "SKY");
+        //map.put(R.drawable.sky_planet, "SKY");
+        map.put(R.drawable.skyblue_planet_outline, "BLUE");
         map.put(R.drawable.pink_planet, "PINK");
         return map;
     }
@@ -120,7 +121,8 @@ public class PlanetDrawable {
        // Integer bluePlanet = (R.drawable.blue_planet);
         Integer bluePlanet = (R.drawable.blue_planet_outline);
         Integer greenPlanet = (R.drawable.green_planet);
-        Integer skyPlanet = (R.drawable.sky_planet);
+        //Integer skyPlanet = (R.drawable.sky_planet);
+        Integer skyPlanet = (R.drawable.skyblue_planet_outline);
         Integer pinkPlanet = (R.drawable.pink_planet);
         List<Integer>  planetDrawables = new ArrayList<Integer>();
         planetDrawables.add(redPlanet);

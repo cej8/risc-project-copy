@@ -1035,5 +1035,59 @@
         app:layout_constraintTop_toTopOf="@+id/p2"
         app:srcCompat="@drawable/p2nb" />
 
+    <ImageView
+        android:id="@+id/p8I"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignLeft="@id/p3"
+        android:layout_alignTop="@id/p3"
+        android:layout_alignRight="@id/p3"
+        android:layout_alignBottom="@id/p3"
+        android:layout_marginBottom="72dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/p8units"
+        app:layout_constraintStart_toStartOf="@+id/p8units"
+        app:layout_constraintTop_toTopOf="@+id/p8units"
+        app:srcCompat="@drawable/p8nb" />
+
+    <ImageView
+        android:id="@+id/p9I"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignLeft="@id/p3"
+        android:layout_alignTop="@id/p3"
+        android:layout_alignRight="@id/p3"
+        android:layout_alignBottom="@id/p3"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginBottom="1dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/p9units"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.541"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line10-9"
+        app:layout_constraintVertical_bias="0.571"
+        app:srcCompat="@drawable/p9nb" />
+
+    <ImageView
+        android:id="@+id/p10I"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignLeft="@id/p3"
+        android:layout_alignTop="@id/p3"
+        android:layout_alignRight="@id/p3"
+        android:layout_alignBottom="@id/p3"
+        android:layout_marginTop="97dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/line10-9"
+        app:layout_constraintEnd_toEndOf="@+id/p10units"
+        app:layout_constraintStart_toStartOf="@+id/p10units"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/p10nb" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
