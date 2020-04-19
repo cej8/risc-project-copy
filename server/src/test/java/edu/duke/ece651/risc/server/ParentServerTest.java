@@ -1086,7 +1086,7 @@ System.out.println(orderMap.keySet());
     List<Integer> expUnits = new ArrayList<Integer>();
     expUnits.add(new Integer(5));
     for(int i = 0; i < 6; i++){ expUnits.add(new Integer(0)); }
-    SourceDestinationOrder attackOrder = (SourceDestinationOrder) orderMap.get("AttackCombat").get(0);
+    SourceDestinationUnitOrder attackOrder = (SourceDestinationUnitOrder) orderMap.get("AttackCombat").get(0);
     assert(attackOrder.getUnits().getUnits().equals(expUnits));
     assert(orderMap.get("NotCombat").get(0) instanceof AttackMove);
     assert(orderMap.get("NotCombat").get(1) instanceof AttackMove);
@@ -1131,6 +1131,7 @@ System.out.println(orderMap.keySet());
     regions.add(region2);
     regions.add(region3);
     Board boardNew = new Board(regions);
+    boardNew.initializeSpies(Arrays.asList("Player 1", "Player 2", "Player 3"));
     //Above creates 3 regions in triangle
 
     //Set max turn time to 10 seconds...

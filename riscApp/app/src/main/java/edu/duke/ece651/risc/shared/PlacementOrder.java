@@ -1,7 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 // Class defines how to execute a placement order operation on the board
-public class PlacementOrder extends DestinationOrder {
+public class PlacementOrder extends DestinationUnitOrder {
   private static final long serialVersionUID = 11L;
   public PlacementOrder(Region d, Unit u){
     this.destination = d;

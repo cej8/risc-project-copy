@@ -17,6 +17,22 @@ public final class ParentActivity {
     private static long maxTime;
     private static boolean isAlive;
     private static boolean firstCall;
+    private static boolean spectateFirstCall;
+    private static boolean spectate;
+
+    public void setSpectate(boolean s){
+        spectate = s;
+    }
+    public static boolean getSpectate(){
+        return spectate;
+    }
+
+    public void setSpectateFirstCall(boolean s){
+        spectateFirstCall = s;
+    }
+    public static boolean getSpectateFirstCall(){
+        return spectateFirstCall;
+    }
 
     public void setFirstCall(boolean f){
         firstCall = f;

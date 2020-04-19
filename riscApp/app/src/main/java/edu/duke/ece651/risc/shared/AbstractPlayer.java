@@ -42,12 +42,31 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
   public int compareTo(AbstractPlayer p){
     return this.name.compareTo(p.getName());
   }
-public TechnologyLevel getMaxTechLevel() {
-	return maxTechLevel;
-}
+  public TechnologyLevel getMaxTechLevel() {
+    return maxTechLevel;
+  }
+
+  public void setMaxTechLevel(TechnologyLevel maxTechLevel){
+    this.maxTechLevel = maxTechLevel;
+  }
 
   public void setPlayerResource(PlayerResources playerResource){
     this.playerResource = playerResource;
+  }
+
+  @Override
+  public boolean equals(Object obj){
+    if(obj == null){
+      return false;
+    }
+
+    if(!AbstractPlayer.class.isAssignableFrom(obj.getClass())){
+      return false;
+    }
+
+    final AbstractPlayer comp = (AbstractPlayer) obj;
+    return comp.getName().equals(name);
+
   }
 
 }

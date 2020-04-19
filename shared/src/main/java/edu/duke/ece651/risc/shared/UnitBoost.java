@@ -3,7 +3,7 @@ package edu.duke.ece651.risc.shared;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnitBoost extends DestinationOrder {
+public class UnitBoost extends DestinationUnitOrder {
   private static final long serialVersionUID = 16L;
 
   // This class takes in an Unit object representing the number of each type of

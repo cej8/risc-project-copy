@@ -84,4 +84,74 @@ public class Board implements Serializable {
         return allPlayers;
     }
 
+
+  public Set<String> getVisibleRegions(String playerName){
+    return getRegionSet(playerName, false);
+  }
+
+  public Set<String> getVisibleRegionsIncludingCloaked(String playerName){
+    return getRegionSet(playerName, true);
+  }
+
+  public Set<String> getRegionSet(String playerName, boolean includeAdj){
+    Set<String> visible = new HashSet<String>();
+    //Add all visible regions to player to set
+    for(Region r : regions){
+      //If you own region --> visible
+      if(r.getOwner().getName().equals(playerName)){
+        visible.add(r.getName());
+        //Check all adjacent, if not cloaked (turns == 0) then add to visible
+        for(Region adj : r.getAdjRegions()){
+          if(includeAdj || adj.getCloakTurns() == 0){
+            visible.add(adj.getName());
+          }
+        }
+      }
+      //Finally if a spy is in region then visible
+      if(r.getSpies(playerName).size() > 0){
+        visible.add(r.getName());
+      }
+    }
+    return visible;
+  }
+  
+  public void initializeSpies(List<String> players){
+    for(Region r : regions){
+      r.initializeSpies(players);
+    }
+  }
+
+  public void updateVisible(String playerName, Board newBoard){
+    //Get newest version of players
+    List<AbstractPlayer> players = new ArrayList<AbstractPlayer>(newBoard.getPlayerSet());
+    Set<String> allUpdate = newBoard.getVisibleRegionsIncludingCloaked(playerName);
+    Set<String> visible = newBoard.getVisibleRegions(playerName);
+
+    //Iterate through board, for each value in visibleRegions --> update
+    List<Region> newRegions = newBoard.getRegions();
+    for(int i = 0; i < regions.size(); i++){
+      //Always update spy information
+      regions.get(i).copySpies(newRegions.get(i));
+      //If in allUpdate (visible + cloaked) then need to update stuff
+      if(allUpdate.contains(regions.get(i).getName())){
+        //Always update cloak
+        regions.get(i).setCloakTurns(newRegions.get(i).getCloakTurns());
+        //If in visible (not cloaked) then update all
+        if(visible.contains(regions.get(i).getName())){
+          regions.get(i).copyInformation(newRegions.get(i));
+        }
+      }
+      //Replace region owner with equivalent player from newBoard (equals based on name)
+      AbstractPlayer tempOwner = regions.get(i).getOwner();
+      int actualOwner = players.indexOf(tempOwner);
+      //if -1 then tempOwner DNE in new board (for example Group _ owners)
+      //if case then don't update
+      if(actualOwner != -1){
+        regions.get(i).setOwner(players.get(actualOwner));
+      }
+    }
+  }
+  
+  
+}
 }

@@ -25,14 +25,8 @@ public class ConfirmLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_login);
-       // ParentActivity parentActivity = new ParentActivity();
-       // parentActivity.generateOrders();
         executeClient = new ExecuteClient(this);
-     //   try {
-            executeClient.createGame();
-       // } catch (InterruptedException e) {
-         //   e.printStackTrace();
-       // }
+        executeClient.createGame();
     }
 
     public void login(View view){

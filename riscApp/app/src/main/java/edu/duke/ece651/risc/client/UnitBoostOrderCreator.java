@@ -18,7 +18,7 @@ public class UnitBoostOrderCreator extends OrderCreator {
     while (true) {
       try {
         Unit units = getOrderUnits(destination);
-        OrderInterface order = DestOrderFactory.getOrder("upgrade unit", destination, units);
+        OrderInterface order = DestinationUnitOrderFactory.getOrder("upgrade unit", destination, units);
         if (order != null) {
           orderList.add(order);
           break;
