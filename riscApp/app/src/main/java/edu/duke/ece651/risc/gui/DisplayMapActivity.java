@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -54,6 +55,16 @@ public class DisplayMapActivity extends AppCompatActivity {
     ImageButton planet9;
     ImageButton planet10;
     ImageButton planet11;
+    ImageView square0;
+    ImageView square1;
+    ImageView square2;
+    ImageView square3;
+    ImageView square4;
+    TextView player0;
+    TextView player1;
+    TextView player2;
+    TextView player3;
+    TextView player4;
     ParentActivity parentActivity = new ParentActivity();
 
     private Handler handler = new Handler();
@@ -78,11 +89,41 @@ public class DisplayMapActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         List<ImageButton> planetButtons = getPlanetButtons();
-        PlanetDrawable pd = new PlanetDrawable(board, planetButtons);
+        List<TextView> planetPlayers = getPlanetPlayers();
+        List<ImageView> planetSquares = getPlanetSquares();
+        PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers);
         pd.setPlanets();
     }
 
+    public List<TextView> getPlanetPlayers() {
+        List<TextView> planetPlayers = new ArrayList<TextView>();
+        player0 = findViewById(R.id.player0);
+        player1 = findViewById(R.id.player1);
+        player2 = findViewById(R.id.player2);
+        player3 = findViewById(R.id.player3);
+        player4 = findViewById(R.id.player4);
+        planetPlayers.add(player0);
+        planetPlayers.add(player1);
+        planetPlayers.add(player2);
+        planetPlayers.add(player3);
+        planetPlayers.add(player4);
+        return planetPlayers;
+    }
 
+    public List<ImageView> getPlanetSquares() {
+        List<ImageView> planetSquares = new ArrayList<ImageView>();
+        square0 = findViewById(R.id.square0);
+        square1 = findViewById(R.id.square1);
+        square2 = findViewById(R.id.square2);
+        square3 = findViewById(R.id.square3);
+        square4 = findViewById(R.id.square4);
+        planetSquares.add(square0);
+        planetSquares.add(square1);
+        planetSquares.add(square2);
+        planetSquares.add(square3);
+        planetSquares.add(square4);
+        return planetSquares;
+    }
     public List<ImageButton> getPlanetButtons(){
         List<ImageButton> planetButtons = new ArrayList<ImageButton>();
         planet0 = findViewById(R.id.p0);
@@ -256,7 +297,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     
     // Mock board
     public void generateBoard(){
-        List<Region> regions = getRegions(5);
+        List<Region> regions = getRegions(4);
         Board b = new Board(regions);
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.setBoard(b);
@@ -264,7 +305,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     }
     private List<Region> getRegions(int numPlayer) {
         AbstractPlayer p1 = new HumanPlayer("Player 1");
-        AbstractPlayer p2 = new HumanPlayer("Player 2");
+        AbstractPlayer p2 = new HumanPlayer("Bob");
         AbstractPlayer p3 = new HumanPlayer("Player 3");
         AbstractPlayer p4 = new HumanPlayer("Player 4");
         AbstractPlayer p5 = new HumanPlayer("Player 5");
@@ -350,9 +391,9 @@ public class DisplayMapActivity extends AppCompatActivity {
         r8.setName("Dune");
         Region r9 = new Region(p4, units.get(5));
         r9.setName("Solaris");
-        Region r10 = new Region(p4, units.get(5));
+        Region r10 = new Region(p5, units.get(5));
         r10.setName("Gallifrey");
-        Region r11 = new Region(p5, units.get(5));
+        Region r11 = new Region(null, units.get(5));
         r11.setName("Cybertron");
 
         List<Region> adj0 = new ArrayList<Region>();

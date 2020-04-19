@@ -2,6 +2,8 @@ package edu.duke.ece651.risc.gui;
 
 import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,14 +18,19 @@ import edu.duke.ece651.risc.shared.Region;
 public class PlanetDrawable {
     Board board;
     List<ImageButton> planetButtons;
+    List<ImageView> playerSquares;
+    List<TextView> playerNames;
 
 
-    public PlanetDrawable(Board b, List<ImageButton> buttons){
+    public PlanetDrawable(Board b, List<ImageButton> buttons , List<ImageView> squares, List<TextView> names){
         board = b;
         planetButtons = buttons;
+        playerSquares = squares;
+        playerNames = names;
     }
 
     public void setPlanets() {
+        this.setPlayerSquares();
         List<AbstractPlayer> players = board.getPlayerList();
         List<Integer> planetDrawables = getPlanetDrawables();
         Map<AbstractPlayer, Integer> playerToColorMap = getPlayerToColorMap();
@@ -44,18 +51,28 @@ public class PlanetDrawable {
         }
     }
 
+    public void setPlayerSquares() {
+        List<AbstractPlayer> players = board.getPlayerList();
+        Map<AbstractPlayer, Integer> playerToColorMap = getPlayerToColorMap();
+        Map<Integer, String> intToColorMap = getIntToColorMap();
+        for (int i = 0; i < players.size(); i++){
+           playerSquares.get(i).setBackgroundResource(playerToColorMap.get(players.get(i)));
+           playerNames.get(i).setText(players.get(i).getName());
+        }
+    }
+
     public  Map<AbstractPlayer, Integer> getPlayerToColorMap(){
         List<AbstractPlayer> players = board.getPlayerList();
-        System.out.println("num of players " + players.size());
-        for (AbstractPlayer p : players){
-            System.out.println("Player = " + p.getName());
-        }
+//        System.out.println("num of players " + players.size());
+//        for (AbstractPlayer p : players){
+//            System.out.println("Player = " + p.getName());
+//        }
         List<Integer> planetDrawables = getPlanetDrawables();
         Map<Integer, String> intToColorMap = getIntToColorMap();
         Map<AbstractPlayer, Integer> playerToColorMap = new HashMap<AbstractPlayer, Integer>();
         for (int i = 0; i < players.size(); i++){
             playerToColorMap.put(players.get(i), planetDrawables.get(i));
-            Log.d(players.get(i).getName() + " is color ",  intToColorMap.get(playerToColorMap.get(players.get(i))));
+//            Log.d(players.get(i).getName() + " is color ",  intToColorMap.get(playerToColorMap.get(players.get(i))));
         }
         return playerToColorMap;
     }
