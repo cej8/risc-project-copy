@@ -43,29 +43,6 @@ public class DisplayMapActivity extends AppCompatActivity {
     TextView helpText;
     List<OrderInterface> orders;
     Board board;
-    ImageButton planet0;
-    ImageButton planet1;
-    ImageButton planet2;
-    ImageButton planet3;
-    ImageButton planet4;
-    ImageButton planet5;
-    ImageButton planet6;
-    ImageButton planet7;
-    ImageButton planet8;
-    ImageButton planet9;
-    ImageButton planet10;
-    ImageButton planet11;
-    ImageView square0;
-    ImageView square1;
-    ImageView square2;
-    ImageView square3;
-    ImageView square4;
-    TextView player0;
-    TextView player1;
-    TextView player2;
-    TextView player3;
-    TextView player4;
-
     ParentActivity parentActivity = new ParentActivity();
 
     private Handler handler = new Handler();
@@ -219,11 +196,11 @@ public class DisplayMapActivity extends AppCompatActivity {
 
     public List<TextView> getPlanetPlayers() {
         List<TextView> planetPlayers = new ArrayList<TextView>();
-        player0 = findViewById(R.id.player0);
-        player1 = findViewById(R.id.player1);
-        player2 = findViewById(R.id.player2);
-        player3 = findViewById(R.id.player3);
-        player4 = findViewById(R.id.player4);
+        TextView player0 = findViewById(R.id.player0);
+        TextView player1 = findViewById(R.id.player1);
+        TextView player2 = findViewById(R.id.player2);
+        TextView player3 = findViewById(R.id.player3);
+        TextView player4 = findViewById(R.id.player4);
         planetPlayers.add(player0);
         planetPlayers.add(player1);
         planetPlayers.add(player2);
@@ -234,11 +211,11 @@ public class DisplayMapActivity extends AppCompatActivity {
 
     public List<ImageView> getPlanetSquares() {
         List<ImageView> planetSquares = new ArrayList<ImageView>();
-        square0 = findViewById(R.id.square0);
-        square1 = findViewById(R.id.square1);
-        square2 = findViewById(R.id.square2);
-        square3 = findViewById(R.id.square3);
-        square4 = findViewById(R.id.square4);
+        ImageView square0 = findViewById(R.id.square0);
+        ImageView square1 = findViewById(R.id.square1);
+        ImageView  square2 = findViewById(R.id.square2);
+        ImageView square3 = findViewById(R.id.square3);
+        ImageView square4 = findViewById(R.id.square4);
         planetSquares.add(square0);
         planetSquares.add(square1);
         planetSquares.add(square2);
@@ -247,19 +224,19 @@ public class DisplayMapActivity extends AppCompatActivity {
         return planetSquares;
     }
     public List<ImageButton> getPlanetButtons(){
-        List<ImageButton> planetButtons = new ArrayList<ImageButton>();
-        planet0 = findViewById(R.id.p0);
-        planet1 = findViewById(R.id.p1);
-        planet2 = findViewById(R.id.p2);
-        planet3 = findViewById(R.id.p3);
-        planet4 = findViewById(R.id.p4);
-        planet5 = findViewById(R.id.p5);
-        planet6 = findViewById(R.id.p6);
-        planet7 = findViewById(R.id.p7);
-        planet8 = findViewById(R.id.p8);
-        planet9 = findViewById(R.id.p9);
-        planet10 = findViewById(R.id.p10);
-        planet11 = findViewById(R.id.p11);
+        List<ImageButton > planetButtons = new ArrayList<ImageButton>();
+        ImageButton planet0 = findViewById(R.id.p0);
+        ImageButton planet1 = findViewById(R.id.p1);
+        ImageButton planet2 = findViewById(R.id.p2);
+        ImageButton planet3 = findViewById(R.id.p3);
+        ImageButton planet4 = findViewById(R.id.p4);
+        ImageButton planet5 = findViewById(R.id.p5);
+        ImageButton planet6 = findViewById(R.id.p6);
+        ImageButton planet7 = findViewById(R.id.p7);
+        ImageButton planet8 = findViewById(R.id.p8);
+        ImageButton  planet9 = findViewById(R.id.p9);
+        ImageButton  planet10 = findViewById(R.id.p10);
+        ImageButton  planet11 = findViewById(R.id.p11);
         planetButtons.add(planet0);
         planetButtons.add(planet1);
         planetButtons.add(planet2);
@@ -425,17 +402,17 @@ public class DisplayMapActivity extends AppCompatActivity {
         r4.setName("Krypton");
         Region r5 = new Region(p3, units.get(5));
         r5.setName("Ego");
-        Region r6 = new Region(p3, units.get(5));
+        Region r6 = new Region(p3, units.get(0));
         r6.setName("Terra Prime");
-        Region r7 = new Region(p4, units.get(5));
+        Region r7 = new Region(p4, units.get(1));
         r7.setName("Arda");
-        Region r8 = new Region(p4, units.get(5));
+        Region r8 = new Region(p4, units.get(2));
         r8.setName("Dune");
-        Region r9 = new Region(p4, units.get(5));
+        Region r9 = new Region(p4, units.get(3));
         r9.setName("Solaris");
-        Region r10 = new Region(p5, units.get(5));
+        Region r10 = new Region(p5, units.get(4));
         r10.setName("Gallifrey");
-        Region r11 = new Region(null, units.get(5));
+        Region r11 = new Region(null, new Unit(0));
         r11.setName("Cybertron");
 
         List<Region> adj0 = new ArrayList<Region>();
