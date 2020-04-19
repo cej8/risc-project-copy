@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -41,6 +43,8 @@ public class DisplayMapActivity extends AppCompatActivity {
     TextView helpText;
     List<OrderInterface> orders;
     Board board;
+    ParentActivity parentActivity = new ParentActivity();
+
     private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,7 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        //generateBoard();
+        generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         Log.d("Inside map regions",regions.get(0).getName());
@@ -66,6 +70,19 @@ public class DisplayMapActivity extends AppCompatActivity {
         BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
         backButtonDialogFragment.show(getSupportFragmentManager(),"back");
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        List<ImageButton> planetButtons = getPlanetButtons();
+        List<TextView> planetPlayers = getPlanetPlayers();
+        List<TextView> unitCircles = getUnitCircles();
+        List<ImageView> planetSquares = getPlanetSquares();
+        PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles);
+        pd.setPlanets();
+    }
+
+
 
     public void getOrders(){
         Intent i = getIntent();
@@ -148,6 +165,94 @@ public class DisplayMapActivity extends AppCompatActivity {
         return nameToRegionMap.get(name);
     }
 
+    public List<TextView> getUnitCircles() {
+        List<TextView> unitCircles = new ArrayList<TextView>();
+        TextView unit0 = findViewById(R.id.p0units);
+        TextView unit1 = findViewById(R.id.p1units);
+        TextView unit2 = findViewById(R.id.p2units);
+        TextView unit3 = findViewById(R.id.p3units);
+        TextView unit4 = findViewById(R.id.p4units);
+        TextView unit5 = findViewById(R.id.p5units);
+        TextView unit6 = findViewById(R.id.p6units);
+        TextView unit7 = findViewById(R.id.p7units);
+        TextView unit8 = findViewById(R.id.p8units);
+        TextView unit9 = findViewById(R.id.p9units);
+        TextView unit10 = findViewById(R.id.p10units);
+        TextView unit11 = findViewById(R.id.p11units);
+        unitCircles.add(unit0);
+        unitCircles.add(unit1);
+        unitCircles.add(unit2);
+        unitCircles.add(unit3);
+        unitCircles.add(unit4);
+        unitCircles.add(unit5);
+        unitCircles.add(unit6);
+        unitCircles.add(unit7);
+        unitCircles.add(unit8);
+        unitCircles.add(unit9);
+        unitCircles.add(unit10);
+        unitCircles.add(unit11);
+        return unitCircles;
+    }
+
+    public List<TextView> getPlanetPlayers() {
+        List<TextView> planetPlayers = new ArrayList<TextView>();
+        TextView player0 = findViewById(R.id.player0);
+        TextView player1 = findViewById(R.id.player1);
+        TextView player2 = findViewById(R.id.player2);
+        TextView player3 = findViewById(R.id.player3);
+        TextView player4 = findViewById(R.id.player4);
+        planetPlayers.add(player0);
+        planetPlayers.add(player1);
+        planetPlayers.add(player2);
+        planetPlayers.add(player3);
+        planetPlayers.add(player4);
+        return planetPlayers;
+    }
+
+    public List<ImageView> getPlanetSquares() {
+        List<ImageView> planetSquares = new ArrayList<ImageView>();
+        ImageView square0 = findViewById(R.id.square0);
+        ImageView square1 = findViewById(R.id.square1);
+        ImageView  square2 = findViewById(R.id.square2);
+        ImageView square3 = findViewById(R.id.square3);
+        ImageView square4 = findViewById(R.id.square4);
+        planetSquares.add(square0);
+        planetSquares.add(square1);
+        planetSquares.add(square2);
+        planetSquares.add(square3);
+        planetSquares.add(square4);
+        return planetSquares;
+    }
+    public List<ImageButton> getPlanetButtons(){
+        List<ImageButton > planetButtons = new ArrayList<ImageButton>();
+        ImageButton planet0 = findViewById(R.id.p0);
+        ImageButton planet1 = findViewById(R.id.p1);
+        ImageButton planet2 = findViewById(R.id.p2);
+        ImageButton planet3 = findViewById(R.id.p3);
+        ImageButton planet4 = findViewById(R.id.p4);
+        ImageButton planet5 = findViewById(R.id.p5);
+        ImageButton planet6 = findViewById(R.id.p6);
+        ImageButton planet7 = findViewById(R.id.p7);
+        ImageButton planet8 = findViewById(R.id.p8);
+        ImageButton  planet9 = findViewById(R.id.p9);
+        ImageButton  planet10 = findViewById(R.id.p10);
+        ImageButton  planet11 = findViewById(R.id.p11);
+        planetButtons.add(planet0);
+        planetButtons.add(planet1);
+        planetButtons.add(planet2);
+        planetButtons.add(planet3);
+        planetButtons.add(planet4);
+        planetButtons.add(planet5);
+        planetButtons.add(planet6);
+        planetButtons.add(planet7);
+        planetButtons.add(planet8);
+        planetButtons.add(planet9);
+        planetButtons.add(planet10);
+        planetButtons.add(planet11);
+        return planetButtons;
+    }
+
+
     public void planetTen(View view){
           Region region = regions.get(10);
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),region.getOwner());
@@ -211,21 +316,38 @@ public class DisplayMapActivity extends AppCompatActivity {
     
     // Mock board
     public void generateBoard(){
-        List<Region> regions = getRegions(false);
+        List<Region> regions = getRegions(4);
         Board b = new Board(regions);
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.setBoard(b);
         Log.d("Earth",Integer.toString(regions.get(0).getUnits().getTotalUnits()));
     }
-    private List<Region> getRegions(boolean singleOwner) {
+    private List<Region> getRegions(int numPlayer) {
         AbstractPlayer p1 = new HumanPlayer("Player 1");
-        AbstractPlayer p2 = new HumanPlayer("Player 2");
+        AbstractPlayer p2 = new HumanPlayer("Bob");
+        AbstractPlayer p3 = new HumanPlayer("Player 3");
+        AbstractPlayer p4 = new HumanPlayer("Player 4");
+        AbstractPlayer p5 = new HumanPlayer("Player 5");
         List<Region> regions = null;
         List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);
-        if (!singleOwner) {
-            regions = getRegionHelper(p1, p2, regionUnits);
-        } else {
-            regions = getRegionHelper(p1, p1, regionUnits);
+        switch (numPlayer) {
+            case 1:
+                regions = getRegionHelper(p1, p1, p1, p1, p1, regionUnits);
+                break;
+            case 2:
+                regions = getRegionHelper(p1, p1, p2, p2, p2, regionUnits);
+                break;
+            case 3:
+                regions = getRegionHelper(p1, p2, p2, p3, p3, regionUnits);
+                break;
+            case 4:
+                regions = getRegionHelper(p1, p2, p3, p4, p4, regionUnits);
+                break;
+            case 5:
+                regions = getRegionHelper(p1, p2, p3, p4, p5, regionUnits);
+                break;
+            default:
+                break;
         }
         return regions;
     }
@@ -264,31 +386,33 @@ public class DisplayMapActivity extends AppCompatActivity {
         return unit;
     }
 
-    private List<Region> getRegionHelper(AbstractPlayer p1, AbstractPlayer p2, List<Unit> units) {
+    private List<Region> getRegionHelper(AbstractPlayer p1, AbstractPlayer p2, AbstractPlayer p3, AbstractPlayer p4, AbstractPlayer p5, List<Unit> units) {
 
         Region r0 = new Region(p1, units.get(0));
         r0.setName("Caprica");
         Region r1 = new Region(p1, units.get(1));
         r1.setName("Hoth");
-        Region r2 = new Region(p1, units.get(2));
+        Region r2 = new Region(p2, units.get(2));
         r2.setName("Worlorn");
-        Region r3 = new Region(p1, units.get(3));
+        Region r3 = new Region(p2, units.get(3));
         r3.setName("Dagobah");
-        Region r4 = new Region(p2, units.get(4));
+
+
+        Region r4 = new Region(p3, units.get(4));
         r4.setName("Krypton");
-        Region r5 = new Region(p2, units.get(5));
+        Region r5 = new Region(p3, units.get(5));
         r5.setName("Ego");
-        Region r6 = new Region(p2, units.get(5));
+        Region r6 = new Region(p3, units.get(0));
         r6.setName("Terra Prime");
-        Region r7 = new Region(p2, units.get(5));
+        Region r7 = new Region(p4, units.get(1));
         r7.setName("Arda");
-        Region r8 = new Region(p2, units.get(5));
+        Region r8 = new Region(p4, units.get(2));
         r8.setName("Dune");
-        Region r9 = new Region(p2, units.get(5));
+        Region r9 = new Region(p4, units.get(3));
         r9.setName("Solaris");
-        Region r10 = new Region(p2, units.get(5));
+        Region r10 = new Region(p5, units.get(4));
         r10.setName("Gallifrey");
-        Region r11 = new Region(p2, units.get(5));
+        Region r11 = new Region(null, new Unit(0));
         r11.setName("Cybertron");
 
         List<Region> adj0 = new ArrayList<Region>();
