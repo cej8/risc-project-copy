@@ -1,5 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
+import java.util.*;
+
 public abstract class DestinationOrder implements RegionOrder {
   private static final long serialVersionUID = 40L;
   protected Region destination;
@@ -22,5 +24,11 @@ public abstract class DestinationOrder implements RegionOrder {
         }
     }     
   }
+
+  @Override
+  abstract public List<Set<String>> getPlayersVisibleTo();
+
+  @Override
+  abstract public List<String> doAction();
 
 }
