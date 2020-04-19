@@ -10,4 +10,7 @@
     <color name="grey">#444952</color>
     <color name="yellow">#ebe20a</color>
     <color name="skyBlue">#00CCFF</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="green">#00FF00</color>
+    <color name="lightpink">#FF69B4</color>
 </resources>
