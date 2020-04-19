@@ -13,9 +13,13 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Connection;
+import edu.duke.ece651.risc.shared.Region;
 
 public class ChooseRegionsActivity extends AppCompatActivity {
     private Connection connection;
@@ -25,6 +29,9 @@ public class ChooseRegionsActivity extends AppCompatActivity {
     private TextView boardView;
     private Button submit;
     private Handler handler = new Handler();
+    private Board board;
+    private List<Region> regions;
+    private String regionGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +42,17 @@ public class ChooseRegionsActivity extends AppCompatActivity {
         connection = ParentActivity.getConnection();
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
-        editRegionGroup= findViewById(R.id.regionName);
-         userPrompt = findViewById(R.id.helpText);
-        userPrompt.setText("Please select a starting group by typing in a group name (i.e. 'Group A')");
+        //editRegionGroup= findViewById(R.id.regionName);
+        userPrompt = findViewById(R.id.helpText);
+        //userPrompt.setText("Please select a starting group by typing in a group name (i.e. 'Group A')");
+        userPrompt.setText("Please select a starting group by selecting a planet");
     }
     @Override
     protected void onStart() {
         super.onStart();
-        executeClient.showStartBoard(boardView);
+        //executeClient.showStartBoard(boardView);
+        board = ParentActivity.getBoard();
+        regions = board.getRegions();
         List<ImageButton> planetButtons = getPlanetButtons();
         List<TextView> planetPlayers = getPlanetPlayers();
         List<ImageView> planetSquares = getPlanetSquares();
@@ -60,9 +70,123 @@ public class ChooseRegionsActivity extends AppCompatActivity {
     }
 
     public void chooseRegion(View view) throws IOException, ClassNotFoundException, InterruptedException{
-        String regionGroup = editRegionGroup.getText().toString();
-        executeClient.chooseRegions(handler,boardView, regionGroup);
+        //String regionGroup = editRegionGroup.getText().toString();
+        if (regionGroup == null){
+            // do nothing
+        } else {
+            executeClient.chooseRegions(handler, boardView, regionGroup);
+        }
     }
+
+    // Planet Buttons:
+    public void planetZero(View view){
+        Region r = regions.get(0);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + " with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetOne(View view){
+        Region r = regions.get(1);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetTwo(View view){
+        Region r = regions.get(2);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetThree(View view){
+        Region r = regions.get(3);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetFour(View view){
+        Region r = regions.get(4);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetFive(View view){
+        Region r = regions.get(5);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetSix(View view){
+        Region r = regions.get(6);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetSeven(View view){
+        Region r = regions.get(7);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetEight(View view){
+        Region r = regions.get(8);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetNine(View view){
+        Region r = regions.get(9);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetTen(View view){
+        Region r = regions.get(10);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    public void planetEleven(View view){
+        Region r = regions.get(11);
+        String o = r.getOwner().getName();
+        String groupList = getPlanetsByOwner(o);
+        String full = "You have selected:\n" + o + "with\n" + groupList + "hit submit to continue with selection";
+        this.regionGroup = o;
+        boardView.setText(full);
+    }
+    // Helper method
+    private String getPlanetsByOwner(String owner){
+        String temp = "";
+        for (Region r : board.getRegions()) {
+            if (owner.equals(r.getOwner().getName())){
+                temp += r.getName() + "\n";
+            }
+        }
+        return temp;
+    }
+
+
     // Layout
     public List<TextView> getPlanetPlayers() {
         List<TextView> planetPlayers = new ArrayList<TextView>();
