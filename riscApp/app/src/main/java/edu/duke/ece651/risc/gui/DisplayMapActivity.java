@@ -56,7 +56,7 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        //generateBoard();
+        generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         Log.d("Inside map regions",regions.get(0).getName());

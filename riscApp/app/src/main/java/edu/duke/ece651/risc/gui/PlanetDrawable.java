@@ -105,7 +105,8 @@ public class PlanetDrawable {
     public Map<Integer, String> getIntToColorMap(){
         Map<Integer, String> map = new HashMap<Integer, String>();
         map.put(R.drawable.red_planet, "RED");
-        map.put(R.drawable.blue_planet, "BLUE");
+        //map.put(R.drawable.blue_planet, "BLUE");
+        map.put(R.drawable.blue_planet_outline, "BLUE");
         map.put(R.drawable.green_planet, "GREEN");
         map.put(R.drawable.sky_planet, "SKY");
         map.put(R.drawable.pink_planet, "PINK");
@@ -116,7 +117,8 @@ public class PlanetDrawable {
 
     public List<Integer> getPlanetDrawables(){
         Integer redPlanet = (R.drawable.red_planet);
-        Integer bluePlanet = (R.drawable.blue_planet);
+       // Integer bluePlanet = (R.drawable.blue_planet);
+        Integer bluePlanet = (R.drawable.blue_planet_outline);
         Integer greenPlanet = (R.drawable.green_planet);
         Integer skyPlanet = (R.drawable.sky_planet);
         Integer pinkPlanet = (R.drawable.pink_planet);

@@ -1000,7 +1000,40 @@
         app:layout_constraintTop_toBottomOf="@+id/square4"
         app:layout_constraintVertical_bias="0.0" />
 
+    <ImageView
+        android:id="@+id/p3I"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignLeft="@id/p3"
+        android:layout_alignTop="@id/p3"
+        android:layout_alignRight="@id/p3"
+        android:layout_alignBottom="@id/p3"
+        android:layout_marginBottom="70dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/p3units"
+        app:layout_constraintStart_toStartOf="@+id/p3units"
+        app:layout_constraintTop_toTopOf="@+id/p3units"
+        app:srcCompat="@drawable/p3nb" />
 
+    <ImageView
+        android:id="@+id/p2I"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignLeft="@id/p3"
+        android:layout_alignTop="@id/p3"
+        android:layout_alignRight="@id/p3"
+        android:layout_alignBottom="@id/p3"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/p2units"
+        app:layout_constraintEnd_toEndOf="@+id/p2units"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/p2"
+        app:srcCompat="@drawable/p2nb" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
