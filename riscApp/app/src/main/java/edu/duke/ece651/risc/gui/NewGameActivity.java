@@ -33,6 +33,20 @@ public class NewGameActivity extends AppCompatActivity {
         executeClient.setConnection(connection);
         textView.setText(gameList);
     }
+
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        connection.closeAll();
+        //Intent intent = new Intent(this, GameTypeActivity.class);
+        Intent intent = new Intent(this, ConfirmLoginActivity.class);
+        intent.putExtra("REPROMPT","reprompt");
+        startActivity(intent);
+        finish();
+    }
+
     public void newGame(View view){
         String idGame = gameID.getText().toString();
         executeClient.pickGame(newGameHandler,false,idGame,false,gameList);

@@ -16,6 +16,14 @@ public class SpectateChoiceActivity extends AppCompatActivity {
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(ParentActivity.getConnection());
     }
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+        // instead of going to new activity open up dialog fragment
+        BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
+        backButtonDialogFragment.show(getSupportFragmentManager(),"back");
+    }
 
     public void spectateGame(View view){
         ParentActivity parentActivity = new ParentActivity();

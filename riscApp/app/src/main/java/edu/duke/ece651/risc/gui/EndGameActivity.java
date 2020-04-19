@@ -30,6 +30,14 @@ public class EndGameActivity extends AppCompatActivity {
        winnerName = intent.getStringExtra("WINNER");
 
     }
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+        // instead of going to new activity open up dialog fragment
+        BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
+        backButtonDialogFragment.show(getSupportFragmentManager(),"back");
+    }
     public void endGame(View view){
         executeClient.endGame();
     }
