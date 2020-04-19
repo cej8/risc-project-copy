@@ -160,10 +160,8 @@ public class ChildServer implements Runnable{
         //Get client's visible version of the board locally
         if(parent.getFOG_OF_WAR()){
           if(firstTurnWithMoves){ //If first turn with moves then get placement board
-System.out.println("getting clientB");
             clientBoard = (Board)DeepCopy.deepCopy(parent.getBoard());
           }
-System.out.println(player.getName());
           clientBoard.updateVisible(player.getName(), parent.getBoard());
         }
         else{
