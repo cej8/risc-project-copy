@@ -22,6 +22,28 @@
         app:layout_constraintStart_toEndOf="@+id/line1-0"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/p0units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:background="@drawable/unit_label"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="95dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toTopOf="@+id/line0-5"
+        app:layout_constraintEnd_toStartOf="@+id/line0-11"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/line1-0"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <ImageButton
         android:id="@+id/p11"
         android:layout_width="70dp"
@@ -37,6 +59,51 @@
         app:layout_constraintStart_toStartOf="@+id/p6"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/p11units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:translationZ="90dp"
+        android:gravity="center"
+        android:background="@drawable/unit_label"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="95dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/line11-6"
+        app:layout_constraintEnd_toEndOf="@+id/p6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/p6"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/p1units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:padding="0dp"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/p5"
+        android:translationZ="90dp"
+        app:layout_constraintEnd_toStartOf="@+id/line1-5"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/p5"
+        app:layout_constraintVertical_bias="1.0"
+        android:background="@drawable/unit_label"/>
 
     <ImageButton
         android:id="@+id/p1"
@@ -53,6 +120,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/p5"
         tools:layout_editor_absoluteY="95dp" />
+
+
 
     <ImageView
         android:id="@+id/line5-4"
@@ -78,6 +147,30 @@
         app:layout_constraintTop_toBottomOf="@+id/p9"
         app:srcCompat="@drawable/lineangleright" />
 
+
+    <TextView
+        android:id="@+id/p5units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:translationZ="90dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/line1-2"
+        app:layout_constraintEnd_toEndOf="@+id/line0-5"
+        app:layout_constraintEnd_toStartOf="@+id/line5-6"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/line1-5"
+        app:layout_constraintStart_toStartOf="@+id/p0"
+        app:layout_constraintTop_toBottomOf="@+id/line1-0"
+        app:layout_constraintVertical_bias="1.0"
+        android:background="@drawable/unit_label" />
+
     <ImageButton
         android:id="@+id/p5"
         android:layout_width="70dp"
@@ -93,6 +186,28 @@
         app:layout_constraintStart_toStartOf="@+id/p0"
         app:layout_constraintTop_toBottomOf="@+id/line1-0" />
 
+    <TextView
+        android:id="@+id/p6units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:background="@drawable/unit_label"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="95dp"
+        android:padding="0dp"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toBottomOf="@+id/p5"
+        app:layout_constraintEnd_toEndOf="@+id/p7"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/p7"
+        app:layout_constraintTop_toTopOf="@+id/p5"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageButton
         android:id="@+id/p6"
@@ -104,9 +219,33 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/p5"
         app:layout_constraintEnd_toEndOf="@+id/p7"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/p7"
-        app:layout_constraintTop_toTopOf="@+id/p5" />
+        app:layout_constraintTop_toTopOf="@+id/p5"
+        app:layout_constraintVertical_bias="1.0" />
 
+    <TextView
+        android:id="@+id/p7units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:translationZ="90dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/line7-8"
+        app:layout_constraintEnd_toEndOf="@+id/line7-8"
+        app:layout_constraintEnd_toStartOf="@+id/line7-9"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/line4-7"
+        app:layout_constraintStart_toStartOf="@+id/line7-8"
+        app:layout_constraintTop_toBottomOf="@+id/line6-7"
+        app:layout_constraintVertical_bias="1.0"
+        android:background="@drawable/unit_label" />
 
     <ImageButton
         android:id="@+id/p7"
@@ -121,7 +260,28 @@
         app:layout_constraintEnd_toStartOf="@+id/line7-9"
         app:layout_constraintStart_toEndOf="@+id/line4-7"
         app:layout_constraintStart_toStartOf="@+id/line7-8"
-        app:layout_constraintTop_toBottomOf="@+id/line6-7" />
+        app:layout_constraintTop_toBottomOf="@+id/line6-7"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/p8units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="75dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:background="@drawable/unit_label"
+        tools:layout_editor_absoluteY="95dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/p7"
+        app:layout_constraintStart_toStartOf="@+id/p7"
+        app:layout_constraintTop_toBottomOf="@+id/line7-8" />
 
     <ImageButton
         android:id="@+id/p8"
@@ -169,6 +329,27 @@
         app:layout_constraintTop_toBottomOf="@+id/line1-0"
         app:srcCompat="@drawable/linehoriz" />
 
+    <TextView
+        android:id="@+id/p9units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="325dp"
+        android:layout_marginRight="325dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:padding="0dp"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toTopOf="@+id/line9-8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/line7-9"
+        app:layout_constraintTop_toBottomOf="@+id/line10-9"
+        app:layout_constraintVertical_bias="1.0"
+        android:background="@drawable/unit_label"    />
 
     <ImageButton
         android:id="@+id/p9"
@@ -185,6 +366,28 @@
         app:layout_constraintStart_toEndOf="@+id/line7-9"
         app:layout_constraintTop_toBottomOf="@+id/line10-9"
         tools:layout_editor_absoluteY="180dp" />
+
+    <TextView
+        android:id="@+id/p10units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:translationZ="90dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/p6"
+        app:layout_constraintEnd_toEndOf="@+id/p9"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/line7-9"
+        app:layout_constraintStart_toStartOf="@+id/p9"
+        app:layout_constraintTop_toBottomOf="@+id/line11-10"
+        app:layout_constraintVertical_bias="1.0"
+        android:background="@drawable/unit_label" />
 
     <ImageButton
         android:id="@+id/p10"
@@ -216,6 +419,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/lineangleleft" />
 
+    <TextView
+        android:id="@+id/p2units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/unit_label"
+        tools:layout_editor_absoluteX="9dp"
+        android:padding="0dp"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toTopOf="@+id/line2-3"
+        app:layout_constraintEnd_toStartOf="@+id/line2-4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line1-2"
+        tools:layout_editor_absoluteY="180dp" />
 
     <ImageButton
         android:id="@+id/p2"
@@ -351,6 +575,26 @@
         app:layout_constraintTop_toBottomOf="@id/p0"
         app:srcCompat="@drawable/linevert" />
 
+    <TextView
+        android:id="@+id/p4units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:background="@drawable/unit_label"
+        android:gravity="center"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toTopOf="@+id/line4-3"
+        app:layout_constraintEnd_toEndOf="@+id/line5-4"
+        app:layout_constraintEnd_toStartOf="@+id/line4-7"
+        app:layout_constraintStart_toEndOf="@+id/line2-4"
+        app:layout_constraintStart_toStartOf="@+id/p5"
+        app:layout_constraintTop_toBottomOf="@+id/line5-4" />
+
 
     <ImageButton
         android:id="@+id/p4"
@@ -391,6 +635,29 @@
         app:layout_constraintStart_toEndOf="@+id/p0"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/linehoriz" />
+
+    <TextView
+        android:id="@+id/p3units"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="75dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:background="@drawable/unit_label"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="95dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:translationZ="90dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/line4-3"
+        app:layout_constraintEnd_toStartOf="@+id/line3-8"
+        app:layout_constraintStart_toEndOf="@+id/line2-3"
+        app:layout_constraintStart_toStartOf="@+id/p4"
+        app:layout_constraintTop_toBottomOf="@+id/line4-3" />
 
     <ImageButton
         android:id="@+id/p3"
@@ -516,6 +783,7 @@
         android:text="Choose an Order"
         android:textColor="@color/white"
         android:textSize="25sp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -731,6 +999,8 @@
         app:layout_constraintStart_toEndOf="@+id/player3"
         app:layout_constraintTop_toBottomOf="@+id/square4"
         app:layout_constraintVertical_bias="0.0" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

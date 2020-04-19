@@ -65,6 +65,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     TextView player2;
     TextView player3;
     TextView player4;
+
     ParentActivity parentActivity = new ParentActivity();
 
     private Handler handler = new Handler();
@@ -98,68 +99,13 @@ public class DisplayMapActivity extends AppCompatActivity {
         super.onStart();
         List<ImageButton> planetButtons = getPlanetButtons();
         List<TextView> planetPlayers = getPlanetPlayers();
+        List<TextView> unitCircles = getUnitCircles();
         List<ImageView> planetSquares = getPlanetSquares();
-        PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers);
+        PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles);
         pd.setPlanets();
     }
 
-    public List<TextView> getPlanetPlayers() {
-        List<TextView> planetPlayers = new ArrayList<TextView>();
-        player0 = findViewById(R.id.player0);
-        player1 = findViewById(R.id.player1);
-        player2 = findViewById(R.id.player2);
-        player3 = findViewById(R.id.player3);
-        player4 = findViewById(R.id.player4);
-        planetPlayers.add(player0);
-        planetPlayers.add(player1);
-        planetPlayers.add(player2);
-        planetPlayers.add(player3);
-        planetPlayers.add(player4);
-        return planetPlayers;
-    }
 
-    public List<ImageView> getPlanetSquares() {
-        List<ImageView> planetSquares = new ArrayList<ImageView>();
-        square0 = findViewById(R.id.square0);
-        square1 = findViewById(R.id.square1);
-        square2 = findViewById(R.id.square2);
-        square3 = findViewById(R.id.square3);
-        square4 = findViewById(R.id.square4);
-        planetSquares.add(square0);
-        planetSquares.add(square1);
-        planetSquares.add(square2);
-        planetSquares.add(square3);
-        planetSquares.add(square4);
-        return planetSquares;
-    }
-    public List<ImageButton> getPlanetButtons(){
-        List<ImageButton> planetButtons = new ArrayList<ImageButton>();
-        planet0 = findViewById(R.id.p0);
-        planet1 = findViewById(R.id.p1);
-        planet2 = findViewById(R.id.p2);
-        planet3 = findViewById(R.id.p3);
-        planet4 = findViewById(R.id.p4);
-        planet5 = findViewById(R.id.p5);
-        planet6 = findViewById(R.id.p6);
-        planet7 = findViewById(R.id.p7);
-        planet8 = findViewById(R.id.p8);
-        planet9 = findViewById(R.id.p9);
-        planet10 = findViewById(R.id.p10);
-        planet11 = findViewById(R.id.p11);
-        planetButtons.add(planet0);
-        planetButtons.add(planet1);
-        planetButtons.add(planet2);
-        planetButtons.add(planet3);
-        planetButtons.add(planet4);
-        planetButtons.add(planet5);
-        planetButtons.add(planet6);
-        planetButtons.add(planet7);
-        planetButtons.add(planet8);
-        planetButtons.add(planet9);
-        planetButtons.add(planet10);
-        planetButtons.add(planet11);
-        return planetButtons;
-    }
 
     public void getOrders(){
         Intent i = getIntent();
@@ -241,6 +187,94 @@ public class DisplayMapActivity extends AppCompatActivity {
         }
         return nameToRegionMap.get(name);
     }
+
+    public List<TextView> getUnitCircles() {
+        List<TextView> unitCircles = new ArrayList<TextView>();
+        TextView unit0 = findViewById(R.id.p0units);
+        TextView unit1 = findViewById(R.id.p1units);
+        TextView unit2 = findViewById(R.id.p2units);
+        TextView unit3 = findViewById(R.id.p3units);
+        TextView unit4 = findViewById(R.id.p4units);
+        TextView unit5 = findViewById(R.id.p5units);
+        TextView unit6 = findViewById(R.id.p6units);
+        TextView unit7 = findViewById(R.id.p7units);
+        TextView unit8 = findViewById(R.id.p8units);
+        TextView unit9 = findViewById(R.id.p9units);
+        TextView unit10 = findViewById(R.id.p10units);
+        TextView unit11 = findViewById(R.id.p11units);
+        unitCircles.add(unit0);
+        unitCircles.add(unit1);
+        unitCircles.add(unit2);
+        unitCircles.add(unit3);
+        unitCircles.add(unit4);
+        unitCircles.add(unit5);
+        unitCircles.add(unit6);
+        unitCircles.add(unit7);
+        unitCircles.add(unit8);
+        unitCircles.add(unit9);
+        unitCircles.add(unit10);
+        unitCircles.add(unit11);
+        return unitCircles;
+    }
+
+    public List<TextView> getPlanetPlayers() {
+        List<TextView> planetPlayers = new ArrayList<TextView>();
+        player0 = findViewById(R.id.player0);
+        player1 = findViewById(R.id.player1);
+        player2 = findViewById(R.id.player2);
+        player3 = findViewById(R.id.player3);
+        player4 = findViewById(R.id.player4);
+        planetPlayers.add(player0);
+        planetPlayers.add(player1);
+        planetPlayers.add(player2);
+        planetPlayers.add(player3);
+        planetPlayers.add(player4);
+        return planetPlayers;
+    }
+
+    public List<ImageView> getPlanetSquares() {
+        List<ImageView> planetSquares = new ArrayList<ImageView>();
+        square0 = findViewById(R.id.square0);
+        square1 = findViewById(R.id.square1);
+        square2 = findViewById(R.id.square2);
+        square3 = findViewById(R.id.square3);
+        square4 = findViewById(R.id.square4);
+        planetSquares.add(square0);
+        planetSquares.add(square1);
+        planetSquares.add(square2);
+        planetSquares.add(square3);
+        planetSquares.add(square4);
+        return planetSquares;
+    }
+    public List<ImageButton> getPlanetButtons(){
+        List<ImageButton> planetButtons = new ArrayList<ImageButton>();
+        planet0 = findViewById(R.id.p0);
+        planet1 = findViewById(R.id.p1);
+        planet2 = findViewById(R.id.p2);
+        planet3 = findViewById(R.id.p3);
+        planet4 = findViewById(R.id.p4);
+        planet5 = findViewById(R.id.p5);
+        planet6 = findViewById(R.id.p6);
+        planet7 = findViewById(R.id.p7);
+        planet8 = findViewById(R.id.p8);
+        planet9 = findViewById(R.id.p9);
+        planet10 = findViewById(R.id.p10);
+        planet11 = findViewById(R.id.p11);
+        planetButtons.add(planet0);
+        planetButtons.add(planet1);
+        planetButtons.add(planet2);
+        planetButtons.add(planet3);
+        planetButtons.add(planet4);
+        planetButtons.add(planet5);
+        planetButtons.add(planet6);
+        planetButtons.add(planet7);
+        planetButtons.add(planet8);
+        planetButtons.add(planet9);
+        planetButtons.add(planet10);
+        planetButtons.add(planet11);
+        return planetButtons;
+    }
+
 
     public void planetTen(View view){
           Region region = regions.get(10);

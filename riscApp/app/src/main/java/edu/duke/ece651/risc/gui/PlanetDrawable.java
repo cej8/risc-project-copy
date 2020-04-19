@@ -20,17 +20,20 @@ public class PlanetDrawable {
     List<ImageButton> planetButtons;
     List<ImageView> playerSquares;
     List<TextView> playerNames;
+    List<TextView> unitCircles;
 
 
-    public PlanetDrawable(Board b, List<ImageButton> buttons , List<ImageView> squares, List<TextView> names){
+    public PlanetDrawable(Board b, List<ImageButton> buttons , List<ImageView> squares, List<TextView> names, List<TextView> circles){
         board = b;
         planetButtons = buttons;
         playerSquares = squares;
         playerNames = names;
+        unitCircles = circles;
     }
 
     public void setPlanets() {
         this.setPlayerSquares();
+        this.setUnitCircles();
         List<AbstractPlayer> players = board.getPlayerList();
         List<Integer> planetDrawables = getPlanetDrawables();
         Map<AbstractPlayer, Integer> playerToColorMap = getPlayerToColorMap();
@@ -51,6 +54,14 @@ public class PlanetDrawable {
         }
     }
 
+    public void setUnitCircles(){
+        Map<Region, TextView> regionToCircleMap = getRegionToCircleMap();
+        for (Region r : board.getRegions()) {
+                regionToCircleMap.get(r).setText(Integer.toString(r.getUnits().getTotalUnits()));
+        }
+    }
+
+
     public void setPlayerSquares() {
         List<AbstractPlayer> players = board.getPlayerList();
         Map<AbstractPlayer, Integer> playerToColorMap = getPlayerToColorMap();
@@ -63,25 +74,28 @@ public class PlanetDrawable {
 
     public  Map<AbstractPlayer, Integer> getPlayerToColorMap(){
         List<AbstractPlayer> players = board.getPlayerList();
-//        System.out.println("num of players " + players.size());
-//        for (AbstractPlayer p : players){
-//            System.out.println("Player = " + p.getName());
-//        }
         List<Integer> planetDrawables = getPlanetDrawables();
         Map<Integer, String> intToColorMap = getIntToColorMap();
         Map<AbstractPlayer, Integer> playerToColorMap = new HashMap<AbstractPlayer, Integer>();
         for (int i = 0; i < players.size(); i++){
             playerToColorMap.put(players.get(i), planetDrawables.get(i));
-//            Log.d(players.get(i).getName() + " is color ",  intToColorMap.get(playerToColorMap.get(players.get(i))));
+//            Log.d(players.get(i).getName() + " is color ",  intToColorMap.get(playerToColorMap.get(players.get(i)))); //testing player colors
         }
         return playerToColorMap;
     }
 
     //regions
+    public Map<Region, TextView> getRegionToCircleMap(){
+        Map<Region, TextView> regionToCircleMap = new HashMap<Region, TextView>();
+        for (int i = 0; i < unitCircles.size(); i++){
+            regionToCircleMap.put(board.getRegions().get(i), unitCircles.get(i));
+        }
+        return regionToCircleMap;
+    }
+
+    //regions
     public Map<Region, ImageButton> getRegionToButtonMap(){
         Map<Region, ImageButton> regionToButtonMap = new HashMap<Region, ImageButton>();
-        System.out.println("Number of planet buttons " + planetButtons.size());
-        System.out.println("Number of regions " + board.getRegions().size());
         for (int i = 0; i < planetButtons.size(); i++){
             regionToButtonMap.put(board.getRegions().get(i), planetButtons.get(i));
         }
