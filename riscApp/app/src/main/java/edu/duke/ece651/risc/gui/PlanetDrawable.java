@@ -30,7 +30,36 @@ public class PlanetDrawable {
         playerNames = names;
         unitCircles = circles;
     }
-
+    // No units assigned
+    public PlanetDrawable(Board b, List<ImageButton> buttons , List<ImageView> squares, List<TextView> names){
+        board = b;
+        planetButtons = buttons;
+        playerSquares = squares;
+        playerNames = names;
+    }
+    public void setPlanetsNoUnit() {
+        this.setPlayerSquares();
+       // this.setUnitCircles();
+        List<AbstractPlayer> players = board.getPlayerList();
+        List<Integer> planetDrawables = getPlanetDrawables();
+        Map<AbstractPlayer, Integer> playerToColorMap = getPlayerToColorMap();
+        Map<Region, ImageButton> regionToButtonMap = getRegionToButtonMap();
+        Map<AbstractPlayer, List<Region>> playerToRegionMap = board.getPlayerToRegionMap();
+        Map<Integer, String> intToColorMap = getIntToColorMap();
+        for (AbstractPlayer p : players) { //for each entry in the map
+            for (Region r : playerToRegionMap.get(p)) { //for each region the player has
+                System.out.println(p.getName() + "'s region " + r.getName() + " is " + intToColorMap.get(playerToColorMap.get(p)));
+                regionToButtonMap.get(r).setBackgroundResource(playerToColorMap.get(p)); //set the drawable of that region's corresponding image button to that player's color
+            }
+        }
+        //set all unowned regions to grey
+        for (Region r : board.getRegions()) {
+            if (r.getOwner() == null) {
+                //regionToButtonMap.get(r).setBackgroundResource(R.drawable.grey_planet);
+                regionToButtonMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+            }
+        }
+    }
     public void setPlanets() {
         this.setPlayerSquares();
         this.setUnitCircles();
