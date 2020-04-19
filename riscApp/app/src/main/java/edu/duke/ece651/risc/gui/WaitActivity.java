@@ -25,4 +25,13 @@ public class WaitActivity extends AppCompatActivity {
         executeClient.setConnection(connection);
         executeClient.displayServerBoard(handler,wait);
     }
+
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+        // instead of going to new activity open up dialog fragment
+        BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
+        backButtonDialogFragment.show(getSupportFragmentManager(),"back");
+    }
 }

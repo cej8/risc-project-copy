@@ -24,6 +24,7 @@ public final class Constants {
   public static final boolean FOG_OF_WAR = true;
  
   //priorities for ordering moves 
+
   public static final int ATTACK_COMBAT_PRIORITY = 70;
   public static final int ATTACK_MOVE_PRIORITY = 50;
   public static final int MOVE_PRIORITY = 30;
@@ -34,6 +35,8 @@ public final class Constants {
   public static final int SPYMOVE_PRIORITY = 65;
   public static final int CLOAK_PRIORITY = 66;
   public static final int SPYUPGRADE_PRIORITY = 64;
+  public static final int UPGRADE_RESOURCE_PRIORITY=35;
+
   // cost to attack - food 
   public static final int ATTACK_COST = 1;
   public static final int TELEPORT_COST = 50;
@@ -47,4 +50,7 @@ public final class Constants {
   // Technology Defaults
   public static final int STARTING_TECH_LEVEL = 1;
   public static final int STARTING_UPGRADE_COST = 50;
+  //Region Level Defaults
+  public static final int STARTING_REGION_LEVEL = 1;
+
 }

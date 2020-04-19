@@ -31,6 +31,14 @@ public class SpectateActivity extends AppCompatActivity {
 //        super.onStart();
 //        executeClient.spectate(false,handler);
 //    }
+// what to do when back button pressed
+@Override
+public void onBackPressed()
+{
+    // instead of going to new activity open up dialog fragment
+    BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
+    backButtonDialogFragment.show(getSupportFragmentManager(),"back");
+}
 
     public void planetOne(View view){
         Region region = regions.get(10);

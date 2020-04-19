@@ -78,6 +78,13 @@ public class GUIClientLogin extends Thread{
         this.confirmPassword = password2;
 
     }
+    // reprompt login
+    public GUIClientLogin(Connection connection,String username, String password){
+        this.connection = connection;
+        this.username = username;
+        this.password = password;
+        this.registeredUser = true;
+    }
     public void Login(){// throws IOException, ClassNotFoundException{
         try {
             //performLogin();
