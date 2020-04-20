@@ -54,6 +54,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     private ValidatorInterface validator;
     ParentActivity parentActivity = new ParentActivity();
     Board validationTempBoard;
+    AbstractPlayer validationPlayerCopy;
 
     private Handler handler = new Handler();
     @Override
@@ -70,6 +71,8 @@ public class DisplayMapActivity extends AppCompatActivity {
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
+        validationPlayerCopy=(AbstractPlayer)DeepCopy.deepCopy(ParentActivity.getPlayer());
+
 
         Log.d("Inside map regions",regions.get(0).getName());
         getOrders();
@@ -116,7 +119,7 @@ public class DisplayMapActivity extends AppCompatActivity {
                 MoveOrder moveOrder = new MoveOrder(source, destination, unit);
                 List<MoveOrder>m= new ArrayList<MoveOrder>();
                 m.add(moveOrder);
-                  validator= new MoveValidator(parentActivity.getPlayer(),validationTempBoard);
+                  validator= new MoveValidator(validationPlayerCopy,validationTempBoard);
                  if(validator.validateOrders(m)) {//if order is valid, add to list to be sent
                    parentActivity.setOrders(moveOrder);
 
@@ -130,7 +133,7 @@ public class DisplayMapActivity extends AppCompatActivity {
                 AttackMove attackMove = new AttackMove(source, destination, unit);
                 List<AttackMove>a= new ArrayList<AttackMove>();
                 a.add(attackMove);
-                validator= new AttackValidator(parentActivity.getPlayer(),validationTempBoard);
+                validator= new AttackValidator(validationPlayerCopy,validationTempBoard);
                 if(validator.validateOrders(a)) {//if order is valid, add to list to be sent
                     parentActivity.setOrders(attackMove);
                     AttackCombat attackCombat = new AttackCombat(source, destination, unit);
@@ -146,7 +149,7 @@ public class DisplayMapActivity extends AppCompatActivity {
                 UnitBoost unitBoost = new UnitBoost(source,unit);
                 List<UnitBoost>u= new ArrayList<UnitBoost>();
                 u.add(unitBoost);
-                validator= new UnitBoostValidator(parentActivity.getPlayer(),validationTempBoard);
+                validator= new UnitBoostValidator(validationPlayerCopy,validationTempBoard);
                 if(validator.validateOrders(u)) {//if order is valid, add to list to be sent
                     parentActivity.setOrders(unitBoost);
                 }
@@ -160,7 +163,7 @@ public class DisplayMapActivity extends AppCompatActivity {
                 TeleportOrder teleportOrder = new TeleportOrder(source,destination,unit);
                 List<TeleportOrder>t= new ArrayList<TeleportOrder>();
                 t.add(teleportOrder);
-                validator= new TeleportValidator(parentActivity.getPlayer(),validationTempBoard);
+                validator= new TeleportValidator(validationPlayerCopy,validationTempBoard);
                 if(validator.validateOrders(t)) {//if order is valid, add to list to be sent
                     parentActivity.setOrders(teleportOrder);
                 }
