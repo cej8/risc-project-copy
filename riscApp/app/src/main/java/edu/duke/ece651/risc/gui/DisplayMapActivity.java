@@ -26,16 +26,22 @@ import java.util.Map;
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.AttackCombat;
 import edu.duke.ece651.risc.shared.AttackMove;
+import edu.duke.ece651.risc.shared.AttackValidator;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.BoardGenerator;
+import edu.duke.ece651.risc.shared.DeepCopy;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.MoveOrder;
+import edu.duke.ece651.risc.shared.MoveValidator;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.TechBoost;
 import edu.duke.ece651.risc.shared.TeleportOrder;
+import edu.duke.ece651.risc.shared.TeleportValidator;
 import edu.duke.ece651.risc.shared.Unit;
 import edu.duke.ece651.risc.shared.UnitBoost;
+import edu.duke.ece651.risc.shared.UnitBoostValidator;
+import edu.duke.ece651.risc.shared.ValidatorInterface;
 
 public class DisplayMapActivity extends AppCompatActivity {
     List<Region> regions;
@@ -43,7 +49,12 @@ public class DisplayMapActivity extends AppCompatActivity {
     TextView helpText;
     List<OrderInterface> orders;
     Board board;
+    //private MoveValidator moveValidator;
+    //private AttackValidator attackValidator;
+    private ValidatorInterface validator;
     ParentActivity parentActivity = new ParentActivity();
+    Board validationTempBoard;
+    AbstractPlayer validationPlayerCopy;
 
     private Handler handler = new Handler();
     @Override
@@ -59,6 +70,10 @@ public class DisplayMapActivity extends AppCompatActivity {
        // generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
+        validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
+        validationPlayerCopy=(AbstractPlayer)DeepCopy.deepCopy(ParentActivity.getPlayer());
+
+
         Log.d("Inside map regions",regions.get(0).getName());
         getOrders();
     }
@@ -97,28 +112,76 @@ public class DisplayMapActivity extends AppCompatActivity {
         ParentActivity parentActivity = new ParentActivity();
         HumanPlayer player = parentActivity.getPlayer();
         Log.d("Board test",regions.get(0).getName());
+        String invalidFlag = null;
         if (order == null){
             // do nothing
         } else {
             if (order.equals("move")) {
                 MoveOrder moveOrder = new MoveOrder(source, destination, unit);
-                parentActivity.setOrders(moveOrder);
+                List<MoveOrder>m= new ArrayList<MoveOrder>();
+                m.add(moveOrder);
+                  validator= new MoveValidator(validationPlayerCopy,validationTempBoard);
+                 if(validator.validateOrders(m)) {//if order is valid, add to list to be sent
+                   parentActivity.setOrders(moveOrder);
+
+                 }
+                 else{
+                //invalid move, set reprompt flag or string
+                   invalidFlag= "move";
+                }
+
             } else if (order.equals("attack")) {
                 AttackMove attackMove = new AttackMove(source, destination, unit);
-                parentActivity.setOrders(attackMove);
-                AttackCombat attackCombat = new AttackCombat(source, destination, unit);
-                parentActivity.setOrders(attackCombat);
+                List<AttackMove>a= new ArrayList<AttackMove>();
+                a.add(attackMove);
+                validator= new AttackValidator(validationPlayerCopy,validationTempBoard);
+                if(validator.validateOrders(a)) {//if order is valid, add to list to be sent
+                    parentActivity.setOrders(attackMove);
+                    AttackCombat attackCombat = new AttackCombat(source, destination, unit);
+                    parentActivity.setOrders(attackCombat);
+                }
+                else{
+                  invalidFlag= "attack";
+                }
+                //parentActivity.setOrders(attackMove);
+                //AttackCombat attackCombat = new AttackCombat(source, destination, unit);
+                //parentActivity.setOrders(attackCombat);
             } else if (order.equals("boost units")) {
                 UnitBoost unitBoost = new UnitBoost(source,unit);
-                parentActivity.setOrders(unitBoost);
+                List<UnitBoost>u= new ArrayList<UnitBoost>();
+                u.add(unitBoost);
+                validator= new UnitBoostValidator(validationPlayerCopy,validationTempBoard);
+                if(validator.validateOrders(u)) {//if order is valid, add to list to be sent
+                    parentActivity.setOrders(unitBoost);
+                }
+                else{
+                    invalidFlag="upgrade unit";
+                }
             }
             else if (order.equals("techBoost")) {
                 //i put my method in the techboost activity itself
             } else if (order.equals("teleport")){
                 TeleportOrder teleportOrder = new TeleportOrder(source,destination,unit);
-                parentActivity.setOrders(teleportOrder);
+                List<TeleportOrder>t= new ArrayList<TeleportOrder>();
+                t.add(teleportOrder);
+                validator= new TeleportValidator(validationPlayerCopy,validationTempBoard);
+                if(validator.validateOrders(t)) {//if order is valid, add to list to be sent
+                    parentActivity.setOrders(teleportOrder);
+                }
+                else{
+                    invalidFlag="teleport";
+                }
             }
         }
+        if(invalidFlag!=null) {
+            //set reprompt for order with in it
+            helpText.setText("Your " + invalidFlag+" order was invalid. Please try again or issue another order");
+        }
+        else {
+            helpText.setText("Issue and order or click submit when all desired order have been entered.");
+
+        }
+
         if (order != null) {
             List<OrderInterface> ordersToDate = ParentActivity.getOrders();
             for (int j = 0; j < ordersToDate.size(); j++) {
