@@ -123,7 +123,7 @@ public class DisplayMapActivity extends AppCompatActivity {
                   validator= new MoveValidator(validationPlayerCopy,validationTempBoard);
                  if(validator.validateOrders(m)) {//if order is valid, add to list to be sent
                    parentActivity.setOrders(moveOrder);
-
+                    moveOrder.doAction();
                  }
                  else{
                 //invalid move, set reprompt flag or string
@@ -137,15 +137,13 @@ public class DisplayMapActivity extends AppCompatActivity {
                 validator= new AttackValidator(validationPlayerCopy,validationTempBoard);
                 if(validator.validateOrders(a)) {//if order is valid, add to list to be sent
                     parentActivity.setOrders(attackMove);
+                    attackMove.doAction();
                     AttackCombat attackCombat = new AttackCombat(source, destination, unit);
                     parentActivity.setOrders(attackCombat);
                 }
                 else{
                   invalidFlag= "attack";
                 }
-                //parentActivity.setOrders(attackMove);
-                //AttackCombat attackCombat = new AttackCombat(source, destination, unit);
-                //parentActivity.setOrders(attackCombat);
             } else if (order.equals("boost units")) {
                 UnitBoost unitBoost = new UnitBoost(source,unit);
                 List<UnitBoost>u= new ArrayList<UnitBoost>();
@@ -153,6 +151,7 @@ public class DisplayMapActivity extends AppCompatActivity {
                 validator= new UnitBoostValidator(validationPlayerCopy,validationTempBoard);
                 if(validator.validateOrders(u)) {//if order is valid, add to list to be sent
                     parentActivity.setOrders(unitBoost);
+                    unitBoost.doAction();
                 }
                 else{
                     invalidFlag="upgrade unit";
@@ -167,6 +166,7 @@ public class DisplayMapActivity extends AppCompatActivity {
                 validator= new TeleportValidator(validationPlayerCopy,validationTempBoard);
                 if(validator.validateOrders(t)) {//if order is valid, add to list to be sent
                     parentActivity.setOrders(teleportOrder);
+                    teleportOrder.doAction();
                 }
                 else{
                     invalidFlag="teleport";
@@ -180,13 +180,6 @@ public class DisplayMapActivity extends AppCompatActivity {
         else {
             helpText.setText("Issue and order or click submit when all desired order have been entered.");
 
-        }
-
-        if (order != null) {
-            List<OrderInterface> ordersToDate = ParentActivity.getOrders();
-            for (int j = 0; j < ordersToDate.size(); j++) {
-                Log.d("Order List", ordersToDate.get(j).doAction());
-            }
         }
     }
     // SUBMIT ORDERS!!!!!!!!!!!!!
