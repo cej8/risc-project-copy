@@ -1,5 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
+import java.util.*;
+
 public abstract class SourceDestinationUnitOrder implements RegionUnitOrder {
   //this class contains relevant fields for order operations between two regions (source and destination)
   private static final long serialVersionUID = 8L; 
@@ -42,8 +44,12 @@ public abstract class SourceDestinationUnitOrder implements RegionUnitOrder {
       }
     }
   }
-@Override
-abstract public String doAction();
+
+  @Override
+  abstract public List<Set<String>> getPlayersVisibleTo();
+
+  @Override
+  abstract public List<String> doAction();
 
 
 }
