@@ -82,7 +82,6 @@ public class OrderActivity extends AppCompatActivity {
         numUnits.setText(u);
         this.planetName = r.getName();
         planetDrawable.setImageViewVisible();
-        System.out.println("Cl " + r.getName() + " ");
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetOne(View view){

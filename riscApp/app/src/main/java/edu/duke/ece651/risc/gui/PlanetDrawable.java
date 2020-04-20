@@ -87,10 +87,18 @@ public class PlanetDrawable {
         }
     }
 
-
+//set all visible
     public void setImageViewVisible(){
         for (ImageView view : planetViews){
             view.setVisibility(View.VISIBLE);
+        }
+    }
+//set all but one visible
+    public void setImageViewVisible(ImageView iv){
+        for (ImageView view : planetViews){
+            if (view != iv) {
+                view.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -166,7 +174,7 @@ public class PlanetDrawable {
 //        Integer bluePlanet = (R.drawable.blue_planet_outline);
 //        Integer greenPlanet = (R.drawable.green_planet_outline);
 //        Integer skyPlanet = (R.drawable.skyblue_planet_outline);
-//        Integer pinkPlanet = (R.drawable.pink_planet_outline);
+//        Integer pinkPlanet = (R.drawable.pink_planet_outline); //commented out, using full planets instead
         List<Integer>  planetDrawables = new ArrayList<Integer>();
         planetDrawables.add(redPlanet);
         planetDrawables.add(bluePlanet);

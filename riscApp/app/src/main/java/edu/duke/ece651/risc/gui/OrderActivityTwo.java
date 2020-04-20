@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -43,7 +44,9 @@ public class OrderActivityTwo extends AppCompatActivity {
         orderHelper = findViewById(R.id.orderHelper);
         Intent intent = getIntent();
         attackFrom = intent.getStringExtra("PNAME");
-        orderMessage =  intent.getStringExtra("ORDER");
+        Log.d("attack from string: ", attackFrom );
+        System.out.println("attack from string: "+ attackFrom );
+      orderMessage =  intent.getStringExtra("ORDER");
         String h = "Select planet to " + orderMessage;
         orderHelper.setText(h);
     }
@@ -71,6 +74,142 @@ public class OrderActivityTwo extends AppCompatActivity {
             i.putExtra("ORDER",orderMessage);
             startActivity(i);
         }
+    }
+
+    //loop through every region and set to clear
+    //set this region to it's color
+
+    public void planetZero(View view){
+        Region r = regions.get(0);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetOne(View view){
+        Region r = regions.get(1);
+        name.setText(r.getName());
+        String o = "Owner: " + r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetTwo(View view){
+        Region r = regions.get(2);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetThree(View view){
+        Region r = regions.get(3);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetFour(View view){
+        Region r = regions.get(4);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetFive(View view){
+        Region r = regions.get(5);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetSix(View view){
+        Region r = regions.get(6);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetSeven(View view){
+        Region r = regions.get(7);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetEight(View view){
+        Region r = regions.get(8);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetNine(View view){
+        Region r = regions.get(9);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetTen(View view){
+        Region r = regions.get(10);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+    }
+    public void planetEleven(View view){
+        Region r = regions.get(11);
+        name.setText(r.getName());
+        String o = "Owner: " +r.getOwner().getName();
+        owner.setText(o);
+        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+        numUnits.setText(u);
+        this.planetName = r.getName();
+        planetDrawable.setImageViewVisible();
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
 
     public List<ImageView> getPlanetViews(){
@@ -101,117 +240,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         views.add(p11I);
         return views;
     }
-    //loop through every region and set to clear
-    //set this region to it's color
 
-    public void planetZero(View view){
-        Region r = regions.get(0);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetOne(View view){
-        Region r = regions.get(1);
-        name.setText(r.getName());
-        String o = "Owner: " + r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetTwo(View view){
-        Region r = regions.get(2);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetThree(View view){
-        Region r = regions.get(3);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetFour(View view){
-        Region r = regions.get(4);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetFive(View view){
-        Region r = regions.get(5);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetSix(View view){
-        Region r = regions.get(5);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetSeven(View view){
-        Region r = regions.get(7);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetEight(View view){
-        Region r = regions.get(8);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetNine(View view){
-        Region r = regions.get(9);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetTen(View view){
-        Region r = regions.get(10);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
-    public void planetEleven(View view){
-        Region r = regions.get(11);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-    }
     public List<TextView> getUnitCircles() {
         List<TextView> unitCircles = new ArrayList<TextView>();
         TextView unit0 = findViewById(R.id.p0units);
