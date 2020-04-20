@@ -45,7 +45,7 @@ public class ParentServer extends Thread{
   private int gameID;
  
   //SB for turns return string
-  private StringBuilder turnResults;
+  private List<String> turnResults;
   private int turnNumber = 1;
   
   //MS that owns PS
@@ -63,8 +63,8 @@ public class ParentServer extends Thread{
     children = new ArrayList<ChildServer>();
     players = new ArrayList<String>();
     orderMap = new HashMap<String, List<OrderInterface>>();
-    turnResults = new StringBuilder("Turn 0: Start of game\n");
     this.plagueID = 0;
+    turnResults = Collections.nCopies(MAX_PLAYERS, "Turn 0:\n");
   }
 
   public ParentServer(int gameID, MasterServer masterServer){
@@ -115,6 +115,7 @@ public class ParentServer extends Thread{
     this.MAX_PLAYERS = MAX_PLAYERS;
     try {
       threads = Executors.newFixedThreadPool(this.MAX_PLAYERS);
+      turnResults = Collections.nCopies(MAX_PLAYERS, "Turn 0:\n");
     }
     // For debug --> assume we won't put negative
     catch (Exception e) {
@@ -473,7 +474,7 @@ public class ParentServer extends Thread{
     // Apply orders to map
     // Mostly hardcoded due to explicit order ordering
 
-    turnResults = new StringBuilder("Turn " + turnNumber + ":\n");
+    turnResults = new ArrayList<String>(Collections.nCopies(players.size(), "Turn " + turnNumber + ":\n"));
 
     //Do all not combat first then attackCombat random ordered
     if(orderMap.containsKey("NotCombat")){
@@ -489,7 +490,58 @@ public class ParentServer extends Thread{
   public void applyOrderList(List<OrderInterface> orders) {
     // Simply call doAction for each order
     for (int i = 0; i < orders.size(); i++) {
-      turnResults.append(orders.get(i).doAction());
+      //List of substrings making up order's text result
+      List<String> results = orders.get(i).doAction();
+      if(FOG_OF_WAR){
+        //stringVisibility is list<set> of player names who can see each
+        //substring of order's results
+        List<Set<String>> stringVisibility = orders.get(i).getPlayersVisibleTo();
+        //Can see is union of all within this set
+        Set<String> canSee = new HashSet<>();
+        for(int j = 0; j < stringVisibility.size(); j++){
+          canSee.addAll(stringVisibility.get(j));
+        }
+        //For players
+        for(int j = 0; j < players.size(); j++){
+          String playerTurnString = turnResults.get(j);
+          //If in canSee then give them string for proper turn result
+          if(canSee.contains(players.get(j))){
+            //For each substring
+            for(int k = 0; k < results.size(); k++){
+              //If player is visible to substring then add
+              if(stringVisibility.get(k).contains(players.get(j))){
+                playerTurnString += results.get(k);
+              }
+              else{
+                playerTurnString += "(Unknown)";
+              }
+            }
+            playerTurnString += "\n";
+            turnResults.add(j, playerTurnString);
+          }
+          //if not playing then dead --> see all
+          else if(!children.get(j).getPlayer().isPlaying()){
+            for(String s : results){
+              playerTurnString += s;
+            }
+            playerTurnString += "\n";
+            turnResults.add(j, playerTurnString);
+          }
+        }
+      }
+      //If no FOW then add all to all
+      else{
+        //For players
+        for(int j = 0; j < players.size(); j++){
+          String playerTurnString = turnResults.get(j);
+          //For each substring
+          for(int k = 0; k < results.size(); k++){
+            //If player is visible to substring then add
+            playerTurnString += results.get(k);
+          }
+          playerTurnString += "\n";
+        }
+      }
     }
 
     orders.clear();
@@ -505,7 +557,7 @@ public class ParentServer extends Thread{
     for (int i = 0; i < children.size(); i++) {
       todo.add(Executors.callable(children.get(i)));
       // Insert message into children
-      children.get(i).setTurnMessage(turnResults.toString());
+      children.get(i).setTurnMessage(turnResults.get(i));
     }
     threads.invokeAll(todo);
     System.out.println(gameID + " : " + "Threads finished");
