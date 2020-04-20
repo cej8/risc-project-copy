@@ -94,7 +94,7 @@ public class PlanetDrawable {
         }
     }
 //set all but one visible
-    public void setImageButtonVisible(ImageView iv){
+    public void setImageViewVisible(ImageView iv){
         for (ImageView view : planetViews){
             if (view != iv) {
                 view.setVisibility(View.VISIBLE);

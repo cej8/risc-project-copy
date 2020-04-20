@@ -28,6 +28,7 @@ public class OrderActivityTwo extends AppCompatActivity {
     String orderMessage;
     TextView orderHelper;
     Board board;
+    Region source;
     PlanetDrawable planetDrawable;
     Map<Region, ImageView> regionImageViewMap;
     ImageView sourceView;
@@ -62,7 +63,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         List<ImageView> planetViews = getPlanetViews();
         planetDrawable = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
-        Region source = board.getRegionByName(attackFrom);
+        source = board.getRegionByName(attackFrom);
         sourceView = regionImageViewMap.get(source);
         sourceView.setVisibility(View.INVISIBLE);
         planetDrawable.setPlanets();
@@ -80,141 +81,97 @@ public class OrderActivityTwo extends AppCompatActivity {
         }
     }
 
+
+    public void setSelectionInvisible(Region r) {
+        planetDrawable.setImageViewVisible(sourceView);
+        if (regionImageViewMap.get(r) != regionImageViewMap.get(source)) {
+            regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        }
+    }
     //loop through every region and set to clear
     //set this region to it's color
 
+ 
+    public void setPlanetInfo(Region r){
+        name.setText(r.getName());
+        if (r.getOwner()!=null) {
+            String o = "Owner: " + r.getOwner().getName();
+            owner.setText(o);
+            String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
+            numUnits.setText(u);
+            this.planetName = r.getName();
+        }
+        else{
+            String o = "Owner: none";
+            owner.setText(o);
+            String u = "Units: none";
+            numUnits.setText(u);
+            this.planetName = r.getName();
+        }
+    }
+
     public void planetZero(View view){
         Region r = regions.get(0);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
     public void planetOne(View view){
         Region r = regions.get(1);
-        name.setText(r.getName());
-        String o = "Owner: " + r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
     public void planetTwo(View view){
         Region r = regions.get(2);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
     public void planetThree(View view){
         Region r = regions.get(3);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
     public void planetFour(View view){
         Region r = regions.get(4);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
     public void planetFive(View view){
         Region r = regions.get(5);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
     public void planetSix(View view){
         Region r = regions.get(6);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
     public void planetSeven(View view){
         Region r = regions.get(7);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
+
     }
     public void planetEight(View view){
         Region r = regions.get(8);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
     public void planetNine(View view){
         Region r = regions.get(9);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
     public void planetTen(View view){
         Region r = regions.get(10);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
     public void planetEleven(View view){
         Region r = regions.get(11);
-        name.setText(r.getName());
-        String o = "Owner: " +r.getOwner().getName();
-        owner.setText(o);
-        String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
-        numUnits.setText(u);
-        this.planetName = r.getName();
-        planetDrawable.setImageViewVisible(sourceView);
-        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+        setPlanetInfo(r);
+        setSelectionInvisible(r);
     }
+
 
     public List<ImageView> getPlanetViews(){
         List<ImageView> views = new ArrayList<ImageView>();
