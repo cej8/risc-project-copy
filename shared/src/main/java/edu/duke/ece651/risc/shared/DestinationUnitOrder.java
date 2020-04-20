@@ -1,5 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
+import java.util.*;
+
 // Class contains relevant fields for order operations with only a destination
 public abstract class DestinationUnitOrder implements RegionUnitOrder {
 
@@ -32,6 +34,9 @@ public abstract class DestinationUnitOrder implements RegionUnitOrder {
   }
 
   @Override
-  abstract public String doAction();
+  abstract public List<Set<String>> getPlayersVisibleTo();
+
+  @Override
+  abstract public List<String> doAction();
 
 }
