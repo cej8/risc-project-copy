@@ -30,7 +30,36 @@ public class PlanetDrawable {
         playerNames = names;
         unitCircles = circles;
     }
-
+    // No units assigned
+    public PlanetDrawable(Board b, List<ImageButton> buttons , List<ImageView> squares, List<TextView> names){
+        board = b;
+        planetButtons = buttons;
+        playerSquares = squares;
+        playerNames = names;
+    }
+    public void setPlanetsNoUnit() {
+        this.setPlayerSquares();
+       // this.setUnitCircles();
+        List<AbstractPlayer> players = board.getPlayerList();
+        List<Integer> planetDrawables = getPlanetDrawables();
+        Map<AbstractPlayer, Integer> playerToColorMap = getPlayerToColorMap();
+        Map<Region, ImageButton> regionToButtonMap = getRegionToButtonMap();
+        Map<AbstractPlayer, List<Region>> playerToRegionMap = board.getPlayerToRegionMap();
+        Map<Integer, String> intToColorMap = getIntToColorMap();
+        for (AbstractPlayer p : players) { //for each entry in the map
+            for (Region r : playerToRegionMap.get(p)) { //for each region the player has
+                System.out.println(p.getName() + "'s region " + r.getName() + " is " + intToColorMap.get(playerToColorMap.get(p)));
+                regionToButtonMap.get(r).setBackgroundResource(playerToColorMap.get(p)); //set the drawable of that region's corresponding image button to that player's color
+            }
+        }
+        //set all unowned regions to grey
+        for (Region r : board.getRegions()) {
+            if (r.getOwner() == null) {
+                //regionToButtonMap.get(r).setBackgroundResource(R.drawable.grey_planet);
+                regionToButtonMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+            }
+        }
+    }
     public void setPlanets() {
         this.setPlayerSquares();
         this.setUnitCircles();
@@ -49,7 +78,8 @@ public class PlanetDrawable {
         //set all unowned regions to grey
         for (Region r : board.getRegions()) {
             if (r.getOwner() == null) {
-                regionToButtonMap.get(r).setBackgroundResource(R.drawable.grey_planet);
+               //regionToButtonMap.get(r).setBackgroundResource(R.drawable.grey_planet);
+                regionToButtonMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
             }
         }
     }
@@ -104,22 +134,32 @@ public class PlanetDrawable {
 
     public Map<Integer, String> getIntToColorMap(){
         Map<Integer, String> map = new HashMap<Integer, String>();
-        map.put(R.drawable.red_planet, "RED");
-        map.put(R.drawable.blue_planet, "BLUE");
-        map.put(R.drawable.green_planet, "GREEN");
-        map.put(R.drawable.sky_planet, "SKY");
-        map.put(R.drawable.pink_planet, "PINK");
+        //map.put(R.drawable.red_planet, "RED");
+        //map.put(R.drawable.blue_planet, "BLUE");
+        //map.put(R.drawable.sky_planet, "SKY");
+        //map.put(R.drawable.green_planet, "GREEN");
+        //map.put(R.drawable.pink_planet, "PINK");
+        map.put(R.drawable.red_planet_outline,"RED");
+        map.put(R.drawable.blue_planet_outline, "BLUE");
+        map.put(R.drawable.green_planet_outline, "GREEN");
+        map.put(R.drawable.skyblue_planet_outline, "BLUE");
+        map.put(R.drawable.pink_planet_outline, "PINK");
         return map;
     }
 
 
 
     public List<Integer> getPlanetDrawables(){
-        Integer redPlanet = (R.drawable.red_planet);
-        Integer bluePlanet = (R.drawable.blue_planet);
-        Integer greenPlanet = (R.drawable.green_planet);
-        Integer skyPlanet = (R.drawable.sky_planet);
-        Integer pinkPlanet = (R.drawable.pink_planet);
+        //Integer redPlanet = (R.drawable.red_planet);
+       // Integer bluePlanet = (R.drawable.blue_planet);
+        //Integer skyPlanet = (R.drawable.sky_planet);
+        //Integer greenPlanet = (R.drawable.green_planet);
+        //Integer pinkPlanet = (R.drawable.pink_planet);
+        Integer redPlanet = (R.drawable.red_planet_outline);
+        Integer bluePlanet = (R.drawable.blue_planet_outline);
+        Integer greenPlanet = (R.drawable.green_planet_outline);
+        Integer skyPlanet = (R.drawable.skyblue_planet_outline);
+        Integer pinkPlanet = (R.drawable.pink_planet_outline);
         List<Integer>  planetDrawables = new ArrayList<Integer>();
         planetDrawables.add(redPlanet);
         planetDrawables.add(bluePlanet);
