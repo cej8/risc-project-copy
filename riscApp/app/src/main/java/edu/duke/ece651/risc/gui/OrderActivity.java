@@ -66,9 +66,9 @@ public class OrderActivity extends AppCompatActivity {
                 helpText.setText("Please select a planet");
             } else {
                 Intent i = new Intent(this, OrderActivityTwo.class);
-            i.putExtra("PNAME", planetName);
-            i.putExtra("ORDER",orderMessage);
-            startActivity(i);
+                i.putExtra("PNAME", planetName);
+                i.putExtra("ORDER",orderMessage);
+                startActivity(i);
         }
     }
 

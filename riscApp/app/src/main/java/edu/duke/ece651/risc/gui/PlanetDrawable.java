@@ -94,7 +94,7 @@ public class PlanetDrawable {
         }
     }
 //set all but one visible
-    public void setImageViewVisible(ImageView iv){
+    public void setImageButtonVisible(ImageView iv){
         for (ImageView view : planetViews){
             if (view != iv) {
                 view.setVisibility(View.VISIBLE);
@@ -103,11 +103,7 @@ public class PlanetDrawable {
     }
 
 
-    public void setImageButtonsVisible(){
-        for (ImageButton view : planetButtons){
-            view.setVisibility(View.VISIBLE);
-        }
-    }
+
 
     public Map<Region, ImageView> getRegionToPlanetViewMap(){
         Map<Region, ImageView> regionToViewMap = new HashMap<Region, ImageView>();

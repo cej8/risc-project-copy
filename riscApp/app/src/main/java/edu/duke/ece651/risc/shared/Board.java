@@ -28,6 +28,13 @@ public class Board implements Serializable {
         this.regions = regionList;
     }
 
+    public Region getRegionByName(String name){
+        Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
+        for (Region r : this.getRegions()){
+            nameToRegionMap.put(r.getName(), r);
+        }
+        return nameToRegionMap.get(name);
+    }
 
     public int getNumRegionsOwned(AbstractPlayer player){
         int total = 0;

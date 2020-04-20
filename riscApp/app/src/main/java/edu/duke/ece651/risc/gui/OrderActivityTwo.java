@@ -30,6 +30,7 @@ public class OrderActivityTwo extends AppCompatActivity {
     Board board;
     PlanetDrawable planetDrawable;
     Map<Region, ImageView> regionImageViewMap;
+    ImageView sourceView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +46,11 @@ public class OrderActivityTwo extends AppCompatActivity {
         Intent intent = getIntent();
         attackFrom = intent.getStringExtra("PNAME");
         Log.d("attack from string: ", attackFrom );
-        System.out.println("attack from string: "+ attackFrom );
-      orderMessage =  intent.getStringExtra("ORDER");
+        orderMessage =  intent.getStringExtra("ORDER");
         String h = "Select planet to " + orderMessage;
         orderHelper.setText(h);
     }
+
 
     @Override
     protected void onStart() {
@@ -61,6 +62,9 @@ public class OrderActivityTwo extends AppCompatActivity {
         List<ImageView> planetViews = getPlanetViews();
         planetDrawable = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
+        Region source = board.getRegionByName(attackFrom);
+        sourceView = regionImageViewMap.get(source);
+        sourceView.setVisibility(View.INVISIBLE);
         planetDrawable.setPlanets();
     }
 
@@ -87,7 +91,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetOne(View view){
@@ -98,7 +102,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetTwo(View view){
@@ -109,7 +113,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetThree(View view){
@@ -120,7 +124,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetFour(View view){
@@ -131,7 +135,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetFive(View view){
@@ -142,7 +146,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetSix(View view){
@@ -164,7 +168,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetEight(View view){
@@ -175,7 +179,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetNine(View view){
@@ -186,7 +190,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetTen(View view){
@@ -197,7 +201,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     public void planetEleven(View view){
@@ -208,7 +212,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         String u = "Units: " + Integer.toString(r.getUnits().getTotalUnits());
         numUnits.setText(u);
         this.planetName = r.getName();
-        planetDrawable.setImageViewVisible();
+        planetDrawable.setImageViewVisible(sourceView);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
 
