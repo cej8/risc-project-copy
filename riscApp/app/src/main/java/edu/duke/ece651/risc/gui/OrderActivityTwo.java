@@ -91,7 +91,7 @@ public class OrderActivityTwo extends AppCompatActivity {
     //loop through every region and set to clear
     //set this region to it's color
 
- 
+
     public void setPlanetInfo(Region r){
         name.setText(r.getName());
         if (r.getOwner()!=null) {
