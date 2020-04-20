@@ -42,6 +42,8 @@ public class PlanetDrawable {
         unitCircles = new ArrayList<>();
         planetViews = new ArrayList<>();
     }
+    
+    
     public void setPlanetsNoUnit() {
         this.setPlayerColors();
         List<AbstractPlayer> players = board.getPlayerList();
