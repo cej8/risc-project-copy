@@ -23,7 +23,7 @@
         android:layout_marginTop="340dp"
         android:background="@drawable/oval2"
         android:onClick="continuePlay"
-        android:text="Next Turn"
+        android:text="Continue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.871"
         app:layout_constraintStart_toStartOf="parent"

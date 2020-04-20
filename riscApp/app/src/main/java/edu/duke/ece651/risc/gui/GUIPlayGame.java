@@ -43,7 +43,6 @@ public class GUIPlayGame extends Thread{
     private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
     private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
     // display board constructor
- //   public GUIPlayGame(Handler handler,boolean displayBoard,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
     public GUIPlayGame(Button nextTurn, Handler handler,boolean displayBoard,Connection connect, ClientInputInterface input, ClientOutputInterface output, Activity act){
 
         this.connection = connect;

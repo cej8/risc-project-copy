@@ -108,11 +108,9 @@ public class ExecuteClient {
         selection.start();
     }
     //set master board
-  //  public void displayServerBoard(Handler handler,TextView helpText){
 
         public void displayServerBoard(Handler handler,TextView helpText, Button nextTurn){
         clientOutput = new GUITextDisplay(helpText, act);
-        //final GUIPlayGame guiPlayGame = new GUIPlayGame(handler,true,connection,clientInput,clientOutput,act);
             final GUIPlayGame guiPlayGame = new GUIPlayGame(nextTurn, handler,true,connection,clientInput,clientOutput,act);
 
             guiPlayGame.start();

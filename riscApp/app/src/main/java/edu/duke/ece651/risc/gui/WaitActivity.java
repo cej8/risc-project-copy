@@ -28,8 +28,7 @@ public class WaitActivity extends AppCompatActivity {
         connection = ParentActivity.getConnection();
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(connection);
-       // executeClient.displayServerBoard(handler,wait);
-        executeClient.displayServerBoard(handler,wait,nextTurn);
+         executeClient.displayServerBoard(handler,wait,nextTurn);
     }
 
     // what to do when back button pressed
