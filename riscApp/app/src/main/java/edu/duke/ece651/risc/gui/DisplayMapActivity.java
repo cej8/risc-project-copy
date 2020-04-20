@@ -56,7 +56,7 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        //generateBoard();
+        generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         Log.d("Inside map regions",regions.get(0).getName());
@@ -78,7 +78,8 @@ public class DisplayMapActivity extends AppCompatActivity {
         List<TextView> planetPlayers = getPlanetPlayers();
         List<TextView> unitCircles = getUnitCircles();
         List<ImageView> planetSquares = getPlanetSquares();
-        PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles);
+        List<ImageView> planetViews = getPlanetViews();
+        PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         pd.setPlanets();
     }
 
@@ -90,8 +91,8 @@ public class DisplayMapActivity extends AppCompatActivity {
         String attackFrom = i.getStringExtra("ATTACKFROM");
         String attackTo = i.getStringExtra("ATTACKTO");
         ArrayList<Integer> unitList = i.getIntegerArrayListExtra("UNITS");
-        Region source = getRegionByName(board,attackFrom);
-        Region destination = getRegionByName(board,attackTo);
+        Region source = board.getRegionByName(attackFrom);
+        Region destination = board.getRegionByName(attackTo);
         Unit unit = new Unit(unitList);
         ParentActivity parentActivity = new ParentActivity();
         HumanPlayer player = parentActivity.getPlayer();
@@ -157,12 +158,35 @@ public class DisplayMapActivity extends AppCompatActivity {
         techBoostSetup.putExtra("ORDER","techBoost");
         startActivity(techBoostSetup);
     }
-    public Region getRegionByName(Board board, String name){
-        Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
-        for (Region r : board.getRegions()){
-            nameToRegionMap.put(r.getName(), r);
-        }
-        return nameToRegionMap.get(name);
+
+
+    public List<ImageView> getPlanetViews(){
+        List<ImageView> views = new ArrayList<ImageView>();
+        ImageView p0I = findViewById(R.id.p0I);
+        ImageView p1I = findViewById(R.id.p1I);
+        ImageView p2I = findViewById(R.id.p2I);
+        ImageView p3I = findViewById(R.id.p3I);
+        ImageView p4I = findViewById(R.id.p4I);
+        ImageView p5I = findViewById(R.id.p5I);
+        ImageView p6I = findViewById(R.id.p6I);
+        ImageView p7I = findViewById(R.id.p7I);
+        ImageView p8I = findViewById(R.id.p8I);
+        ImageView p9I = findViewById(R.id.p9I);
+        ImageView p10I = findViewById(R.id.p10I);
+        ImageView p11I = findViewById(R.id.p11I);
+        views.add(p0I);
+        views.add(p1I);
+        views.add(p2I);
+        views.add(p3I);
+        views.add(p4I);
+        views.add(p5I);
+        views.add(p6I);
+        views.add(p7I);
+        views.add(p8I);
+        views.add(p9I);
+        views.add(p10I);
+        views.add(p11I);
+        return views;
     }
 
     public List<TextView> getUnitCircles() {
