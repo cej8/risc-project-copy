@@ -31,10 +31,10 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
     TextView plague;
     private boolean hasPlague;
 
-    public DisplayRegionInfoDialogFragment(Region region,String planetName, int unit, AbstractPlayer owner) {
+    public DisplayRegionInfoDialogFragment(Region region,String planetName, int unit, String owner) {
         this.planetName = planetName;
         this.unit = unit;
-        this.owner = owner.getName();
+        this.owner = owner;
         this.region = region;
         this.hasPlague = region.getPlague();
     }
