@@ -1,6 +1,6 @@
 package edu.duke.ece651.risc.shared;
 
-import java.util.Random;
+import java.util.*;
 
 public class AttackCombat extends SourceDestinationUnitOrder {
   // this class handles the actual combat resolution when an attack is issued by a
@@ -21,7 +21,19 @@ public class AttackCombat extends SourceDestinationUnitOrder {
   }
 
   @Override
-  public String doAction() {
+  public List<Set<String>> getPlayersVisibleTo(){
+    Set<String> playersDestination = new HashSet<String>();
+    //Get destination + regions adjacent
+    playersDestination.add(destination.getOwner().getName());
+    for(Region adj : destination.getAdjRegions()){
+      playersDestination.add(adj.getOwner().getName());
+    }
+    //Source can only see attacking somewhere, destination can only see attack with something
+    return Arrays.asList(playersDestination);
+  }
+
+  @Override
+  public List<String> doAction() {
     // set initial evaluation order
     boolean attackerIsStronger = true;
     // Continue executing attack until one player has no more units left in region
@@ -69,8 +81,8 @@ public class AttackCombat extends SourceDestinationUnitOrder {
     } else {
       returnString = (source.getOwner().getName() + " (attacker) takes over the region ");
     }
-    returnString += destination.getName() + ", " + destination.getUnits().getTotalUnits() + " units survived!\n";
-    return returnString;
+    returnString += destination.getName() + ", " + destination.getUnits().getTotalUnits() + " units survived!";
+    return Arrays.asList(returnString);
 
   }
 

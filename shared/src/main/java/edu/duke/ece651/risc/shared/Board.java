@@ -13,12 +13,12 @@ public class Board implements Serializable {
   public Board(){
     this.regions = new ArrayList<Region>();
   }
-  
+
   public Board(List<Region> regionList) {
     this.regions = new ArrayList<Region>();
     this.setRegions(regionList);
   }
-  
+
   //get and set List of Regions
   public List<Region> getRegions(){
     return this.regions;
@@ -36,10 +36,10 @@ public class Board implements Serializable {
           total++;
         }
     }
-    return total;      
+    return total;
   }
-  
- //Creates a Map of Players to a List of all their owned regions 
+
+ //Creates a Map of Players to a List of all their owned regions
   public Map<AbstractPlayer, List<Region>> getPlayerToRegionMap(){
     Map<AbstractPlayer, List<Region>> playerRegionMap = new HashMap<AbstractPlayer, List<Region>>();
     List<Region> allRegions = this.getRegions(); //get all the regions
@@ -56,7 +56,7 @@ public class Board implements Serializable {
     return playerRegionMap;
 
   }
-  //Creates a Set of all Players on the Board 
+  //Creates a Set of all Players on the Board
   public Set<AbstractPlayer> getPlayerSet(){
     List<Region> allRegions = this.getRegions();
     Set<AbstractPlayer> allPlayers = new HashSet<AbstractPlayer>();
@@ -95,7 +95,7 @@ public class Board implements Serializable {
     }
     return visible;
   }
-  
+
   public void initializeSpies(List<String> players){
     for(Region r : regions){
       r.initializeSpies(players);
@@ -132,7 +132,32 @@ public class Board implements Serializable {
       }
     }
   }
-  
-  
+
+  public Region getRegionByName(String name){
+    Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
+    for (Region r : this.getRegions()){
+        nameToRegionMap.put(r.getName(), r);
+    }
+    return nameToRegionMap.get(name);
 }
 
+//Creates a list (preserve order) of players on board.
+public List<AbstractPlayer> getPlayerList(){
+    List<Region> allRegions = this.getRegions();
+    Set<AbstractPlayer> addedPlayers = new HashSet<AbstractPlayer>();
+    List<AbstractPlayer> allPlayers = new ArrayList<AbstractPlayer>();
+    for (Region r : allRegions) { //for each region on the board
+        if (r.getOwner() != null) {
+            if (!(addedPlayers.contains(r.getOwner()))) { // if that player has not already been to list
+                allPlayers.add(r.getOwner()); //add that region's owner to the set
+                addedPlayers.add(r.getOwner());//add player to list of added players
+            }
+        }
+    }
+    return allPlayers;
+}
+
+
+
+
+}
