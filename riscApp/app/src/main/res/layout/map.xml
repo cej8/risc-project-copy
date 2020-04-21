@@ -707,17 +707,17 @@
         android:layout_marginEnd="72dp"
         android:layout_marginRight="72dp"
         android:background="@drawable/oval"
-        android:onClick="moveOrder"
-        android:text="move"
+        android:onClick="travelOrder"
+        android:text="travel"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/attackButton"
+        app:layout_constraintBottom_toTopOf="@+id/offenseButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orderHelper" />
 
     <Button
-        android:id="@+id/attackButton"
+        android:id="@+id/offenseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="571dp"
@@ -725,8 +725,8 @@
         android:layout_marginEnd="72dp"
         android:layout_marginRight="72dp"
         android:background="@drawable/oval"
-        android:onClick="attackOrder"
-        android:text="attack"
+        android:onClick="offenseOrder"
+        android:text="offense"
         android:textAllCaps="true"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/upgradeButton"
@@ -743,17 +743,17 @@
         android:layout_marginEnd="72dp"
         android:layout_marginRight="72dp"
         android:background="@drawable/oval"
-        android:onClick="upgradeOrder"
-        android:text="UNITBOOST"
+        android:onClick="boostOrder"
+        android:text="boost"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/techBoostButton"
+        app:layout_constraintBottom_toTopOf="@+id/fow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/attackButton" />
+        app:layout_constraintTop_toBottomOf="@+id/offenseButton" />
 
     <Button
-        android:id="@+id/techBoostButton"
+        android:id="@+id/fow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="571dp"
@@ -761,8 +761,8 @@
         android:layout_marginEnd="72dp"
         android:layout_marginRight="72dp"
         android:background="@drawable/oval"
-        android:onClick="techBoostOrder"
-        android:text="techBoost"
+        android:onClick="fowOrder"
+        android:text="F.o.W"
         android:textAllCaps="true"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/submitButton"
@@ -807,7 +807,7 @@
         app:layout_constraintBottom_toTopOf="@+id/helpText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/techBoostButton" />
+        app:layout_constraintTop_toBottomOf="@+id/fow" />
 
     <TextView
         android:id="@+id/techLevel"
