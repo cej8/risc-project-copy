@@ -31,6 +31,6 @@ public class SpectateChoiceActivity extends AppCompatActivity {
         executeClient.spectate(true,handler);
     }
     public void exitGame(View view){
-        executeClient.endGame();
+        executeClient.spectate(false,handler);
     }
 }

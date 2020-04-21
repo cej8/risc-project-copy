@@ -24,7 +24,7 @@ public class SpectateActivity extends AppCompatActivity {
         regions = board.getRegions();
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(ParentActivity.getConnection());
-        executeClient.spectate(false,handler);  // problem is this keeps looping, doesn't do everything I need
+        executeClient.spectate(true,handler);  // problem is this keeps looping, doesn't do everything I need
     }
 //    @Override
 //    protected void onStart(){
