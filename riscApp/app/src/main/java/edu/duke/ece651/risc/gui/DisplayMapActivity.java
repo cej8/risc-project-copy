@@ -98,8 +98,6 @@ public class DisplayMapActivity extends AppCompatActivity {
         pd.setPlanets();
     }
 
-
-
     public void getOrders(){
         Intent i = getIntent();
         String order = i.getStringExtra("ORDER");
@@ -181,6 +179,11 @@ public class DisplayMapActivity extends AppCompatActivity {
             helpText.setText("Issue and order or click submit when all desired order have been entered.");
 
         }
+    }
+    // exit game popup
+    public void exitGame(View view){
+        ExitGameDialogFragment exitFrag = new ExitGameDialogFragment(this,executeClient);
+        exitFrag.show(getSupportFragmentManager(),"exit");
     }
     // SUBMIT ORDERS!!!!!!!!!!!!!
     public void submitAll(View view){
