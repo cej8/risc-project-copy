@@ -810,16 +810,60 @@
         app:layout_constraintTop_toBottomOf="@+id/techBoostButton" />
 
     <TextView
+        android:id="@+id/techLevel"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/techAmount"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/techAmount"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fuelAmount"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/fuelAmount"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
         android:id="@+id/helpText"
         android:layout_width="295dp"
         android:layout_height="17dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginEnd="260dp"
+        android:layout_marginRight="260dp"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submitButton" />
-
 
     <ImageView
         android:id="@+id/square0"
@@ -865,11 +909,10 @@
         android:layout_marginTop="345dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        app:layout_constraintEnd_toStartOf="@+id/square2"
         app:layout_constraintBottom_toTopOf="@+id/player1"
+        app:layout_constraintEnd_toStartOf="@+id/square2"
         app:layout_constraintStart_toEndOf="@+id/square0"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="83dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/player1"
@@ -901,11 +944,10 @@
         android:layout_marginTop="345dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        app:layout_constraintEnd_toStartOf="@+id/square3"
         app:layout_constraintBottom_toTopOf="@+id/player2"
+        app:layout_constraintEnd_toStartOf="@+id/square3"
         app:layout_constraintStart_toEndOf="@+id/square1"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="83dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/player2"
