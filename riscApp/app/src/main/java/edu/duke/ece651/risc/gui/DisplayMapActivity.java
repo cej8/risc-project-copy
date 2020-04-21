@@ -117,7 +117,9 @@ public void setPlayerInfo(){
     techLevel.setText("Level: "+ ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
 
 
+
 }
+
 
     public void getOrders(){
         Intent i = getIntent();
@@ -141,7 +143,7 @@ public void setPlayerInfo(){
                   validator= new MoveValidator(validationPlayerCopy,validationTempBoard);
                  if(validator.validateOrders(m)) {//if order is valid, add to list to be sent
                    parentActivity.setOrders(moveOrder);
-
+                    moveOrder.doAction();
                  }
                  else{
                 //invalid move, set reprompt flag or string
@@ -155,15 +157,13 @@ public void setPlayerInfo(){
                 validator= new AttackValidator(validationPlayerCopy,validationTempBoard);
                 if(validator.validateOrders(a)) {//if order is valid, add to list to be sent
                     parentActivity.setOrders(attackMove);
+                    attackMove.doAction();
                     AttackCombat attackCombat = new AttackCombat(source, destination, unit);
                     parentActivity.setOrders(attackCombat);
                 }
                 else{
                   invalidFlag= "attack";
                 }
-                //parentActivity.setOrders(attackMove);
-                //AttackCombat attackCombat = new AttackCombat(source, destination, unit);
-                //parentActivity.setOrders(attackCombat);
             } else if (order.equals("boost units")) {
                 UnitBoost unitBoost = new UnitBoost(source,unit);
                 List<UnitBoost>u= new ArrayList<UnitBoost>();
@@ -171,6 +171,7 @@ public void setPlayerInfo(){
                 validator= new UnitBoostValidator(validationPlayerCopy,validationTempBoard);
                 if(validator.validateOrders(u)) {//if order is valid, add to list to be sent
                     parentActivity.setOrders(unitBoost);
+                    unitBoost.doAction();
                 }
                 else{
                     invalidFlag="upgrade unit";
@@ -185,6 +186,7 @@ public void setPlayerInfo(){
                 validator= new TeleportValidator(validationPlayerCopy,validationTempBoard);
                 if(validator.validateOrders(t)) {//if order is valid, add to list to be sent
                     parentActivity.setOrders(teleportOrder);
+                    teleportOrder.doAction();
                 }
                 else{
                     invalidFlag="teleport";
@@ -199,13 +201,11 @@ public void setPlayerInfo(){
             helpText.setText("Issue and order or click submit when all desired order have been entered.");
 
         }
-
-        if (order != null) {
-            List<OrderInterface> ordersToDate = ParentActivity.getOrders();
-            for (int j = 0; j < ordersToDate.size(); j++) {
-                Log.d("Order List", ordersToDate.get(j).doAction());
-            }
-        }
+    }
+    // exit game popup
+    public void exitGame(View view){
+        ExitGameDialogFragment exitFrag = new ExitGameDialogFragment(this,executeClient);
+        exitFrag.show(getSupportFragmentManager(),"exit");
     }
     // SUBMIT ORDERS!!!!!!!!!!!!!
     public void submitAll(View view){

@@ -234,16 +234,14 @@ public class Region implements Serializable {
     return name;
   }  
 
+  public RegionLevel getRegionLevel() {
+    return regionLevel;
+  }
 
   //Method to copy spies from another region (assumes same name/adjacent/etc.)
   public void copySpies(Region regionCopy){
     this.spies = (Map<String, List<Spy>>)DeepCopy.deepCopy(regionCopy.getSpies());
   }
-
-
-public RegionLevel getRegionLevel() {
-	return regionLevel;
-}
 
   //Method to copy information from another region (assumes same name/adjacent/etc.) that may change between turns
   //This includes the owner, units, hasPlague
@@ -251,6 +249,7 @@ public RegionLevel getRegionLevel() {
     this.owner = (AbstractPlayer)DeepCopy.deepCopy(regionCopy.getOwner());
     this.units = (Unit)DeepCopy.deepCopy(regionCopy.getUnits());
     this.hasPlague = regionCopy.getPlague();
+    this.regionLevel = (RegionLevel)DeepCopy.deepCopy(regionCopy.getRegionLevel());
   }
 
 

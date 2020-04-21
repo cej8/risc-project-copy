@@ -1,7 +1,6 @@
 package edu.duke.ece651.risc.shared;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class UnitBoost extends DestinationUnitOrder {
   private static final long serialVersionUID = 16L;
@@ -15,7 +14,19 @@ public class UnitBoost extends DestinationUnitOrder {
   }
 
   @Override
-  public String doAction() {
+  public List<Set<String>> getPlayersVisibleTo(){
+    Set<String> playersDestination = new HashSet<String>();
+    //Get destination + regions adjacent
+    playersDestination.add(destination.getOwner().getName());
+    for(Region adj : destination.getAdjRegions()){
+      playersDestination.add(adj.getOwner().getName());
+    }
+    //Get destination and all adjacent
+    return Arrays.asList(playersDestination);
+  }
+
+  @Override
+  public List<String> doAction() {
     StringBuilder sb = new StringBuilder(
         destination.getOwner().getName() + " upgraded units from " + destination.getUnits().getUnits());
     Unit upgradedUnits = getUpgradedUnits();
@@ -28,7 +39,7 @@ public class UnitBoost extends DestinationUnitOrder {
     destination.getUnits().subtractUnits(units);
     sb.append(" to " + destination.getUnits().getUnits() + "\n");
     System.out.println(sb.toString());
-    return sb.toString();
+    return Arrays.asList(sb.toString());
   }
 
   private Unit getUpgradedUnits() {

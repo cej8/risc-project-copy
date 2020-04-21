@@ -1,22 +1,31 @@
 package edu.duke.ece651.risc.shared;
 
+import java.util.*;
+
 public class TechBoost implements PlayerOrder {
   //this class represents an upgrade order that is issued by a player to increase their maximum technology level
   private static final long serialVersionUID = 15L;
   
-  private  AbstractPlayer player;
+  private AbstractPlayer player;
   public TechBoost(AbstractPlayer p){
     setPlayer(p);
   }
   
   @Override
-  public String doAction() {
+  public List<String> doAction() {
     //remove technology resources
     player.getResources().getTechResource().useTech(player.getMaxTechLevel().getCostToUpgrade());
     //increase level
     player.getMaxTechLevel().upgradeLevel();
-    StringBuilder sb = new StringBuilder(player.getName() + " upgrade to tech level " + player.getMaxTechLevel().getMaxTechLevel()+" \n");
-    return sb.toString();
+    return Arrays.asList( (player.getName() + " upgraded to tech level " + player.getMaxTechLevel().getMaxTechLevel() + ".") );
+  }
+
+  @Override
+  public List<Set<String>> getPlayersVisibleTo(){
+    Set<String> players = new HashSet<String>();
+    players.add(player.getName());
+    //Only player can see
+    return Arrays.asList(players);
   }
 
   @Override
