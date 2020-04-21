@@ -699,104 +699,86 @@
 
 
     <Button
-        android:id="@+id/moveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="571dp"
-        android:layout_marginLeft="571dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
-        android:background="@drawable/oval"
-        android:onClick="travelOrder"
-        android:text="travel"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/offenseButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orderHelper" />
-
-    <Button
         android:id="@+id/offenseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="571dp"
-        android:layout_marginLeft="571dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
         android:background="@drawable/oval"
         android:onClick="offenseOrder"
         android:text="offense"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/upgradeButton"
+        app:layout_constraintBottom_toBottomOf="@+id/moveButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toEndOf="@+id/moveButton"
+        app:layout_constraintTop_toTopOf="@+id/moveButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/moveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/oval"
+        android:onClick="travelOrder"
+        android:text="travel"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moveButton" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.173" />
 
     <Button
         android:id="@+id/upgradeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="571dp"
-        android:layout_marginLeft="571dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
         android:background="@drawable/oval"
         android:onClick="boostOrder"
         android:text="boost"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/fow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offenseButton" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/moveButton"
+        app:layout_constraintTop_toBottomOf="@+id/moveButton"
+        app:layout_constraintVertical_bias="0.091" />
 
     <Button
         android:id="@+id/fow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="571dp"
-        android:layout_marginLeft="571dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
         android:background="@drawable/oval"
         android:onClick="fowOrder"
         android:text="F.o.W"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/submitButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upgradeButton" />
+        app:layout_constraintBottom_toBottomOf="@+id/upgradeButton"
+        app:layout_constraintEnd_toEndOf="@+id/offenseButton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/upgradeButton"
+        app:layout_constraintTop_toBottomOf="@+id/offenseButton"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/orderHelper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="527dp"
-        android:layout_marginLeft="527dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="360dp"
+        android:gravity="center"
         android:text="Choose an Order"
         android:textColor="@color/white"
         android:textSize="25sp"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.961"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.042" />
 
     <Button
         android:id="@+id/submitButton"
         android:layout_width="88dp"
         android:layout_height="70dp"
-        android:layout_marginStart="571dp"
-        android:layout_marginLeft="571dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
         android:background="@drawable/oval3"
         android:onClick="submitAll"
         android:text="Submit"
@@ -804,10 +786,12 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/helpText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.883"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fow" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.595" />
 
     <TextView
         android:id="@+id/techLevel"
@@ -858,12 +842,13 @@
         android:id="@+id/helpText"
         android:layout_width="295dp"
         android:layout_height="17dp"
-        android:layout_marginEnd="260dp"
-        android:layout_marginRight="260dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submitButton" />
+        app:layout_constraintTop_toBottomOf="@+id/submitButton"
+        app:layout_constraintVertical_bias="0.954" />
 
     <ImageView
         android:id="@+id/square0"
