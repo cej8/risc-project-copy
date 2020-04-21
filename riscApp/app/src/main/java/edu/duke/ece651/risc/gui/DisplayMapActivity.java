@@ -17,6 +17,8 @@ import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,6 +58,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     Board validationTempBoard;
     AbstractPlayer validationPlayerCopy;
 
+
     private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,7 @@ public class DisplayMapActivity extends AppCompatActivity {
 
 
         Log.d("Inside map regions",regions.get(0).getName());
+        //setPlayerInfo();
         getOrders();
     }
     // what to do when back button pressed
@@ -96,9 +100,24 @@ public class DisplayMapActivity extends AppCompatActivity {
         List<ImageView> planetViews = getPlanetViews();
         PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         pd.setPlanets();
+        setPlayerInfo();
     }
 
+public void setPlayerInfo(){
+        for(AbstractPlayer player:board.getPlayerSet()){//update player object
+            if(player.getName().equals(ParentActivity.getPlayer().getName())){
+                parentActivity.setPlayer((HumanPlayer)player);
+    }
+        }
+    TextView fuelAmount = findViewById(R.id.fuelAmount);
+    TextView techAmount = findViewById(R.id.techAmount);
+    TextView techLevel= findViewById(R.id.techLevel);
+    fuelAmount.setText("Fuel : "+ParentActivity.getPlayer().getResources().getFuelResource().getFuel());
+    techAmount.setText("Tech : "+ParentActivity.getPlayer().getResources().getTechResource().getTech());
+    techLevel.setText("Level: "+ ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
 
+
+}
 
     public void getOrders(){
         Intent i = getIntent();
@@ -110,8 +129,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         Region destination = board.getRegionByName(attackTo);
         Unit unit = new Unit(unitList);
         ParentActivity parentActivity = new ParentActivity();
-        HumanPlayer player = parentActivity.getPlayer();
-        Log.d("Board test",regions.get(0).getName());
+         Log.d("Board test",regions.get(0).getName());
         String invalidFlag = null;
         if (order == null){
             // do nothing

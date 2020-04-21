@@ -87,7 +87,7 @@ public final class ParentActivity {
     public void setStartTime(long t){this.startTime=t;}
 
 
-    final static HumanPlayer getPlayer(){return player;}
+    static HumanPlayer getPlayer(){return player;}
     public void setPlayer(HumanPlayer p){this.player=p;}
     final static Connection getConnection(){
         return connection;
