@@ -246,8 +246,6 @@ public class GUIPlayGame extends Thread{
                             activity.startActivity(end);
                             //return;
                         } else {
-                           // Intent firstUnits = new Intent(activity, DisplayMapActivity.class);
-                           // activity.startActivity(firstUnits);
                             nextTurn.setEnabled(true);
                         }
                     }

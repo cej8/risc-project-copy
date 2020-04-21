@@ -210,15 +210,15 @@ public class GUISpectate extends Thread {
 
     public void playGame() {
         try {
-            while (true) {
+           // while (true) {
                 String response = receiveAndDisplayString();
                 if (response.matches("^Fail:.*$")) {
-                    continue;
+                //    continue;
                 }
                 if (response.matches("^Success:.*$")) {
-                    break;
+               //     break;
                 }
-            }
+           // }
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
