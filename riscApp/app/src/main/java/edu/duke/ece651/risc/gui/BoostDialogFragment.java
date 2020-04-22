@@ -34,7 +34,7 @@ public class BoostDialogFragment extends DialogFragment {
         unitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent unitBoost = new Intent(activity,BoostRegionActivity.class);
+                Intent unitBoost = new Intent(activity,BoostUnitActivity.class);
                 unitBoost.putExtra("ORDER","boost units");
                 startActivity(unitBoost);
             }
@@ -50,7 +50,10 @@ public class BoostDialogFragment extends DialogFragment {
         resourceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: add functionality
+                Intent resourceBoost = new Intent(activity,ResourceBoostActivity.class);
+                startActivity(resourceBoost);
+
+
             }
         });
         builder.setView(travelView)
