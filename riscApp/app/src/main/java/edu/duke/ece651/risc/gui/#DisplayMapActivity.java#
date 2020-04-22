@@ -219,11 +219,17 @@ public void setPlayerInfo(){
         BoostDialogFragment boostFragment = new BoostDialogFragment(this);
         boostFragment.show(getSupportFragmentManager(),"boost");
     }
-
+<<<<<<< HEAD
+    public void upgradeOrder(View view){
+        Intent unitBoost = new Intent(this, BoostUnitActivity.class);
+        unitBoost.putExtra("ORDER","boost units");
+        startActivity(unitBoost);
+=======
     public void fowOrder(View view){
         // FOW order popup
         FOWDialogFragment fowFragment = new FOWDialogFragment(this);
         fowFragment.show(getSupportFragmentManager(),"fow");
+>>>>>>> e6a4ec4c7e77d14afc2e05edf96819a502727de5
     }
 
 

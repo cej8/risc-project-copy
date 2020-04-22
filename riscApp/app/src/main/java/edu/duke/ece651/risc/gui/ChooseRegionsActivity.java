@@ -57,7 +57,8 @@ public class ChooseRegionsActivity extends AppCompatActivity {
         List<TextView> planetPlayers = getPlanetPlayers();
         List<ImageView> planetSquares = getPlanetSquares();
         PlanetDrawable planetDrawable = new PlanetDrawable(ParentActivity.getBoard(), planetButtons, planetSquares, planetPlayers);
-        planetDrawable.setPlanetsNoUnit();
+        planetDrawable.setPlanetsNoUnits();
+        planetDrawable.setGreyOutlines();
     }
 
     // what to do when back button pressed
