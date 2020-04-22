@@ -71,6 +71,18 @@ public class Board implements Serializable {
         }
         return playerRegions;
     }
+    
+      //Creates a Set of all Players on the Board
+  public Set<AbstractPlayer> getPlayerSet(){
+    List<Region> allRegions = this.getRegions();
+    Set<AbstractPlayer> allPlayers = new HashSet<AbstractPlayer>();
+    for (Region r : allRegions){ //for each region on the board
+      allPlayers.add(r.getOwner()); //add that player's owner to the set
+    }
+    return allPlayers;
+  }
+
+
 
   public Set<String> getVisibleRegions(String playerName){
     return getRegionSet(playerName, false);
