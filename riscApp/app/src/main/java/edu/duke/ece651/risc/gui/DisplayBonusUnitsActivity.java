@@ -74,7 +74,7 @@ public class DisplayBonusUnitsActivity extends AppCompatActivity {
         List<Integer> unitList = region.getUnits().getUnits();
         unitName0.setText("Civilian (" + unitList.get(0) + " units available)");
         unitName1.setText("Trainee (" + unitList.get(1) + " units available)");
-        unitName2.setText("Junior Technicain (" + unitList.get(2) + " units available)");
+        unitName2.setText("Junior Technician (" + unitList.get(2) + " units available)");
         unitName3.setText("Aerospace Engineer (" + unitList.get(3) + " units available)");
         unitName4.setText("Space Cadet (" + unitList.get(4) + " units available)");
         unitName5.setText("Astronaut (" + unitList.get(5) + " units available)");

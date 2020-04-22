@@ -699,104 +699,86 @@
 
 
     <Button
+        android:id="@+id/offenseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/oval"
+        android:onClick="offenseOrder"
+        android:text="offense"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/moveButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toEndOf="@+id/moveButton"
+        app:layout_constraintTop_toTopOf="@+id/moveButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
         android:id="@+id/moveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="571dp"
-        android:layout_marginLeft="571dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
         android:background="@drawable/oval"
-        android:onClick="moveOrder"
-        android:text="move"
+        android:onClick="travelOrder"
+        android:text="travel"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/attackButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orderHelper" />
-
-    <Button
-        android:id="@+id/attackButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="571dp"
-        android:layout_marginLeft="571dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
-        android:background="@drawable/oval"
-        android:onClick="attackOrder"
-        android:text="attack"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/upgradeButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moveButton" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.173" />
 
     <Button
         android:id="@+id/upgradeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="571dp"
-        android:layout_marginLeft="571dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
         android:background="@drawable/oval"
-        android:onClick="upgradeOrder"
-        android:text="UNITBOOST"
+        android:onClick="boostOrder"
+        android:text="boost"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/techBoostButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/attackButton" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/moveButton"
+        app:layout_constraintTop_toBottomOf="@+id/moveButton"
+        app:layout_constraintVertical_bias="0.091" />
 
     <Button
-        android:id="@+id/techBoostButton"
+        android:id="@+id/fow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="571dp"
-        android:layout_marginLeft="571dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
         android:background="@drawable/oval"
-        android:onClick="techBoostOrder"
-        android:text="techBoost"
+        android:onClick="fowOrder"
+        android:text="F.o.W"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/submitButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upgradeButton" />
+        app:layout_constraintBottom_toBottomOf="@+id/upgradeButton"
+        app:layout_constraintEnd_toEndOf="@+id/offenseButton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/upgradeButton"
+        app:layout_constraintTop_toBottomOf="@+id/offenseButton"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/orderHelper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="527dp"
-        android:layout_marginLeft="527dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="360dp"
+        android:gravity="center"
         android:text="Choose an Order"
         android:textColor="@color/white"
         android:textSize="25sp"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.961"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.042" />
 
     <Button
         android:id="@+id/submitButton"
         android:layout_width="88dp"
         android:layout_height="70dp"
-        android:layout_marginStart="571dp"
-        android:layout_marginLeft="571dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
         android:background="@drawable/oval3"
         android:onClick="submitAll"
         android:text="Submit"
@@ -804,22 +786,69 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/helpText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.883"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/techBoostButton" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.595" />
+
+    <TextView
+        android:id="@+id/techLevel"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/techAmount"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/techAmount"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fuelAmount"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/fuelAmount"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/helpText"
         android:layout_width="295dp"
         android:layout_height="17dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submitButton" />
-
+        app:layout_constraintTop_toBottomOf="@+id/submitButton"
+        app:layout_constraintVertical_bias="0.954" />
 
     <ImageView
         android:id="@+id/square0"
@@ -865,11 +894,10 @@
         android:layout_marginTop="345dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        app:layout_constraintEnd_toStartOf="@+id/square2"
         app:layout_constraintBottom_toTopOf="@+id/player1"
+        app:layout_constraintEnd_toStartOf="@+id/square2"
         app:layout_constraintStart_toEndOf="@+id/square0"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="83dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/player1"
@@ -901,11 +929,10 @@
         android:layout_marginTop="345dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        app:layout_constraintEnd_toStartOf="@+id/square3"
         app:layout_constraintBottom_toTopOf="@+id/player2"
+        app:layout_constraintEnd_toStartOf="@+id/square3"
         app:layout_constraintStart_toEndOf="@+id/square1"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="83dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/player2"
@@ -1208,4 +1235,19 @@
         app:layout_constraintStart_toEndOf="@+id/line1-0"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/p12nb" />
+
+    <Button
+        android:id="@+id/exit"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:background="@drawable/exit"
+        android:onClick="exitGame"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.012"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.026" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

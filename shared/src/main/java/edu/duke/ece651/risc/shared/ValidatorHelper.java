@@ -27,7 +27,7 @@ public class ValidatorHelper {
     this.unitBoostValidator = new UnitBoostValidator(this.player, tempBoard);
     this.teleportValidator = new TeleportValidator(this.player, tempBoard);
 
-    this.resourceBoostValidator = new ResourceBoostValidator(player, tempBoard);
+    this.resourceBoostValidator = new ResourceBoostValidator(this.player, tempBoard);
 
     this.cloakValidator = new CloakValidator(this.player, tempBoard);
     this.spyUpgradeValidator = new SpyUpgradeValidator(this.player, tempBoard);
@@ -36,9 +36,9 @@ public class ValidatorHelper {
   }
 
   public ValidatorHelper(AbstractPlayer player, Unit u, Board currentBoard) {
-    this.player = player;
+    this.player =  (AbstractPlayer) DeepCopy.deepCopy(player);
     this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
-    this.placementValidator = new PlacementValidator(player, u, currentBoard);
+    this.placementValidator = new PlacementValidator(this.player,u,tempBoard);
   }
 
   // check all orders are valid for round per player

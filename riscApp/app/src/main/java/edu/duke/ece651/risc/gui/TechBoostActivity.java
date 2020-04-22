@@ -10,13 +10,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
+import edu.duke.ece651.risc.shared.DeepCopy;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.TechBoost;
+import edu.duke.ece651.risc.shared.TechBoostValidator;
 
 public class TechBoostActivity extends AppCompatActivity {
         HumanPlayer player;
@@ -36,6 +39,8 @@ public class TechBoostActivity extends AppCompatActivity {
         ImageView lock6;
         Button yesButton;
         Button noButton;
+        Board validationBoard;
+        AbstractPlayer validationPlayer;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -57,6 +62,8 @@ public class TechBoostActivity extends AppCompatActivity {
             lock5 = findViewById(R.id.lock5);
             level6 = findViewById(R.id.level6w);
             lock6 = findViewById(R.id.lock6);
+            validationBoard=(Board) DeepCopy.deepCopy(ParentActivity.getBoard());
+            validationPlayer=(AbstractPlayer)DeepCopy.deepCopy(ParentActivity.getPlayer());
             Intent intent = getIntent();
         }
 
@@ -85,7 +92,12 @@ public class TechBoostActivity extends AppCompatActivity {
             int after = player.getMaxTechLevel().getMaxTechLevel();
             Log.d("no button", "player level went from " + before + " to " + after);
             ParentActivity pa = new ParentActivity();
-            pa.setOrders(techBoost);
+            List<TechBoost>t= new ArrayList<TechBoost>();
+            t.add(techBoost);
+            TechBoostValidator validator= new TechBoostValidator(validationPlayer,validationBoard);
+            if(validator.validateOrders(t)) {
+                pa.setOrders(techBoost);
+            }
             Intent techBoostSetup = new Intent(this, DisplayMapActivity.class);
             startActivity(techBoostSetup);
         }

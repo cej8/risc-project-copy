@@ -114,13 +114,13 @@ public class GUISpectate extends Thread {
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
         String str = message.unpacker();
-        clientOutput.displayString(str);
+    //    clientOutput.displayString(str);
         return str;
     }
 
     public void allSpectate(){
         try {
-            while (true) {
+           // while (true) {
                 String turn = receiveAndDisplayString();
                 parentActivity.setStartTime(System.currentTimeMillis());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));//(long) (connection.getSocket().getSoTimeout());
@@ -175,7 +175,7 @@ public class GUISpectate extends Thread {
                         break;
                     }
                 }
-            }
+         //   }
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
@@ -210,15 +210,15 @@ public class GUISpectate extends Thread {
 
     public void playGame() {
         try {
-            while (true) {
+           // while (true) {
                 String response = receiveAndDisplayString();
                 if (response.matches("^Fail:.*$")) {
-                    continue;
+                //    continue;
                 }
                 if (response.matches("^Success:.*$")) {
-                    break;
+               //     break;
                 }
-            }
+           // }
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
@@ -252,8 +252,11 @@ public class GUISpectate extends Thread {
            // Log.d("Spectate Alive","true");
             //serverDisplayBoard();
             //Log.d("Spectate Display board","true");
-            //playGame();
-            recieveBoard();
+
+           // playGame();
+           // recieveBoard();
+
+           allSpectate();
             handler.post(new Runnable() {
                 @Override
                 public void run() {

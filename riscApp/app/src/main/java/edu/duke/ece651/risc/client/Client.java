@@ -284,7 +284,7 @@ public class Client extends Thread implements ClientInterface {
         // Get primitive
         boolean alive = isAlive.getMessage();
         // If not same then player died on previous turn --> get spectate message
-        if (alive != isPlaying) {
+          if (alive != isPlaying) {
           isPlaying = alive;
           //Query for spectating
           //If no then kill connection
