@@ -25,6 +25,7 @@ public class ResourceBoostActivity extends AppCompatActivity {
     TextView owner;
     TextView numUnits;
     TextView helpText;
+    TextView regionLevel;
     Board board;
     PlanetDrawable planetDrawable;
     Map<Region, ImageView> regionImageViewMap;
@@ -41,7 +42,8 @@ public class ResourceBoostActivity extends AppCompatActivity {
         name = findViewById(R.id.displayPame);
         owner = findViewById(R.id.displayOwner);
         numUnits = findViewById(R.id.displayUnits);
-        helpText = findViewById(R.id.attackHelp);
+        regionLevel=findViewById(R.id.displayLevel);
+        helpText = findViewById(R.id.orderHelp);
 
     }
     @Override
@@ -58,6 +60,14 @@ public class ResourceBoostActivity extends AppCompatActivity {
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
         planetDrawable.setAllUnitCircles();
         setSameOwnerPlanets();
+    }
+    // what to do when back button pressed
+    @Override
+    public void onBackPressed()
+    {
+        // instead of going to new activity open up dialog fragment
+        BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
+        backButtonDialogFragment.show(getSupportFragmentManager(),"back");
     }
     //helper function for orders in which you can only select planets you own
     public void setSameOwnerPlanets(){
@@ -104,6 +114,8 @@ public class ResourceBoostActivity extends AppCompatActivity {
 
     public void setPlanetInfo(Region r){
         name.setText(r.getName());
+        String rLevel="Current Level: "+ Integer.toString(r.getRegionLevel().getRegionLevel());
+        regionLevel.setText(rLevel);
         if (r.getOwner()!=null) {
             String o = "Owner: " + r.getOwner().getName();
             owner.setText(o);

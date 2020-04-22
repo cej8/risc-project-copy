@@ -105,9 +105,12 @@ public void setPlayerInfo(){
     TextView fuelAmount = findViewById(R.id.fuelAmount);
     TextView techAmount = findViewById(R.id.techAmount);
     TextView techLevel= findViewById(R.id.techLevel);
-    fuelAmount.setText("Fuel : "+ParentActivity.getPlayer().getResources().getFuelResource().getFuel());
-    techAmount.setText("Tech : "+ParentActivity.getPlayer().getResources().getTechResource().getTech());
-    techLevel.setText("Level: "+ ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
+    String fuel= "Fuel : "+ Integer.toString(ParentActivity.getPlayer().getResources().getFuelResource().getFuel());
+    fuelAmount.setText(fuel);
+    String tech="Tech : "+ Integer.toString(ParentActivity.getPlayer().getResources().getTechResource().getTech());
+    techAmount.setText(tech);
+    String level= "Level: "+  Integer.toString(ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
+    techLevel.setText(level);
 
 
 
