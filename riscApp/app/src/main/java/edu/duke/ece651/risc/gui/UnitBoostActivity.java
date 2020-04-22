@@ -76,7 +76,7 @@ public class UnitBoostActivity extends AppCompatActivity {
         helptext.setText("Please type number of units to upgrade per Unit class");
         board = ParentActivity.getBoard();
         regions = board.getRegions();
-        Region region = getRegionByName(board,boostFrom);
+        Region region = board.getRegionByName(boostFrom);
         List<Integer> unitList = region.getUnits().getUnits();
         unitName0.setText("Civilian (" + unitList.get(0) + " units available)");
         unitName1.setText("Trainee (" + unitList.get(1) + " units available)");
@@ -113,11 +113,5 @@ public class UnitBoostActivity extends AppCompatActivity {
 //        orders.getOrders();
         startActivity(i);
     }
-    public Region getRegionByName(Board board, String name){
-        Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
-        for (Region r : board.getRegions()){
-            nameToRegionMap.put(r.getName(), r);
-        }
-        return nameToRegionMap.get(name);
-    }
+
 }

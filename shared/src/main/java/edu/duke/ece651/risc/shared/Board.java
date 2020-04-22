@@ -54,8 +54,22 @@ public class Board implements Serializable {
       playerRegionMap.put(p, playerRegions); //add this <p, list<r>> to the map
       }
     return playerRegionMap;
-
   }
+  
+      //Creates a Set of all regions a player owns on the Board
+    public Set<Region> getPlayerRegionSet(AbstractPlayer p){
+        List<Region> allRegions = this.getRegions();
+        Set<Region> playerRegions = new HashSet<Region>();
+        for (Region r : allRegions) { //for each region on the board
+            if (r.getOwner() != null) {
+                if (r.getOwner().getName() == p.getName()) { //if player owns it
+                    playerRegions.add(r); //add that region to the set
+                }
+            }
+        }
+        return playerRegions;
+    }
+  
   //Creates a Set of all Players on the Board
   public Set<AbstractPlayer> getPlayerSet(){
     List<Region> allRegions = this.getRegions();

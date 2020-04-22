@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RepromptRegionsActivity"></activity>
+        <activity android:name=".ResourceBoostActivity"></activity>
+        <activity android:name=".RepromptRegionsActivity" />
         <activity android:name=".SpectateActivity" />
         <activity android:name=".SpectateChoiceActivity" />
         <activity android:name=".EndGameActivity" />
@@ -23,7 +24,7 @@
             android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".BoostRegionActivity"
+            android:name=".BoostUnitActivity"
             android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
         <activity

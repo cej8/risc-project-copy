@@ -699,6 +699,18 @@
 
 
 
+    <TextView
+        android:id="@+id/helpText"
+        android:layout_width="295dp"
+        android:layout_height="17dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton" />
+
+
     <ImageView
         android:id="@+id/square0"
         android:layout_width="75dp"
@@ -893,7 +905,7 @@
         app:layout_constraintEnd_toEndOf="@+id/p3units"
         app:layout_constraintStart_toStartOf="@+id/p3units"
         app:layout_constraintTop_toTopOf="@+id/p3units"
-        app:srcCompat="@drawable/p3nb" />
+         />
 
     <ImageView
         android:id="@+id/p2I"
@@ -911,7 +923,7 @@
         app:layout_constraintEnd_toEndOf="@+id/p2units"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/p2"
-        app:srcCompat="@drawable/p2nb" />
+        />
 
     <ImageView
         android:id="@+id/p8I"
@@ -928,7 +940,7 @@
         app:layout_constraintEnd_toEndOf="@+id/p8units"
         app:layout_constraintStart_toStartOf="@+id/p8units"
         app:layout_constraintTop_toTopOf="@+id/p8units"
-        app:srcCompat="@drawable/p8nb" />
+        />
 
     <ImageView
         android:id="@+id/p9I"
@@ -949,7 +961,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line10-9"
         app:layout_constraintVertical_bias="0.571"
-        app:srcCompat="@drawable/p9nb" />
+         />
 
     <ImageView
         android:id="@+id/p10I"
@@ -966,7 +978,7 @@
         app:layout_constraintEnd_toEndOf="@+id/p10units"
         app:layout_constraintStart_toStartOf="@+id/p10units"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/p10nb" />
+        />
 
     <ImageView
         android:id="@+id/p7I"
@@ -983,7 +995,7 @@
         app:layout_constraintEnd_toEndOf="@+id/p7units"
         app:layout_constraintStart_toStartOf="@+id/p7units"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/p7nb" />
+        />
 
     <ImageView
         android:id="@+id/p4I"
@@ -1000,7 +1012,7 @@
         app:layout_constraintEnd_toStartOf="@+id/line4-7"
         app:layout_constraintStart_toStartOf="@+id/p4units"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/p4nb" />
+        />
 
     <ImageView
         android:id="@+id/p1I"
@@ -1017,7 +1029,7 @@
         app:layout_constraintEnd_toEndOf="@+id/p1units"
         app:layout_constraintStart_toStartOf="@+id/p1units"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/p1nb" />
+        />
 
     <ImageView
         android:id="@+id/p5I"
@@ -1034,7 +1046,7 @@
         app:layout_constraintEnd_toEndOf="@+id/p5units"
         app:layout_constraintStart_toStartOf="@+id/p5units"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/p5nb" />
+        />
 
     <ImageView
         android:id="@+id/p6I"
@@ -1051,7 +1063,7 @@
         app:layout_constraintEnd_toEndOf="@+id/p6units"
         app:layout_constraintStart_toStartOf="@+id/p6units"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/p6nb" />
+        />
 
     <ImageView
         android:id="@+id/p11I"
@@ -1068,7 +1080,7 @@
         app:layout_constraintEnd_toEndOf="@+id/p11"
         app:layout_constraintStart_toEndOf="@+id/line0-11"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/p11nb" />
+         />
 
     <ImageView
         android:id="@+id/p0I"
@@ -1085,25 +1097,21 @@
         app:layout_constraintEnd_toEndOf="@+id/p0"
         app:layout_constraintStart_toEndOf="@+id/line1-0"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/p12nb" />
+         />
 
     <TextView
         android:id="@+id/orderHelper"
-        android:layout_width="206dp"
-        android:layout_height="68dp"
-        android:layout_marginStart="514dp"
-        android:layout_marginLeft="514dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="11dp"
-        android:layout_marginRight="11dp"
-        android:layout_marginBottom="317dp"
-        android:text="Select a planet to attack from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select a planet \n to attack from"
         android:textColor="@color/white"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.898"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.048" />
 
     <Button
         android:id="@+id/submitAttackFrom"

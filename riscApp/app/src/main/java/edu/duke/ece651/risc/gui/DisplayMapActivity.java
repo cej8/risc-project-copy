@@ -1,31 +1,23 @@
 package edu.duke.ece651.risc.gui;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.AttackCombat;
@@ -39,7 +31,8 @@ import edu.duke.ece651.risc.shared.MoveOrder;
 import edu.duke.ece651.risc.shared.MoveValidator;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
-import edu.duke.ece651.risc.shared.TechBoost;
+import edu.duke.ece651.risc.shared.ResourceBoost;
+import edu.duke.ece651.risc.shared.ResourceBoostValidator;
 import edu.duke.ece651.risc.shared.TeleportOrder;
 import edu.duke.ece651.risc.shared.TeleportValidator;
 import edu.duke.ece651.risc.shared.Unit;
@@ -72,7 +65,7 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-       // generateBoard();
+        //generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
@@ -80,7 +73,7 @@ public class DisplayMapActivity extends AppCompatActivity {
 
 
         Log.d("Inside map regions",regions.get(0).getName());
-        //setPlayerInfo();
+
         getOrders();
         plagueDraw();
     }
@@ -103,6 +96,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         List<ImageView> planetViews = getPlanetViews();
         PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         pd.setPlanets();
+        pd.setGreyPlanets();
         setPlayerInfo();
     }
     public void plagueDraw(){
@@ -150,9 +144,12 @@ public void setPlayerInfo(){
     TextView fuelAmount = findViewById(R.id.fuelAmount);
     TextView techAmount = findViewById(R.id.techAmount);
     TextView techLevel= findViewById(R.id.techLevel);
-    fuelAmount.setText("Fuel : "+ParentActivity.getPlayer().getResources().getFuelResource().getFuel());
-    techAmount.setText("Tech : "+ParentActivity.getPlayer().getResources().getTechResource().getTech());
-    techLevel.setText("Level: "+ ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
+    String fuel= "Fuel : "+ Integer.toString(ParentActivity.getPlayer().getResources().getFuelResource().getFuel());
+    fuelAmount.setText(fuel);
+    String tech="Tech : "+ Integer.toString(ParentActivity.getPlayer().getResources().getTechResource().getTech());
+    techAmount.setText(tech);
+    String level= "Level: "+  Integer.toString(ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
+    techLevel.setText(level);
 
 }
     public void getOrders(){
@@ -211,6 +208,19 @@ public void setPlayerInfo(){
                     invalidFlag="upgrade unit";
                 }
             }
+            else if (order.equals("resource boost")) {
+               ResourceBoost resourceBoost= new ResourceBoost(destination);
+                List<ResourceBoost>r= new ArrayList<ResourceBoost>();
+                r.add(resourceBoost);
+                validator= new ResourceBoostValidator(validationPlayerCopy,validationTempBoard);
+                if(validator.validateOrders(r)) {//if order is valid, add to list to be sent
+                    parentActivity.setOrders(resourceBoost);
+                    resourceBoost.doAction();
+                }
+                else{
+                    invalidFlag="upgrade region";
+                }
+            }
             else if (order.equals("techBoost")) {
                 //i put my method in the techboost activity itself
             } else if (order.equals("teleport")){
@@ -262,6 +272,7 @@ public void setPlayerInfo(){
         BoostDialogFragment boostFragment = new BoostDialogFragment(this);
         boostFragment.show(getSupportFragmentManager(),"boost");
     }
+
     public void fowOrder(View view){
         // FOW order popup
         FOWDialogFragment fowFragment = new FOWDialogFragment(this);
@@ -454,21 +465,22 @@ public void setPlayerInfo(){
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
         dialogFragment.show(getSupportFragmentManager(), "P7");
     }
-    
+
     // Mock board
     public void generateBoard(){
-        List<Region> regions = getRegions(4);
+        HumanPlayer p1 = new HumanPlayer("Player 1");
+        List<Region> regions = getRegions(p1, 4);
         Board b = new Board(regions);
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.setBoard(b);
+        parentActivity.setPlayer(p1);
         Log.d("Earth",Integer.toString(regions.get(0).getUnits().getTotalUnits()));
     }
-    private List<Region> getRegions(int numPlayer) {
-        AbstractPlayer p1 = new HumanPlayer("Player 1");
-        AbstractPlayer p2 = new HumanPlayer("Bob");
-        AbstractPlayer p3 = new HumanPlayer("Player 3");
-        AbstractPlayer p4 = new HumanPlayer("Player 4");
-        AbstractPlayer p5 = new HumanPlayer("Player 5");
+    private List<Region> getRegions(HumanPlayer p1, int numPlayer) {
+        HumanPlayer p2 = new HumanPlayer("Bob");
+        HumanPlayer p3 = new HumanPlayer("Player 3");
+        HumanPlayer p4 = new HumanPlayer("Player 4");
+        HumanPlayer p5 = new HumanPlayer("Player 5");
         List<Region> regions = null;
         List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);
         switch (numPlayer) {
@@ -482,7 +494,7 @@ public void setPlayerInfo(){
                 regions = getRegionHelper(p1, p2, p2, p3, p3, regionUnits);
                 break;
             case 4:
-                regions = getRegionHelper(p1, p2, p3, p4, p4, regionUnits);
+                regions = getRegionHelper(p4, p2, p3, p1, p1, regionUnits);
                 break;
             case 5:
                 regions = getRegionHelper(p1, p2, p3, p4, p5, regionUnits);
@@ -630,7 +642,7 @@ public void setPlayerInfo(){
         adj11.add(r0);
         adj11.add(r10);
         r11.setAdjRegions(adj11);
-        
+
 
         List<Region> regions = new ArrayList<Region>();
         regions.add(r0);

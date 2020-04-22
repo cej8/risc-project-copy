@@ -18,45 +18,33 @@ import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
 
-public class OrderActivityTwo extends AppCompatActivity {
+public class ResourceBoostActivity extends AppCompatActivity {
     List<Region> regions;
     String planetName;
     TextView name;
     TextView owner;
     TextView numUnits;
     TextView helpText;
-    String attackFrom;
-    String orderMessage;
-    TextView orderHelper;
+    TextView regionLevel;
     Board board;
-    Region source;
     PlanetDrawable planetDrawable;
     Map<Region, ImageView> regionImageViewMap;
-    ImageView sourceView;
     AbstractPlayer player;
     Map<Region, ImageButton> regionImageButtonMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attack_two);
+        setContentView(R.layout.activity_resource_boost);
         board = ParentActivity.getBoard();
         player = ParentActivity.getPlayer();
         regions = board.getRegions();
         name = findViewById(R.id.displayPame);
         owner = findViewById(R.id.displayOwner);
         numUnits = findViewById(R.id.displayUnits);
-        helpText = findViewById(R.id.attackHelp);
-        orderHelper = findViewById(R.id.orderHelper);
-        Intent intent = getIntent();
-        attackFrom = intent.getStringExtra("PNAME");
-        Log.d("attack from string: ", attackFrom );
-        orderMessage =  intent.getStringExtra("ORDER");
-        String h = "Select planet to " + orderMessage;
-        orderHelper.setText(h);
+        regionLevel=findViewById(R.id.displayLevel);
+        helpText = findViewById(R.id.orderHelp);
     }
-
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -68,30 +56,10 @@ public class OrderActivityTwo extends AppCompatActivity {
         planetDrawable = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
 
-        source = board.getRegionByName(attackFrom);
-        sourceView = regionImageViewMap.get(source);
-       // sourceView.setVisibility(View.INVISIBLE);
-
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
         planetDrawable.setAllUnitCircles();
-        switch(orderMessage){
-            case "attack":
-                setDifferentOwnerPlanets();
-                Log.d("onStart switch case", "attack");
-                break;
-            case "move":
-                setSameOwnerPlanets();
-                Log.d("onStart switch case","move");
-                break;
-            case "teleport":
-                setSameOwnerPlanets();
-                Log.d("onStart switch case", "teleport");
-                break;
-            default:
-                Log.d("onStart switch case", "default");
-        }
+        setSameOwnerPlanets();
     }
-
     //helper function for orders in which you can only select planets you own
     public void setSameOwnerPlanets(){
         for (AbstractPlayer p : board.getPlayerList()) {
@@ -102,65 +70,34 @@ public class OrderActivityTwo extends AppCompatActivity {
                         planetDrawable.setImageButtonsInvisible(p);
                     }
                 }
+                else{ //if player is null, set button invisible and set grey outline
+                    planetDrawable.setGreyOutlines();
+                    planetDrawable.setImageButtonsInvisible(p);
+                }
             } else { //if player own's planet, set up visible planet
                 for (Region r : board.getPlayerRegionSet(p)) {
-                    if (r == source){ //if source planet
-                        Log.d("source", r.getName());
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p)); //set source to player color
-                        planetDrawable.setImageButtonInvisible(r); //can't click source
-                    }
-                    else { //
-                        planetDrawable.setPlanets();
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
-                    }
-                }
-            }
-        }
-        planetDrawable.setGreyOutlines();
-    }
-
-    //helper function for orders in which you can only select planets you don't own
-    public void setDifferentOwnerPlanets() {
-        for (AbstractPlayer p : board.getPlayerList()) {
-            if (p == player) { //if player's own planet, set view to outline and make button invisible
-                for (Region r : board.getPlayerRegionSet(p)) {
-                    if (r == source){ //if source planet
-                        planetDrawable.setImageButtonsInvisible(p); //can't click
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p)); //set to player color
-                    }
-                    else { //not source, player owns, set to outline
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
-                    }
-                }
-            } else { //if player doesn't own planet
-                for (Region r : board.getPlayerRegionSet(p)) {
-                    planetDrawable.setPlanets(); //set planet & planet drawables
+                    planetDrawable.setPlanets();
                     regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
                 }
             }
         }
-        planetDrawable.setGreyPlanets();
     }
 
-
-    public void attackTo(View view){
+    public void submitRegion(View view){//button click
         if (planetName == null){
-            helpText.setText("Please select a planet");
+            helpText.setText("Please select a planet to boost");
         } else {
-            Intent i = new Intent(this, DisplayBonusUnitsActivity.class);
-            i.putExtra("PNAME", attackFrom);
+            Intent i = new Intent(this,DisplayMapActivity.class);
             i.putExtra("ATTACKTO", planetName);
-            i.putExtra("ORDER",orderMessage);
+            i.putExtra("ORDER","resource boost");
             startActivity(i);
         }
+
+
     }
-
-
     public void setSelectionInvisible(Region r) {
-        planetDrawable.setImageViewVisible(sourceView);
-        if (regionImageViewMap.get(r) != regionImageViewMap.get(source)) {
-            regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
-        }
+        planetDrawable.setImageViewVisible(null);
+        regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     //loop through every region and set to clear
     //set this region to it's color
@@ -168,6 +105,8 @@ public class OrderActivityTwo extends AppCompatActivity {
 
     public void setPlanetInfo(Region r){
         name.setText(r.getName());
+        String rLevel="Current Level: "+ Integer.toString(r.getRegionLevel().getRegionLevel());
+        regionLevel.setText(rLevel);
         if (r.getOwner()!=null) {
             String o = "Owner: " + r.getOwner().getName();
             owner.setText(o);
