@@ -253,7 +253,6 @@ public void setPlayerInfo(){
     }
     // SUBMIT ORDERS!!!!!!!!!!!!!
     public void submitAll(View view){
-        // TODO: execute client when done
         orders = ParentActivity.getOrders();
         executeClient.playGame(handler,helpText,orders);
     }

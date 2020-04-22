@@ -3,6 +3,9 @@ package edu.duke.ece651.risc.gui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -58,6 +61,7 @@ public class BoostUnitActivity extends AppCompatActivity {
         orderMessage =  i.getStringExtra("ORDER");
         String h = "Select planet to " + orderMessage;
         orderHelper.setText(h);
+        plagueDraw();
     }
 
 
@@ -98,6 +102,43 @@ public class BoostUnitActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    // plague
+    public void plagueDraw(){
+        int increment = 0;
+        Resources r = getResources();
+        Drawable[] layers = new Drawable[2];
+        for (Region region: regions){
+            if (region.getPlague()){
+                layers[0] = getPlanetDrawable().get(increment);
+                layers[1] = r.getDrawable(R.drawable.skulltransparent);
+                LayerDrawable layerDrawable = new LayerDrawable(layers);
+                ImageView imageView = getPlanetViews().get(increment);
+                TextView textView = getUnitCircles().get(increment);
+                textView.setVisibility(View.INVISIBLE);
+                imageView.setImageDrawable(layerDrawable);
+                break;
+            }
+            increment++;
+        }
+    }
+    public List<Drawable> getPlanetDrawable(){
+        List<Drawable> drawables = new ArrayList<Drawable>();
+        Resources r = getResources();
+        drawables.add(r.getDrawable(R.drawable.p1nb));
+        drawables.add(r.getDrawable(R.drawable.p2nb));
+        drawables.add(r.getDrawable(R.drawable.p3nb));
+        drawables.add(r.getDrawable(R.drawable.p4nb));
+        drawables.add(r.getDrawable(R.drawable.p5nb));
+        drawables.add(r.getDrawable(R.drawable.p6nb));
+        drawables.add(r.getDrawable(R.drawable.p7nb));
+        drawables.add(r.getDrawable(R.drawable.p8nb));
+        drawables.add(r.getDrawable(R.drawable.p9nb));
+        drawables.add(r.getDrawable(R.drawable.p10nb));
+        drawables.add(r.getDrawable(R.drawable.p11nb));
+        drawables.add(r.getDrawable(R.drawable.p12nb));
+        return drawables;
     }
 
 
