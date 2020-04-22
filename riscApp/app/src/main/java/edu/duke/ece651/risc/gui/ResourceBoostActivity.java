@@ -44,7 +44,6 @@ public class ResourceBoostActivity extends AppCompatActivity {
         numUnits = findViewById(R.id.displayUnits);
         regionLevel=findViewById(R.id.displayLevel);
         helpText = findViewById(R.id.orderHelp);
-
     }
     @Override
     protected void onStart() {
@@ -60,14 +59,6 @@ public class ResourceBoostActivity extends AppCompatActivity {
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
         planetDrawable.setAllUnitCircles();
         setSameOwnerPlanets();
-    }
-    // what to do when back button pressed
-    @Override
-    public void onBackPressed()
-    {
-        // instead of going to new activity open up dialog fragment
-        BackButtonDialogFragment backButtonDialogFragment = new BackButtonDialogFragment(this);
-        backButtonDialogFragment.show(getSupportFragmentManager(),"back");
     }
     //helper function for orders in which you can only select planets you own
     public void setSameOwnerPlanets(){
