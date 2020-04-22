@@ -45,10 +45,10 @@ public class PlanetDrawable {
         planetButtons = buttons;
         playerColors = squares;
         playerNames = names;
-        this.setPlayerColors();
         players = board.getPlayerList();
-        unitCircles = new ArrayList<>();
-        planetViews = new ArrayList<>();
+        this.setPlayerColors();
+        unitCircles = new ArrayList<TextView>();
+        planetViews = new ArrayList<ImageView>();
     }
 
     //set planets without units
@@ -269,7 +269,7 @@ public class PlanetDrawable {
         return planetDrawables;
     }
 
-    //probably unneeded methods, used for testing, commented out just in case i decide i want it
+    //probably unneeded methods, used for testing, commented out just in case i decide i want to use them in the future
 //    public Map<Integer, String> getIntToColorMap(){
 //        Map<Integer, String> map = new HashMap<Integer, String>();
 //        map.put(R.drawable.red_planet, "RED");
