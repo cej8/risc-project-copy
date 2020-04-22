@@ -38,8 +38,18 @@ public class UnitBoostValidatorTest {
     regions.get(0).getRegionByName(board, "Earth").getOwner().getResources().getTechResource().addTech(300);
     Board copy = (Board) DeepCopy.deepCopy(board);
     Region earth = regions.get(0).getRegionByName(copy, "Earth");
+   
     Unit unitBoost = new Unit(listOfUnitInts(0, 0, 0, 0, 0, 5, 0));
-    upgradeTech(earth, 5); //upgrade player tech 5 times 
+    upgradeTech(earth, 5); //upgrade player tech 5 times
+
+    Region testPlague = new Region("Fire");
+    AbstractPlayer plagueOwner= new HumanPlayer("plague owner");
+    testPlague.setPlague(true);
+    UnitBoost ub = new UnitBoost(testPlague, unitBoost);
+    UnitBoostValidator plagueValidator = new UnitBoostValidator(plagueOwner, board);
+    List<UnitBoost> plagueBoost= new ArrayList<UnitBoost>();
+    plagueBoost.add(ub);
+    assertEquals(false, plagueValidator.validateRegions(plagueBoost));
 
     UnitBoost boost = new UnitBoost(earth, unitBoost);
     ValidatorInterface<UnitBoost> ubv = new UnitBoostValidator(earth.getOwner(), copy);
