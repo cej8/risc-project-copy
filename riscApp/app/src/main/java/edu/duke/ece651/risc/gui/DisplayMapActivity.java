@@ -28,6 +28,8 @@ import edu.duke.ece651.risc.shared.MoveOrder;
 import edu.duke.ece651.risc.shared.MoveValidator;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
+import edu.duke.ece651.risc.shared.ResourceBoost;
+import edu.duke.ece651.risc.shared.ResourceBoostValidator;
 import edu.duke.ece651.risc.shared.TeleportOrder;
 import edu.duke.ece651.risc.shared.TeleportValidator;
 import edu.duke.ece651.risc.shared.Unit;
@@ -68,7 +70,7 @@ public class DisplayMapActivity extends AppCompatActivity {
 
 
         Log.d("Inside map regions",regions.get(0).getName());
-        //setPlayerInfo();
+
         getOrders();
     }
     // what to do when back button pressed
@@ -166,6 +168,19 @@ public void setPlayerInfo(){
                 }
                 else{
                     invalidFlag="upgrade unit";
+                }
+            }
+            else if (order.equals("resource boost")) {
+               ResourceBoost resourceBoost= new ResourceBoost(destination);
+                List<ResourceBoost>r= new ArrayList<ResourceBoost>();
+                r.add(resourceBoost);
+                validator= new ResourceBoostValidator(validationPlayerCopy,validationTempBoard);
+                if(validator.validateOrders(r)) {//if order is valid, add to list to be sent
+                    parentActivity.setOrders(resourceBoost);
+                    resourceBoost.doAction();
+                }
+                else{
+                    invalidFlag="upgrade region";
                 }
             }
             else if (order.equals("techBoost")) {
