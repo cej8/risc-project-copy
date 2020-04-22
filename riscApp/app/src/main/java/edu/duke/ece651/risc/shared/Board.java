@@ -1,4 +1,6 @@
 package edu.duke.ece651.risc.shared;
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.*;
@@ -73,6 +75,20 @@ public class Board implements Serializable {
             }
         }
         return allPlayers;
+    }
+
+    //Creates a Set of all regions a player owns on the Board
+    public Set<Region> getPlayerRegionSet(AbstractPlayer p){
+        List<Region> allRegions = this.getRegions();
+        Set<Region> playerRegions = new HashSet<Region>();
+        for (Region r : allRegions) { //for each region on the board
+            if (r.getOwner() != null) {
+                if (r.getOwner().getName() == p.getName()) { //if player owns it
+                    playerRegions.add(r); //add that region to the set
+                }
+            }
+        }
+        return playerRegions;
     }
 
     //Creates a list (preserve order) of players on board.

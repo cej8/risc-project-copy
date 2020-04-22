@@ -1,38 +1,27 @@
 package edu.duke.ece651.risc.gui;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.AttackCombat;
 import edu.duke.ece651.risc.shared.AttackMove;
 import edu.duke.ece651.risc.shared.Board;
-import edu.duke.ece651.risc.shared.BoardGenerator;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.MoveOrder;
 import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
-import edu.duke.ece651.risc.shared.TechBoost;
 import edu.duke.ece651.risc.shared.TeleportOrder;
 import edu.duke.ece651.risc.shared.Unit;
 import edu.duke.ece651.risc.shared.UnitBoost;
@@ -56,7 +45,7 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        generateBoard();
+        //generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         Log.d("Inside map regions",regions.get(0).getName());
@@ -81,6 +70,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         List<ImageView> planetViews = getPlanetViews();
         PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         pd.setPlanets();
+        pd.setGreyPlanets();
     }
 
 
@@ -148,7 +138,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         startActivity(attackSetup);
     }
     public void upgradeOrder(View view){
-        Intent unitBoost = new Intent(this,BoostRegionActivity.class);
+        Intent unitBoost = new Intent(this, BoostUnitActivity.class);
         unitBoost.putExtra("ORDER","boost units");
         startActivity(unitBoost);
     }
@@ -340,18 +330,19 @@ public class DisplayMapActivity extends AppCompatActivity {
     
     // Mock board
     public void generateBoard(){
-        List<Region> regions = getRegions(4);
+        HumanPlayer p1 = new HumanPlayer("Player 1");
+        List<Region> regions = getRegions(p1, 4);
         Board b = new Board(regions);
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.setBoard(b);
+        parentActivity.setPlayer(p1);
         Log.d("Earth",Integer.toString(regions.get(0).getUnits().getTotalUnits()));
     }
-    private List<Region> getRegions(int numPlayer) {
-        AbstractPlayer p1 = new HumanPlayer("Player 1");
-        AbstractPlayer p2 = new HumanPlayer("Bob");
-        AbstractPlayer p3 = new HumanPlayer("Player 3");
-        AbstractPlayer p4 = new HumanPlayer("Player 4");
-        AbstractPlayer p5 = new HumanPlayer("Player 5");
+    private List<Region> getRegions(HumanPlayer p1, int numPlayer) {
+        HumanPlayer p2 = new HumanPlayer("Bob");
+        HumanPlayer p3 = new HumanPlayer("Player 3");
+        HumanPlayer p4 = new HumanPlayer("Player 4");
+        HumanPlayer p5 = new HumanPlayer("Player 5");
         List<Region> regions = null;
         List<Unit> regionUnits = get6UnitList(5, 10, 15, 20, 25, 30);
         switch (numPlayer) {
@@ -365,7 +356,7 @@ public class DisplayMapActivity extends AppCompatActivity {
                 regions = getRegionHelper(p1, p2, p2, p3, p3, regionUnits);
                 break;
             case 4:
-                regions = getRegionHelper(p1, p2, p3, p4, p4, regionUnits);
+                regions = getRegionHelper(p4, p2, p3, p1, p1, regionUnits);
                 break;
             case 5:
                 regions = getRegionHelper(p1, p2, p3, p4, p5, regionUnits);
