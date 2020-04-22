@@ -38,6 +38,9 @@ public class ResourceBoostValidator implements ValidatorInterface<ResourceBoost>
   public boolean validOwnership(List<ResourceBoost> orders){
     //verify that player owns region
     for(ResourceBoost rb: orders){
+      if(rb.getDestination().getPlague()){
+        return false;
+      }
       if(!rb.getDestination().getOwner().getName().equals(player.getName())){
           return false;
         }
