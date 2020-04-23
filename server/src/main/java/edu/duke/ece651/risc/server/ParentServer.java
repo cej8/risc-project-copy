@@ -402,37 +402,38 @@ public class ParentServer extends Thread{
     for (OrderInterface order : orders) {
       // Not sure if better way to do casting...
       OrderInterface castOrder;
-      if (order instanceof PlacementOrder) {
+      if (order.getPriority() == Constants.PLACEMENT_PRIORITY) {
         castOrder = (PlacementOrder) (order);
-      } else if (order instanceof AttackMove) {
+      } else if (order.getPriority() == Constants.ATTACK_MOVE_PRIORITY) {
         castOrder = (AttackMove) (order);
-      } else if (order instanceof AttackCombat) {
+
+      } else if (order.getPriority() == Constants.ATTACK_COMBAT_PRIORITY) {
         castOrder = (AttackCombat) (order);
       }
 
-      else if (order instanceof MoveOrder) {
+      else if (order.getPriority() == Constants.MOVE_PRIORITY) {
         castOrder = (MoveOrder) (order);
       }
-      else if (order instanceof UnitBoost) {
+      else if (order.getPriority() == Constants.UPGRADE_UNITS_PRIORITY) {
         castOrder = (UnitBoost) (order);
       }
-       else if (order instanceof TechBoost) {
+       else if (order.getPriority() == Constants.UPGRADE_TECH_PRIORITY) {
         castOrder = (TechBoost) (order);
       }
-         else if (order instanceof ResourceBoost) {
+         else if (order.getPriority() == Constants.UPGRADE_RESOURCE_PRIORITY) {
         castOrder = (ResourceBoost) (order);
       }
    
-       else if (order instanceof SpyUpgradeOrder) {
+       else if (order.getPriority() == Constants.SPYUPGRADE_PRIORITY) {
         castOrder = (SpyUpgradeOrder) (order);
       }
-       else if (order instanceof SpyMoveOrder) {
+       else if (order.getPriority() == Constants.SPYMOVE_PRIORITY) {
         castOrder = (SpyMoveOrder) (order);
       }
-       else if (order instanceof CloakOrder) {
+       else if (order.getPriority() == Constants.CLOAK_PRIORITY) {
         castOrder = (CloakOrder) (order);
       }
-       else if (order instanceof RaidOrder){
+       else if (order.getPriority() == Constants.RAID_PRIORITY){
         castOrder = (RaidOrder) (order);
       }
      
@@ -481,6 +482,7 @@ public class ParentServer extends Thread{
 
       // Add order to list
       orderMap.get(className).add(castOrder);
+
     }
   }
 
