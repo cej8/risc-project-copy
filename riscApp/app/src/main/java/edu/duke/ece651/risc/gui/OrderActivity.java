@@ -184,75 +184,50 @@ public class OrderActivity extends AppCompatActivity {
     public void planetZero(View view){
         Region r = regions.get(0);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
     public void planetOne(View view){
         Region r = regions.get(1);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
     public void planetTwo(View view){
         Region r = regions.get(2);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
     public void planetThree(View view){
         Region r = regions.get(3);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
     public void planetFour(View view){
         Region r = regions.get(4);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
     public void planetFive(View view){
         Region r = regions.get(5);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
     public void planetSix(View view){
         Region r = regions.get(6);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
     public void planetSeven(View view){
         Region r = regions.get(7);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
-
     }
     public void planetEight(View view){
         Region r = regions.get(8);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
     public void planetNine(View view){
         Region r = regions.get(9);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
     public void planetTen(View view){
         Region r = regions.get(10);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
     public void planetEleven(View view){
         Region r = regions.get(11);
         displayInfo(r);
-//        setPlanetInfo(r);
-//        setSelectionInvisible(r);
     }
 
 

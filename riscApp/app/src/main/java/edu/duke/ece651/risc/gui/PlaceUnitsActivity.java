@@ -70,6 +70,11 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         validatorHelper = new ValidatorHelper(player,new Unit(startUnits), board);
     }
     @Override
+    protected void onResume(){
+        super.onResume();
+        headerText.setText("Those placements were invalid. You have You have " + startUnits + " units to place on your planets. Hit submit when finished!");
+    }
+    @Override
     protected void onStart() {
         super.onStart();
         List<ImageButton> planetButtons = getPlanetButtons();
