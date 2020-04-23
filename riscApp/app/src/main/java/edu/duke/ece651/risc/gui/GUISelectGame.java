@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -65,23 +66,17 @@ public class GUISelectGame extends Thread{
         return this.pickedGames;
     }
     public void performGetGame() throws IOException, ClassNotFoundException{
-        // boolean oldBoolean = queryYNAndRespond("Would you like to join a game you are already in? [Y/N]");
         connection.sendObject(new ConfirmationMessage(oldBoolean));
         //Server then sends back list of games
         StringMessage message = (StringMessage) (connection.receiveObject());
         gameList = message.unpacker();
-        //clientOutput.displayString(str);
         this.gotGames = true;
     }
     //Method to mesh with selectGame() in loginServer
     public void performSelectGame() throws IOException, ClassNotFoundException{
-       // while(true){
-
             Integer gameID;
             while(true){
-                //clientOutput.displayString("Pick a game via ID");
                 try{
-                    //gameID = Integer.parseInt(clientInput.readInput());
                     gameID = Integer.parseInt(gameNumber);
                 }
                 catch (NumberFormatException ne) {
@@ -95,23 +90,17 @@ public class GUISelectGame extends Thread{
             connection.sendObject(new IntegerMessage(gameID));
 
             //Get back response
-            //String response = receiveAndDisplayString();
             StringMessage message = (StringMessage) (connection.receiveObject());
             String response = message.unpacker();
-            //clientOutput.displayString(response);
             //Repeat if fail, continue if success
             if (response.matches("^Fail:.*$")) {
-               // continue;
-                // TODO: wrong ID entered
                 this.correctID = false;
                 return;
             }
             if (response.matches("^Success:.*$")) {
                 this.pickedGames = true;
                 this.correctID = true;
-               //break;
             }
-        //}
         boolean firstCall = ((ConfirmationMessage) connection.receiveObject()).unpacker();
         ParentActivity pa = new ParentActivity();
         pa.setFirstCall(firstCall);
@@ -177,9 +166,27 @@ public class GUISelectGame extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
             Log.d("GUISelectGame","IOException, run");
+            connection.closeAll();
+            clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             Log.d("GUISelectGame","ClassNotFoundException, run");
+            connection.closeAll();
+            clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
 }

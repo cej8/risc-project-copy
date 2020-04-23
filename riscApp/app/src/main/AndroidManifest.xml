@@ -18,7 +18,9 @@
         <activity android:name=".SpectateActivity" />
         <activity android:name=".SpectateChoiceActivity" />
         <activity android:name=".EndGameActivity" />
-        <activity android:name=".PlayerLobbyActivity" />
+        <activity android:name=".PlayerLobbyActivity"
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".PlaceUnitsActivity"
             android:screenOrientation="landscape"

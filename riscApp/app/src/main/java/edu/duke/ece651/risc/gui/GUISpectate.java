@@ -64,6 +64,13 @@ public class GUISpectate extends Thread {
             e.printStackTrace();
             connection.closeAll();
             clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
             return;
         }
     }
@@ -75,7 +82,6 @@ public class GUISpectate extends Thread {
     }
     public void checkAlive(){
         try {
-            // while (true) {
             String turn = receiveAndDisplayString();
             parentActivity.setStartTime(System.currentTimeMillis());
             parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));//(long) (connection.getSocket().getSoTimeout());
@@ -89,10 +95,7 @@ public class GUISpectate extends Thread {
             String start = startMessage.unpacker();
             if (!start.equals("Continue")) {
                 // If not continue then someone won --> print and exit
-                //  clientOutput.displayString(start);  // help text on map
                 setWinner(start);
-                //   connection.closeAll();
-                //   clientInput.close();
                 return;
             }
             // Next is alive status for player
@@ -108,19 +111,24 @@ public class GUISpectate extends Thread {
             e.printStackTrace();
             connection.closeAll();
             clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
             return;
         }
     }
     public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
         StringMessage message = (StringMessage) (connection.receiveObject());
         String str = message.unpacker();
-    //    clientOutput.displayString(str);
         return str;
     }
 
     public void allSpectate(){
         try {
-           // while (true) {
                 String turn = receiveAndDisplayString();
                 parentActivity.setStartTime(System.currentTimeMillis());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));//(long) (connection.getSocket().getSoTimeout());
@@ -136,8 +144,6 @@ public class GUISpectate extends Thread {
                     // If not continue then someone won --> print and exit
                     //  clientOutput.displayString(start);  // help text on map
                     setWinner(start);
-                    //   connection.closeAll();
-                    //   clientInput.close();
                     return;
                 }
                 // Next is alive status for player
@@ -157,16 +163,21 @@ public class GUISpectate extends Thread {
                     if (!response) {
                         connection.closeAll();
                         clientInput.close();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                                activity.startActivity(intent);
+                            }
+                        });
                     }
                 }
                 while (true) {
                 // Next server sends board
                 board = (Board) (connection.receiveObject());
-                // ParentActivity parentActivity = new ParentActivity();
                 parentActivity.setBoard(board);
                 gotBoard = true;
 
-             //   while (true) {
                     String response = receiveAndDisplayString();
                     if (response.matches("^Fail:.*$")) {
                         continue;
@@ -175,11 +186,17 @@ public class GUISpectate extends Thread {
                         break;
                     }
                 }
-         //   }
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
             clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
             return;
         }
     }
@@ -204,25 +221,35 @@ public class GUISpectate extends Thread {
             e.printStackTrace();
             connection.closeAll();
             clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
             return;
         }
     }
 
     public void playGame() {
         try {
-           // while (true) {
                 String response = receiveAndDisplayString();
                 if (response.matches("^Fail:.*$")) {
-                //    continue;
                 }
                 if (response.matches("^Success:.*$")) {
-               //     break;
                 }
-           // }
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
             clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
             return;
         }
     }
@@ -248,14 +275,6 @@ public class GUISpectate extends Thread {
                 }
             });
         } else {
-            //checkAlive();
-           // Log.d("Spectate Alive","true");
-            //serverDisplayBoard();
-            //Log.d("Spectate Display board","true");
-
-           // playGame();
-           // recieveBoard();
-
            allSpectate();
             handler.post(new Runnable() {
                 @Override

@@ -103,22 +103,25 @@ public class GUIPlayGame extends Thread{
             }
             // Next server sends board
             board = (Board) (connection.receiveObject());
-            // ParentActivity parentActivity = new ParentActivity();
             parentActivity.setBoard(board);
             gotBoard = true;
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
             clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
             return;
         }
     }
     public void checkAlive(){
         try {
-           // while (true) {
                 String turn = receiveAndDisplayString();
-               // ParentActivity parentActivity = new ParentActivity();
-                //startTime = System.currentTimeMillis();
                 parentActivity.setStartTime(System.currentTimeMillis());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));//(long) (connection.getSocket().getSoTimeout());
                 //Catch case for issues in testing, should never really happen
@@ -131,10 +134,7 @@ public class GUIPlayGame extends Thread{
                 String start = startMessage.unpacker();
                 if (!start.equals("Continue")) {
                     // If not continue then someone won --> print and exit
-                  //  clientOutput.displayString(start);  // help text on map
                     setWinner(start);
-                 //   connection.closeAll();
-                 //   clientInput.close();
                     return;
                 }
                 // Next is alive status for player
@@ -146,28 +146,17 @@ public class GUIPlayGame extends Thread{
                 // Get primitive
                 alive = isAlive.getMessage();
                 parentActivity.setAlive(alive);
-                /////------------------------///// Separate method
-                // If not same then player died on previous turn --> get spectate message
-               /* if (alive != isPlaying) {
-                    isPlaying = alive;
-                    //Query for spectating
-                    //If no then kill connection
-                    if (!queryYNAndRespond("Would you like to keep spectating? [Y/N]")) {
-                        // TODO: no spectating allowed for now
-                        connection.closeAll();
-                        clientInput.close();
-                    }
-                }
-                // Next server sends board
-                board = (Board) (connection.receiveObject());
-               // ParentActivity parentActivity = new ParentActivity();
-                parentActivity.setBoard(board);
-                gotBoard = true;*/
-           // }
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
             clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
             return;
         }
     }
@@ -177,7 +166,6 @@ public class GUIPlayGame extends Thread{
     public void playGame() {
         try {
                 while (true) {
-                    /////TODO probably seperate this part
                     if(ParentActivity.getAlive()){
                         //If too long --> kill player
                         if(timeOut(ParentActivity.getStartTime(), ParentActivity.getMaxTime())){ return;}
@@ -196,6 +184,13 @@ public class GUIPlayGame extends Thread{
             e.printStackTrace();
             connection.closeAll();
             clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
             return;
         }
     }

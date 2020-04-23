@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,14 @@ public class GUIClientPlacementSelection extends Thread implements ClientInterfa
         } catch (Exception e) {
             e.printStackTrace();
             connection.closeAll();
+            clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
             return false;
         }
         return true;
@@ -71,6 +80,15 @@ public class GUIClientPlacementSelection extends Thread implements ClientInterfa
             clientOutput.displayString("Player took too long, killing connection");
             connection.closeAll();
             clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    intent.putExtra("HELPTEXT","You took too long to submit placements, " +
+                            "connection killed. Please login again");
+                    activity.startActivity(intent);
+                }
+            });
             return true;
         }
         return false;
@@ -96,6 +114,15 @@ public class GUIClientPlacementSelection extends Thread implements ClientInterfa
                 });
             }
         } catch (Exception e) {
+            connection.closeAll();
+            clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
 

@@ -30,6 +30,9 @@ public class ConfirmLoginActivity extends AppCompatActivity {
         executeClient = new ExecuteClient(this);
         executeClient.createGame();
         helpText = findViewById(R.id.helpText);
+        Intent intent = getIntent();
+        String help = intent.getStringExtra("HELPTEXT");
+        helpText.setText(help);
     }
     @Override
     public void onResume(){

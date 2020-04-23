@@ -1,6 +1,9 @@
 package edu.duke.ece651.risc.gui;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -72,6 +75,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         Log.d("Inside map regions",regions.get(0).getName());
 
         getOrders();
+        plagueDraw();
     }
     // what to do when back button pressed
     @Override
@@ -95,6 +99,41 @@ public class DisplayMapActivity extends AppCompatActivity {
         pd.setGreyPlanets();
         setPlayerInfo();
     }
+    public void plagueDraw(){
+        int increment = 0;
+        Resources r = getResources();
+        Drawable[] layers = new Drawable[2];
+        for (Region region: regions){
+            if (region.getPlague()){
+                layers[0] = getPlanetDrawable().get(increment);
+                layers[1] = r.getDrawable(R.drawable.skulltransparent);
+                LayerDrawable layerDrawable = new LayerDrawable(layers);
+                ImageView imageView = getPlanetViews().get(increment);
+                TextView textView = getUnitCircles().get(increment);
+                textView.setVisibility(View.INVISIBLE);
+                imageView.setImageDrawable(layerDrawable);
+                break;
+            }
+            increment++;
+        }
+    }
+    public List<Drawable> getPlanetDrawable(){
+        List<Drawable> drawables = new ArrayList<Drawable>();
+        Resources r = getResources();
+        drawables.add(r.getDrawable(R.drawable.p1nb));
+        drawables.add(r.getDrawable(R.drawable.p2nb));
+        drawables.add(r.getDrawable(R.drawable.p3nb));
+        drawables.add(r.getDrawable(R.drawable.p4nb));
+        drawables.add(r.getDrawable(R.drawable.p5nb));
+        drawables.add(r.getDrawable(R.drawable.p6nb));
+        drawables.add(r.getDrawable(R.drawable.p7nb));
+        drawables.add(r.getDrawable(R.drawable.p8nb));
+        drawables.add(r.getDrawable(R.drawable.p9nb));
+        drawables.add(r.getDrawable(R.drawable.p10nb));
+        drawables.add(r.getDrawable(R.drawable.p11nb));
+        drawables.add(r.getDrawable(R.drawable.p12nb));
+        return drawables;
+    }
 
 public void setPlayerInfo(){
         for(AbstractPlayer player:board.getPlayerSet()){//update player object
@@ -112,11 +151,7 @@ public void setPlayerInfo(){
     String level= "Level: "+  Integer.toString(ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
     techLevel.setText(level);
 
-
-
 }
-
-
     public void getOrders(){
         Intent i = getIntent();
         String order = i.getStringExtra("ORDER");
@@ -218,7 +253,6 @@ public void setPlayerInfo(){
     }
     // SUBMIT ORDERS!!!!!!!!!!!!!
     public void submitAll(View view){
-        // TODO: execute client when done
         orders = ParentActivity.getOrders();
         executeClient.playGame(handler,helpText,orders);
     }
@@ -430,7 +464,7 @@ public void setPlayerInfo(){
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
         dialogFragment.show(getSupportFragmentManager(), "P7");
     }
-    
+
     // Mock board
     public void generateBoard(){
         HumanPlayer p1 = new HumanPlayer("Player 1");
@@ -607,7 +641,7 @@ public void setPlayerInfo(){
         adj11.add(r0);
         adj11.add(r10);
         r11.setAdjRegions(adj11);
-        
+
 
         List<Region> regions = new ArrayList<Region>();
         regions.add(r0);
