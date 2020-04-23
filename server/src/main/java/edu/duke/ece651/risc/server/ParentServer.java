@@ -38,6 +38,7 @@ public class ParentServer extends Thread{
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
   private boolean FOG_OF_WAR = Constants.FOG_OF_WAR;
+  private int MAX_MISSED = Constants.MAX_MISSED;
   
   //boolean for if still in waitingForPlayers
   private boolean notStarted = true;
@@ -146,6 +147,16 @@ public class ParentServer extends Thread{
   //Used only for testing
   public void setFOG_OF_WAR(boolean FOG_OF_WAR){
     this.FOG_OF_WAR = FOG_OF_WAR;
+  }
+  
+  //Used only for testing
+  public int getMAX_MISSED(){
+    return MAX_MISSED;
+  }
+
+  //Used only for testing
+  public void setMAX_MISSED(int MAX_MISSED){
+    this.MAX_MISSED = MAX_MISSED;
   }
 
   public void setNotStarted(boolean notStarted){
@@ -661,15 +672,20 @@ public class ParentServer extends Thread{
       applyPlague();    
       updatePlayersInChildServers();
     }
-    if (numPlayersLeft() == 1) {
+    if (numPlayersLeft() <= 1) {
       // If one player alive then create message --> send
-      AbstractPlayer winner = playersLeft().iterator().next();
-      StringMessage winnerMessage = new StringMessage(winner.getName() + " is the winner!");
+      StringMessage winnerMessage = new StringMessage("Somehow no one is left?");
+      if(playersLeft().iterator().hasNext()){
+        AbstractPlayer winner = playersLeft().iterator().next();
+        winnerMessage = new StringMessage(winner.getName() + " is the winner!");
+      }
       System.out.println(gameID + " : " + winnerMessage.unpacker());
       // Send message to all children
-      for (ChildServer child : children) {
+      for (int i = 0; i < children.size(); i++) {
+        ChildServer child = children.get(i);
         try {
-          child.getPlayerConnection().sendObject(new StringMessage(turnResults.toString()));
+          child.getPlayerConnection().sendObject(child.getPlayer());
+          child.getPlayerConnection().sendObject(new StringMessage(turnResults.get(i).toString()));
           child.getPlayerConnection().sendObject(winnerMessage);
         } catch (Exception e) {
         }
@@ -688,6 +704,7 @@ public class ParentServer extends Thread{
     System.out.println(gameID + " : TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
     System.out.println(gameID + " : START_WAIT_MINUTES:" + START_WAIT_MINUTES);
     System.out.println(gameID + " : FOG_OF_WAR:" + FOG_OF_WAR);
+    System.out.println(gameID + " : MAX_MISSED:" + MAX_MISSED);
     playGame();
     System.out.println(gameID + " : Game ended");
   }

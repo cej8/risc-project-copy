@@ -273,8 +273,8 @@ public class ChildServer implements Runnable{
     missedTurns++;
     System.out.println(parent.getGameID() + " : (" + player.getName() + ") did not input turn, missed now " + missedTurns);
     //If past maximum then mark as not playing
-    if(missedTurns > Constants.MAX_MISSED){
-      System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed more than " + Constants.MAX_MISSED + " turns, marking as dead");
+    if(missedTurns > parent.getMAX_MISSED()){
+      System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed more than " + parent.getMAX_MISSED() + " turns, marking as dead");
       player.setPlaying(false);
     }
     if(missedTurns == 1 && firstCall == true){
