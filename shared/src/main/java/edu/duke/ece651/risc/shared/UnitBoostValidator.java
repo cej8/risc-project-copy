@@ -21,6 +21,9 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
 
   public boolean validateRegions(List<UnitBoost> orders) {
     for (UnitBoost boost : orders) {
+      if(boost.getDestination().getPlague()){
+        return false;
+      }
       if (!(validateRegion(boost))) {
         System.out.println("Invalid UnitBoost: player did not own region "+ boost.getDestination().getName());
         return false;

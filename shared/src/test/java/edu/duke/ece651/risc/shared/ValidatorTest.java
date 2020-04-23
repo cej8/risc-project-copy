@@ -27,8 +27,7 @@ public class ValidatorTest {
     AttackValidator av = new AttackValidator(p1, b);
     PlacementValidator pv = new PlacementValidator(p2, new Unit(15), b);
     TechBoostValidator tbv = new TechBoostValidator(p1, b);
-
-    List<MoveOrder> moves = getMoveOrders(regions);
+     List<MoveOrder> moves = getMoveOrders(regions);
     List<AttackMove> attacks = getAttackList(regions);
     List<PlacementOrder> placements = getPlacementList(p1, p2);
 
@@ -40,16 +39,20 @@ public class ValidatorTest {
 
     List<TechBoost> invalidCountBoosts = getInvalidCountTechBoosts(p2);
     assertEquals(false, tbv.validateOrders(invalidCountBoosts));
-
+ 
     assertEquals(true, mv.isValidMove(moves.get(0), 0));
     assertEquals(false, mv.isValidMove(moves.get(1), 0));
     assertEquals(true, mv.isValidMove(moves.get(2), 0));
     assertEquals(false, mv.isValidMove(moves.get(3), 0));
+    assertEquals(false,mv.isValidMove(moves.get(4),0));
+    assertEquals(false, mv.isValidMove(moves.get(5),0));
     assertEquals(false, mv.validateRegions(moves));
     // TODO uncomment when attacska re changed
     assertEquals(true, av.isValidAttack(attacks.get(0)));
     assertEquals(false, av.isValidAttack(attacks.get(1)));
     assertEquals(false, av.isValidAttack(attacks.get(2)));
+    assertEquals(false, av.isValidAttack(attacks.get(3)));
+  
     assertEquals(false, av.validateRegions(attacks));
 
     assertEquals(true, pv.isValidPlacement(placements.get(0), p1));// valid
@@ -57,7 +60,27 @@ public class ValidatorTest {
     assertEquals(false, pv.validateRegions(placements));
 
   }
+  @Test
+  public void plagueOrderFailures(){
+    Board board = new Board();
+      Region testPlague = new Region("Fire");
+    AbstractPlayer plagueOwner= new HumanPlayer("plague owner");
+    testPlague.setPlague(true);
+    ResourceBoost ub = new ResourceBoost(testPlague);
+    ResourceBoostValidator plagueValidator = new ResourceBoostValidator(plagueOwner, board);
+    List<ResourceBoost> plagueBoost= new ArrayList<ResourceBoost>();
+    plagueBoost.add(ub);
+    assertEquals(false, plagueValidator.validOwnership(plagueBoost));
 
+    TeleportOrder to= new TeleportOrder(testPlague,testPlague,new Unit(1));
+     TeleportValidator plagueValidator2 = new TeleportValidator(plagueOwner, board);
+    List<TeleportOrder> plagueTeleport= new ArrayList<TeleportOrder>();
+    plagueTeleport.add(to);
+    assertEquals(false, plagueValidator2.validOwnership(plagueTeleport));
+
+
+
+  }
   private List<TechBoost> getInvalidCountTechBoosts(AbstractPlayer p) {
     List<TechBoost> boosts = new ArrayList<TechBoost>();
     TechBoost tb1 = new TechBoost(p);
@@ -104,7 +127,7 @@ public class ValidatorTest {
     r3.setName("r6");
     Region r6 = new Region(p2, new Unit(6));
     r6.setName("r6");
-
+    r6.setPlague(true);
     List<Region> regions = new ArrayList<Region>();
     regions.add(r1);
     regions.add(r2);
@@ -151,11 +174,15 @@ public class ValidatorTest {
     MoveOrder move23 = new MoveOrder(regions.get(1), regions.get(3), new Unit(2));// invalid (diff owner)
     MoveOrder move14 = new MoveOrder(regions.get(0), regions.get(2), new Unit(3));// valid not adjacent
     MoveOrder move15 = new MoveOrder(regions.get(0), regions.get(4), new Unit(1));// invalid no path
+    MoveOrder move63= new MoveOrder(regions.get(5),regions.get(3),new Unit(1));//invalid source has plague
+    MoveOrder move33= new MoveOrder(regions.get(3),regions.get(3), new Unit(1));//invalid, source and destination are equal
     List<MoveOrder> moves = new ArrayList<MoveOrder>();
     moves.add(move12);
     moves.add(move23);
     moves.add(move14);
     moves.add(move15);
+    moves.add(move63);
+    moves.add(move33);
     return moves;
   }
 
@@ -163,10 +190,13 @@ public class ValidatorTest {
     AttackMove attack13 = new AttackMove(regions.get(0), regions.get(3), new Unit(4));// valid adjacent
     AttackMove attack23 = new AttackMove(regions.get(1), regions.get(3), new Unit(3));// invalid not adjacent
     AttackMove attack36 = new AttackMove(regions.get(3), regions.get(5), new Unit(2));// invalid same owner
+     AttackMove attack33= new AttackMove(regions.get(3),regions.get(3), new Unit(1));//invalid, source and destination are equal
+  
     List<AttackMove> attacks = new ArrayList<AttackMove>();
     attacks.add(attack13);
     attacks.add(attack23);
     attacks.add(attack36);
+    attacks.add(attack33);
     return attacks;
   }
 
