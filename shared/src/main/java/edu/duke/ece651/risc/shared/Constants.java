@@ -35,7 +35,8 @@ public final class Constants {
   public static final int SPYMOVE_PRIORITY = 65;
   public static final int CLOAK_PRIORITY = 66;
   public static final int SPYUPGRADE_PRIORITY = 64;
-  public static final int UPGRADE_RESOURCE_PRIORITY=35;
+  public static final int UPGRADE_RESOURCE_PRIORITY = 35;
+  public static final int RAID_PRIORITY = 69;
 
   // cost to attack - food 
   public static final int ATTACK_COST = 1;

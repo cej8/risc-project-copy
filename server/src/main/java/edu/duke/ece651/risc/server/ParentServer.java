@@ -421,6 +421,9 @@ public class ParentServer extends Thread{
        else if (order instanceof CloakOrder) {
         castOrder = (CloakOrder) (order);
       }
+       else if (order instanceof RaidOrder){
+        castOrder = (RaidOrder) (order);
+      }
      
       else {
         continue;
@@ -429,7 +432,7 @@ public class ParentServer extends Thread{
       String className = castOrder.getClass().getName();
       className = className.substring(className.lastIndexOf('.') + 1);
       //Handle non-combat in order
-      if(!className.equals("AttackCombat")){
+      if(!className.equals("AttackCombat") && !className.equals("RaidOrder")){
         className = "NotCombat";
       }
 
@@ -479,6 +482,10 @@ public class ParentServer extends Thread{
     //Do all not combat first then attackCombat random ordered
     if(orderMap.containsKey("NotCombat")){
       applyOrderList(orderMap.get("NotCombat"));
+    }
+    if(orderMap.containsKey("RaidOrder")){
+      Collections.shuffle(orderMap.get("RaidOrder"));
+      applyOrderList(orderMap.get("RaidOrder"));
     }
     if(orderMap.containsKey("AttackCombat")){
       Collections.shuffle(orderMap.get("AttackCombat"));
@@ -587,8 +594,8 @@ public class ParentServer extends Thread{
         r.setCloakTurns(r.getCloakTurns()-1);
       }
     }
-
   }
+
   // method to apply plague to region
   public void applyPlague(){
     if(turnNumber<6){
@@ -603,6 +610,7 @@ public class ParentServer extends Thread{
     }
     // otherwise do nothing
   }
+
   // set turn used for testing
   public void setTurn(int i){
     this.turnNumber = i;
@@ -610,6 +618,21 @@ public class ParentServer extends Thread{
   public int getPlagueID(){
     return this.plagueID;
   }
+
+  //Method to get freshest version of player from board
+  //Needed to update CS version of player so most up to date
+  //(resources changed from doAction) is sent
+  void updatePlayersInChildServers(){
+    for(Region r : board.getRegions()){
+      AbstractPlayer p = r.getOwner();
+      int pIndex = players.indexOf(p.getName());
+      if(pIndex != -1){
+        children.get(pIndex).setPlayer(p);
+      }
+    }
+  }
+
+
   // method that controls game play
   public void playGame(){
     //Wait for MAX_PLAYERS to connect or timeout
@@ -634,8 +657,8 @@ public class ParentServer extends Thread{
       }
       turnNumber++;
       // Evolution 3: Plague
-      applyPlague();
-      
+      applyPlague();    
+      updatePlayersInChildServers();
     }
     if (numPlayersLeft() == 1) {
       // If one player alive then create message --> send

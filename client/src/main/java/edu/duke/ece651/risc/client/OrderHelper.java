@@ -38,7 +38,7 @@ public class OrderHelper {
 
       client.getClientOutput().displayString("You are " + client.getPlayer().getName()
 
-          + ", what would you like to do?\n (M)ove\n (A)ttack\n (U)nit Boost\n (T)ech Boost\n (R)esource Boost\n T(E)leport\n (C)loak\n Sp(Y) Upgrade\n Spy Mo(V)e\n (D)one");
+          + ", what would you like to do?\n (M)ove\n (A)ttack\n (U)nit Boost\n (T)ech Boost\n (R)esource Boost\n T(E)leport\n (C)loak\n Sp(Y) Upgrade\n Spy Mo(V)e\n Ra(I)d\n (D)one");
 
       response = client.getClientInput().readInput();
       orderSelect = getOrderList(orderList, response);

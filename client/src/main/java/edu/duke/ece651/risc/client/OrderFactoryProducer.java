@@ -44,9 +44,13 @@ public class OrderFactoryProducer {
         factory = new SpyMoveOrderCreator(c);
         c.getClientOutput().displayString("You made a Spy Move order, what else would you like to do?");
         break;
+      case "I":// Raid
+        factory = new RaidOrderCreator(c);
+        c.getClientOutput().displayString("You made a Raid order, what else would you like to do?");
+        break;
       default:
-       c.getClientOutput().displayString("Please select either T, M, A, U, E, R, C, Y, V or D");
-       break;
+        c.getClientOutput().displayString("Please select either T, M, A, U, E, R, C, Y, V, I or D");
+        break;
     }
     return factory;
   }

@@ -57,6 +57,10 @@ public class ChildServer implements Runnable{
     return player;
   }
 
+  public void setPlayer(AbstractPlayer player){
+    this.player = player;
+  }
+
   public ParentServer getParentServer(){
     return parent;
   }
@@ -167,6 +171,8 @@ public class ChildServer implements Runnable{
         else{
           clientBoard = parent.getBoard();
         }
+        //Send player
+        playerConnection.sendObject(player);
         //Send turn message
         playerConnection.sendObject(new StringMessage(turnMessage));
         //If called then new turn --> send continue
