@@ -9,6 +9,9 @@ public class TechResources implements Serializable{
   public TechResources(int startingTech){
     this.techStash = startingTech;
   }
+  public void setTech(int techStash){
+    this.techStash = techStash;
+  }
   public int getTech(){
     return this.techStash;
   }

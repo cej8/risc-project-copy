@@ -31,7 +31,7 @@ public class RaidValidator implements ValidatorInterface<RaidOrder> {
     Region source = order.getSource().getRegionByName(tempBoard, order.getDestination().getName());
     
     //Ensure player owns starting region
-    if(!player.getName().equals(destination.getOwner().getName()){
+    if(!player.getName().equals(destination.getOwner().getName())){
       return false;
     }
     //Ensure player does not own ending region

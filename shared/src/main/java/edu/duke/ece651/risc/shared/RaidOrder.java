@@ -1,10 +1,10 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.*;
-import com.google.common.collet.Sets;
+import com.google.common.collect.Sets;
 
 public class RaidOrder extends SourceDestinationOrder{
-  private static final log serialVersionUID = 56L;
+  private static final long serialVersionUID = 56L;
 
   public RaidOrder(Region source, Region destination){
     this.source = source;
@@ -35,17 +35,17 @@ public class RaidOrder extends SourceDestinationOrder{
                          playersDestination,
                          Sets.union(playersSource, playersDestination),
                          playersSource,
-                         source.getOwner().getName(),
-                         destination.getOwner().getName());
+                         new HashSet<String>(Arrays.asList(source.getOwner().getName())),
+                         new HashSet<String>(Arrays.asList(destination.getOwner().getName())));
   }
 
   @Override
   public List<String> doAction() {
     //Remove fuel and tech times max((sourceTechLevel - destTechLevel),1)/5
-    int fuelCost = destination.getOwner().getResource.getFuelResource().getFuel();
-    int techCost = destination.getOwner().getResource.getTechResource().getTech();
+    int fuelCost = destination.getOwner().getResources().getFuelResource().getFuel();
+    int techCost = destination.getOwner().getResources().getTechResource().getTech();
     double multiplier = Math.max((source.getOwner().getMaxTechLevel().getMaxTechLevel() - destination.getOwner().getMaxTechLevel().getMaxTechLevel()), 1)*1.0/5.0;
-    
+
     fuelCost *= multiplier;
     techCost *= multiplier;
     
@@ -53,7 +53,7 @@ public class RaidOrder extends SourceDestinationOrder{
     source.getOwner().getResources().getTechResource().addTech(techCost);
     destination.getOwner().getResources().getFuelResource().useFuel(fuelCost);
     destination.getOwner().getResources().getTechResource().useTech(techCost);
-    return Arrays.asList(source.getOwner().getName() + " raided "
+    return Arrays.asList(source.getOwner().getName() + " raided ",
                          destination.getName(),
                          " from ",
                          source.getName(),

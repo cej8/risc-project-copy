@@ -14,6 +14,7 @@ public class ValidatorHelper {
   private ValidatorInterface<CloakOrder> cloakValidator;
   private ValidatorInterface<SpyUpgradeOrder> spyUpgradeValidator;
   private ValidatorInterface<SpyMoveOrder> spyMoveValidator;
+  private ValidatorInterface<RaidOrder> raidValidator;
 
   private Board tempBoard;
   private AbstractPlayer player;
@@ -33,7 +34,7 @@ public class ValidatorHelper {
     this.spyUpgradeValidator = new SpyUpgradeValidator(this.player, tempBoard);
     this.spyMoveValidator = new SpyMoveValidator(this.player, tempBoard);
 
-    this.raidValidator = new RaidValidator(this.player, tempboard);
+    this.raidValidator = new RaidValidator(this.player, tempBoard);
 
   }
 

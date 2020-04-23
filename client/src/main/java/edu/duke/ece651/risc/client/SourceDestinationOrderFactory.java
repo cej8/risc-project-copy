@@ -5,7 +5,7 @@ public class SourceDestinationOrderFactory extends AbstractOrderFactory{
   public static OrderInterface getOrder(String unitKeyWord, Region source, Region destination){
     switch(unitKeyWord){
     case "I":
-      order = new RaidOrder(source destination);
+      order = new RaidOrder(source, destination);
       break;
     }
     return order;

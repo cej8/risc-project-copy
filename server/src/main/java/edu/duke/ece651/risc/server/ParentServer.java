@@ -499,7 +499,8 @@ public class ParentServer extends Thread{
     for (int i = 0; i < orders.size(); i++) {
       //List of substrings making up order's text result
       List<String> results = orders.get(i).doAction();
-      if(FOG_OF_WAR){
+      //If FOG_OF_WAR then apply (if not initial placements)
+      if(FOG_OF_WAR && turnNumber > 0){
         //stringVisibility is list<set> of player names who can see each
         //substring of order's results
         List<Set<String>> stringVisibility = orders.get(i).getPlayersVisibleTo();

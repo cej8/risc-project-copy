@@ -10,7 +10,7 @@ public class RaidOrderCreator extends OrderCreator {
   public void raidHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord){
     Region source = promptForRegion(sourceKeyWord);
     Region destination = promptForRegion(destKeyWord);
-    OrderInterface order = SourceDestinationOrderFactory.getOrder("I", destination);
+    OrderInterface order = SourceDestinationOrderFactory.getOrder("I", source, destination);
     orderList.add(order);
   }
   
