@@ -21,8 +21,12 @@ public class TeleportValidator implements ValidatorInterface<TeleportOrder> {
   }
 
   public boolean validOwnership(List<TeleportOrder> tList) {
+    
     // check that a player owns both teh source and destination
     for (TeleportOrder t : tList) {
+      if(t.getSource().getPlague()){
+        return false;
+      }
       if (!t.getSource().getOwner().getName().equals(player.getName())
           || !t.getDestination().getOwner().getName().equals(player.getName())) {
         System.out.println(player.getName() + " does not own source or destination");
@@ -35,6 +39,7 @@ public class TeleportValidator implements ValidatorInterface<TeleportOrder> {
   public boolean validUnits(List<TeleportOrder> t) {
     // ensure that units are valid cumulatively for all teleport orders
     for (TeleportOrder teleport : t) {
+      
       Region tempSource = teleport.getSource().getRegionByName(tempBoard, teleport.getSource().getName());
       Region tempDest = teleport.getDestination().getRegionByName(tempBoard, teleport.getDestination().getName());
       Unit sourceUnits = tempSource.getUnits();

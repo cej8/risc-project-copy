@@ -52,6 +52,9 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
 
   // helper method
   public boolean isValidMove(MoveOrder m, int sum) {
+    if(m.getSource().getPlague()){
+      return false;
+    }
     if(m.getSource()==m.getDestination()){
       System.out.println("Source cannot also be destionation");
    
