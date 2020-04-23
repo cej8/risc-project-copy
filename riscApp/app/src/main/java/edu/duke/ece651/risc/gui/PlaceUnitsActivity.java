@@ -185,7 +185,6 @@ public class PlaceUnitsActivity extends AppCompatActivity {
                 break;
             }
             planetUnits.get(j).setText("");
-            planetName.get(j).setText(playerRegions.get(j).getName());
         }
     }
     public boolean makePlacements(){
