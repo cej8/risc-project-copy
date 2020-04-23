@@ -50,6 +50,18 @@ public class PlanetDrawable {
         unitCircles = new ArrayList<TextView>();
         planetViews = new ArrayList<ImageView>();
     }
+    // placements
+    public PlanetDrawable(Board b, List<ImageButton> buttons , List<ImageView> squares, List<TextView> names,List<ImageView> views){
+        board = b;
+        planetButtons = buttons;
+        playerColors = squares;
+        playerNames = names;
+        players = board.getPlayerList();
+        this.setPlayerColors();
+        unitCircles = new ArrayList<TextView>();
+        //planetViews = new ArrayList<ImageView>();
+        planetViews = views;
+    }
 
     //set planets without units
     public void setPlanetsNoUnits() {

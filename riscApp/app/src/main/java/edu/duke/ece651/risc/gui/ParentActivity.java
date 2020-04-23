@@ -20,11 +20,17 @@ public final class ParentActivity {
     private static boolean spectateFirstCall;
     private static boolean spectate;
     private static String repromptBoard;
+    private static String regionGroup;
 
     // login credentials
     private static String username;
     private static String password1;
     private static String password2;
+
+    public static String getRegionGroup(){return regionGroup;}
+    public void setRegionGroup(String rG){
+        regionGroup = rG;
+    }
 
     public static String getPassword1(){
         return password1;
