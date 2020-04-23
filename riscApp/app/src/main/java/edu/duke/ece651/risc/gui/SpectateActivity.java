@@ -30,17 +30,6 @@ public class SpectateActivity extends AppCompatActivity {
         executeClient.setConnection(ParentActivity.getConnection());
         executeClient.spectate(true,handler);
     }
-   /* @Override
-    protected void onStart() {
-        super.onStart();
-        List<ImageButton> planetButtons = getPlanetButtons();
-        List<TextView> planetPlayers = getPlanetPlayers();
-        List<TextView> unitCircles = getUnitCircles();
-        List<ImageView> planetSquares = getPlanetSquares();
-        List<ImageView> planetViews = getPlanetViews();
-        PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
-        pd.setPlanets();
-    }*/
 @Override
 public void onBackPressed()
 {
