@@ -156,7 +156,7 @@ public class Board implements Serializable {
 }
 
 //Creates a list (preserve order) of players on board.
-public List<AbstractPlayer> getPlayerList(){
+public List<AbstractPlayer> getPlayerListOld(){
     List<Region> allRegions = this.getRegions();
     Set<AbstractPlayer> addedPlayers = new HashSet<AbstractPlayer>();
     List<AbstractPlayer> allPlayers = new ArrayList<AbstractPlayer>();
@@ -171,7 +171,21 @@ public List<AbstractPlayer> getPlayerList(){
     return allPlayers;
 }
 
-
+    public List<AbstractPlayer> getPlayerList(){
+        List<Region> allRegions = this.getRegions();
+        Set<String> addedPlayers = new HashSet<String>();
+        List<AbstractPlayer> allPlayers = new ArrayList<AbstractPlayer>();
+        for (Region r : allRegions) { //for each region on the board
+            if (r.getOwner() != null) {
+                //AbstractPlayer ab = new HumanPlayer();
+                if (!(addedPlayers.contains(r.getOwner().getName()))) { // if that player has not already been to list
+                    allPlayers.add(r.getOwner()); //add that region's owner to the set
+                    addedPlayers.add(r.getOwner().getName());//add player to list of added players
+                }
+            }
+        }
+        return allPlayers;
+    }
 
 
 }
