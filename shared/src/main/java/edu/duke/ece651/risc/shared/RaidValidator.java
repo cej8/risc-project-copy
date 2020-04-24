@@ -39,6 +39,11 @@ public class RaidValidator implements ValidatorInterface<RaidOrder> {
       return false;
     }
 
+    //Do not allow if plague
+    if(source.getPlague()){
+      return false;
+    }
+
     boolean destSource = false;
     boolean sourceDest = false;
 
