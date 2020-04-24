@@ -60,10 +60,10 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         connection = ParentActivity.getConnection();
         executeClient.setConnection(connection);
         board = ParentActivity.getBoard();
-        regionList = board.getRegions();
+        //regionList = board.getRegions();
         player = ParentActivity.getPlayer();
         startUnits = Constants.UNIT_START_MULTIPLIER * board.getNumRegionsOwned(player);
-        getRegionByOwner();
+        //getRegionByOwner();
         //displayText();
         headerText = findViewById(R.id.headerText);
         headerText.setText("You have You have " + startUnits + " units to place on your planets. Hit submit when finished!");
@@ -79,7 +79,6 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         super.onStart();
         List<ImageButton> planetButtons = getPlanetButtons();
         List<TextView> planetPlayers = getPlanetPlayers();
-       // List<TextView> unitCircles = getUnitCircles();
         List<ImageView> playerColors = getPlayerColors();
         List<ImageView> planetViews = getPlanetViews();
         // create temp players with your players name
@@ -97,8 +96,9 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         planetDrawable = new PlanetDrawable(tempBoard, planetButtons, playerColors, planetPlayers,planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
         planetDrawable.setGreyOutlines();
-        //planetDrawable.setAllUnitCircles();
         planetDrawable.setPlanetsNoUnits();
+        regionList = tempBoard.getRegions();
+        getRegionByOwner();
         for (AbstractPlayer p : tempPlayerList) {
             if (!p.getName().equals(player.getName())) { //if not player's planet, set view to outline
                 if (p!=null){ //if owned by someone, set to their outline color and make button invisible
@@ -185,10 +185,7 @@ public class PlaceUnitsActivity extends AppCompatActivity {
         }
     }
     public void resetSelections(){
-        for (int j = 0; j < playerRegions.size(); j++){
-            if (j > 5){
-                break;
-            }
+        for (int j = 0; j < planetUnits.size(); j++){
             planetUnits.get(j).setText("");
         }
     }
@@ -205,17 +202,34 @@ public class PlaceUnitsActivity extends AppCompatActivity {
                 parentActivity.setOrders(placementOrder);
             }
         } else {
-            for (int j = 0; j < playerRegions.size(); j++) {
+            for (int j = 0; j < planetUnits.size(); j++){
+                unitPlacement = planetUnits.get(j).getText().toString();
+                if (unitPlacement.equals("")){
+                    // do nothing
+                } else {
+                    unit = new Unit(Integer.parseInt(unitPlacement));
+                    //region = getRegionByName(tempBoard, playerRegions.get(j).getName());
+                    region = getRegionByName(tempBoard,planetNames().get(j));
+                    PlacementOrder placementOrder = new PlacementOrder(region, unit);
+                    ParentActivity parentActivity = new ParentActivity();
+                    parentActivity.setOrders(placementOrder);
+                }
+            }
+            /*for (int j = 0; j < playerRegions.size(); j++) {
                 if (j > 5) {
                     break;
                 }
                 unitPlacement = planetUnits.get(j).getText().toString();
-                unit = new Unit(Integer.parseInt(unitPlacement));
-                region = getRegionByName(board, playerRegions.get(j).getName());
-                PlacementOrder placementOrder = new PlacementOrder(region, unit);
-                ParentActivity parentActivity = new ParentActivity();
-                parentActivity.setOrders(placementOrder);
-            }
+                if (unitPlacement.equals("")){
+
+                } else {
+                    unit = new Unit(Integer.parseInt(unitPlacement));
+                    region = getRegionByName(board, playerRegions.get(j).getName());
+                    PlacementOrder placementOrder = new PlacementOrder(region, unit);
+                    ParentActivity parentActivity = new ParentActivity();
+                    parentActivity.setOrders(placementOrder);
+                }
+            }*/
         }
         if(!validatorHelper.allPlacementsValid(ParentActivity.getOrders())){
             resetSelections();
@@ -238,6 +252,22 @@ public class PlaceUnitsActivity extends AppCompatActivity {
                 playerRegions.add(regionList.get(i));
             }
         }
+    }
+    public List<String> planetNames(){
+        List<String> planets = new ArrayList<String>();
+        planets.add("Caprica");
+        planets.add("Hoth");
+        planets.add("Worlorn");
+        planets.add("Dagobah");
+        planets.add("Krypton");
+        planets.add("Ego");
+        planets.add("Terra Prime");
+        planets.add("Arda");
+        planets.add("Dune");
+        planets.add("Solaris");
+        planets.add("Gallifrey");
+        planets.add("Cybertron");
+        return planets;
     }
     public List<ImageButton> getPlanetButtons(){
         List<ImageButton > planetButtons = new ArrayList<ImageButton>();
