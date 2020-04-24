@@ -280,6 +280,10 @@ public class ChildServer implements Runnable{
     if(missedTurns == 1 && firstCall == true){
       System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed initial placements, marking as dead");
       player.setPlaying(false);
+      playerConnection.closeAll();
+      playerConnection = null;
+      parent.getMasterServer().removePlayer(player.getName(), parent.getGameID());
+      player.setWatchingNull();
     }
   }
 }
