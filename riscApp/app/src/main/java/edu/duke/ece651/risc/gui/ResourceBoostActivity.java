@@ -13,8 +13,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,87 +21,50 @@ import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
 
-public class OrderActivity extends AppCompatActivity {
+public class ResourceBoostActivity extends AppCompatActivity {
     List<Region> regions;
     String planetName;
     TextView name;
     TextView owner;
     TextView numUnits;
     TextView helpText;
-    TextView orderHelper;
-    String orderMessage;
+    TextView regionLevel;
     Board board;
-    AbstractPlayer player;
     PlanetDrawable planetDrawable;
     Map<Region, ImageView> regionImageViewMap;
+    AbstractPlayer player;
     Map<Region, ImageButton> regionImageButtonMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attack);
+        setContentView(R.layout.activity_resource_boost);
         board = ParentActivity.getBoard();
         player = ParentActivity.getPlayer();
         regions = board.getRegions();
         name = findViewById(R.id.displayPame);
         owner = findViewById(R.id.displayOwner);
         numUnits = findViewById(R.id.displayUnits);
-        helpText = findViewById(R.id.attackHelp);
-        orderHelper = findViewById(R.id.orderHelper);
-        Intent i = getIntent();
-        orderMessage =  i.getStringExtra("ORDER");
-        Log.d("Order Message", orderMessage);
-        String h = "Select planet to " + orderMessage + " from";
-        orderHelper.setText(h);
+        regionLevel=findViewById(R.id.displayLevel);
+        helpText = findViewById(R.id.orderHelp);
         plagueDraw();
     }
-
     @Override
     protected void onStart() {
         super.onStart();
         List<ImageButton> planetButtons = getPlanetButtons();
         List<TextView> planetPlayers = getPlanetPlayers();
         List<TextView> unitCircles = getUnitCircles();
-        List<ImageView> playerColors = getPlayerColors();
+        List<ImageView> planetSquares = getPlanetSquares();
         List<ImageView> planetViews = getPlanetViews();
-        planetDrawable = new PlanetDrawable(board, planetButtons, playerColors, planetPlayers, unitCircles, planetViews);
+        planetDrawable = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
-        planetDrawable.setGreyOutlines();
+
+        regionImageButtonMap = planetDrawable.getRegionToButtonMap();
         planetDrawable.setAllUnitCircles();
-        for (AbstractPlayer p : board.getPlayerList()) {
-            if (p != player) { //if not player's planet, set view to outline
-                if (p!=null){ //if owned by someone, set to their outline color and make button invisible
-                    for (Region r : board.getPlayerRegionSet(p)) {
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
-                        planetDrawable.setImageButtonsInvisible(p);
-                    }
-                }
-                else{ //if player is null, set button invisible and set grey outline
-                    planetDrawable.setGreyOutlines();
-                    planetDrawable.setImageButtonsInvisible(p);
-                }
-            } else { //if player own's planet, set up visible planet
-                for (Region r : board.getPlayerRegionSet(p)) {
-                    planetDrawable.setPlanets();
-                    regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
-                }
-            }
-        }
+        setSameOwnerPlanets();
     }
-
-
-    public void attackFrom(View view){
-        if (planetName == null){
-                helpText.setText("Please select a planet");
-            } else {
-                Intent i = new Intent(this, OrderActivityTwo.class);
-                i.putExtra("PNAME", planetName);
-                i.putExtra("ORDER",orderMessage);
-                startActivity(i);
-        }
-    }
-
-    // Plague
+    // plague
     public void plagueDraw(){
         int increment = 0;
         Resources r = getResources();
@@ -139,9 +100,41 @@ public class OrderActivity extends AppCompatActivity {
         drawables.add(r.getDrawable(R.drawable.p12nb));
         return drawables;
     }
+    //helper function for orders in which you can only select planets you own
+    public void setSameOwnerPlanets(){
+        for (AbstractPlayer p : board.getPlayerList()) {
+            if (p != player) { //if not player's planet, set view to outline
+                if (p!=null){ //if owned by someone, set to their outline color and make button invisible
+                    for (Region r : board.getPlayerRegionSet(p)) {
+                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
+                        planetDrawable.setImageButtonsInvisible(p);
+                    }
+                }
+                else{ //if player is null, set button invisible and set grey outline
+                    planetDrawable.setGreyOutlines();
+                    planetDrawable.setImageButtonsInvisible(p);
+                }
+            } else { //if player own's planet, set up visible planet
+                for (Region r : board.getPlayerRegionSet(p)) {
+                    planetDrawable.setPlanets();
+                    regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
+                }
+            }
+        }
+    }
+
+    public void submitRegion(View view){//button click
+        if (planetName == null){
+            helpText.setText("Please select a planet to boost");
+        } else {
+            Intent i = new Intent(this,DisplayMapActivity.class);
+            i.putExtra("ATTACKTO", planetName);
+            i.putExtra("ORDER","resource boost");
+            startActivity(i);
+        }
 
 
-
+    }
     public void setSelectionInvisible(Region r) {
         planetDrawable.setImageViewVisible(null);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
@@ -152,6 +145,8 @@ public class OrderActivity extends AppCompatActivity {
 
     public void setPlanetInfo(Region r){
         name.setText(r.getName());
+        String rLevel="Current Level: "+ Integer.toString(r.getRegionLevel().getRegionLevel());
+        regionLevel.setText(rLevel);
         if (r.getOwner()!=null) {
             String o = "Owner: " + r.getOwner().getName();
             owner.setText(o);
@@ -304,11 +299,11 @@ public class OrderActivity extends AppCompatActivity {
         return planetPlayers;
     }
 
-    public List<ImageView> getPlayerColors() {
+    public List<ImageView> getPlanetSquares() {
         List<ImageView> planetSquares = new ArrayList<ImageView>();
         ImageView square0 = findViewById(R.id.square0);
         ImageView square1 = findViewById(R.id.square1);
-        ImageView  square2 = findViewById(R.id.square2);
+        ImageView square2 = findViewById(R.id.square2);
         ImageView square3 = findViewById(R.id.square3);
         ImageView square4 = findViewById(R.id.square4);
         planetSquares.add(square0);
@@ -329,9 +324,9 @@ public class OrderActivity extends AppCompatActivity {
         ImageButton planet6 = findViewById(R.id.p6);
         ImageButton planet7 = findViewById(R.id.p7);
         ImageButton planet8 = findViewById(R.id.p8);
-        ImageButton  planet9 = findViewById(R.id.p9);
-        ImageButton  planet10 = findViewById(R.id.p10);
-        ImageButton  planet11 = findViewById(R.id.p11);
+        ImageButton planet9 = findViewById(R.id.p9);
+        ImageButton planet10 = findViewById(R.id.p10);
+        ImageButton planet11 = findViewById(R.id.p11);
         planetButtons.add(planet0);
         planetButtons.add(planet1);
         planetButtons.add(planet2);
@@ -346,6 +341,4 @@ public class OrderActivity extends AppCompatActivity {
         planetButtons.add(planet11);
         return planetButtons;
     }
-
-
 }

@@ -14,6 +14,9 @@ private Board tempBoard;
   }
   // Checks if attack is valid given conditions
   public boolean isValidAttack(AttackMove a) {
+    if(a.getSource().getPlague()){
+      return false;
+    }
     // regions must be owned by different players
     //starting must be owned by player
     if(!a.getSource().getOwner().getName().equals(player.getName())){

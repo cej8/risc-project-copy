@@ -1,6 +1,7 @@
 package edu.duke.ece651.risc.gui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -62,23 +63,27 @@ public class GUIWaitingRoom extends Thread {
 
             //Set max/start first time board received (start of turn)
             if (maxTime == -1) {
-                // maxTime=(long) (connection.getSocket().getSoTimeout());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));
                 //Catch case for issues in testing, should never really happen
                 if (maxTime == 0) {
-                    //maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
                     parentActivity.setMaxTime((long) (TURN_WAIT_MINUTES * 60 * 1000));
                 }
             }
             if (startTime == -1) {
-                //startTime = System.currentTimeMillis();
                 parentActivity.setStartTime(System.currentTimeMillis());
             }
-            // return this.board;
         }
         catch(Exception e) {
             e.printStackTrace();
             connection.closeAll();
+            clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
 
@@ -96,20 +101,25 @@ public class GUIWaitingRoom extends Thread {
 
             //Set max/start first time board received (start of turn)
             if (maxTime == -1) {
-                // maxTime=(long) (connection.getSocket().getSoTimeout());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));
                 //Catch case for issues in testing, should never really happen
                 if (maxTime == 0) {
-                    //maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
                     parentActivity.setMaxTime((long) (TURN_WAIT_MINUTES * 60 * 1000));
                 }
             }
             if (startTime == -1) {
-                //startTime = System.currentTimeMillis();
                 parentActivity.setStartTime(System.currentTimeMillis());
             }
         } catch (Exception e){
-
+            connection.closeAll();
+            clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
 
@@ -136,10 +146,16 @@ public class GUIWaitingRoom extends Thread {
                 e.printStackTrace();
                 Log.d("SetSocketTimeout", "Exception");
                 connection.closeAll();
+                clientInput.close();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                        activity.startActivity(intent);
+                    }
+                });
             }
-
             Log.d("Connection", ParentActivity.getConnection().toString());
-            //waitingToStart();
             getInitialBoard();
             handler.post(new Runnable() {
                 @Override
@@ -151,14 +167,6 @@ public class GUIWaitingRoom extends Thread {
             });
         } else {
             repromptInitialBoard();
-           /* handler.post(new Runnable() {
-                @Override
-                public void run() {
-
-                    status.setVisibility(View.INVISIBLE);
-                    startGame.setEnabled(true);
-                }
-            });*/
         }
     }
 }

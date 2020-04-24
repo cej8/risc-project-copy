@@ -62,13 +62,11 @@ public class ExecuteClient {
         clientOutput = new GUITextDisplay(textHelp, act);
         final GUIClientLogin clientLogin = new GUIClientLogin(regHandler,connection, clientInput, clientOutput, username, password, act, confirmPassword);
         clientLogin.start();
-
     }
 
     public void getGames(Handler gameHandler, boolean gameType, boolean getgame) {
         final GUISelectGame selectGame = new GUISelectGame(gameHandler,getgame, gameType, connection, clientInput, clientOutput, act);
         selectGame.start();
-
     }
 
     public void pickGame(Handler newGameHandler,boolean gameType, String id, boolean getgame, String gameList) {
@@ -145,7 +143,5 @@ public class ExecuteClient {
         clientInput.close();
         Intent intent = new Intent(act,ConfirmLoginActivity.class);
         act.startActivity(intent);
-        //android.os.Process.killProcess(android.os.Process.myPid());
-       // System.exit(1);
     }
 }

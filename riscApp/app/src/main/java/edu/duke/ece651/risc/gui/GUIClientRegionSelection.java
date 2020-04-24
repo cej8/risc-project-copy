@@ -60,13 +60,7 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
     }
     public boolean chooseStartGroup() {
             try {
-                //while(true) {
-                    //Output board
-
-                //    clientOutput.displayBoard(board);
-                    //     Print prompt and get group name
-                   // clientOutput.displayString("Please select a starting group by typing in a group name (i.e. 'Group A')");
-
+                //     Print prompt and get group name
                     String groupName = this.regionGroup;
                     //if (timeOut(startTime, maxTime)) {
                     if(timeOut(ParentActivity.getStartTime(),ParentActivity.getMaxTime())){
@@ -77,20 +71,24 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                     //  Wait for response
                     StringMessage responseMessage = (StringMessage) (connection.receiveObject());
                     String response = responseMessage.unpacker();
-                   // clientOutput.displayString(response);
                     if (response.matches("^Fail:.*$")) {
-                       // continue;
                         return false;
                     }
                     if (response.matches("^Success:.*$")) {
-                       // break;
                     }
-
-               // }
-                ParentActivity parentActivity = new ParentActivity();
+                    ParentActivity parentActivity = new ParentActivity();
                 parentActivity.setBoard((Board) (connection.receiveObject()));
                 this.board = ParentActivity.getBoard();
             } catch (Exception e) {
+                connection.closeAll();
+                clientInput.close();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                        activity.startActivity(intent);
+                    }
+                });
             }
             return true;
     }
@@ -121,20 +119,25 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
 
             //Set max/start first time board received (start of turn)
             if (maxTime == -1) {
-                // maxTime=(long) (connection.getSocket().getSoTimeout());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));
                 //Catch case for issues in testing, should never really happen
                 if (maxTime == 0) {
-                    //maxTime = (long) (TURN_WAIT_MINUTES * 60 * 1000);
                     parentActivity.setMaxTime((long) (TURN_WAIT_MINUTES * 60 * 1000));
                 }
             }
             if (startTime == -1) {
-                //startTime = System.currentTimeMillis();
                 parentActivity.setStartTime(System.currentTimeMillis());
             }
         } catch (Exception e){
-
+            connection.closeAll();
+            clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
     @Override
@@ -161,7 +164,15 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                 });
             }
         } catch (Exception e) {
-
+            connection.closeAll();
+            clientInput.close();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
 

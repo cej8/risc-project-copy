@@ -107,18 +107,13 @@ public class GUIClientLogin extends Thread{
     //Method to mesh with loginProcess() in loginServer
     public void performLogin() throws IOException, ClassNotFoundException{
         String initalSuccess = receiveAndDisplayString();
-       // while(true){
-            //boolean loginBoolean = true;//queryYNAndRespond("Do you already have a login? [Y/N]");
             //Either way request login
             connection.sendObject(new ConfirmationMessage(registeredUser));
-           // connection.sendObject(new StringMessage(clientInput.readInput()));
             connection.sendObject(new StringMessage(username));
             //We will get salt back
             String salt = ((StringMessage)(connection.receiveObject())).unpacker();
             Log.d("Salt",salt);
             //We will request a password
-            //clientOutput.displayString("Password:");
-            //String password1 = clientInput.readInput();
 
             String password1 = password;
             //Hash password
@@ -137,7 +132,6 @@ public class GUIClientLogin extends Thread{
             //If false then registering (need second password entry)
             if(!registeredUser){
             //Request repeat of password
-            //clientOutput.displayString("Password (again):");
             String password2 = confirmPassword;//clientInput.readInput();
             //Hash password
             String hashPassword2 = BCrypt.hashpw(password2, salt);
@@ -242,8 +236,26 @@ public class GUIClientLogin extends Thread{
             });
         } catch (IOException e) {
             e.printStackTrace();
+            connection.closeAll();
+            clientInput.close();
+            loginHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            connection.closeAll();
+            clientInput.close();
+            loginHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity,ConfirmLoginActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
         }
     }
 }
