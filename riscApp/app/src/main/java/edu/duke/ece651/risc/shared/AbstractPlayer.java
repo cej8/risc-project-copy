@@ -50,6 +50,10 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
     this.maxTechLevel = maxTechLevel;
   }
 
+  public void setMaxTechLevel(int maxTechLevel){
+    this.maxTechLevel = new TechnologyLevel(maxTechLevel);
+  }
+
   public void setPlayerResource(PlayerResources playerResource){
     this.playerResource = playerResource;
   }

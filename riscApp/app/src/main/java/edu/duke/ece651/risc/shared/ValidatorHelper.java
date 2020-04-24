@@ -14,6 +14,7 @@ public class ValidatorHelper {
   private ValidatorInterface<CloakOrder> cloakValidator;
   private ValidatorInterface<SpyUpgradeOrder> spyUpgradeValidator;
   private ValidatorInterface<SpyMoveOrder> spyMoveValidator;
+  private ValidatorInterface<RaidOrder> raidValidator;
 
   private Board tempBoard;
   private AbstractPlayer player;
@@ -32,6 +33,8 @@ public class ValidatorHelper {
     this.cloakValidator = new CloakValidator(this.player, tempBoard);
     this.spyUpgradeValidator = new SpyUpgradeValidator(this.player, tempBoard);
     this.spyMoveValidator = new SpyMoveValidator(this.player, tempBoard);
+
+    this.raidValidator = new RaidValidator(this.player, tempBoard);
 
   }
 
@@ -52,12 +55,13 @@ public class ValidatorHelper {
     boolean validUnitBoost = true;
     boolean validTechBoost = true;
     boolean validTeleport = true;
-   boolean validResourceBoost = true;
+    boolean validResourceBoost = true;
     
     boolean validCloak = true;
     boolean validSpyUpgrade = true;
     boolean validSpyMove = true;
 
+    boolean validRaid = true;
 
     List<AttackMove> attackMoveList = new ArrayList<AttackMove>();
     List<MoveOrder> moveList = new ArrayList<MoveOrder>();
@@ -68,6 +72,7 @@ public class ValidatorHelper {
     List<CloakOrder> cloakList = new ArrayList<CloakOrder>();
     List<SpyUpgradeOrder> spyUpgradeList = new ArrayList<SpyUpgradeOrder>();
     List<SpyMoveOrder> spyMoveList = new ArrayList<SpyMoveOrder>();
+    List<RaidOrder> raidList = new ArrayList<RaidOrder>();
 
     for (OrderInterface order : orders) {
       if (order.getPriority() == Constants.ATTACK_MOVE_PRIORITY) {
@@ -109,13 +114,17 @@ public class ValidatorHelper {
         spyMoveList.clear();
         spyMoveList.add((SpyMoveOrder) order);
         validSpyMove = validSpyMove && spyMoveValidator.validateOrders(spyMoveList);
+      } else if (order.getPriority() == Constants.RAID_PRIORITY){
+        raidList.clear();
+        raidList.add((RaidOrder) order);
+        validRaid = validRaid && raidValidator.validateOrders(raidList);
       }
 
     }
 
 
     return validMove && validAttackMove && validTechBoost && validUnitBoost && validTeleport && 
-      validCloak && validSpyUpgrade && validSpyMove&&validResourceBoost;
+      validCloak && validSpyUpgrade && validSpyMove && validResourceBoost && validRaid;
 
 
   }
