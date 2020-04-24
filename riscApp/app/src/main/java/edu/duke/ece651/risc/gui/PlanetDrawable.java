@@ -62,6 +62,18 @@ public class PlanetDrawable {
         //planetViews = new ArrayList<ImageView>();
         planetViews = views;
     }
+    // spectate
+    public PlanetDrawable(Board b, List<ImageButton> buttons , List<ImageView> squares, List<TextView> names,List<ImageView> views,String s){
+        board = b;
+        planetButtons = buttons;
+        playerColors = squares;
+        playerNames = names;
+        players = board.getPlayerList();
+        this.setPlayerColors();
+        unitCircles = new ArrayList<TextView>();
+        //planetViews = new ArrayList<ImageView>();
+        planetViews = views;
+    }
 
     //set planets without units
     public void setPlanetsNoUnits() {
@@ -185,6 +197,9 @@ public class PlanetDrawable {
     //player to colored sphere
     public  Map<AbstractPlayer, Integer> getPlayerToColorMap(){
         List<AbstractPlayer> players = board.getPlayerList();
+        for (int i = 0; i < players.size();i++){
+            Log.d("Players",players.get(i).getName());
+        }
         List<Integer> planetDrawables = getColorDrawables();
         Map<AbstractPlayer, Integer> playerToColorMap = new HashMap<AbstractPlayer, Integer>();
         for (int i = 0; i < players.size(); i++){

@@ -2,6 +2,9 @@ package edu.duke.ece651.risc.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -26,9 +29,22 @@ public class SpectateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_spectate);
         board = ParentActivity.getBoard();
         regions = board.getRegions();
+        plagueDraw();
         executeClient = new ExecuteClient(this);
         executeClient.setConnection(ParentActivity.getConnection());
         executeClient.spectate(true,handler);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        List<ImageButton> planetButtons = getPlanetButtons();
+        List<TextView> planetPlayers = getPlanetPlayers();
+        List<TextView> unitCircles = getUnitCircles();
+        List<ImageView> planetSquares = getPlanetSquares();
+        List<ImageView> planetViews = getPlanetViews();
+        PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
+        pd.setPlanets();
+        pd.setGreyPlanets();
     }
 @Override
 public void onBackPressed()
@@ -42,6 +58,42 @@ public void onBackPressed()
         ExitGameDialogFragment exitFrag = new ExitGameDialogFragment(this,executeClient);
         exitFrag.show(getSupportFragmentManager(),"exit");
     }
+
+    public void plagueDraw(){
+        int increment = 0;
+        Resources r = getResources();
+        Drawable[] layers = new Drawable[2];
+        for (Region region: regions){
+            if (region.getPlague()){
+                layers[0] = getPlanetDrawable().get(increment);
+                layers[1] = r.getDrawable(R.drawable.skulltransparent);
+                LayerDrawable layerDrawable = new LayerDrawable(layers);
+                ImageView imageView = getPlanetViews().get(increment);
+                TextView textView = getUnitCircles().get(increment);
+                textView.setVisibility(View.INVISIBLE);
+                imageView.setImageDrawable(layerDrawable);
+                break;
+            }
+            increment++;
+        }
+    }
+    public List<Drawable> getPlanetDrawable(){
+        List<Drawable> drawables = new ArrayList<Drawable>();
+        Resources r = getResources();
+        drawables.add(r.getDrawable(R.drawable.p1nb));
+        drawables.add(r.getDrawable(R.drawable.p2nb));
+        drawables.add(r.getDrawable(R.drawable.p3nb));
+        drawables.add(r.getDrawable(R.drawable.p4nb));
+        drawables.add(r.getDrawable(R.drawable.p5nb));
+        drawables.add(r.getDrawable(R.drawable.p6nb));
+        drawables.add(r.getDrawable(R.drawable.p7nb));
+        drawables.add(r.getDrawable(R.drawable.p8nb));
+        drawables.add(r.getDrawable(R.drawable.p9nb));
+        drawables.add(r.getDrawable(R.drawable.p10nb));
+        drawables.add(r.getDrawable(R.drawable.p11nb));
+        drawables.add(r.getDrawable(R.drawable.p12nb));
+        return drawables;
+    }
     public String planetOwner(Region region){
         String owner;
         if (region.getOwner() == null){
@@ -51,40 +103,40 @@ public void onBackPressed()
         }
         return owner;
     }
-    public void planetOne(View view){
+    public void planetTen(View view){
         Region region = regions.get(10);
+        DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
+        dialogFragment.show(getSupportFragmentManager(), "P10");
+    }
+    public void planetOne(View view){
+        Region region = regions.get(1);
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
         dialogFragment.show(getSupportFragmentManager(), "P1");
     }
-    public void planetTwo(View view){
-        Region region = regions.get(1);
-        DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
-        dialogFragment.show(getSupportFragmentManager(), "P2");
-    }
-    public void planetThree(View view){
-        Region region = regions.get(6);
-        DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
-        dialogFragment.show(getSupportFragmentManager(), "P3");
-    }
-    public void planetFour(View view){
-        Region region = regions.get(11);
-        DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
-        dialogFragment.show(getSupportFragmentManager(), "P4");
-    }
-    public void planetFive(View view){
-        Region region = regions.get(0);
-        DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
-        dialogFragment.show(getSupportFragmentManager(), "P5");
-    }
     public void planetSix(View view){
-        Region region = regions.get(5);
+        Region region = regions.get(6);
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
         dialogFragment.show(getSupportFragmentManager(), "P6");
     }
-    public void planetSeven(View view){
+    public void planetEleven(View view){
+        Region region = regions.get(11);
+        DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
+        dialogFragment.show(getSupportFragmentManager(), "P11");
+    }
+    public void planetZero(View view){
+        Region region = regions.get(0);
+        DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
+        dialogFragment.show(getSupportFragmentManager(), "P0");
+    }
+    public void planetFive(View view){
+        Region region = regions.get(5);
+        DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
+        dialogFragment.show(getSupportFragmentManager(), "P5");
+    }
+    public void planetTwo(View view){
         Region region = regions.get(2);
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
-        dialogFragment.show(getSupportFragmentManager(), "P7");
+        dialogFragment.show(getSupportFragmentManager(), "P2");
     }
     public void planetEight(View view){
         Region region = regions.get(8);
@@ -96,20 +148,20 @@ public void onBackPressed()
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
         dialogFragment.show(getSupportFragmentManager(), "P9");
     }
-    public void planetTen(View view){
+    public void planetThree(View view){
         Region region = regions.get(3);
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
-        dialogFragment.show(getSupportFragmentManager(), "P10");
+        dialogFragment.show(getSupportFragmentManager(), "P3");
     }
-    public void planetEleven(View view){
+    public void planetFour(View view){
         Region region = regions.get(4);
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
-        dialogFragment.show(getSupportFragmentManager(), "P11");
+        dialogFragment.show(getSupportFragmentManager(), "P4");
     }
-    public void planetTwelve(View view){
+    public void planetSeven(View view){
         Region region = regions.get(7);
         DisplayRegionInfoDialogFragment dialogFragment = new DisplayRegionInfoDialogFragment(region,region.getName(),region.getUnits().getTotalUnits(),planetOwner(region));
-        dialogFragment.show(getSupportFragmentManager(), "P12");
+        dialogFragment.show(getSupportFragmentManager(), "P7");
     }
 
     public List<ImageView> getPlanetViews(){
