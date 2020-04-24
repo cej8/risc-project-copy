@@ -75,6 +75,8 @@ public class ChooseRegionsActivity extends AppCompatActivity {
         if (regionGroup == null){
             // do nothing
         } else {
+            ParentActivity pa = new ParentActivity();
+            pa.setRegionGroup(regionGroup);
             executeClient.chooseRegions(handler, boardView, regionGroup);
         }
     }

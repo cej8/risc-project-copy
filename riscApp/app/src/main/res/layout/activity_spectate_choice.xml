@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/spacebackground"
     tools:context=".SpectateChoiceActivity">
 
     <Button
@@ -11,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Spectate"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/oval2"
         android:onClick="spectateGame"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Exit"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="@drawable/oval2"
         android:onClick="exitGame"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
