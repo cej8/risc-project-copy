@@ -158,7 +158,6 @@ public class GUIClientRegionSelection extends Thread implements ClientInterface 
                     @Override
                     public void run() {
                         Intent chooseRegions = new Intent(activity,RepromptRegionsActivity.class);
-                       // Intent chooseRegions = new Intent(activity,PlayerLobbyActivity.class);
                         activity.startActivity(chooseRegions);
                     }
                 });
