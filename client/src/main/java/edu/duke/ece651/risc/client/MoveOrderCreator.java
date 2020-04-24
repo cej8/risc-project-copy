@@ -33,7 +33,7 @@ public class MoveOrderCreator extends OrderCreator {
   
   @Override
   public void addToOrderList(List<OrderInterface> orderList) {
-    moveHelper(orderList, "move units from", "move untis to");
+    moveHelper(orderList, "move units from", "move units to");
   }
 
 }

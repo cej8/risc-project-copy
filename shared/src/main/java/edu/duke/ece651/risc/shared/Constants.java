@@ -5,7 +5,7 @@ public final class Constants {
   // time to wait for initial connection of players (must be > 0)
   public static final double START_WAIT_MINUTES = 2.5;
   // time to wait between turns (must be > 0)
-  public static final double TURN_WAIT_MINUTES = 3.0;
+  public static final double TURN_WAIT_MINUTES = 10.0;
   //Time to wait before connected to parentserver
   public static final double LOGIN_WAIT_MINUTES = 1.0;
   // max number of units per player (must be > 0)
@@ -35,7 +35,8 @@ public final class Constants {
   public static final int SPYMOVE_PRIORITY = 65;
   public static final int CLOAK_PRIORITY = 66;
   public static final int SPYUPGRADE_PRIORITY = 64;
-  public static final int UPGRADE_RESOURCE_PRIORITY=35;
+  public static final int UPGRADE_RESOURCE_PRIORITY = 35;
+  public static final int RAID_PRIORITY = 69;
 
   // cost to attack - food 
   public static final int ATTACK_COST = 1;

@@ -18,9 +18,9 @@ public class TechnologyLevel implements Serializable {
   public int getMaxTechLevel() {
     return maxTechLevel;
   }
-public int getMaxRegionLevel() {
-	return maxRegionLevel;
-}
+  public int getMaxRegionLevel() {
+    return maxRegionLevel;
+  }
 
 
   
