@@ -73,7 +73,8 @@ public class OrderActivity extends AppCompatActivity {
         planetDrawable.setGreyOutlines();
         planetDrawable.setAllUnitCircles();
         for (AbstractPlayer p : board.getPlayerList()) {
-            if (p != player) { //if not player's planet, set view to outline
+
+                if (!p.getName().equals(player.getName())) { //if not player's planet, set view to outline
                 if (p!=null){ //if owned by someone, set to their outline color and make button invisible
                     for (Region r : board.getPlayerRegionSet(p)) {
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
