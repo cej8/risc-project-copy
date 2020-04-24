@@ -117,7 +117,7 @@ public class RaidTest {
   }
 
   @Test
-  public void test_SpyValidators(){
+  public void test_RaidValidators(){
     Board board = new Board();
     AbstractPlayer p1 = new HumanPlayer("p1");
     AbstractPlayer p2 = new HumanPlayer("p2");
@@ -147,7 +147,7 @@ public class RaidTest {
     p1Orders = new ArrayList<OrderInterface>();
     p2Orders = new ArrayList<OrderInterface>();
 
-    //Try raiding from
+    //Try raiding from another region
     p1Orders.add(new RaidOrder(r2, r3));
     assert(!vh1.allOrdersValid(p1Orders));
     //Try raiding self
@@ -178,6 +178,22 @@ public class RaidTest {
     p1Orders.add(new RaidOrder(r1, r3));
     assert(!vh1.allOrdersValid(p1Orders));
     //Raid correctly
+    p2Orders.add(new RaidOrder(r2, r1));
+    assert(vh2.allOrdersValid(p2Orders));
+
+    //Plague r2
+    r2.setPlague(true);
+
+
+    vh1 = new ValidatorHelper(p1, board);
+    vh2 = new ValidatorHelper(p2, board);
+    p1Orders = new ArrayList<OrderInterface>();
+    p2Orders = new ArrayList<OrderInterface>();
+
+    //Try good
+    p1Orders.add(new RaidOrder(r1, r2));
+    assert(vh1.allOrdersValid(p1Orders));
+    //Can't with plague
     p2Orders.add(new RaidOrder(r2, r1));
     assert(!vh2.allOrdersValid(p2Orders));
 

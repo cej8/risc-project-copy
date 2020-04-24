@@ -28,14 +28,14 @@ public class RaidValidator implements ValidatorInterface<RaidOrder> {
   public boolean isValidOrder(RaidOrder order){
     //Simply check a s->d and d->s path exists
     Region destination = order.getDestination().getRegionByName(tempBoard, order.getDestination().getName());
-    Region source = order.getSource().getRegionByName(tempBoard, order.getDestination().getName());
+    Region source = order.getSource().getRegionByName(tempBoard, order.getSource().getName());
     
     //Ensure player owns starting region
-    if(!player.getName().equals(destination.getOwner().getName())){
+    if(!player.getName().equals(source.getOwner().getName())){
       return false;
     }
     //Ensure player does not own ending region
-    if(player.getName().equals(source.getOwner().getName())){
+    if(player.getName().equals(destination.getOwner().getName())){
       return false;
     }
 
@@ -60,6 +60,7 @@ public class RaidValidator implements ValidatorInterface<RaidOrder> {
         break;
       }
     }
+    
     
     return destSource && sourceDest;
   }
