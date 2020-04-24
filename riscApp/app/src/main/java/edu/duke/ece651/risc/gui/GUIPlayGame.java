@@ -121,6 +121,8 @@ public class GUIPlayGame extends Thread{
     }
     public void checkAlive(){
         try {
+                parentActivity.setPlayer((HumanPlayer)connection.receiveObject());
+
                 String turn = receiveAndDisplayString();
                 parentActivity.setStartTime(System.currentTimeMillis());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));//(long) (connection.getSocket().getSoTimeout());
