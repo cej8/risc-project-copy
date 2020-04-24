@@ -254,6 +254,8 @@ public class Client extends Thread implements ClientInterface {
         if(!chooseRegions()) {return; }
       }
       while (true) {
+        player = (HumanPlayer) (connection.receiveObject());
+
         String turn = receiveAndDisplayString();
         
         long startTime = System.currentTimeMillis();

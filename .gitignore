@@ -9,3 +9,8 @@ bin
 
 #
 .classpath
+
+
+#Add ignore for emacs temporary files
+*~
+\#*\#

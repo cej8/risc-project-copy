@@ -623,6 +623,7 @@ System.out.println(orderMap.keySet());
     ParentServer server = new ParentServer(1, ms);
     ms.addParentServer(server);
     server.setMAX_PLAYERS(2);
+    server.setMAX_MISSED(1);
     BoardGenerator genBoard = new BoardGenerator();
     genBoard.createBoard_legacy();
     server.setBoard(genBoard.getBoard());
@@ -806,7 +807,16 @@ System.out.println(orderMap.keySet());
     //Parent should wait --> apply all
     //Now should be in main game loop (past this point client doesn't care about
     //board/player)
-    //Both should get "Continue", true alive message, and board
+    //Both should get player, "Continue", true alive message, and board
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+    player = (HumanPlayer)(c2in.readObject());
+    cout.displayString("c2 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 2", player.getName());
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
@@ -863,6 +873,15 @@ System.out.println(orderMap.keySet());
     cout.displayString("G-K should be 3,4,5,3,3");
 
     //Start turn stuff
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+    player = (HumanPlayer)(c2in.readObject());
+    cout.displayString("c2 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 2", player.getName());
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
@@ -916,6 +935,15 @@ System.out.println(orderMap.keySet());
     cout.displayString("J-K should be 4,4");
 
     //Start turn stuff
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+    player = (HumanPlayer)(c2in.readObject());
+    cout.displayString("c2 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 2", player.getName());
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
@@ -967,6 +995,11 @@ System.out.println(orderMap.keySet());
     cout.displayString("Should be same as last but all regions + 1");
 
     //P1 does start turn
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
@@ -998,8 +1031,12 @@ System.out.println(orderMap.keySet());
     cout.displayString("After waiting for timeout moves will be applied");
     cout.displayString("Server should wait until MAX_MISSED then inform player 1 that they won and close socket");
 
-    for(int i = 0; i < Constants.MAX_MISSED; i++){
+    for(int i = 0; i < server.getMAX_MISSED(); i++){
     //P1 does start turn
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
@@ -1024,10 +1061,16 @@ System.out.println(orderMap.keySet());
     cout.displayString(string.unpacker());
     }
 
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
     string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 winner message");
     cout.displayString(string.unpacker());
 
     Thread.sleep(500);
@@ -1104,6 +1147,7 @@ System.out.println(orderMap.keySet());
     ParentServer server = new ParentServer(1, ms);
     ms.addParentServer(server);
     server.setMAX_PLAYERS(3);
+    server.setMAX_MISSED(3);
 
     AbstractPlayer player1 = new HumanPlayer("Group A");
     AbstractPlayer player2 = new HumanPlayer("Group B");
@@ -1364,7 +1408,24 @@ System.out.println(orderMap.keySet());
     //Parent should wait --> apply all
     //Now should be in main game loop (past this point client doesn't care about
     //board/player)
-    //Both should get "Continue", true alive message, and board
+    //Both should get player, "Continue", true alive message, and board
+
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+
+    player = (HumanPlayer)(c2in.readObject());
+    cout.displayString("c2 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 2", player.getName());
+
+    player = (HumanPlayer)(c3in.readObject());
+    cout.displayString("c3 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 3", player.getName());
+
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
@@ -1444,6 +1505,22 @@ System.out.println(orderMap.keySet());
     
 
     //Start turn stuff
+
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+
+    player = (HumanPlayer)(c2in.readObject());
+    cout.displayString("c2 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 2", player.getName());
+
+    player = (HumanPlayer)(c3in.readObject());
+    cout.displayString("c3 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 3", player.getName());
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
@@ -1519,6 +1596,22 @@ System.out.println(orderMap.keySet());
     cout.displayString("C should taken by A");
 
     //Start turn stuff
+
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+
+    player = (HumanPlayer)(c2in.readObject());
+    cout.displayString("c2 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 2", player.getName());
+
+    player = (HumanPlayer)(c3in.readObject());
+    cout.displayString("c3 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 3", player.getName());
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
@@ -1587,7 +1680,17 @@ System.out.println(orderMap.keySet());
     cout.displayString("c3 spectate success");
     cout.displayString(string.unpacker());
 
-    //P1 does start turn
+    //P1/3 does start turn
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+
+    player = (HumanPlayer)(c3in.readObject());
+    cout.displayString("c3 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 3", player.getName());
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
@@ -1638,8 +1741,18 @@ System.out.println(orderMap.keySet());
     cout.displayString("After waiting for timeout moves will be applied");
     cout.displayString("Server should wait until MAX_MISSED then inform player 1 that they won and close socket");
 
-    for(int i = 0; i < Constants.MAX_MISSED; i++){
-    //P1 does start turn
+    for(int i = 0; i < server.getMAX_MISSED(); i++){
+    //P1/3 does start turn
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+
+    player = (HumanPlayer)(c3in.readObject());
+    cout.displayString("c3 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 3", player.getName());
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
@@ -1681,17 +1794,30 @@ System.out.println(orderMap.keySet());
     cout.displayString(string.unpacker());
     }
 
+    player = (HumanPlayer)(c1in.readObject());
+    cout.displayString("c1 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 1", player.getName());
+
+    player = (HumanPlayer)(c3in.readObject());
+    cout.displayString("c3 player");
+    cout.displayString(player.getName());
+    assertEquals("Player 3", player.getName());
+
     string = (StringMessage)(c1in.readObject());
     cout.displayString("c1 turn message");
     cout.displayString(string.unpacker());
     string = (StringMessage)(c1in.readObject());
+    cout.displayString("c1 winner message");
     cout.displayString(string.unpacker());
 
     string = (StringMessage)(c3in.readObject());
     cout.displayString("c3 turn message");
     cout.displayString(string.unpacker());
     string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 winner message");
     cout.displayString(string.unpacker());
+
 
     Thread.sleep(500);
 

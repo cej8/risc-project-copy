@@ -38,6 +38,7 @@ public class ParentServer extends Thread{
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES;
   private boolean FOG_OF_WAR = Constants.FOG_OF_WAR;
+  private int MAX_MISSED = Constants.MAX_MISSED;
   
   //boolean for if still in waitingForPlayers
   private boolean notStarted = true;
@@ -146,6 +147,16 @@ public class ParentServer extends Thread{
   //Used only for testing
   public void setFOG_OF_WAR(boolean FOG_OF_WAR){
     this.FOG_OF_WAR = FOG_OF_WAR;
+  }
+  
+  //Used only for testing
+  public int getMAX_MISSED(){
+    return MAX_MISSED;
+  }
+
+  //Used only for testing
+  public void setMAX_MISSED(int MAX_MISSED){
+    this.MAX_MISSED = MAX_MISSED;
   }
 
   public void setNotStarted(boolean notStarted){
@@ -391,35 +402,39 @@ public class ParentServer extends Thread{
     for (OrderInterface order : orders) {
       // Not sure if better way to do casting...
       OrderInterface castOrder;
-      if (order instanceof PlacementOrder) {
+      if (order.getPriority() == Constants.PLACEMENT_PRIORITY) {
         castOrder = (PlacementOrder) (order);
-      } else if (order instanceof AttackMove) {
+      } else if (order.getPriority() == Constants.ATTACK_MOVE_PRIORITY) {
         castOrder = (AttackMove) (order);
-      } else if (order instanceof AttackCombat) {
+
+      } else if (order.getPriority() == Constants.ATTACK_COMBAT_PRIORITY) {
         castOrder = (AttackCombat) (order);
       }
 
-      else if (order instanceof MoveOrder) {
+      else if (order.getPriority() == Constants.MOVE_PRIORITY) {
         castOrder = (MoveOrder) (order);
       }
-      else if (order instanceof UnitBoost) {
+      else if (order.getPriority() == Constants.UPGRADE_UNITS_PRIORITY) {
         castOrder = (UnitBoost) (order);
       }
-       else if (order instanceof TechBoost) {
+       else if (order.getPriority() == Constants.UPGRADE_TECH_PRIORITY) {
         castOrder = (TechBoost) (order);
       }
-         else if (order instanceof ResourceBoost) {
+         else if (order.getPriority() == Constants.UPGRADE_RESOURCE_PRIORITY) {
         castOrder = (ResourceBoost) (order);
       }
    
-       else if (order instanceof SpyUpgradeOrder) {
+       else if (order.getPriority() == Constants.SPYUPGRADE_PRIORITY) {
         castOrder = (SpyUpgradeOrder) (order);
       }
-       else if (order instanceof SpyMoveOrder) {
+       else if (order.getPriority() == Constants.SPYMOVE_PRIORITY) {
         castOrder = (SpyMoveOrder) (order);
       }
-       else if (order instanceof CloakOrder) {
+       else if (order.getPriority() == Constants.CLOAK_PRIORITY) {
         castOrder = (CloakOrder) (order);
+      }
+       else if (order.getPriority() == Constants.RAID_PRIORITY){
+        castOrder = (RaidOrder) (order);
       }
      
       else {
@@ -429,7 +444,7 @@ public class ParentServer extends Thread{
       String className = castOrder.getClass().getName();
       className = className.substring(className.lastIndexOf('.') + 1);
       //Handle non-combat in order
-      if(!className.equals("AttackCombat")){
+      if(!className.equals("AttackCombat") && !className.equals("RaidOrder")){
         className = "NotCombat";
       }
 
@@ -467,6 +482,7 @@ public class ParentServer extends Thread{
 
       // Add order to list
       orderMap.get(className).add(castOrder);
+
     }
   }
 
@@ -480,6 +496,10 @@ public class ParentServer extends Thread{
     if(orderMap.containsKey("NotCombat")){
       applyOrderList(orderMap.get("NotCombat"));
     }
+    if(orderMap.containsKey("RaidOrder")){
+      Collections.shuffle(orderMap.get("RaidOrder"));
+      applyOrderList(orderMap.get("RaidOrder"));
+    }
     if(orderMap.containsKey("AttackCombat")){
       Collections.shuffle(orderMap.get("AttackCombat"));
       applyOrderList(orderMap.get("AttackCombat"));
@@ -492,7 +512,8 @@ public class ParentServer extends Thread{
     for (int i = 0; i < orders.size(); i++) {
       //List of substrings making up order's text result
       List<String> results = orders.get(i).doAction();
-      if(FOG_OF_WAR){
+      //If FOG_OF_WAR then apply (if not initial placements)
+      if(FOG_OF_WAR && turnNumber > 0){
         //stringVisibility is list<set> of player names who can see each
         //substring of order's results
         List<Set<String>> stringVisibility = orders.get(i).getPlayersVisibleTo();
@@ -587,8 +608,8 @@ public class ParentServer extends Thread{
         r.setCloakTurns(r.getCloakTurns()-1);
       }
     }
-
   }
+
   // method to apply plague to region
   public void applyPlague(){
     if(turnNumber<6){
@@ -603,6 +624,7 @@ public class ParentServer extends Thread{
     }
     // otherwise do nothing
   }
+
   // set turn used for testing
   public void setTurn(int i){
     this.turnNumber = i;
@@ -610,6 +632,21 @@ public class ParentServer extends Thread{
   public int getPlagueID(){
     return this.plagueID;
   }
+
+  //Method to get freshest version of player from board
+  //Needed to update CS version of player so most up to date
+  //(resources changed from doAction) is sent
+  void updatePlayersInChildServers(){
+    for(Region r : board.getRegions()){
+      AbstractPlayer p = r.getOwner();
+      int pIndex = players.indexOf(p.getName());
+      if(pIndex != -1){
+        children.get(pIndex).setPlayer(p);
+      }
+    }
+  }
+
+
   // method that controls game play
   public void playGame(){
     //Wait for MAX_PLAYERS to connect or timeout
@@ -634,18 +671,23 @@ public class ParentServer extends Thread{
       }
       turnNumber++;
       // Evolution 3: Plague
-      applyPlague();
-      
+      applyPlague();    
+      updatePlayersInChildServers();
     }
-    if (numPlayersLeft() == 1) {
+    if (numPlayersLeft() <= 1) {
       // If one player alive then create message --> send
-      AbstractPlayer winner = playersLeft().iterator().next();
-      StringMessage winnerMessage = new StringMessage(winner.getName() + " is the winner!");
+      StringMessage winnerMessage = new StringMessage("Somehow no one is left?");
+      if(playersLeft().iterator().hasNext()){
+        AbstractPlayer winner = playersLeft().iterator().next();
+        winnerMessage = new StringMessage(winner.getName() + " is the winner!");
+      }
       System.out.println(gameID + " : " + winnerMessage.unpacker());
       // Send message to all children
-      for (ChildServer child : children) {
+      for (int i = 0; i < children.size(); i++) {
+        ChildServer child = children.get(i);
         try {
-          child.getPlayerConnection().sendObject(new StringMessage(turnResults.toString()));
+          child.getPlayerConnection().sendObject(child.getPlayer());
+          child.getPlayerConnection().sendObject(new StringMessage(turnResults.get(i).toString()));
           child.getPlayerConnection().sendObject(winnerMessage);
         } catch (Exception e) {
         }
@@ -664,6 +706,7 @@ public class ParentServer extends Thread{
     System.out.println(gameID + " : TURN_WAIT_MINUTES:" + TURN_WAIT_MINUTES);
     System.out.println(gameID + " : START_WAIT_MINUTES:" + START_WAIT_MINUTES);
     System.out.println(gameID + " : FOG_OF_WAR:" + FOG_OF_WAR);
+    System.out.println(gameID + " : MAX_MISSED:" + MAX_MISSED);
     playGame();
     System.out.println(gameID + " : Game ended");
   }

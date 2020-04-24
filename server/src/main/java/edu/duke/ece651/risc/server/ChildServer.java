@@ -57,6 +57,10 @@ public class ChildServer implements Runnable{
     return player;
   }
 
+  public void setPlayer(AbstractPlayer player){
+    this.player = player;
+  }
+
   public ParentServer getParentServer(){
     return parent;
   }
@@ -167,6 +171,8 @@ public class ChildServer implements Runnable{
         else{
           clientBoard = parent.getBoard();
         }
+        //Send player
+        playerConnection.sendObject(player);
         //Send turn message
         playerConnection.sendObject(new StringMessage(turnMessage));
         //If called then new turn --> send continue
@@ -267,13 +273,17 @@ public class ChildServer implements Runnable{
     missedTurns++;
     System.out.println(parent.getGameID() + " : (" + player.getName() + ") did not input turn, missed now " + missedTurns);
     //If past maximum then mark as not playing
-    if(missedTurns > Constants.MAX_MISSED){
-      System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed more than " + Constants.MAX_MISSED + " turns, marking as dead");
+    if(missedTurns > parent.getMAX_MISSED()){
+      System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed more than " + parent.getMAX_MISSED() + " turns, marking as dead");
       player.setPlaying(false);
     }
     if(missedTurns == 1 && firstCall == true){
       System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed initial placements, marking as dead");
       player.setPlaying(false);
+      playerConnection.closeAll();
+      playerConnection = null;
+      parent.getMasterServer().removePlayer(player.getName(), parent.getGameID());
+      player.setWatchingNull();
     }
   }
 }

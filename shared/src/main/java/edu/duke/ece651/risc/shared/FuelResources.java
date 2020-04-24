@@ -9,6 +9,9 @@ public class FuelResources implements Serializable {
   public FuelResources(int startingFuel){
     this.fuelStash = startingFuel;
   }
+  public void setFuel(int startingFuel){
+    this.fuelStash = startingFuel;
+  }
   public int getFuel(){
     return this.fuelStash;
   }
