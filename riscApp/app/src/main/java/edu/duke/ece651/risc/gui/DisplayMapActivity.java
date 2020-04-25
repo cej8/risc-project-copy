@@ -142,29 +142,10 @@ public class DisplayMapActivity extends AppCompatActivity {
 
 
     }
-    @SuppressLint("ClickableViewAccessibility")
-    public void setSpyButton(final PlanetDrawable pd){
-        //Button mySpies = findViewById(R.id.spies);
-        //mySpies.setOnTouchListener(new View.OnTouchListener() {
-        findViewById(R.id.viewSpies).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-              if(event.getAction()==MotionEvent.ACTION_DOWN) {//when pressed, show spies
-                  showSpies();
-              }
-              else if (event.getAction() == MotionEvent.ACTION_UP) {//when released clear spies and reload
-                 pd.setPlanets();// NOT WORKING AS EXPECTED
-                  //TODO: not sure how to reset back to normal map (mayeb call displaymapAcititvity again?)
-
-              }
-    return false;
-            }
-
-        });
 
 
-    }
+
+
     public void plagueDraw(){
         int increment = 0;
         Resources r = getResources();

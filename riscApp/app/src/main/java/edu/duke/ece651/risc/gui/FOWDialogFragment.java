@@ -30,7 +30,10 @@ public class FOWDialogFragment extends DialogFragment {
         Button spyButton = travelView.findViewById(R.id.spyButton);
         Button cloakButton = travelView.findViewById(R.id.cloakButton);
         if(this.pa.getPlayer().getMaxTechLevel().getMaxTechLevel()<3){
-            cloakButton.setEnabled(false);
+            cloakButton.setVisibility(View.INVISIBLE);
+        }
+        else{
+            cloakButton.setVisibility(View.VISIBLE);
         }
 
         spyButton.setOnClickListener(new View.OnClickListener() {
