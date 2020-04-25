@@ -395,6 +395,7 @@ public class ClientTest {
     objs.add(board2);
     objs.add(new StringMessage("Success: good placement"));
     //Turn message
+    objs.add(player1);
     objs.add(new StringMessage("Turn 1: placements"));
     //Client enters loop --> send continue
     objs.add(new StringMessage("Continue"));
@@ -410,6 +411,7 @@ public class ClientTest {
     objs.add(board3);
     objs.add(new StringMessage("Success: good orders"));
     //Turn message
+    objs.add(player1);
     objs.add(new StringMessage("Turn 2: first orders"));
     //Assume player somehow died
     objs.add(new StringMessage("Continue"));
@@ -420,6 +422,7 @@ public class ClientTest {
     objs.add(new StringMessage("Success: spectate"));
     //Now player 2 wins
     //Turn message
+    objs.add(player1);
     objs.add(new StringMessage("Turn 3: final"));
     objs.add(new StringMessage("Player 2 wins or something"));
     //Game ends
@@ -590,6 +593,7 @@ public class ClientTest {
     objs.add(board2);
     objs.add(new StringMessage("Success: good placement"));
     //Turn message
+    objs.add(player1);
     objs.add(new StringMessage("Turn 1: placements"));
     //Client enters loop --> send continue
     objs.add(new StringMessage("Continue"));
@@ -605,6 +609,7 @@ public class ClientTest {
     objs.add(board3);
     objs.add(new StringMessage("Success: good orders"));
     //Turn message
+    objs.add(player1);
     objs.add(new StringMessage("Turn 2: first orders"));
     //Assume player somehow died
     objs.add(new StringMessage("Continue"));
@@ -1047,6 +1052,7 @@ public class ClientTest {
     objs.add(board2);
     objs.add(new StringMessage("Success: good placement"));
     //Turn message
+    objs.add(player1);
     objs.add(new StringMessage("Turn 1: placements"));
     //Client enters loop --> send continue
     objs.add(new StringMessage("Continue"));

@@ -9,6 +9,8 @@ public class ConnectionTester extends Thread{
   private List<ChildServer> children;
   private MasterServer masterServer;
   private int gameID;
+  private boolean continueRunning = true;
+  private boolean hasStopped = false;
 
   public ConnectionTester(List<ChildServer> children, MasterServer masterServer, int gameID){
     this.children = children;
@@ -16,11 +18,16 @@ public class ConnectionTester extends Thread{
     this.gameID = gameID;
   }
 
+  public boolean hasStopped(){
+    return hasStopped;
+  }
+
   public void peekConnections(){
     for(ChildServer child : children){
+      if(!continueRunning) { return;}
       //Get connection
       Connection playerConnection = child.getPlayerConnection();
-      if(child.isFinished() && playerConnection != null){
+      if(child.getFinishedTurn() && playerConnection != null){
         try{
           //Try to listen for .5s
           playerConnection.getSocket().setSoTimeout(500);
@@ -28,6 +35,7 @@ public class ConnectionTester extends Thread{
         }
         catch(Exception e){
           if(!(e instanceof SocketTimeoutException)){
+            System.out.println(gameID + " : Removing " + child.getPlayer().getName() + " connection lost after turn complete");
             //If not timeout then not there --> close connection
             playerConnection.closeAll();
             child.setPlayerConnection(null);
@@ -41,8 +49,14 @@ public class ConnectionTester extends Thread{
 
   @Override
   public void run(){
-    while(true){
+    while(continueRunning){
       peekConnections();
     }
+    System.out.println(gameID + " : ConnectionTester stopping");
+    this.hasStopped = true;
+  }
+
+  public void stopLoop(){
+    this.continueRunning = false;
   }
 }

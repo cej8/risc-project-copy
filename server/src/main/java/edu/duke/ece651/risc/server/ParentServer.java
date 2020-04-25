@@ -591,6 +591,10 @@ public class ParentServer extends Thread{
   //ChildServers internally handle their own timeouts by leveraging socket timeouts
   //based on TURN_WAIT_MINUTES as a maximum for time spent within run() method
   public void callThreads() throws InterruptedException {
+    //Toggle to not finished to prevent race on ConnectionTester call
+    for(ChildServer child : children){
+      child.setFinishedTurn(false);
+    }
     System.out.println(gameID + " : " + "Calling threads");
     List<Callable<Object>> todo = new ArrayList<Callable<Object>>(children.size());
     for (int i = 0; i < children.size(); i++) {
@@ -598,11 +602,15 @@ public class ParentServer extends Thread{
       // Insert message into children
       children.get(i).setTurnMessage(turnResults.get(i));
     }
+    //Create thread to check sockets for those who submit turns
     ConnectionTester cT = new ConnectionTester(children, masterServer, gameID);
     Thread t = new Thread(cT);
     t.start();
     threads.invokeAll(todo);
-    t.interrupt();
+    //Stop the listener
+    cT.stopLoop();
+    //Wait until cT has actually stopped run() loop
+    while(!cT.hasStopped()) {Thread.sleep(10);};
     System.out.println(gameID + " : " + "Threads finished");
   }
   public void growResources(Region r){
