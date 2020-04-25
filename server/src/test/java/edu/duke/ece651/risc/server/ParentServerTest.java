@@ -1844,7 +1844,6 @@ System.out.println(orderMap.keySet());
     assert(ps.tryJoin("b", pc) == false);
     ps.setNotStarted(false);
     assert(ps.tryJoin("b", pc) == false);
-    ps.removePlayer("a");
     ps.setNotStarted(true);
     assert(ps.tryJoin("a", pc) == true);
     ps.removePlayer("a");
