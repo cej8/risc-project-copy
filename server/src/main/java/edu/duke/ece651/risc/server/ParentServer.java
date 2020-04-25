@@ -495,11 +495,43 @@ public class ParentServer extends Thread{
 
   public void applyOrderList(List<OrderInterface> orders) {
     // Simply call doAction for each order
+
+    //Strings for attackCombat update special case
+    String attackName = "";
+    String defendName = "";
+    String attackedRegionName = "";
     for (int i = 0; i < orders.size(); i++) {
+      //Special case --> force update for ChildServer involved in AttackCombat
+      if(orders.get(i).getPriority() == Constants.ATTACK_COMBAT_PRIORITY){
+          AttackCombat castOrder = (AttackCombat) orders.get(i);
+          //Get attack/defend player names
+          attackName = castOrder.getSource().getOwner().getName();
+          defendName = castOrder.getDestination().getOwner().getName();
+          //Get name of attacked region to update
+          attackedRegionName = castOrder.getDestination().getName();
+      }
+
+
       //List of substrings making up order's text result
       List<String> results = orders.get(i).doAction();
       //If FOG_OF_WAR then apply (if not initial placements)
       if(FOG_OF_WAR && turnNumber > 0){
+        //Special case --> force update for ChildServer involved in AttackCombat
+        //Avoids issue where losing single region not adjancent to any others
+        if(orders.get(i).getPriority() == Constants.ATTACK_COMBAT_PRIORITY){
+          //Ensure actual player (not just Group A)
+          if(players.contains(attackName)){
+            Board attackBoard = children.get(players.indexOf(attackName)).getClientBoard();
+            attackBoard.getRegionByName(attackedRegionName).copyInformation(board.getRegionByName(attackedRegionName));
+          }
+          //Ensure actual player (not just Group A)
+          if(players.contains(defendName)){
+            Board defendBoard = children.get(players.indexOf(defendName)).getClientBoard();
+            defendBoard.getRegionByName(attackedRegionName).copyInformation(board.getRegionByName(attackedRegionName));
+          }
+        }
+
+
         //stringVisibility is list<set> of player names who can see each
         //substring of order's results
         List<Set<String>> stringVisibility = orders.get(i).getPlayersVisibleTo();
