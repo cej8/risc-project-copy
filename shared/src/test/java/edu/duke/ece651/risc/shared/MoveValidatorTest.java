@@ -292,4 +292,25 @@ public class MoveValidatorTest {
     return moves;
   }
 
+  @Test
+  public void test_pathComp(){
+    Region r1 = new Region("r1");
+    r1.setSize(100);
+    Region r2 = new Region("r2");
+    r2.setSize(50);
+    Region r3 = new Region("r3");
+    r3.setSize(150);
+    Path p1 = new Path();
+    p1.add(r1);
+    Path p2 = new Path();
+    p2.add(r2);
+    Path p3 = new Path();
+    p3.add(r3);
+    PathComparator pc = new PathComparator();
+    assert(pc.compare(p1,p2) == 1);
+    assert(pc.compare(p1,p3) == -1);
+    assert(pc.compare(p1,p1) == 0);
+
+  }
+
 }
