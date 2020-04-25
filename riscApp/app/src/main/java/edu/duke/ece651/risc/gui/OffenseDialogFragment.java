@@ -41,7 +41,8 @@ public class OffenseDialogFragment extends DialogFragment {
         raidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent raidIntent = new Intent(activity,RaidActivity.class);
+                Intent raidIntent = new Intent(activity,OrderActivity.class);
+                raidIntent.putExtra("ORDER","raid");
                 startActivity(raidIntent);
             }
         });

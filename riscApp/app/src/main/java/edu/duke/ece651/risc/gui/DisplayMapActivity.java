@@ -30,6 +30,8 @@ import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.MoveOrder;
 import edu.duke.ece651.risc.shared.MoveValidator;
 import edu.duke.ece651.risc.shared.OrderInterface;
+import edu.duke.ece651.risc.shared.RaidOrder;
+import edu.duke.ece651.risc.shared.RaidValidator;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.ResourceBoost;
 import edu.duke.ece651.risc.shared.ResourceBoostValidator;
@@ -195,7 +197,17 @@ public void setPlayerInfo(){
                 else{
                   invalidFlag= "attack";
                 }
-            } else if (order.equals("boost units")) {
+            } else if (order.equals("raid")){
+                RaidOrder raidOrder = new RaidOrder(source,destination);
+                List<RaidOrder> r = new ArrayList<RaidOrder>();
+                r.add(raidOrder);
+                validator = new RaidValidator(validationPlayerCopy,validationTempBoard);
+                if (validator.validateOrders(r)){
+                    parentActivity.setOrders(raidOrder);
+                } else {
+                    invalidFlag = "raid";
+                }
+            }else if (order.equals("boost units")) {
                 UnitBoost unitBoost = new UnitBoost(source,unit);
                 List<UnitBoost>u= new ArrayList<UnitBoost>();
                 u.add(unitBoost);
@@ -207,8 +219,7 @@ public void setPlayerInfo(){
                 else{
                     invalidFlag="upgrade unit";
                 }
-            }
-            else if (order.equals("resource boost")) {
+            } else if (order.equals("resource boost")) {
                ResourceBoost resourceBoost= new ResourceBoost(destination);
                 List<ResourceBoost>r= new ArrayList<ResourceBoost>();
                 r.add(resourceBoost);

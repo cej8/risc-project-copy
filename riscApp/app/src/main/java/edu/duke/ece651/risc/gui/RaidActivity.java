@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -36,6 +37,10 @@ public class RaidActivity extends AppCompatActivity {
     Map<Region, ImageButton> regionImageButtonMap;
     List<Region> myPlanets;
     ImageView sourceView;
+    String attackFrom;
+    String orderMessage;
+    TextView orderHelper;
+    TextView helpText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +52,18 @@ public class RaidActivity extends AppCompatActivity {
         name = findViewById(R.id.displayPame);
         owner = findViewById(R.id.displayOwner);
         numUnits = findViewById(R.id.displayUnits);
-        getMyPlanets();
+        helpText = findViewById(R.id.attackHelp);
+        orderHelper = findViewById(R.id.orderHelper);
+        Intent intent = getIntent();
+        attackFrom = intent.getStringExtra("PNAME");
+        Log.d("attack from string: ", attackFrom );
+        orderMessage =  intent.getStringExtra("ORDER");
+        String h = "Select planet to " + orderMessage;
+        orderHelper.setText(h);
+        plagueDraw();
     }
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -60,41 +75,126 @@ public class RaidActivity extends AppCompatActivity {
         planetDrawable = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
 
+        source = board.getRegionByName(attackFrom);
+        sourceView = regionImageViewMap.get(source);
 
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
         planetDrawable.setAllUnitCircles();
         setDifferentOwnerPlanets();
     }
-    public void getMyPlanets(){
-        myPlanets = new ArrayList<Region>();
-        for (Region r : regions){
-            if (r.getOwner().getName().equals(player.getName())){
-                myPlanets.add(r);
+
+    // Plague
+    public void plagueDraw(){
+        int increment = 0;
+        Resources r = getResources();
+        Drawable[] layers = new Drawable[2];
+        for (Region region: regions){
+            if (region.getPlague()){
+                layers[0] = getPlanetDrawable().get(increment);
+                layers[1] = r.getDrawable(R.drawable.skulltransparent);
+                LayerDrawable layerDrawable = new LayerDrawable(layers);
+                ImageView imageView = getPlanetViews().get(increment);
+                TextView textView = getUnitCircles().get(increment);
+                textView.setVisibility(View.INVISIBLE);
+                imageView.setImageDrawable(layerDrawable);
+                break;
             }
+            increment++;
         }
     }
-    public void setSelectionInvisible(Region r){
-        for (int i = 0; i < myPlanets.size(); i++){
-            //List<Region> adjRegions = myPlanets.get(i).getAdjRegions();
-            Set<Region> adjRegions = new HashSet<>(myPlanets.get(i).getAdjRegions());
-            if (!r.getOwner().getName().equals(player.getName())){
-                if (adjRegions.contains(r)){
-                    source = board.getRegionByName(r.getName());
-                    sourceView = regionImageViewMap.get(source);
-                    planetDrawable.setImageViewVisible(sourceView);
+    public List<Drawable> getPlanetDrawable(){
+        List<Drawable> drawables = new ArrayList<Drawable>();
+        Resources r = getResources();
+        drawables.add(r.getDrawable(R.drawable.p1nb));
+        drawables.add(r.getDrawable(R.drawable.p2nb));
+        drawables.add(r.getDrawable(R.drawable.p3nb));
+        drawables.add(r.getDrawable(R.drawable.p4nb));
+        drawables.add(r.getDrawable(R.drawable.p5nb));
+        drawables.add(r.getDrawable(R.drawable.p6nb));
+        drawables.add(r.getDrawable(R.drawable.p7nb));
+        drawables.add(r.getDrawable(R.drawable.p8nb));
+        drawables.add(r.getDrawable(R.drawable.p9nb));
+        drawables.add(r.getDrawable(R.drawable.p10nb));
+        drawables.add(r.getDrawable(R.drawable.p11nb));
+        drawables.add(r.getDrawable(R.drawable.p12nb));
+        return drawables;
+    }
+
+    //helper function for orders in which you can only select planets you own
+    public void setSameOwnerPlanets(){
+        for (AbstractPlayer p : board.getPlayerList()) {
+
+            if (!p.getName().equals(player.getName())) { //if not player's planet, set view to outline
+                if (p!=null){ //if owned by someone, set to their outline color and make button invisible
+                    for (Region r : board.getPlayerRegionSet(p)) {
+                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
+                        planetDrawable.setImageButtonsInvisible(p);
+                    }
                 }
-            } else {
-                regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
+            } else { //if player own's planet, set up visible planet
+                for (Region r : board.getPlayerRegionSet(p)) {
+                    if (r == source){ //if source planet
+                        Log.d("source", r.getName());
+                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p)); //set source to player color
+                        planetDrawable.setImageButtonInvisible(r); //can't click source
+                    }
+                    else { //
+                        planetDrawable.setPlanets();
+                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
+                    }
+                }
             }
+        }
+        planetDrawable.setGreyOutlines();
+    }
+
+    //helper function for orders in which you can only select planets you don't own
+    public void setDifferentOwnerPlanets() {
+        for (AbstractPlayer p : board.getPlayerList()) {
+
+            if (p.getName().equals(player.getName())) { //if player's own planet, set view to outline and make button invisible
+                for (Region r : board.getPlayerRegionSet(p)) {
+                    if (r == source){ //if source planet
+                        planetDrawable.setImageButtonsInvisible(p); //can't click
+                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p)); //set to player color
+                    }
+                    else { //not source, player owns, set to outline
+                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
+                    }
+                }
+            } else { //if player doesn't own planet
+                for (Region r : board.getPlayerRegionSet(p)) {
+                    planetDrawable.setPlanets(); //set planet & planet drawables
+                    regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
+                }
+            }
+        }
+        planetDrawable.setGreyPlanets();
+    }
+
+
+    public void attackTo(View view){
+        if (planetName == null){
+            helpText.setText("Please select a planet");
+        } else {
+            Intent i = new Intent(this, DisplayMapActivity.class);
+            i.putExtra("ATTACKFROM", attackFrom);
+            i.putExtra("ATTACKTO", planetName);
+            i.putExtra("ORDER",orderMessage);
+            startActivity(i);
         }
     }
 
-   /* public void setSelectionInvisible(Region r) {
+
+    public void setSelectionInvisible(Region r) {
         planetDrawable.setImageViewVisible(sourceView);
         if (regionImageViewMap.get(r) != regionImageViewMap.get(source)) {
             regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
         }
-    }*/
+    }
+    //loop through every region and set to clear
+    //set this region to it's color
+
 
     public void setPlanetInfo(Region r){
         name.setText(r.getName());
@@ -176,93 +276,7 @@ public class RaidActivity extends AppCompatActivity {
         setSelectionInvisible(r);
     }
 
-    // Plague
-    public void plagueDraw(){
-        int increment = 0;
-        Resources r = getResources();
-        Drawable[] layers = new Drawable[2];
-        for (Region region: regions){
-            if (region.getPlague()){
-                layers[0] = getPlanetDrawable().get(increment);
-                layers[1] = r.getDrawable(R.drawable.skulltransparent);
-                LayerDrawable layerDrawable = new LayerDrawable(layers);
-                ImageView imageView = getPlanetViews().get(increment);
-                TextView textView = getUnitCircles().get(increment);
-                textView.setVisibility(View.INVISIBLE);
-                imageView.setImageDrawable(layerDrawable);
-                break;
-            }
-            increment++;
-        }
-    }
-    //helper function for orders in which you can only select planets you don't own
-    public void setDifferentOwnerPlanets() {
-        for (AbstractPlayer p : board.getPlayerList()) {
 
-            if (p.getName().equals(player.getName())) { //if player's own planet, set view to outline and make button invisible
-                for (Region r : board.getPlayerRegionSet(p)) {
-                    if (r == source){ //if source planet
-                        planetDrawable.setImageButtonsInvisible(p); //can't click
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p)); //set to player color
-                    }
-                    else { //not source, player owns, set to outline
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
-                    }
-                }
-            } else { //if player doesn't own planet
-                for (Region r : board.getPlayerRegionSet(p)) {
-                    planetDrawable.setPlanets(); //set planet & planet drawables
-                    regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
-                }
-            }
-        }
-        planetDrawable.setGreyPlanets();
-    }
-    public List<Drawable> getPlanetDrawable(){
-        List<Drawable> drawables = new ArrayList<Drawable>();
-        Resources r = getResources();
-        drawables.add(r.getDrawable(R.drawable.p1nb));
-        drawables.add(r.getDrawable(R.drawable.p2nb));
-        drawables.add(r.getDrawable(R.drawable.p3nb));
-        drawables.add(r.getDrawable(R.drawable.p4nb));
-        drawables.add(r.getDrawable(R.drawable.p5nb));
-        drawables.add(r.getDrawable(R.drawable.p6nb));
-        drawables.add(r.getDrawable(R.drawable.p7nb));
-        drawables.add(r.getDrawable(R.drawable.p8nb));
-        drawables.add(r.getDrawable(R.drawable.p9nb));
-        drawables.add(r.getDrawable(R.drawable.p10nb));
-        drawables.add(r.getDrawable(R.drawable.p11nb));
-        drawables.add(r.getDrawable(R.drawable.p12nb));
-        return drawables;
-    }
-    public List<TextView> getUnitCircles() {
-        List<TextView> unitCircles = new ArrayList<TextView>();
-        TextView unit0 = findViewById(R.id.p0units);
-        TextView unit1 = findViewById(R.id.p1units);
-        TextView unit2 = findViewById(R.id.p2units);
-        TextView unit3 = findViewById(R.id.p3units);
-        TextView unit4 = findViewById(R.id.p4units);
-        TextView unit5 = findViewById(R.id.p5units);
-        TextView unit6 = findViewById(R.id.p6units);
-        TextView unit7 = findViewById(R.id.p7units);
-        TextView unit8 = findViewById(R.id.p8units);
-        TextView unit9 = findViewById(R.id.p9units);
-        TextView unit10 = findViewById(R.id.p10units);
-        TextView unit11 = findViewById(R.id.p11units);
-        unitCircles.add(unit0);
-        unitCircles.add(unit1);
-        unitCircles.add(unit2);
-        unitCircles.add(unit3);
-        unitCircles.add(unit4);
-        unitCircles.add(unit5);
-        unitCircles.add(unit6);
-        unitCircles.add(unit7);
-        unitCircles.add(unit8);
-        unitCircles.add(unit9);
-        unitCircles.add(unit10);
-        unitCircles.add(unit11);
-        return unitCircles;
-    }
     public List<ImageView> getPlanetViews(){
         List<ImageView> views = new ArrayList<ImageView>();
         ImageView p0I = findViewById(R.id.p0I);
@@ -291,34 +305,36 @@ public class RaidActivity extends AppCompatActivity {
         views.add(p11I);
         return views;
     }
-    public List<ImageButton> getPlanetButtons(){
-        List<ImageButton > planetButtons = new ArrayList<ImageButton>();
-        ImageButton planet0 = findViewById(R.id.p0);
-        ImageButton planet1 = findViewById(R.id.p1);
-        ImageButton planet2 = findViewById(R.id.p2);
-        ImageButton planet3 = findViewById(R.id.p3);
-        ImageButton planet4 = findViewById(R.id.p4);
-        ImageButton planet5 = findViewById(R.id.p5);
-        ImageButton planet6 = findViewById(R.id.p6);
-        ImageButton planet7 = findViewById(R.id.p7);
-        ImageButton planet8 = findViewById(R.id.p8);
-        ImageButton planet9 = findViewById(R.id.p9);
-        ImageButton planet10 = findViewById(R.id.p10);
-        ImageButton planet11 = findViewById(R.id.p11);
-        planetButtons.add(planet0);
-        planetButtons.add(planet1);
-        planetButtons.add(planet2);
-        planetButtons.add(planet3);
-        planetButtons.add(planet4);
-        planetButtons.add(planet5);
-        planetButtons.add(planet6);
-        planetButtons.add(planet7);
-        planetButtons.add(planet8);
-        planetButtons.add(planet9);
-        planetButtons.add(planet10);
-        planetButtons.add(planet11);
-        return planetButtons;
+
+    public List<TextView> getUnitCircles() {
+        List<TextView> unitCircles = new ArrayList<TextView>();
+        TextView unit0 = findViewById(R.id.p0units);
+        TextView unit1 = findViewById(R.id.p1units);
+        TextView unit2 = findViewById(R.id.p2units);
+        TextView unit3 = findViewById(R.id.p3units);
+        TextView unit4 = findViewById(R.id.p4units);
+        TextView unit5 = findViewById(R.id.p5units);
+        TextView unit6 = findViewById(R.id.p6units);
+        TextView unit7 = findViewById(R.id.p7units);
+        TextView unit8 = findViewById(R.id.p8units);
+        TextView unit9 = findViewById(R.id.p9units);
+        TextView unit10 = findViewById(R.id.p10units);
+        TextView unit11 = findViewById(R.id.p11units);
+        unitCircles.add(unit0);
+        unitCircles.add(unit1);
+        unitCircles.add(unit2);
+        unitCircles.add(unit3);
+        unitCircles.add(unit4);
+        unitCircles.add(unit5);
+        unitCircles.add(unit6);
+        unitCircles.add(unit7);
+        unitCircles.add(unit8);
+        unitCircles.add(unit9);
+        unitCircles.add(unit10);
+        unitCircles.add(unit11);
+        return unitCircles;
     }
+
     public List<TextView> getPlanetPlayers() {
         List<TextView> planetPlayers = new ArrayList<TextView>();
         TextView player0 = findViewById(R.id.player0);
@@ -347,5 +363,33 @@ public class RaidActivity extends AppCompatActivity {
         planetSquares.add(square3);
         planetSquares.add(square4);
         return planetSquares;
+    }
+    public List<ImageButton> getPlanetButtons(){
+        List<ImageButton > planetButtons = new ArrayList<ImageButton>();
+        ImageButton planet0 = findViewById(R.id.p0);
+        ImageButton planet1 = findViewById(R.id.p1);
+        ImageButton planet2 = findViewById(R.id.p2);
+        ImageButton planet3 = findViewById(R.id.p3);
+        ImageButton planet4 = findViewById(R.id.p4);
+        ImageButton planet5 = findViewById(R.id.p5);
+        ImageButton planet6 = findViewById(R.id.p6);
+        ImageButton planet7 = findViewById(R.id.p7);
+        ImageButton planet8 = findViewById(R.id.p8);
+        ImageButton planet9 = findViewById(R.id.p9);
+        ImageButton planet10 = findViewById(R.id.p10);
+        ImageButton planet11 = findViewById(R.id.p11);
+        planetButtons.add(planet0);
+        planetButtons.add(planet1);
+        planetButtons.add(planet2);
+        planetButtons.add(planet3);
+        planetButtons.add(planet4);
+        planetButtons.add(planet5);
+        planetButtons.add(planet6);
+        planetButtons.add(planet7);
+        planetButtons.add(planet8);
+        planetButtons.add(planet9);
+        planetButtons.add(planet10);
+        planetButtons.add(planet11);
+        return planetButtons;
     }
 }
