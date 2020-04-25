@@ -125,6 +125,7 @@ public class OrderVisibility {
     assert(sm.getPlayer() == p2);
 
     assert(mo.getUnits().getUnits().get(0) == 1);
+    mo.setUnits(new Unit(1));
 
     Unit unit = new Unit(1);
     assert(unit.getListOfUnitTypes().size() == 1);
