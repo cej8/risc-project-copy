@@ -140,7 +140,7 @@ public class Board implements Serializable {
       AbstractPlayer tempOwner = regions.get(i).getOwner();
       int actualOwner = players.indexOf(tempOwner);
       //if -1 then tempOwner DNE in new board (for example Group _ owners)
-      //if case then don't update
+      //if case then don't update (player object no longer exists so nothing to update to)
       if(actualOwner != -1){
         regions.get(i).setOwner(players.get(actualOwner));
       }

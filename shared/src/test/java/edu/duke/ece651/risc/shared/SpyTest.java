@@ -9,7 +9,7 @@ import java.io.*;
 import java.net.*;
 
 
-public class SpyTest {
+public class SpyTest{ 
   @Test
   public void test_Spies() {
     Board board = new Board();
