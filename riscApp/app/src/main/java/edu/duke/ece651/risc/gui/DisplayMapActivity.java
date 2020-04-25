@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.gui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -11,6 +12,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -43,6 +45,9 @@ import edu.duke.ece651.risc.shared.RaidValidator;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.ResourceBoost;
 import edu.duke.ece651.risc.shared.ResourceBoostValidator;
+import edu.duke.ece651.risc.shared.Spy;
+import edu.duke.ece651.risc.shared.SpyUpgradeOrder;
+import edu.duke.ece651.risc.shared.SpyUpgradeValidator;
 import edu.duke.ece651.risc.shared.TeleportOrder;
 import edu.duke.ece651.risc.shared.TeleportValidator;
 import edu.duke.ece651.risc.shared.Unit;
@@ -85,6 +90,13 @@ public class DisplayMapActivity extends AppCompatActivity {
         getOrders();
         plagueDraw();
     }
+    public List<String>getPlayerNames(List<AbstractPlayer> p){
+        List<String>list= new ArrayList<String>();
+        for(AbstractPlayer player: p){
+            list.add(player.getName());
+        }
+        return list;
+    }
     // what to do when back button pressed
     @Override
     public void onBackPressed()
@@ -106,6 +118,43 @@ public class DisplayMapActivity extends AppCompatActivity {
         pd.setPlanets();
         pd.setGreyPlanets();
         setPlayerInfo();
+        setSpyButton(pd);
+    }
+    @SuppressLint("ClickableViewAccessibility")
+    public void setSpyButton(final PlanetDrawable pd){
+        Button mySpies = findViewById(R.id.spies);
+        mySpies.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+              if(event.getAction()==MotionEvent.ACTION_DOWN) {//when pressed, show spies
+                  int increment = 0;
+                  Resources r = getResources();
+                  Drawable[] layers = new Drawable[2];
+
+                  for (Region region : regions) {
+                      if (region.getSpies(ParentActivity.getPlayer().getName()).size() > 0) {//if player has a spy on the region
+                          layers[0] = getPlanetDrawable().get(increment);
+                          layers[1] = r.getDrawable(R.drawable.spytransparent);
+                          LayerDrawable layerDrawable = new LayerDrawable(layers);
+                          ImageView imageView = getPlanetViews().get(increment);
+                          TextView textView = getUnitCircles().get(increment);
+                          textView.setVisibility(View.INVISIBLE);
+                          imageView.setImageDrawable(layerDrawable);
+                          break;
+                      }
+                      increment++;
+                  }
+              }
+              else if (event.getAction() == MotionEvent.ACTION_UP) {//when released clear spies and reload
+                 pd.setPlanets();
+
+              }
+    return false;
+            }
+
+        });
+
+
     }
     public void plagueDraw(){
         int increment = 0;
@@ -156,12 +205,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     }
 
 public void setPlayerInfo(){
-   /*     for(AbstractPlayer player:board.getPlayerSet()){//update player object
-            if(player.getName().equals(ParentActivity.getPlayer().getName())){
-                parentActivity.setPlayer((HumanPlayer)player);
-            }
-        }*/
-    TextView fuelAmount = findViewById(R.id.fuelAmount);
+     TextView fuelAmount = findViewById(R.id.fuelAmount);
     TextView techAmount = findViewById(R.id.techAmount);
     TextView techLevel= findViewById(R.id.techLevel);
     String fuel= "Fuel : "+ Integer.toString(ParentActivity.getPlayer().getResources().getFuelResource().getFuel());
@@ -263,6 +307,19 @@ public void setPlayerInfo(){
                 }
                 else{
                     invalidFlag="teleport";
+                }
+            }
+            else if (order.equals("spy upgrade")){
+                SpyUpgradeOrder spyOrder = new SpyUpgradeOrder(destination);
+                List<SpyUpgradeOrder>s= new ArrayList<SpyUpgradeOrder>();
+                s.add(spyOrder);
+                validator= new SpyUpgradeValidator(validationPlayerCopy,validationTempBoard);
+                if(validator.validateOrders(s)) {//if order is valid, add to list to be sent
+                    parentActivity.setOrders(spyOrder);
+                    spyOrder.doAction();
+                }
+                else{
+                    invalidFlag="spy upgrade";
                 }
             }
         }
@@ -522,6 +579,7 @@ public void setPlayerInfo(){
         HumanPlayer p1 = new HumanPlayer("Player 1");
         List<Region> regions = getRegions(p1, 4);
         Board b = new Board(regions);
+        b.initializeSpies(getPlayerNames(b.getPlayerList()));
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.setBoard(b);
         parentActivity.setPlayer(p1);
@@ -598,6 +656,7 @@ public void setPlayerInfo(){
         r1.setName("Hoth");
         Region r2 = new Region(p2, units.get(2));
         r2.setName("Worlorn");
+
         Region r3 = new Region(p2, units.get(3));
         r3.setName("Dagobah");
 
