@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WaitActivity">
+    tools:context=".WaitActivity"
+    android:background="@drawable/space_background">
 
     <TextView
         android:id="@+id/waittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:text="Please wait for other players to send their boards"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +25,7 @@
         android:layout_marginTop="340dp"
         android:background="@drawable/oval2"
         android:onClick="continuePlay"
-        android:text="Continue Playing"
+        android:text="Continue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.871"
         app:layout_constraintStart_toStartOf="parent"

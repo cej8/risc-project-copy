@@ -19,7 +19,7 @@ public class AttackOrderCreator extends OrderCreator{
         Unit units = getOrderUnits(source);
         OrderInterface order1 =SourceDestinationUnitOrderFactory.getOrder("attack move", source, destination, units);
         if (order1 != null) { //should not ever be null -- would have gone to default in switch case instead of A
-          OrderInterface order2=SourceDestinationUnitOrderFactory.getOrder("attack combat", source, destination, units);
+          OrderInterface order2=SourceDestinationUnitOrderFactory.getOrder("attack combat", source, destination, (Unit)DeepCopy.deepCopy(units));
           if (order2 != null) {
             orderList.add(order1);
             orderList.add(order2);

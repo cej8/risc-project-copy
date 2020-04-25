@@ -136,7 +136,8 @@ public class OrderActivityTwo extends AppCompatActivity {
     //helper function for orders in which you can only select planets you own
     public void setSameOwnerPlanets(){
         for (AbstractPlayer p : board.getPlayerList()) {
-            if (p != player) { //if not player's planet, set view to outline
+
+            if (!p.getName().equals(player.getName())) { //if not player's planet, set view to outline
                 if (p!=null){ //if owned by someone, set to their outline color and make button invisible
                     for (Region r : board.getPlayerRegionSet(p)) {
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
@@ -163,7 +164,8 @@ public class OrderActivityTwo extends AppCompatActivity {
     //helper function for orders in which you can only select planets you don't own
     public void setDifferentOwnerPlanets() {
         for (AbstractPlayer p : board.getPlayerList()) {
-            if (p == player) { //if player's own planet, set view to outline and make button invisible
+
+            if (p.getName().equals(player.getName())) { //if player's own planet, set view to outline and make button invisible
                 for (Region r : board.getPlayerRegionSet(p)) {
                     if (r == source){ //if source planet
                         planetDrawable.setImageButtonsInvisible(p); //can't click
