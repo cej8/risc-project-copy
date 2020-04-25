@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.gui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -18,6 +19,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 
 import org.w3c.dom.Text;
 
@@ -70,7 +73,7 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        //generateBoard();
+       // generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
@@ -137,6 +140,18 @@ public class DisplayMapActivity extends AppCompatActivity {
         drawables.add(r.getDrawable(R.drawable.p10nb));
         drawables.add(r.getDrawable(R.drawable.p11nb));
         drawables.add(r.getDrawable(R.drawable.p12nb));
+        return drawables;
+    }
+    public List<Drawable> getLevelDrawable(){
+        List<Drawable> drawables = new ArrayList<Drawable>();
+        Resources r = getResources();
+        drawables.add(r.getDrawable(R.drawable.level0b));
+        drawables.add(r.getDrawable(R.drawable.level1b));
+        drawables.add(r.getDrawable(R.drawable.level2b));
+        drawables.add(r.getDrawable(R.drawable.level3b));
+        drawables.add(r.getDrawable(R.drawable.level4b));
+        drawables.add(r.getDrawable(R.drawable.level5b));
+        drawables.add(r.getDrawable(R.drawable.level6b));
         return drawables;
     }
 
@@ -275,6 +290,8 @@ public void setPlayerInfo(){
                        return true;
                    case R.id.backpack:
                        // TODO: backpack popup??
+                       BackpackDialogFragment backpackFrag = new BackpackDialogFragment(getLevelDrawable());
+                       backpackFrag.show(getSupportFragmentManager(),"backpack");
                        return true;
                    case R.id.instructions:
                        // TODO: instructions
