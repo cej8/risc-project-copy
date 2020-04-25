@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.gui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -70,7 +71,7 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        generateBoard();
+       // generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
@@ -109,37 +110,42 @@ public class DisplayMapActivity extends AppCompatActivity {
         PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         pd.setPlanets();
         pd.setGreyPlanets();
-        //setPlayerInfo();
-        setSpyButton();
+        setPlayerInfo();
+        setSpyButton(pd);
     }
-    public void setSpyButton(){
+    @SuppressLint("ClickableViewAccessibility")
+    public void setSpyButton(final PlanetDrawable pd){
         Button mySpies = findViewById(R.id.spies);
         mySpies.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                // public void showSpies (View view){
-                int increment = 0;
-                Resources r = getResources();
-                Drawable[] layers = new Drawable[2];
+              if(event.getAction()==MotionEvent.ACTION_DOWN) {//when pressed, show spies
+                  int increment = 0;
+                  Resources r = getResources();
+                  Drawable[] layers = new Drawable[2];
 
-                for (Region region : regions) {
-                    if (region.getSpies(ParentActivity.getPlayer().getName()).size() > 0) {//if player has a spy on the region
-                        layers[0] = getPlanetDrawable().get(increment);
-                        layers[1] = r.getDrawable(R.drawable.spytransparent);
-                        LayerDrawable layerDrawable = new LayerDrawable(layers);
-                        ImageView imageView = getPlanetViews().get(increment);
-                        TextView textView = getUnitCircles().get(increment);
-                        textView.setVisibility(View.INVISIBLE);
-                        imageView.setImageDrawable(layerDrawable);
-                        break;
-                    }
-                    increment++;
-                }
+                  for (Region region : regions) {
+                      if (region.getSpies(ParentActivity.getPlayer().getName()).size() > 0) {//if player has a spy on the region
+                          layers[0] = getPlanetDrawable().get(increment);
+                          layers[1] = r.getDrawable(R.drawable.spytransparent);
+                          LayerDrawable layerDrawable = new LayerDrawable(layers);
+                          ImageView imageView = getPlanetViews().get(increment);
+                          TextView textView = getUnitCircles().get(increment);
+                          textView.setVisibility(View.INVISIBLE);
+                          imageView.setImageDrawable(layerDrawable);
+                          break;
+                      }
+                      increment++;
+                  }
+              }
+              else if (event.getAction() == MotionEvent.ACTION_UP) {//when released clear spies and reload
+                 pd.setPlanets();
+
+              }
     return false;
             }
 
         });
-
 
 
     }
