@@ -112,6 +112,17 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     return true;
   }
 
+  private boolean hasEnoughUnits(MoveOrder m){
+    int totalUnits = m.getSource().getUnits().getTotalUnits();
+    int moveUnits = m.getUnits().getTotalUnits();
+    if (totalUnits > moveUnits) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  
   // Ensure at least one unit is left behind in region moving from (based on game
   // rules)
   // @Override
@@ -123,14 +134,16 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
       Unit moveUnits = new Unit(move.getUnits().getUnits());
 
       MoveOrder moveCopy = new MoveOrder(tempSource, tempDest, moveUnits);
-      boolean validMove = true;
+      boolean validMove = hasEnoughUnits(moveCopy); //true if have enough total units for move
+      
       // set validMove to false if any of these are false: at least 1 sourceUnit, 1
       // moveUnit, and sourceUnits > moveUnits in each index of source
       for (int i = 0; i < sourceUnits.getUnits().size(); i++) { // for each index of the source units
         if (sourceUnits.getUnits().get(i).equals(0) && moveUnits.getUnits().get(i).equals(0)){
             continue;   
         }
-        else if (((sourceUnits.getUnits().get(i) - 1)< moveUnits.getUnits().get(i)) || (moveUnits.getUnits().get(i) < 0)) {
+        else if ((sourceUnits.getUnits().get(i) < moveUnits.getUnits().get(i))
+                 || (moveUnits.getUnits().get(i) < 0)) { //if don't have enough sourceUnits or try to move negative
           validMove = false;
         }
       }
