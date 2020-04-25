@@ -6,6 +6,7 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 /*
 
@@ -56,6 +57,9 @@ public class ParentServer extends Thread{
 
   // Value of plagueID representing which number planet in list has plague
   private int plagueID;
+
+  //Lock for adding to child list
+  private final ReentrantLock childServerAddLock = new ReentrantLock();
   
   public ParentServer(){
     BoardGenerator genBoard = new BoardGenerator();
@@ -80,9 +84,9 @@ public class ParentServer extends Thread{
 
   //Method to add player's childserver to list
   public void addPlayer(ChildServer c){
-    synchronized(children){
-      children.add(c);
-    }
+    childServerAddLock.lock();
+    children.add(c);
+    childServerAddLock.unlock();
   }
 
   //Method to add username/connection to game by creating new childserver
@@ -246,28 +250,10 @@ public class ParentServer extends Thread{
     while (children.size() < MAX_PLAYERS && (System.currentTimeMillis()-startTime < gameStartTime)) {
       //Set timeout to .5 seconds --> try to read
       //If timeout then still there (otherwise socket has failed)
-      synchronized(children){
-        for(ChildServer child : children){
-          //Get connection
-          Connection playerConnection = child.getPlayerConnection();
-          if(playerConnection != null){
-            try{
-              //Try to listen for .5s
-              playerConnection.getSocket().setSoTimeout(500);
-              playerConnection.receiveObject();
-            }
-            catch(Exception e){
-              if(!(e instanceof SocketTimeoutException)){
-                //If not timeout then not there --> close connection
-                playerConnection.closeAll();
-                child.setPlayerConnection(null);
-                //Only remove player IFF in this game
-                masterServer.removePlayer(child.getPlayer().getName(), gameID);
-              }
-            }
-          }
-        }
-      }
+      childServerAddLock.lock();
+      ConnectionTester cT = new ConnectionTester(children, masterServer, gameID);
+      cT.peekConnections();
+      childServerAddLock.unlock();
       //Wait for .5s so others can access children
       try{
         Thread.sleep(500);
@@ -423,6 +409,9 @@ public class ParentServer extends Thread{
          else if (order.getPriority() == Constants.UPGRADE_RESOURCE_PRIORITY) {
         castOrder = (ResourceBoost) (order);
       }
+         else if (order.getPriority() == Constants.TELEPORT_ORDER_PRIORITY){
+           castOrder = (TeleportOrder) (order);
+      }
    
        else if (order.getPriority() == Constants.SPYUPGRADE_PRIORITY) {
         castOrder = (SpyUpgradeOrder) (order);
@@ -509,11 +498,43 @@ public class ParentServer extends Thread{
 
   public void applyOrderList(List<OrderInterface> orders) {
     // Simply call doAction for each order
+
+    //Strings for attackCombat update special case
+    String attackName = "";
+    String defendName = "";
+    String attackedRegionName = "";
     for (int i = 0; i < orders.size(); i++) {
+      //Special case --> force update for ChildServer involved in AttackCombat
+      if(orders.get(i).getPriority() == Constants.ATTACK_COMBAT_PRIORITY){
+          AttackCombat castOrder = (AttackCombat) orders.get(i);
+          //Get attack/defend player names
+          attackName = castOrder.getSource().getOwner().getName();
+          defendName = castOrder.getDestination().getOwner().getName();
+          //Get name of attacked region to update
+          attackedRegionName = castOrder.getDestination().getName();
+      }
+
+
       //List of substrings making up order's text result
       List<String> results = orders.get(i).doAction();
       //If FOG_OF_WAR then apply (if not initial placements)
       if(FOG_OF_WAR && turnNumber > 0){
+        //Special case --> force update for ChildServer involved in AttackCombat
+        //Avoids issue where losing single region not adjancent to any others
+        if(orders.get(i).getPriority() == Constants.ATTACK_COMBAT_PRIORITY){
+          //Ensure actual player (not just Group A)
+          if(players.contains(attackName)){
+            Board attackBoard = children.get(players.indexOf(attackName)).getClientBoard();
+            attackBoard.getRegionByName(attackedRegionName).copyInformation(board.getRegionByName(attackedRegionName));
+          }
+          //Ensure actual player (not just Group A)
+          if(players.contains(defendName)){
+            Board defendBoard = children.get(players.indexOf(defendName)).getClientBoard();
+            defendBoard.getRegionByName(attackedRegionName).copyInformation(board.getRegionByName(attackedRegionName));
+          }
+        }
+
+
         //stringVisibility is list<set> of player names who can see each
         //substring of order's results
         List<Set<String>> stringVisibility = orders.get(i).getPlayersVisibleTo();
@@ -573,6 +594,10 @@ public class ParentServer extends Thread{
   //ChildServers internally handle their own timeouts by leveraging socket timeouts
   //based on TURN_WAIT_MINUTES as a maximum for time spent within run() method
   public void callThreads() throws InterruptedException {
+    //Toggle to not finished to prevent race on ConnectionTester call
+    for(ChildServer child : children){
+      child.setFinishedTurn(false);
+    }
     System.out.println(gameID + " : " + "Calling threads");
     List<Callable<Object>> todo = new ArrayList<Callable<Object>>(children.size());
     for (int i = 0; i < children.size(); i++) {
@@ -580,7 +605,15 @@ public class ParentServer extends Thread{
       // Insert message into children
       children.get(i).setTurnMessage(turnResults.get(i));
     }
+    //Create thread to check sockets for those who submit turns
+    ConnectionTester cT = new ConnectionTester(children, masterServer, gameID);
+    Thread t = new Thread(cT);
+    t.start();
     threads.invokeAll(todo);
+    //Stop the listener
+    cT.stopLoop();
+    //Wait until cT has actually stopped run() loop
+    while(!cT.hasStopped()) {Thread.sleep(10);};
     System.out.println(gameID + " : " + "Threads finished");
   }
   public void growResources(Region r){
