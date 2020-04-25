@@ -15,6 +15,7 @@ import java.util.List;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Region;
+import edu.duke.ece651.risc.shared.Spy;
 
 public class DisplayRegionInfoDialogFragment extends DialogFragment {
     String planetName;
@@ -101,8 +102,9 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
             if (hasPlague){
                 plague.setText("Your planet has the plague, it will produce no resources");
             }
-            if (owner.equals(ParentActivity.getPlayer().getName())){
-                spies.setText("Sshhh you have a spy on this planet");
+            List<Spy> spyList = region.getSpies(owner);
+            if (spyList.size() > 0){
+                    spies.setText("Sshhh you have a spy on this planet");
             }
             int regionLevel = region.getRegionLevel().getRegionLevel();
             planetLevel.setText("Level " + regionLevel);
