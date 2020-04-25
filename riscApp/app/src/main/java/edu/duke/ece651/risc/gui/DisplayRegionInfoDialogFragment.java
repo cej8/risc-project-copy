@@ -38,7 +38,7 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
         this.region = region;
         this.hasPlague = region.getPlague();
     }
-        @Override
+        /*@Override
         public Dialog onCreateDialog(final Bundle savedInstanceState) {
             TextView ownerName;
             TextView unitNumbers;
@@ -70,28 +70,45 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
                     });
             // Create the AlertDialog object and return it
             return builder.create();
-        }
-        public Dialog DialogTwo(final Bundle savedInstanceState){
+        }*/
+        @Override
+        public Dialog onCreateDialog(final Bundle savedInstanceState) {
             AlertDialog.Builder unitBuilder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = requireActivity().getLayoutInflater();
-            View unitBonusView = inflater.inflate(R.layout.display_unit_dialog, null);
+            View planetView = inflater.inflate(R.layout.display_unit_dialog, null);
             List<Integer> unitList = region.getUnits().getUnits();
-            unit0 = unitBonusView.findViewById(R.id.unit0);
+            unit0 = planetView.findViewById(R.id.unit0);
             unit0.setText(Integer.toString(unitList.get(0)));
-            unit1 = unitBonusView.findViewById(R.id.unit3);
+            unit1 = planetView.findViewById(R.id.unit3);
             unit1.setText(Integer.toString(unitList.get(1)));
-            unit2 = unitBonusView.findViewById(R.id.unit5);
+            unit2 = planetView.findViewById(R.id.unit5);
             unit2.setText(Integer.toString(unitList.get(2)));
-            unit3 = unitBonusView.findViewById(R.id.unit6);
+            unit3 = planetView.findViewById(R.id.unit6);
             unit3.setText(Integer.toString(unitList.get(3)));
-            unit4 = unitBonusView.findViewById(R.id.unit2);
+            unit4 = planetView.findViewById(R.id.unit2);
             unit4.setText(Integer.toString(unitList.get(4)));
-            unit5 = unitBonusView.findViewById(R.id.unit1);
+            unit5 = planetView.findViewById(R.id.unit1);
             unit5.setText(Integer.toString(unitList.get(5)));
-            unit6 = unitBonusView.findViewById(R.id.unit4);
+            unit6 = planetView.findViewById(R.id.unit4);
             unit6.setText(Integer.toString(unitList.get(6)));
-            unitBuilder.setView(unitBonusView)
-                    .setTitle("Available Units")
+            TextView ownerName;
+            TextView spies;
+            TextView planetLevel;
+            planetLevel = planetView.findViewById(R.id.planetLevel);
+            spies = planetView.findViewById(R.id.spies);
+            ownerName = planetView.findViewById(R.id.owner);
+            plague = planetView.findViewById(R.id.plague);
+            if (hasPlague){
+                plague.setText("Your planet has the plague, it will produce no resources");
+            }
+            if (owner.equals(ParentActivity.getPlayer().getName())){
+                spies.setText("Sshhh you have a spy on this planet");
+            }
+            int regionLevel = region.getRegionLevel().getRegionLevel();
+            planetLevel.setText("Level " + regionLevel);
+            ownerName.setText(owner);
+            unitBuilder.setView(planetView)
+                    .setTitle(planetName)
                     .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // popup builder 2
