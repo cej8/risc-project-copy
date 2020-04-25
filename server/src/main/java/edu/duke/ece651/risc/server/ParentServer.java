@@ -6,6 +6,7 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 /*
 
@@ -56,6 +57,9 @@ public class ParentServer extends Thread{
 
   // Value of plagueID representing which number planet in list has plague
   private int plagueID;
+
+  //Lock for adding to child list
+  private final ReentrantLock childServerAddLock = new ReentrantLock();
   
   public ParentServer(){
     BoardGenerator genBoard = new BoardGenerator();
@@ -80,9 +84,9 @@ public class ParentServer extends Thread{
 
   //Method to add player's childserver to list
   public void addPlayer(ChildServer c){
-    synchronized(children){
-      children.add(c);
-    }
+    childServerAddLock.lock();
+    children.add(c);
+    childServerAddLock.unlock();
   }
 
   //Method to add username/connection to game by creating new childserver
@@ -246,28 +250,10 @@ public class ParentServer extends Thread{
     while (children.size() < MAX_PLAYERS && (System.currentTimeMillis()-startTime < gameStartTime)) {
       //Set timeout to .5 seconds --> try to read
       //If timeout then still there (otherwise socket has failed)
-      synchronized(children){
-        for(ChildServer child : children){
-          //Get connection
-          Connection playerConnection = child.getPlayerConnection();
-          if(playerConnection != null){
-            try{
-              //Try to listen for .5s
-              playerConnection.getSocket().setSoTimeout(500);
-              playerConnection.receiveObject();
-            }
-            catch(Exception e){
-              if(!(e instanceof SocketTimeoutException)){
-                //If not timeout then not there --> close connection
-                playerConnection.closeAll();
-                child.setPlayerConnection(null);
-                //Only remove player IFF in this game
-                masterServer.removePlayer(child.getPlayer().getName(), gameID);
-              }
-            }
-          }
-        }
-      }
+      childServerAddLock.lock();
+      ConnectionTester cT = new ConnectionTester(children, masterServer, gameID);
+      cT.peekConnections();
+      childServerAddLock.unlock();
       //Wait for .5s so others can access children
       try{
         Thread.sleep(500);
@@ -580,7 +566,11 @@ public class ParentServer extends Thread{
       // Insert message into children
       children.get(i).setTurnMessage(turnResults.get(i));
     }
+    ConnectionTester cT = new ConnectionTester(children, masterServer, gameID);
+    Thread t = new Thread(cT);
+    t.start();
     threads.invokeAll(todo);
+    t.interrupt();
     System.out.println(gameID + " : " + "Threads finished");
   }
   public void growResources(Region r){

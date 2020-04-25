@@ -36,6 +36,8 @@ public class ChildServer implements Runnable{
   private long startTime;
   //Maximum time for turn
   private long maxTime;
+  //Boolean for if turn complete (passed successfully)
+  private boolean finishedTurn = true;
 
   //Client's version of the board
   private Board clientBoard;
@@ -81,6 +83,10 @@ public class ChildServer implements Runnable{
 
   public boolean getFirstCall(){
     return firstCall;
+  }
+
+  public boolean isFinished(){
+    return finishedTurn;
   }
 
   public void firstTurnCall() throws IOException, SocketException, ClassNotFoundException{
@@ -256,6 +262,7 @@ public class ChildServer implements Runnable{
   // enables ChildServer to be runnable
   @Override
   public void run(){
+    finishedTurn = false;
     startTime = System.currentTimeMillis();
     //Timeout is Socket's timeout
     maxTime = (long)(parent.getTURN_WAIT_MINUTES()*60*1000);
@@ -265,6 +272,7 @@ public class ChildServer implements Runnable{
         //If successful then decrement missed turns to zero
         missedTurns = (missedTurns > 0) ? (missedTurns - 1) : (0);
         System.out.println(parent.getGameID() + " : (" + player.getName() + ") input turn, missed now " + missedTurns);
+        finishedTurn = true;
         return;
       }
     }
