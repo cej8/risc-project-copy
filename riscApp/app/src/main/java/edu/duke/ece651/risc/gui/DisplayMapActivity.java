@@ -119,34 +119,43 @@ public class DisplayMapActivity extends AppCompatActivity {
         pd.setGreyPlanets();
         setPlayerInfo();
         setSpyButton(pd);
+
+    }
+    public void showSpies(){
+        int increment = 0;
+        Resources r = getResources();
+        Drawable[] layers = new Drawable[2];
+
+        for (Region region : regions) {
+            if (region.getSpies(ParentActivity.getPlayer().getName()).size() > 0) {//if player has a spy on the region
+                layers[0] = getPlanetDrawable().get(increment);
+                layers[1] = r.getDrawable(R.drawable.spytransparent);
+                LayerDrawable layerDrawable = new LayerDrawable(layers);
+                ImageView imageView = getPlanetViews().get(increment);
+                TextView textView = getUnitCircles().get(increment);
+                textView.setVisibility(View.INVISIBLE);
+                imageView.setImageDrawable(layerDrawable);
+                break;
+            }
+            increment++;
+        }
+
+
     }
     @SuppressLint("ClickableViewAccessibility")
     public void setSpyButton(final PlanetDrawable pd){
-        Button mySpies = findViewById(R.id.spies);
-        mySpies.setOnTouchListener(new View.OnTouchListener() {
+        //Button mySpies = findViewById(R.id.spies);
+        //mySpies.setOnTouchListener(new View.OnTouchListener() {
+        findViewById(R.id.viewSpies).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-              if(event.getAction()==MotionEvent.ACTION_DOWN) {//when pressed, show spies
-                  int increment = 0;
-                  Resources r = getResources();
-                  Drawable[] layers = new Drawable[2];
 
-                  for (Region region : regions) {
-                      if (region.getSpies(ParentActivity.getPlayer().getName()).size() > 0) {//if player has a spy on the region
-                          layers[0] = getPlanetDrawable().get(increment);
-                          layers[1] = r.getDrawable(R.drawable.spytransparent);
-                          LayerDrawable layerDrawable = new LayerDrawable(layers);
-                          ImageView imageView = getPlanetViews().get(increment);
-                          TextView textView = getUnitCircles().get(increment);
-                          textView.setVisibility(View.INVISIBLE);
-                          imageView.setImageDrawable(layerDrawable);
-                          break;
-                      }
-                      increment++;
-                  }
+              if(event.getAction()==MotionEvent.ACTION_DOWN) {//when pressed, show spies
+                  showSpies();
               }
               else if (event.getAction() == MotionEvent.ACTION_UP) {//when released clear spies and reload
-                 pd.setPlanets();
+                 pd.setPlanets();// NOT WORKING AS EXPECTED
+                  //TODO: not sure how to reset back to normal map (mayeb call displaymapAcititvity again?)
 
               }
     return false;
@@ -343,7 +352,7 @@ public void setPlayerInfo(){
                        exitFrag.show(getSupportFragmentManager(),"exit");
                        return true;
                    case R.id.viewSpies:
-                       // TODO: add spies
+                       // run set spy method on touch listener
                        return true;
                    case R.id.backpack:
                        // TODO: backpack popup??
