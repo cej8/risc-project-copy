@@ -136,12 +136,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     }
 
 public void setPlayerInfo(){
-   /*     for(AbstractPlayer player:board.getPlayerSet()){//update player object
-            if(player.getName().equals(ParentActivity.getPlayer().getName())){
-                parentActivity.setPlayer((HumanPlayer)player);
-            }
-        }*/
-    TextView fuelAmount = findViewById(R.id.fuelAmount);
+     TextView fuelAmount = findViewById(R.id.fuelAmount);
     TextView techAmount = findViewById(R.id.techAmount);
     TextView techLevel= findViewById(R.id.techLevel);
     String fuel= "Fuel : "+ Integer.toString(ParentActivity.getPlayer().getResources().getFuelResource().getFuel());

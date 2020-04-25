@@ -29,11 +29,15 @@ public class FOWDialogFragment extends DialogFragment {
         View travelView = inflater.inflate(R.layout.fow_dialog,null);
         Button spyButton = travelView.findViewById(R.id.spyButton);
         Button cloakButton = travelView.findViewById(R.id.cloakButton);
+        if(this.pa.getPlayer().getMaxTechLevel().getMaxTechLevel()<3){
+            cloakButton.setEnabled(false);
+        }
 
         spyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: set spy functionality
+                Intent spyUpgrade = new Intent(activity,SpyUpgradeActivity.class);
+                startActivity(spyUpgrade);
             }
         });
         cloakButton.setOnClickListener(new View.OnClickListener() {

@@ -30,6 +30,12 @@ public class MoveDialogFragment extends DialogFragment {
         View travelView = inflater.inflate(R.layout.travel_dialog,null);
         Button moveButton = travelView.findViewById(R.id.moveButton);
         Button teleportButton = travelView.findViewById(R.id.teleportButton);
+        if(this.pa.getPlayer().getMaxTechLevel().getMaxTechLevel()<4){
+            teleportButton.setEnabled(false);//button is locked until appropriate tech level is reached
+        }
+        else{
+            teleportButton.setEnabled(true);
+        }
 
         moveButton.setOnClickListener(new View.OnClickListener() {
             @Override
