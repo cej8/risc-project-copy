@@ -118,7 +118,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         pd.setPlanets();
         pd.setGreyPlanets();
         setPlayerInfo();
-        setSpyButton(pd);
+       // setSpyButton(pd);
 
     }
     public void showSpies(){
@@ -353,6 +353,7 @@ public void setPlayerInfo(){
                        return true;
                    case R.id.viewSpies:
                        // run set spy method on touch listener
+                       showSpies();
                        return true;
                    case R.id.backpack:
                        // TODO: backpack popup??
