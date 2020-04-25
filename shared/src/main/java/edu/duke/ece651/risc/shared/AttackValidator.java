@@ -29,7 +29,7 @@ private Board tempBoard;
       return false;
     }
     //check resources drop below zero
-    if(a.getUnits().getTotalUnits() * Constants.ATTACK_COST > a.getSource().getOwner().getResources().getFuelResource().getFuel()){
+    if(a.getUnits().getTotalUnits() * Constants.ATTACK_COST > player.getResources().getFuelResource().getFuel()){
       return false;
     }
     // regions must be adjacent
