@@ -53,13 +53,11 @@ private Board tempBoard;
 @Override
 public boolean validateOrders(List<AttackMove> attackList) {
   boolean validRegions = validateRegions(attackList);
-    boolean validUnits = validateUnits(attackList);
-    return validRegions && validUnits;
-  }
-  // Method to validate corrent units in each region
-  //  	@Override
+  boolean validUnits = validateUnits(attackList);
+  return validRegions && validUnits;
+}
 
-      private boolean hasEnoughUnits(AttackMove m){
+    private boolean hasEnoughUnits(AttackMove m){
     int totalUnits = m.getSource().getUnits().getTotalUnits();
     int moveUnits = m.getUnits().getTotalUnits();
     if (totalUnits > moveUnits) {
@@ -68,12 +66,14 @@ public boolean validateOrders(List<AttackMove> attackList) {
     else{
       return false;
     }
-  
+  }
+  // Method to validate corrent units in each region
+  //  	@Override
 	public boolean validateUnits(List<AttackMove> a) {
 	 // check to make sure numUnits in source < attackOrder units
      for (AttackMove attack : a) {
-      Region tempSource = attack.getSource().getRegionByName(tempBoard, attack.getSource().getName());
-      Region tempDest = attack.getDestination().getRegionByName(tempBoard, attack.getDestination().getName());
+       Region tempSource = attack.getSource().getRegionByName(tempBoard, attack.getSource().getName());
+       Region tempDest = attack.getDestination().getRegionByName(tempBoard, attack.getDestination().getName());
       Unit sourceUnits = tempSource.getUnits();
       Unit attackUnits = new Unit(attack.getUnits().getUnits());
       AttackMove attackCopyMove = new AttackMove(tempSource, tempDest, attackUnits);

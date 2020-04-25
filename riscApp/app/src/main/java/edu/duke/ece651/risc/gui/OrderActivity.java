@@ -99,10 +99,17 @@ public class OrderActivity extends AppCompatActivity {
         if (planetName == null){
                 helpText.setText("Please select a planet");
             } else {
-                Intent i = new Intent(this, OrderActivityTwo.class);
-                i.putExtra("PNAME", planetName);
-                i.putExtra("ORDER",orderMessage);
-                startActivity(i);
+                if (orderMessage.equals("raid")){
+                    Intent intent = new Intent(this,RaidActivity.class);
+                    intent.putExtra("PNAME",planetName);
+                    intent.putExtra("ORDER",orderMessage);
+                    startActivity(intent);
+                } else {
+                    Intent i = new Intent(this, OrderActivityTwo.class);
+                    i.putExtra("PNAME", planetName);
+                    i.putExtra("ORDER", orderMessage);
+                    startActivity(i);
+                }
         }
     }
 

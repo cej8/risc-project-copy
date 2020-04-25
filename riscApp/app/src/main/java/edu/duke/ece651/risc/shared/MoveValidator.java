@@ -112,6 +112,10 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
     return true;
   }
 
+
+  // rules)
+  // @Override
+  // Ensure at least one unit is left behind in region moving from (based on game
   private boolean hasEnoughUnits(MoveOrder m){
     int totalUnits = m.getSource().getUnits().getTotalUnits();
     int moveUnits = m.getUnits().getTotalUnits();
@@ -122,10 +126,6 @@ public class MoveValidator implements ValidatorInterface<MoveOrder> {
       return false;
     }
   }
-  
-  // Ensure at least one unit is left behind in region moving from (based on game
-  // rules)
-  // @Override
   public boolean validateUnits(List<MoveOrder> m) {
     for (MoveOrder move : m) {
       Region tempSource = move.getSource().getRegionByName(tempBoard, move.getSource().getName());

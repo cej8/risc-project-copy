@@ -1,5 +1,7 @@
 package edu.duke.ece651.risc.gui;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -7,12 +9,18 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 
 import org.w3c.dom.Text;
 
@@ -30,6 +38,8 @@ import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.MoveOrder;
 import edu.duke.ece651.risc.shared.MoveValidator;
 import edu.duke.ece651.risc.shared.OrderInterface;
+import edu.duke.ece651.risc.shared.RaidOrder;
+import edu.duke.ece651.risc.shared.RaidValidator;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.ResourceBoost;
 import edu.duke.ece651.risc.shared.ResourceBoostValidator;
@@ -46,13 +56,11 @@ public class DisplayMapActivity extends AppCompatActivity {
     TextView helpText;
     List<OrderInterface> orders;
     Board board;
-    //private MoveValidator moveValidator;
-    //private AttackValidator attackValidator;
     private ValidatorInterface validator;
     ParentActivity parentActivity = new ParentActivity();
     Board validationTempBoard;
     AbstractPlayer validationPlayerCopy;
-
+    Activity activity;
 
     private Handler handler = new Handler();
     @Override
@@ -65,12 +73,12 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        //generateBoard();
+       // generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
         validationPlayerCopy=(AbstractPlayer)DeepCopy.deepCopy(ParentActivity.getPlayer());
-
+        activity = this;
 
         Log.d("Inside map regions",regions.get(0).getName());
 
@@ -134,6 +142,18 @@ public class DisplayMapActivity extends AppCompatActivity {
         drawables.add(r.getDrawable(R.drawable.p12nb));
         return drawables;
     }
+    public List<Drawable> getLevelDrawable(){
+        List<Drawable> drawables = new ArrayList<Drawable>();
+        Resources r = getResources();
+        drawables.add(r.getDrawable(R.drawable.level0b));
+        drawables.add(r.getDrawable(R.drawable.level1b));
+        drawables.add(r.getDrawable(R.drawable.level2b));
+        drawables.add(r.getDrawable(R.drawable.level3b));
+        drawables.add(r.getDrawable(R.drawable.level4b));
+        drawables.add(r.getDrawable(R.drawable.level5b));
+        drawables.add(r.getDrawable(R.drawable.level6b));
+        return drawables;
+    }
 
 public void setPlayerInfo(){
    /*     for(AbstractPlayer player:board.getPlayerSet()){//update player object
@@ -195,7 +215,17 @@ public void setPlayerInfo(){
                 else{
                   invalidFlag= "attack";
                 }
-            } else if (order.equals("boost units")) {
+            } else if (order.equals("raid")){
+                RaidOrder raidOrder = new RaidOrder(source,destination);
+                List<RaidOrder> r = new ArrayList<RaidOrder>();
+                r.add(raidOrder);
+                validator = new RaidValidator(validationPlayerCopy,validationTempBoard);
+                if (validator.validateOrders(r)){
+                    parentActivity.setOrders(raidOrder);
+                } else {
+                    invalidFlag = "raid";
+                }
+            }else if (order.equals("boost units")) {
                 UnitBoost unitBoost = new UnitBoost(source,unit);
                 List<UnitBoost>u= new ArrayList<UnitBoost>();
                 u.add(unitBoost);
@@ -207,8 +237,7 @@ public void setPlayerInfo(){
                 else{
                     invalidFlag="upgrade unit";
                 }
-            }
-            else if (order.equals("resource boost")) {
+            } else if (order.equals("resource boost")) {
                ResourceBoost resourceBoost= new ResourceBoost(destination);
                 List<ResourceBoost>r= new ArrayList<ResourceBoost>();
                 r.add(resourceBoost);
@@ -246,10 +275,33 @@ public void setPlayerInfo(){
 
         }
     }
-    // exit game popup
-    public void exitGame(View view){
-        ExitGameDialogFragment exitFrag = new ExitGameDialogFragment(this,executeClient);
-        exitFrag.show(getSupportFragmentManager(),"exit");
+   public void popupMenu(View view){
+       PopupMenu popupMenu = new PopupMenu(this, view);
+       popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+       popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+           public boolean onMenuItemClick(MenuItem item) {
+               switch (item.getItemId()) {
+                   case R.id.exit:
+                       ExitGameDialogFragment exitFrag = new ExitGameDialogFragment(activity,executeClient);
+                       exitFrag.show(getSupportFragmentManager(),"exit");
+                       return true;
+                   case R.id.viewSpies:
+                       // TODO: add spies
+                       return true;
+                   case R.id.backpack:
+                       // TODO: backpack popup??
+                       BackpackDialogFragment backpackFrag = new BackpackDialogFragment(getLevelDrawable());
+                       backpackFrag.show(getSupportFragmentManager(),"backpack");
+                       return true;
+                   case R.id.instructions:
+                       // TODO: instructions
+                       return true;
+                   default:
+                       return false;
+               }
+           }
+       });
+       popupMenu.show();
     }
     // SUBMIT ORDERS!!!!!!!!!!!!!
     public void submitAll(View view){

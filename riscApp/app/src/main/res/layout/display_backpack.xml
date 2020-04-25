@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="138dp"
+        android:layout_height="164dp"
+        android:orientation="vertical"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.058"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:layout_constraintVertical_bias="0.084">
+
+        <ImageView
+            android:id="@+id/fuelCan"
+            android:layout_width="85dp"
+            android:layout_height="101dp"
+            card_view:srcCompat="@drawable/gascan"
+            tools:layout_editor_absoluteX="59dp"
+            tools:layout_editor_absoluteY="67dp" />
+
+        <TextView
+            android:id="@+id/fuelHeader"
+            android:layout_width="92dp"
+            android:layout_height="wrap_content"
+            android:text="Fuel:"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            tools:layout_editor_absoluteX="70dp"
+            tools:layout_editor_absoluteY="180dp" />
+
+        <TextView
+            android:id="@+id/fuelAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="138dp"
+        android:layout_height="164dp"
+        android:orientation="vertical"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintStart_toEndOf="@+id/linearLayout"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:layout_constraintVertical_bias="0.085">
+
+        <ImageView
+            android:id="@+id/techPic"
+            android:layout_width="85dp"
+            android:layout_height="101dp"
+            card_view:srcCompat="@drawable/tech"
+            tools:layout_editor_absoluteX="183dp"
+            tools:layout_editor_absoluteY="61dp" />
+
+        <TextView
+            android:id="@+id/techHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Technology:"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            tools:layout_editor_absoluteX="206dp"
+            tools:layout_editor_absoluteY="182dp" />
+
+        <TextView
+            android:id="@+id/techAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="138dp"
+        android:layout_height="164dp"
+        android:orientation="vertical"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintStart_toEndOf="@+id/linearLayout2"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:layout_constraintVertical_bias="0.085">
+
+        <ImageView
+            android:id="@+id/techLevelPic"
+            android:layout_width="85dp"
+            android:layout_height="101dp"
+            card_view:srcCompat="@drawable/level1b"
+            tools:layout_editor_absoluteX="183dp"
+            tools:layout_editor_absoluteY="61dp" />
+
+        <TextView
+            android:id="@+id/techLevelHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tech Level:"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            tools:layout_editor_absoluteX="206dp"
+            tools:layout_editor_absoluteY="182dp" />
+
+        <TextView
+            android:id="@+id/techLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
