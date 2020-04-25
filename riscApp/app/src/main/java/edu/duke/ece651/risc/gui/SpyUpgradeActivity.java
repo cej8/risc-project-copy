@@ -22,6 +22,7 @@ import java.util.Map;
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
+import edu.duke.ece651.risc.shared.Spy;
 
 public class SpyUpgradeActivity extends AppCompatActivity {
     List<Region> regions;
@@ -40,7 +41,7 @@ public class SpyUpgradeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_resource_boost);
+        setContentView(R.layout.activity_spy_upgrade);
         board = ParentActivity.getBoard();
         player = ParentActivity.getPlayer();
         regions = board.getRegions();
@@ -67,15 +68,16 @@ public class SpyUpgradeActivity extends AppCompatActivity {
         planetDrawable.setAllUnitCircles();
         setSameOwnerPlanets();
     }
-    // existing spies
+    // show existing spies
     public void spyDraw(){
         int increment = 0;
         Resources r = getResources();
         Drawable[] layers = new Drawable[2];
+
         for (Region region: regions){
-            if (region.getPlague()){
+            if(region.getSpies(ParentActivity.getPlayer().getName()).size()>0){//if player has a spy on the region
                 layers[0] = getPlanetDrawable().get(increment);
-                layers[1] = r.getDrawable(R.drawable.spyTransparent);
+                layers[1] = r.getDrawable(R.drawable.spytransparent);
                 LayerDrawable layerDrawable = new LayerDrawable(layers);
                 ImageView imageView = getPlanetViews().get(increment);
                 TextView textView = getUnitCircles().get(increment);
@@ -85,7 +87,8 @@ public class SpyUpgradeActivity extends AppCompatActivity {
             }
             increment++;
         }
-    }
+        }
+
 
 
     // plague
@@ -161,7 +164,7 @@ public class SpyUpgradeActivity extends AppCompatActivity {
 
     }
     public void setSelectionInvisible(Region r) {
-        planetDrawable.setImageViewVisible(R.drawable.);
+        planetDrawable.setImageViewVisible(null);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);
     }
     //loop through every region and set to clear

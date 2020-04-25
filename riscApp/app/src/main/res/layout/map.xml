@@ -1250,4 +1250,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.026" />
 
+    <Button
+        android:id="@+id/spies"
+        android:layout_width="88dp"
+        android:layout_height="70dp"
+        android:background="@drawable/oval3"
+        android:text="View Spies"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.883"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.873" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

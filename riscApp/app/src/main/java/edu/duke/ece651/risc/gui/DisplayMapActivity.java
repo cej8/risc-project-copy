@@ -7,7 +7,9 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +35,9 @@ import edu.duke.ece651.risc.shared.OrderInterface;
 import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.ResourceBoost;
 import edu.duke.ece651.risc.shared.ResourceBoostValidator;
+import edu.duke.ece651.risc.shared.Spy;
+import edu.duke.ece651.risc.shared.SpyUpgradeOrder;
+import edu.duke.ece651.risc.shared.SpyUpgradeValidator;
 import edu.duke.ece651.risc.shared.TeleportOrder;
 import edu.duke.ece651.risc.shared.TeleportValidator;
 import edu.duke.ece651.risc.shared.Unit;
@@ -65,7 +70,7 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        //generateBoard();
+        generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
@@ -76,6 +81,13 @@ public class DisplayMapActivity extends AppCompatActivity {
 
         getOrders();
         plagueDraw();
+    }
+    public List<String>getPlayerNames(List<AbstractPlayer> p){
+        List<String>list= new ArrayList<String>();
+        for(AbstractPlayer player: p){
+            list.add(player.getName());
+        }
+        return list;
     }
     // what to do when back button pressed
     @Override
@@ -97,7 +109,39 @@ public class DisplayMapActivity extends AppCompatActivity {
         PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         pd.setPlanets();
         pd.setGreyPlanets();
-        setPlayerInfo();
+        //setPlayerInfo();
+        setSpyButton();
+    }
+    public void setSpyButton(){
+        Button mySpies = findViewById(R.id.spies);
+        mySpies.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // public void showSpies (View view){
+                int increment = 0;
+                Resources r = getResources();
+                Drawable[] layers = new Drawable[2];
+
+                for (Region region : regions) {
+                    if (region.getSpies(ParentActivity.getPlayer().getName()).size() > 0) {//if player has a spy on the region
+                        layers[0] = getPlanetDrawable().get(increment);
+                        layers[1] = r.getDrawable(R.drawable.spytransparent);
+                        LayerDrawable layerDrawable = new LayerDrawable(layers);
+                        ImageView imageView = getPlanetViews().get(increment);
+                        TextView textView = getUnitCircles().get(increment);
+                        textView.setVisibility(View.INVISIBLE);
+                        imageView.setImageDrawable(layerDrawable);
+                        break;
+                    }
+                    increment++;
+                }
+    return false;
+            }
+
+        });
+
+
+
     }
     public void plagueDraw(){
         int increment = 0;
@@ -229,6 +273,19 @@ public void setPlayerInfo(){
                 }
                 else{
                     invalidFlag="teleport";
+                }
+            }
+            else if (order.equals("spy upgrade")){
+                SpyUpgradeOrder spyOrder = new SpyUpgradeOrder(destination);
+                List<SpyUpgradeOrder>s= new ArrayList<SpyUpgradeOrder>();
+                s.add(spyOrder);
+                validator= new SpyUpgradeValidator(validationPlayerCopy,validationTempBoard);
+                if(validator.validateOrders(s)) {//if order is valid, add to list to be sent
+                    parentActivity.setOrders(spyOrder);
+                    spyOrder.doAction();
+                }
+                else{
+                    invalidFlag="spy upgrade";
                 }
             }
         }
@@ -465,6 +522,7 @@ public void setPlayerInfo(){
         HumanPlayer p1 = new HumanPlayer("Player 1");
         List<Region> regions = getRegions(p1, 4);
         Board b = new Board(regions);
+        b.initializeSpies(getPlayerNames(b.getPlayerList()));
         ParentActivity parentActivity = new ParentActivity();
         parentActivity.setBoard(b);
         parentActivity.setPlayer(p1);
@@ -541,6 +599,7 @@ public void setPlayerInfo(){
         r1.setName("Hoth");
         Region r2 = new Region(p2, units.get(2));
         r2.setName("Worlorn");
+
         Region r3 = new Region(p2, units.get(3));
         r3.setName("Dagobah");
 

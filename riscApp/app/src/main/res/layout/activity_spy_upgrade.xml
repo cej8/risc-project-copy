@@ -1095,7 +1095,7 @@
         android:layout_marginEnd="11dp"
         android:layout_marginRight="11dp"
         android:layout_marginBottom="317dp"
-        android:text="Select a planet to boost"
+        android:text="Select create a spy on"
         android:textColor="@color/white"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
