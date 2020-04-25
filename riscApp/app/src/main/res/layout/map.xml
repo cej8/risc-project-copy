@@ -1237,12 +1237,11 @@
         app:srcCompat="@drawable/p12nb" />
 
     <Button
-        android:id="@+id/exit"
+        android:id="@+id/menuPopup"
         android:layout_width="27dp"
         android:layout_height="27dp"
-        android:background="@drawable/exit"
-        android:onClick="exitGame"
-        android:text=""
+        android:background="@drawable/ham_menu"
+        android:onClick="popupMenu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.012"

@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.gui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -7,9 +8,13 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,13 +53,11 @@ public class DisplayMapActivity extends AppCompatActivity {
     TextView helpText;
     List<OrderInterface> orders;
     Board board;
-    //private MoveValidator moveValidator;
-    //private AttackValidator attackValidator;
     private ValidatorInterface validator;
     ParentActivity parentActivity = new ParentActivity();
     Board validationTempBoard;
     AbstractPlayer validationPlayerCopy;
-
+    Activity activity;
 
     private Handler handler = new Handler();
     @Override
@@ -72,7 +75,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
         validationPlayerCopy=(AbstractPlayer)DeepCopy.deepCopy(ParentActivity.getPlayer());
-
+        activity = this;
 
         Log.d("Inside map regions",regions.get(0).getName());
 
@@ -257,10 +260,31 @@ public void setPlayerInfo(){
 
         }
     }
-    // exit game popup
-    public void exitGame(View view){
-        ExitGameDialogFragment exitFrag = new ExitGameDialogFragment(this,executeClient);
-        exitFrag.show(getSupportFragmentManager(),"exit");
+   public void popupMenu(View view){
+       PopupMenu popupMenu = new PopupMenu(this, view);
+       popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+       popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+           public boolean onMenuItemClick(MenuItem item) {
+               switch (item.getItemId()) {
+                   case R.id.exit:
+                       ExitGameDialogFragment exitFrag = new ExitGameDialogFragment(activity,executeClient);
+                       exitFrag.show(getSupportFragmentManager(),"exit");
+                       return true;
+                   case R.id.viewSpies:
+                       // TODO: add spies
+                       return true;
+                   case R.id.backpack:
+                       // TODO: backpack popup??
+                       return true;
+                   case R.id.instructions:
+                       // TODO: instructions
+                       return true;
+                   default:
+                       return false;
+               }
+           }
+       });
+       popupMenu.show();
     }
     // SUBMIT ORDERS!!!!!!!!!!!!!
     public void submitAll(View view){
