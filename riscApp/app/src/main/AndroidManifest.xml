@@ -13,14 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ResourceBoostActivity"></activity>
+        <activity android:name=".RaidActivity"
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity"></activity>
+        <activity android:name=".ResourceBoostActivity" />
         <activity android:name=".RepromptRegionsActivity" />
         <activity android:name=".SpectateActivity" />
         <activity android:name=".SpectateChoiceActivity" />
         <activity android:name=".EndGameActivity" />
-        <activity android:name=".PlayerLobbyActivity"
+        <activity
+            android:name=".PlayerLobbyActivity"
             android:screenOrientation="landscape"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".PlaceUnitsActivity"
             android:screenOrientation="landscape"

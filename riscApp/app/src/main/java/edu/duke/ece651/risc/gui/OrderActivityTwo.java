@@ -74,7 +74,6 @@ public class OrderActivityTwo extends AppCompatActivity {
 
         source = board.getRegionByName(attackFrom);
         sourceView = regionImageViewMap.get(source);
-       // sourceView.setVisibility(View.INVISIBLE);
 
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
         planetDrawable.setAllUnitCircles();
