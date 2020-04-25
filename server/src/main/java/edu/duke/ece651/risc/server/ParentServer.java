@@ -409,6 +409,9 @@ public class ParentServer extends Thread{
          else if (order.getPriority() == Constants.UPGRADE_RESOURCE_PRIORITY) {
         castOrder = (ResourceBoost) (order);
       }
+         else if (order.getPriority() == Constants.TELEPORT_ORDER_PRIORITY){
+           castOrder = (TeleportOrder) (order);
+      }
    
        else if (order.getPriority() == Constants.SPYUPGRADE_PRIORITY) {
         castOrder = (SpyUpgradeOrder) (order);

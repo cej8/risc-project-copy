@@ -52,17 +52,11 @@ public class ClientTest {
         assertTrue(regionNames.contains(r.getName()));
       }
 
-    } catch (Exception e) { //TODO -- test exception handling
-      e.printStackTrace(System.out);
-      return;
-    } finally {
-      try {
-        client.getConnection().closeAll(); //TODO - mocking closing the connection
-      } catch (Exception e) {
-        e.printStackTrace(System.out);
-      }
+    } catch (Exception e) {} //TODO -- test exception handling
+    client.getConnection().closeAll(); //TODO - mocking closing the connection
+ 
     }
-  }
+  
   @Test
   public void test_updateBoard() throws IOException {
     AbstractPlayer player1 = new HumanPlayer("Player 1");
@@ -91,17 +85,12 @@ public class ClientTest {
         assertTrue(regionNames.contains(r.getName()));
       }
 
-    } catch (Exception e) { //TODO -- test exception handling
-      e.printStackTrace(System.out);
-      return;
-    } finally {
-      try {
+    } catch (Exception e){}
+      
         client.getConnection().closeAll(); //TODO - mocking closing the connection
-      } catch (Exception e) {
-        e.printStackTrace(System.out);
-      }
+
     }    
-  }
+  
   
   private Board getTestBoard(AbstractPlayer player1) {
     Unit unit = new Unit(10);
@@ -144,16 +133,10 @@ public class ClientTest {
       System.out.println(message.unpacker());
       assertEquals("test sending string message", message.unpacker());
     
-    } catch (Exception e) {
-      e.printStackTrace(System.out);
-      return;
-    } finally {
-      try {
+    } catch (Exception e) {}
         client.getConnection().closeAll();
-      } catch (Exception e) {
-        e.printStackTrace(System.out);
-      }
-    }
+
+    
   }
 
 
@@ -169,7 +152,6 @@ public class ClientTest {
         this.serverSocket = new ServerSocket(port);
       }
       catch(Exception e){
-        e.printStackTrace();
       }
     }
 
@@ -194,7 +176,6 @@ public class ClientTest {
         oos.close();
       }
       catch(Exception e){
-        e.printStackTrace();
       }
      }
   }
@@ -232,7 +213,6 @@ public class ClientTest {
       
     }
     catch(Exception e){
-      e.printStackTrace(System.out);
     }
     localConnection.getConnection().closeAll();
     client.getClientInput().close();
@@ -640,7 +620,6 @@ public class ClientTest {
             Thread.sleep(1000);
           }
           catch(Exception e){
-            e.printStackTrace();
           }
          return "Group B";
         }
@@ -784,7 +763,6 @@ public class ClientTest {
               Thread.sleep(1000);
             }
             catch(Exception e){
-              e.printStackTrace();
             }
           }
           return vals.get(count++);
@@ -904,7 +882,6 @@ public class ClientTest {
               Thread.sleep(1000);
             }
             catch(Exception e){
-              e.printStackTrace();
             }
           }
           return vals.get(count++);
@@ -1086,7 +1063,6 @@ public class ClientTest {
         this.serverSocket = new ServerSocket(port);
       }
       catch(Exception e){
-        e.printStackTrace();
       }
     }
 
@@ -1109,7 +1085,6 @@ public class ClientTest {
         oos.close();
       }
       catch(Exception e){
-        e.printStackTrace();
       }
      }
   }
@@ -1125,7 +1100,6 @@ public class ClientTest {
       Thread.sleep(5000);
     }
     catch(Exception e){
-      e.printStackTrace();
     }
     TextDisplay td = new TextDisplay();
     ConsoleInput ci = new ConsoleInput();
@@ -1139,7 +1113,7 @@ public class ClientTest {
       Thread.sleep(1000);
     }
     catch(Exception e){
-      e.printStackTrace();
+    
     }
     //Set to half a second
     client.setTURN_WAIT_MINUTES(.5/60);

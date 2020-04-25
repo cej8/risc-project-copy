@@ -110,6 +110,12 @@ public class SpyTest{
     assert(p2Vis.contains(r1.getName()));
     assert(p2Vis.contains(r2.getName()));
     assert(p2Vis.contains(r3.getName()));
+
+
+    r1.addSpyList("p4", new ArrayList<Spy>());
+    r1.addSpy("p4", new Spy());
+    r1.addSpy("p5", new Spy());
+    r1.setAllSpiesFalse();
   }
 
   @Test
@@ -173,7 +179,7 @@ public class SpyTest{
     //Give both 2 times upgrade cost
     p1.setPlayerResource(new PlayerResources(100, Constants.SPYUPGRADE_COST*2));
     p2.setPlayerResource(new PlayerResources(100, Constants.SPYUPGRADE_COST*2));
-
+    
     vh1 = new ValidatorHelper(p1, board);
     vh2 = new ValidatorHelper(p2, board);
     p1Orders = new ArrayList<OrderInterface>();
@@ -204,6 +210,16 @@ public class SpyTest{
     //Legal upgrade
     p2Orders.add(new SpyUpgradeOrder(r2));
     assert(vh2.allOrdersValid(p2Orders));
+
+    r3.setUnits(new Unit(0));
+    vh1 = new ValidatorHelper(p1, board);
+    vh2 = new ValidatorHelper(p2, board);
+    p1Orders = new ArrayList<OrderInterface>();
+    p2Orders = new ArrayList<OrderInterface>();
+
+    //Illegal no lvl 0
+    p2Orders.add(new SpyUpgradeOrder(r3));
+    assert(!vh2.allOrdersValid(p2Orders));
 
     //P1 actually create spy
     (new SpyUpgradeOrder(r1)).doAction();
@@ -237,9 +253,6 @@ public class SpyTest{
     p2Orders.add(new SpyMoveOrder(r2, r3, p2));
     p2Orders.add(new SpyMoveOrder(r3, r1, p2));
     assert(vh2.allOrdersValid(p2Orders));
-
-
-
   }
 
 }

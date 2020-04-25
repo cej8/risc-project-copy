@@ -233,8 +233,6 @@ public class BoardTest {
     b2.initializeSpies(Arrays.asList("p1", "p2", "p3", "p4"));
 
     board.updateVisible("p1", b2);
-System.out.println(board.getRegionByName("r3").getOwner().getName());
-System.out.println(board.getRegionByName("r4").getOwner().getName());
     assert(r3.getOwner() == p3c);
     assert(r4.getOwner() == p4);
     

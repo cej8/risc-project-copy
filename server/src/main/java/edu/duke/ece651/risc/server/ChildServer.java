@@ -97,6 +97,10 @@ public class ChildServer implements Runnable{
     return clientBoard;
   }
 
+  public void setClientBoard(Board clientBoard){
+    this.clientBoard = clientBoard;
+  }
+
   public void firstTurnCall() throws IOException, SocketException, ClassNotFoundException{
     ValidatorHelper validator;
     //Prompt for region --> placement
