@@ -1,8 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import org.junit.jupiter.api.Test;
 
 public class AttackOrderTest {
@@ -86,6 +85,64 @@ public class AttackOrderTest {
     AttackCombat ap2 = new AttackCombat(r1, r1, ua);
     ap2.doAction();
    
+  }
+
+  @Test
+  public void test_RandomOnAttackCombat(){
+    List<Integer> listOf5 = new ArrayList<Integer>(Collections.nCopies(7, 5));
+    Board board = new Board();
+    AbstractPlayer p1 = new HumanPlayer("p1");
+    AbstractPlayer p2 = new HumanPlayer("p2");
+    Unit u1 = new Unit(1);
+    Unit u2 = new Unit(listOf5);
+    Region r1 = new Region(p1, u1);
+    Region r2 = new Region(p2, u2);
+    r1.setName("r1");
+    r2.setName("r2");
+    r1.setAdjRegions(Arrays.asList(r2));
+    r2.setAdjRegions(Arrays.asList(r1));
+    board.setRegions(Arrays.asList(r1, r2));
+    board.initializeSpies(Arrays.asList("p1", "p2"));
+
+    List<Integer> listOf5Fresh = new ArrayList<Integer>(Collections.nCopies(7, 5));
+    List<Integer> listOf1Fresh = new ArrayList<Integer>(Collections.nCopies(7, 1));
+    AttackCombat ac = new AttackCombat(r1, r2, new Unit(listOf5Fresh));
+    r2.setUnits(new Unit(listOf1Fresh));
+    r2.setOwner(p2);
+    ac.doAction();
+
+    listOf5Fresh = new ArrayList<Integer>(Collections.nCopies(7, 5));
+    listOf1Fresh = new ArrayList<Integer>(Collections.nCopies(7, 1));
+    ac = new AttackCombat(r1, r2, new Unit(listOf1Fresh));
+    r2.setUnits(new Unit(listOf5Fresh));
+    r2.setOwner(p2);
+    ac.doAction();
+
+    List<Integer> listOf0Fresh = new ArrayList<Integer>(Collections.nCopies(7, 0));
+    listOf0Fresh.add(6, new Integer(5));
+    List<Integer> listOf0Fresh2 = new ArrayList<Integer>(Collections.nCopies(7, 0));
+    listOf0Fresh2.add(6, new Integer(5));
+    ac = new AttackCombat(r1, r2, new Unit(listOf1Fresh));
+    r2.setUnits(new Unit(listOf0Fresh2));
+    r2.setOwner(p2);
+    ac.doAction();
+
+    listOf0Fresh = new ArrayList<Integer>(Collections.nCopies(7, 0));
+    listOf0Fresh2 = new ArrayList<Integer>(Collections.nCopies(7, 0));
+    listOf0Fresh2.add(6, new Integer(5));
+    ac = new AttackCombat(r1, r2, new Unit(listOf1Fresh));
+    r2.setUnits(new Unit(listOf0Fresh2));
+    r2.setOwner(p2);
+    ac.doAction();
+
+    listOf0Fresh = new ArrayList<Integer>(Collections.nCopies(7, 0));
+    listOf0Fresh.add(6, new Integer(5));
+    listOf0Fresh2 = new ArrayList<Integer>(Collections.nCopies(7, 0));
+    ac = new AttackCombat(r1, r2, new Unit(listOf1Fresh));
+    r2.setUnits(new Unit(listOf0Fresh2));
+    r2.setOwner(p2);
+    ac.doAction();
+
   }
 
 }

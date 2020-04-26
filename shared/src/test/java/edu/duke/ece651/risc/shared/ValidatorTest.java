@@ -40,23 +40,10 @@ public class ValidatorTest {
     List<TechBoost> invalidCountBoosts = getInvalidCountTechBoosts(p2);
     assertEquals(false, tbv.validateOrders(invalidCountBoosts));
  
-    assertEquals(true, mv.isValidMove(moves.get(0), 0));
-    assertEquals(false, mv.isValidMove(moves.get(1), 0));
-    assertEquals(true, mv.isValidMove(moves.get(2), 0));
-    assertEquals(false, mv.isValidMove(moves.get(3), 0));
-    assertEquals(false,mv.isValidMove(moves.get(4),0));
-    assertEquals(false, mv.isValidMove(moves.get(5),0));
-    assertEquals(false, mv.validateRegions(moves));
-    // TODO uncomment when attacska re changed
-    assertEquals(true, av.isValidAttack(attacks.get(0)));
-    assertEquals(false, av.isValidAttack(attacks.get(1)));
-    assertEquals(false, av.isValidAttack(attacks.get(2)));
-    assertEquals(false, av.isValidAttack(attacks.get(3)));
-  
-    assertEquals(false, av.validateRegions(attacks));
+    assertEquals(false, mv.validateOrders(moves));
+    // TODO uncomment when attacska re changed  
+    assertEquals(false, av.validateOrders(attacks));
 
-    assertEquals(true, pv.isValidPlacement(placements.get(0), p1));// valid
-    assertEquals(false, pv.isValidPlacement(placements.get(1), p1));// invalid (does not own)
     assertEquals(false, pv.validateRegions(placements));
 
   }
@@ -240,6 +227,7 @@ public class ValidatorTest {
   @Test
   public void test_validatorHelper() {
     AbstractPlayer p1 = new HumanPlayer("player 1");
+    p1.getResources().getFuelResource().addFuel(10000);
     p1.getResources().getTechResource().addTech(300);
     p1.getMaxTechLevel().upgradeLevel();
     p1.getMaxTechLevel().upgradeLevel();
@@ -278,8 +266,9 @@ public class ValidatorTest {
     ordersValid.add(move41);
     ordersValid.add(rb4);
     ValidatorHelper vh = new ValidatorHelper(p1, b);
-      assertEquals(false, vh.allOrdersValid(orders));
-     assertEquals(true, vh.allOrdersValid(ordersValid));
+    assertEquals(false, vh.allOrdersValid(orders));
+    vh = new ValidatorHelper(p1, b);
+    assertEquals(true, vh.allOrdersValid(ordersValid));
     ValidatorHelper th = new ValidatorHelper(p1, b);
     assertEquals(true, th.allOrdersValid(getValidTeleport(regions)));
     

@@ -235,6 +235,9 @@ public class BoardTest {
     board.updateVisible("p1", b2);
     assert(r3.getOwner() == p3c);
     assert(r4.getOwner() == p4);
+
+    assert(board.getPlayerByName("p4") == p4);
+    assert(board.getPlayerByName("jeff") == null);
     
   }
 }
