@@ -171,6 +171,16 @@ public class Board implements Serializable {
     return allPlayers;
   }
 
+  public AbstractPlayer getPlayerByName(String playerName){
+    List<AbstractPlayer> players = getPlayerList();
+    for(AbstractPlayer player : players){
+      if(player.getName().equals(playerName)){
+        return player;
+      }
+    }
+    return null;
+  }
+
 }
 
 

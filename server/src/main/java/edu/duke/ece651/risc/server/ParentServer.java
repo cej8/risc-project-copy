@@ -60,6 +60,8 @@ public class ParentServer extends Thread{
 
   //Lock for adding to child list
   private final ReentrantLock childServerAddLock = new ReentrantLock();
+
+  private List<AbstractPlayer> attackCombatAttackers;
   
   public ParentServer(){
     BoardGenerator genBoard = new BoardGenerator();
@@ -68,6 +70,7 @@ public class ParentServer extends Thread{
     children = new ArrayList<ChildServer>();
     players = new ArrayList<String>();
     orderMap = new HashMap<String, List<OrderInterface>>();
+    attackCombatAttackers = new ArrayList<AbstractPlayer>();
     this.plagueID = 0;
     turnResults = Collections.nCopies(MAX_PLAYERS, "Turn 0:\n");
   }
@@ -446,8 +449,7 @@ public class ParentServer extends Thread{
       if(className.equals("AttackCombat")){
         boolean foundOrder = false;
         SourceDestinationUnitOrder sduOrderNew = (SourceDestinationUnitOrder) castOrder;
-        //Create copy of source to prevent A-->B, B-->C issue where B is taken by A (then B->C would be A's)
-        sduOrderNew.setSource((Region)DeepCopy.deepCopy(sduOrderNew.getSource()));
+        
         for(OrderInterface combatOrder : orderMap.get("AttackCombat")){
           if(foundOrder){ break; }
           //If both have same source owner and go to same region
@@ -467,6 +469,10 @@ public class ParentServer extends Thread{
         }
         //if found then do not add (immediately continue)
         if(foundOrder){ continue; }
+        else{
+          String playerName = sduOrderNew.getSource().getOwner().getName();
+          attackCombatAttackers.add(children.get(players.indexOf(playerName)).getPlayer());
+        }
       }
 
       // Add order to list
@@ -492,6 +498,7 @@ public class ParentServer extends Thread{
     if(orderMap.containsKey("AttackCombat")){
       Collections.shuffle(orderMap.get("AttackCombat"));
       applyOrderList(orderMap.get("AttackCombat"));
+      attackCombatAttackers.clear();
     }
 
   }
@@ -499,12 +506,14 @@ public class ParentServer extends Thread{
   public void applyOrderList(List<OrderInterface> orders) {
     // Simply call doAction for each order
 
-    //Strings for attackCombat update special case
+    //Defaults (always will be set if used) for attackCombat update special case
     String attackName = "";
     String defendName = "";
     String attackedRegionName = "";
+    Region attackedRegion = new Region("");
     for (int i = 0; i < orders.size(); i++) {
       //Special case --> force update for ChildServer involved in AttackCombat
+      //Need to get this BEFORE doAction()
       if(orders.get(i).getPriority() == Constants.ATTACK_COMBAT_PRIORITY){
           AttackCombat castOrder = (AttackCombat) orders.get(i);
           //Get attack/defend player names
@@ -512,29 +521,36 @@ public class ParentServer extends Thread{
           defendName = castOrder.getDestination().getOwner().getName();
           //Get name of attacked region to update
           attackedRegionName = castOrder.getDestination().getName();
+          attackedRegion = castOrder.getDestination();
       }
 
 
       //List of substrings making up order's text result
       List<String> results = orders.get(i).doAction();
-      //If FOG_OF_WAR then apply (if not initial placements)
-      if(FOG_OF_WAR && turnNumber > 0){
-        //Special case --> force update for ChildServer involved in AttackCombat
-        //Avoids issue where losing single region not adjancent to any others
-        if(orders.get(i).getPriority() == Constants.ATTACK_COMBAT_PRIORITY){
-          //Ensure actual player (not just Group A)
-          if(players.contains(attackName)){
-            Board attackBoard = children.get(players.indexOf(attackName)).getClientBoard();
-            attackBoard.getRegionByName(attackedRegionName).copyInformation(board.getRegionByName(attackedRegionName));
-          }
-          //Ensure actual player (not just Group A)
-          if(players.contains(defendName)){
-            Board defendBoard = children.get(players.indexOf(defendName)).getClientBoard();
-            defendBoard.getRegionByName(attackedRegionName).copyInformation(board.getRegionByName(attackedRegionName));
-          }
+
+      //Special case --> force update for ChildServer involved in AttackCombat
+      //Avoids issue where losing single region not adjancent to any others
+      if(orders.get(i).getPriority() == Constants.ATTACK_COMBAT_PRIORITY){
+        //Also need to give region to proper owner, see if second entry does not have (defender)
+        if(results.get(1).indexOf("(defender)") != -1){
+          //attackCombatAttacker's i'th entry is the player in the i'th attackCombat
+          attackedRegion.setOwner(attackCombatAttackers.get(i));
         }
 
+        //Ensure actual player (not just Group A)
+        if(players.contains(attackName)){
+          Board attackBoard = children.get(players.indexOf(attackName)).getClientBoard();
+          attackBoard.getRegionByName(attackedRegionName).copyInformation(board.getRegionByName(attackedRegionName));
+        }
+        //Ensure actual player (not just Group A)
+        if(players.contains(defendName)){
+          Board defendBoard = children.get(players.indexOf(defendName)).getClientBoard();
+          defendBoard.getRegionByName(attackedRegionName).copyInformation(board.getRegionByName(attackedRegionName));
+        }
+      }
 
+      //If FOG_OF_WAR then apply (if not initial placements)
+      if(FOG_OF_WAR && turnNumber > 0){
         //stringVisibility is list<set> of player names who can see each
         //substring of order's results
         List<Set<String>> stringVisibility = orders.get(i).getPlayersVisibleTo();

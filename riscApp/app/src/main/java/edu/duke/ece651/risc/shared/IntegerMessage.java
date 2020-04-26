@@ -12,9 +12,4 @@ public class IntegerMessage implements MessageInterface<Integer> {
     return message;
   }
 
-  public Integer getMessage() {
-	return message;
-  }
-
-
 }

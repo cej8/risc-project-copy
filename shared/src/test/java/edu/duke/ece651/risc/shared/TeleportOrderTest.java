@@ -50,6 +50,7 @@ public class TeleportOrderTest {
     TeleportValidator tv4p1 = new TeleportValidator(p1, b);
     TeleportValidator tv4p2 = new TeleportValidator(p2, b);
     TeleportValidator tv4p3 = new TeleportValidator(p3, b);
+    TeleportValidator tv4p4 = new TeleportValidator(p3, b);
 
     // valid teleport order (r1 to r2- both owned by p1 who has sufficient resources
     TeleportOrder valid1 = new TeleportOrder(r1, r2, new Unit(4));
@@ -100,6 +101,13 @@ public class TeleportOrderTest {
     assertEquals(true, tv4p3.validResources( invalidP3Level));
     assertEquals(false, tv4p3.validTechLevel());
     assertEquals(true, tv4p3.validOwnership( invalidP3Level));
+
+
+    // invalid teleportOrder(r1 to r2- player does not have enough units
+    TeleportOrder invalidUnitNum = new TeleportOrder(r3, r6, new Unit(1000));
+    List<TeleportOrder> invalidP4Level = new ArrayList<>();
+    invalidP4Level.add(invalidUnitNum);
+    assertEquals(false, tv4p4.validUnits( invalidP4Level));
 
   }
 

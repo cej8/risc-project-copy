@@ -21,7 +21,7 @@ public class MoveValidatorTest {
     List<Region> regions = getRegions(singleOwner); 
     Board board = new Board(regions);
     int totalUnits = board.getRegions().get(0).getUnits().getTotalUnits();
-    board.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves 
+    board.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(37600); //amount of fuel needed for following moves 
     Board boardCopy = (Board) DeepCopy.deepCopy(board);
     List<Region> regionCopy = boardCopy.getRegions();
     MoveValidator mv = new MoveValidator(regionCopy.get(0).getOwner(), boardCopy);
@@ -29,7 +29,6 @@ public class MoveValidatorTest {
     List<Unit> units = get6UnitList(4, 9, 14, 19, 24, 29); // true: moving all but one unit   
     List<MoveOrder> moveUnits = getMovesDependent(regionCopy, units);
     
-    assertEquals(singleOwner, mv.validateRegions(moveUnits)); //true if one owner for regions, false if multiple
     assertEquals(singleOwner, mv.validateOrders(moveUnits)); //true if one owner for regions, false if multiple
   
     assertEquals(totalUnits, board.getRegions().get(0).getUnits().getTotalUnits()); //number of units on actual cost should not have changed after validation
@@ -40,7 +39,7 @@ public class MoveValidatorTest {
     List<Region> regions = getRegions(true); 
     Board board = new Board(regions);
     int totalUnits = board.getRegions().get(0).getUnits().getTotalUnits();
-    board.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves 
+    board.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(37600); //amount of fuel needed for following moves 
     Board boardCopy = (Board) DeepCopy.deepCopy(board);
     List<Region> regionCopy = boardCopy.getRegions();
     MoveValidator mv = new MoveValidator(regionCopy.get(0).getOwner(), boardCopy);
@@ -59,7 +58,7 @@ public class MoveValidatorTest {
     List<Region> regions = getRegions(true); 
     Board board = new Board(regions);
     int totalUnits = board.getRegions().get(0).getUnits().getTotalUnits();
-    board.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves 
+    board.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(37600); //amount of fuel needed for following moves 
     Board boardCopy = (Board) DeepCopy.deepCopy(board);
     List<Region> regionCopy = boardCopy.getRegions();
     MoveValidator mv = new MoveValidator(regionCopy.get(0).getOwner(), boardCopy);
@@ -124,7 +123,30 @@ public class MoveValidatorTest {
     sb.append(")\n"); //close parentheses
     return sb.toString();
   }
-      
+
+@Test
+   public void test_Leighanne() {
+    List<Region> regions = getRegions(true); 
+    Board board = new Board(regions);
+    Board boardCopy = (Board) DeepCopy.deepCopy(board);
+    regions = boardCopy.getRegions();
+    boardCopy.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves
+    Unit r0 = new Unit(listOfUnitInts(3, 4, 2, 0, 0, 0, 0));
+    regions.get(0).setUnits(r0);
+    System.out.println(regions.get(0).getName() + " has units " + regions.get(0).getUnits().getUnits()); 
+    System.out.println(regions.get(1).getName() + " has units " + regions.get(1).getUnits().getUnits());  
+    Unit unit = new Unit(listOfUnitInts(2, 4, 2, 0, 0, 0, 0));
+    MoveOrder move01 = new MoveOrder(regions.get(0), regions.get(1), unit);
+    System.out.println("Moving " + move01.getUnits().getUnits() + " units out of " + move01.getSource().getName() + " with units " + move01.getSource().getUnits().getUnits()); 
+    MoveValidator mv = new MoveValidator(regions.get(0).getOwner(), board);
+    List<MoveOrder> moveUnits = new ArrayList<MoveOrder>();
+    moveUnits.add(move01);
+    assertEquals(true, mv.validateOrders(moveUnits)); //true, move all but 1
+    move01.doAction();
+    System.out.println(regions.get(0).getName() + " now has units " + regions.get(0).getUnits().getUnits()); 
+    System.out.println(regions.get(1).getName() + " now has units " + regions.get(1).getUnits().getUnits());  
+}
+  
 @Test
    public void test_totalUnits() {
     List<Region> regions = getRegions(true); 
@@ -132,7 +154,7 @@ public class MoveValidatorTest {
 
     Board boardCopy = (Board) DeepCopy.deepCopy(board);
     regions = boardCopy.getRegions();
-    boardCopy.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves
+    boardCopy.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(37600); //amount of fuel needed for following moves
     List<Integer> u = listOfUnitInts(4, 5, 5, 5, 5, 5, 5);
     Unit unit = new Unit(u);
     MoveOrder move01 = new MoveOrder(regions.get(0), regions.get(1), unit);
@@ -143,7 +165,7 @@ public class MoveValidatorTest {
 
     boardCopy = (Board) DeepCopy.deepCopy(board);
     regions = boardCopy.getRegions();
-    boardCopy.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves
+    boardCopy.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(37600); //amount of fuel needed for following moves
     u = listOfUnitInts(5, 5, 5, 5, 5, 5, 5);
     unit = new Unit(u);
     move01 = new MoveOrder(regions.get(0), regions.get(1), unit);
@@ -152,6 +174,7 @@ public class MoveValidatorTest {
     moveUnits = new ArrayList<MoveOrder>();
     moveUnits.add(move01);
     assertEquals(false, mv.validateOrders(moveUnits));//false, move all
+    
   }
   
   private List<Region> getRegions(boolean singleOwner) {
@@ -291,5 +314,111 @@ public class MoveValidatorTest {
     moves.add(move50);
     return moves;
   }
+
+  @Test
+  public void test_pathComp(){
+    Region r1 = new Region("r1");
+    r1.setSize(100);
+    Region r2 = new Region("r2");
+    r2.setSize(50);
+    Region r3 = new Region("r3");
+    r3.setSize(150);
+    Path p1 = new Path();
+    p1.add(r1);
+    Path p2 = new Path();
+    p2.add(r2);
+    Path p3 = new Path();
+    p3.add(r3);
+    PathComparator pc = new PathComparator();
+    assert(pc.compare(p1,p2) == 1);
+    assert(pc.compare(p1,p3) == -1);
+    assert(pc.compare(p1,p1) == 0);
+
+  }
+
+  @Test
+  public void test_assorted(){
+    Board board = new Board();
+    AbstractPlayer p1 = new HumanPlayer("p1");
+    AbstractPlayer p2 = new HumanPlayer("p2");
+    Unit u1 = new Unit(5);
+    Unit u2 = new Unit(5);
+    Unit u3 = new Unit(5);
+    Region r1 = new Region(p1, u1);
+    Region r2 = new Region(p2, u2);
+    Region r3 = new Region(p2, u3);
+    r1.setName("r1");
+    r2.setName("r2");
+    r3.setName("r3");
+    r1.setAdjRegions(Arrays.asList(r2));
+    r2.setAdjRegions(Arrays.asList(r1, r3));
+    r3.setAdjRegions(Arrays.asList(r2));
+    board.setRegions(Arrays.asList(r1, r2, r3));
+    board.initializeSpies(Arrays.asList("p1", "p2"));
+    
+    ValidatorHelper vh2;
+    List<OrderInterface> p2Orders;
+
+    p2.setPlayerResource(new PlayerResources(1, 100));
+    vh2 = new ValidatorHelper(p2, board);
+    p2Orders = new ArrayList<OrderInterface>();
+
+    //Test path too long
+    p2Orders.add(new MoveOrder(r3, r2, new Unit(4)));
+    assert(!vh2.allOrdersValid(p2Orders));
+
+    p2.setPlayerResource(new PlayerResources(20*4+10, 100));
+    vh2 = new ValidatorHelper(p2, board);
+    p2Orders = new ArrayList<OrderInterface>();
+
+    //Test total path too long
+    p2Orders.add(new MoveOrder(r3, r2, new Unit(4)));
+    p2Orders.add(new MoveOrder(r2, r3, new Unit(4)));
+    assert(!vh2.allOrdersValid(p2Orders));
+
+    p2.setPlayerResource(new PlayerResources(2000, 100));
+    vh2 = new ValidatorHelper(p2, board);
+    p2Orders = new ArrayList<OrderInterface>();
+
+    //Can't move to same
+    p2Orders.add(new MoveOrder(r3, r3, new Unit(4)));
+    assert(!vh2.allOrdersValid(p2Orders));
+  }
+
+  @Test
+  public void test_nopath(){
+    Board board = new Board();
+    AbstractPlayer p1 = new HumanPlayer("p1");
+    AbstractPlayer p2 = new HumanPlayer("p2");
+    Unit u1 = new Unit(5);
+    Unit u2 = new Unit(5);
+    Unit u3 = new Unit(5);
+    Region r1 = new Region(p1, u1);
+    Region r2 = new Region(p2, u2);
+    Region r3 = new Region(p1, u3);
+    Region r4 = new Region(p1, u3);
+    r1.setName("r1");
+    r2.setName("r2");
+    r3.setName("r3");
+    r4.setName("r4");
+    r1.setAdjRegions(Arrays.asList(r2, r4));
+    r2.setAdjRegions(Arrays.asList(r1, r3));
+    r3.setAdjRegions(Arrays.asList(r2));
+    r4.setAdjRegions(Arrays.asList(r1));
+    board.setRegions(Arrays.asList(r1, r2, r3, r4));
+    board.initializeSpies(Arrays.asList("p1", "p2"));
+    
+    ValidatorHelper vh1;
+    List<OrderInterface> p1Orders;
+
+    p1.setPlayerResource(new PlayerResources(2000, 100));
+    vh1 = new ValidatorHelper(p1, board);
+    p1Orders = new ArrayList<OrderInterface>();
+
+    //Can't move to same
+    p1Orders.add(new MoveOrder(r1, r3, new Unit(4)));
+    assert(!vh1.allOrdersValid(p1Orders));
+  }
+
 
 }

@@ -41,10 +41,24 @@ public class LoginServerTest {
     objs.add(new StringMessage("pw"));
     //RETURNS
     
-    //Try overwritting user, then create user2
+    //Try overwritting user, try invalid "Group A", try "", then create user2
     objs.add(new ConfirmationMessage(false));
     //Username
     objs.add(new StringMessage("user"));
+    //Password
+    objs.add(new StringMessage("pw2"));
+    //Good PW
+    objs.add(new StringMessage("pw2"));
+    //Username
+    objs.add(new ConfirmationMessage(false));
+    objs.add(new StringMessage("Group A"));
+    //Password
+    objs.add(new StringMessage("pw2"));
+    //Good PW
+    objs.add(new StringMessage("pw2"));
+    //Username
+    objs.add(new ConfirmationMessage(false));
+    objs.add(new StringMessage(""));
     //Password
     objs.add(new StringMessage("pw2"));
     //Good PW
