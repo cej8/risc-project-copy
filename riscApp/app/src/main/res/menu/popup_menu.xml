@@ -7,5 +7,16 @@
     <item android:id="@+id/backpack"
         android:title="Backpack"/>
     <item android:id="@+id/instructions"
-        android:title="Help"/>
+        android:title="Help">
+        <menu>
+            <item android:id="@+id/move"
+                android:title="Move"/>
+            <item android:id="@+id/teleport"
+                android:title="Teleport"/>
+            <item android:id="@+id/attack"
+                android:title="Attack"/>
+            <item android:id="@+id/raid"
+                android:title="Raid"/>
+        </menu>
+    </item>
 </menu>
