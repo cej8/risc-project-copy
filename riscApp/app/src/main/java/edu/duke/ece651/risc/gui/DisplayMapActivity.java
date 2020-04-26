@@ -318,7 +318,7 @@ public void setPlayerInfo(){
             helpText.setText("Your " + invalidFlag+" order was invalid. Please try again or issue another order");
         }
         else {
-            helpText.setText("Issue and order or click submit when all desired order have been entered.");
+            helpText.setText("Issue an order or click submit when done");
 
         }
     }

@@ -92,8 +92,8 @@ public class UnitBoostActivity extends AppCompatActivity {
     }
     public void next(View view){
         u0 = Integer.parseInt(bonus0.getText().toString());
-        u1 = Integer.parseInt(bonus1.getText().toString());
-        u2 = Integer.parseInt(bonus2.getText().toString());
+        u1 = Integer.parseInt(bonus2.getText().toString());
+        u2 = Integer.parseInt(bonus1.getText().toString());
         u3 = Integer.parseInt(bonus3.getText().toString());
         u4 = Integer.parseInt(bonus4.getText().toString());
         u5 = Integer.parseInt(bonus5.getText().toString());
