@@ -1,4 +1,6 @@
 package edu.duke.ece651.risc.shared;
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.*;
@@ -80,6 +82,15 @@ public class Board implements Serializable {
     return allPlayers;
   }
 
+  public List<String> getPlayerStringList(){
+      List<String> playerList = new ArrayList<String>();
+      for (AbstractPlayer p : getPlayerList()){
+          playerList.add(p.getName());
+      }
+      Log.d("Player List", playerList.toString());
+      return playerList;
+  }
+
   public Set<String> getVisibleRegions(String playerName){
     return getRegionSet(playerName, false);
   }
@@ -155,6 +166,25 @@ public class Board implements Serializable {
     return nameToRegionMap.get(name);
 }
 
+//return set of regions visible to player
+public Set<Region> getSetVisibleRegions(AbstractPlayer p){
+    Set<String> stringSet = new HashSet<String>();
+    Set<String> regionStrings = getVisibleRegions(p.getName());
+    Set<Region> regionSet = new HashSet<Region>();
+      Log.d("getRegionSet player", p.getName());
+      for (String s : regionStrings){
+          if (!stringSet.contains(s)){
+              stringSet.add(s); //add string to set of strings already in region set
+              regionSet.add(getRegionByName(s)); //add region to region set by name (string
+              Log.d("visible region: ", s);
+          }
+          else{
+              Log.d("invisible region: ", s);
+          }
+      }
+      return regionSet;
+}
+
 //Creates a list (preserve order) of players on board.
 public List<AbstractPlayer> getPlayerListOld(){
     List<Region> allRegions = this.getRegions();
@@ -178,9 +208,11 @@ public List<AbstractPlayer> getPlayerListOld(){
         for (Region r : allRegions) { //for each region on the board
             if (r.getOwner() != null) {
                 //AbstractPlayer ab = new HumanPlayer();
-                if (!(addedPlayers.contains(r.getOwner().getName()))) { // if that player has not already been to list
-                    allPlayers.add(r.getOwner()); //add that region's owner to the set
-                    addedPlayers.add(r.getOwner().getName());//add player to list of added players
+                if (!(r.getOwner().getName().contains("Group"))) {
+                    if (!(addedPlayers.contains(r.getOwner().getName()))) { // if that player has not already been to list
+                        allPlayers.add(r.getOwner()); //add that region's owner to the set
+                        addedPlayers.add(r.getOwner().getName());//add player to list of added players
+                    }
                 }
             }
         }

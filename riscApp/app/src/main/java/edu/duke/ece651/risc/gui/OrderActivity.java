@@ -15,11 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
@@ -71,22 +70,24 @@ public class OrderActivity extends AppCompatActivity {
         planetDrawable = new PlanetDrawable(board, planetButtons, playerColors, planetPlayers, unitCircles, planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
         planetDrawable.setGreyOutlines();
-        planetDrawable.setAllUnitCircles();
+       Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
             if (p != player) { //if not player's planet, set view to outline
-                if (p!=null){ //if owned by someone, set to their outline color and make button invisible
                     for (Region r : board.getPlayerRegionSet(p)) {
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
+                         if (regionSet.contains(r)) {
+                            regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
+                            planetDrawable.setUnitCircle(r);
+                        }
+                        else{
+                            regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+                         }
+                    }
                         planetDrawable.setImageButtonsInvisible(p);
                     }
-                }
-                else{ //if player is null, set button invisible and set grey outline
-                    planetDrawable.setGreyOutlines();
-                    planetDrawable.setImageButtonsInvisible(p);
-                }
-            } else { //if player own's planet, set up visible planet
+            else { //if player own's planet, set up visible planet
                 for (Region r : board.getPlayerRegionSet(p)) {
                     planetDrawable.setPlanets();
+                    planetDrawable.setUnitCircle(r);
                     regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
                 }
             }

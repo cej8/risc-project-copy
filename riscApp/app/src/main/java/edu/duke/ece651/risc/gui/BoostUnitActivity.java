@@ -84,22 +84,24 @@ public class BoostUnitActivity extends AppCompatActivity {
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
         planetDrawable.setGreyOutlines();
-        planetDrawable.setAllUnitCircles();
+        Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
             if (p != player) { //if not player's planet, set view to outline
-                if (p!=null){ //if owned by someone, set to their outline color and make button invisible
-                    for (Region r : board.getPlayerRegionSet(p)) {
+                for (Region r : board.getPlayerRegionSet(p)) {
+                    if (regionSet.contains(r)) {
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
-                        planetDrawable.setImageButtonsInvisible(p);
+                        planetDrawable.setUnitCircle(r);
+                    }
+                    else{
+                        regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
                     }
                 }
-                else{ //if player is null, set button invisible and set grey outline
-                    planetDrawable.setGreyOutlines();
-                    planetDrawable.setImageButtonsInvisible(p);
-                }
-            } else { //if player own's planet, set up visible planet
+                planetDrawable.setImageButtonsInvisible(p);
+            }
+            else { //if player own's planet, set up visible planet
                 for (Region r : board.getPlayerRegionSet(p)) {
                     planetDrawable.setPlanets();
+                    planetDrawable.setUnitCircle(r);
                     regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
                 }
             }

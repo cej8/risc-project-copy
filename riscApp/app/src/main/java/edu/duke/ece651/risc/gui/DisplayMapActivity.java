@@ -14,17 +14,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.AttackCombat;
 import edu.duke.ece651.risc.shared.AttackMove;
 import edu.duke.ece651.risc.shared.AttackValidator;
 import edu.duke.ece651.risc.shared.Board;
-import edu.duke.ece651.risc.shared.BoardGenerator;
 import edu.duke.ece651.risc.shared.DeepCopy;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.MoveOrder;
@@ -51,6 +49,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     private ValidatorInterface validator;
     ParentActivity parentActivity = new ParentActivity();
     Board validationTempBoard;
+    AbstractPlayer player;
     AbstractPlayer validationPlayerCopy;
 
 
@@ -66,10 +65,13 @@ public class DisplayMapActivity extends AppCompatActivity {
         // temp for testing
         // TODO: remove generateBoard for whole test
         //generateBoard();
+        player = ParentActivity.getPlayer();
         board = ParentActivity.getBoard();
+        List<String> playerNames = board.getPlayerStringList();
+        board.initializeSpies(playerNames);
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
-        validationPlayerCopy=(AbstractPlayer)DeepCopy.deepCopy(ParentActivity.getPlayer());
+        validationPlayerCopy=(AbstractPlayer)DeepCopy.deepCopy(player);
 
 
         Log.d("Inside map regions",regions.get(0).getName());
@@ -95,9 +97,12 @@ public class DisplayMapActivity extends AppCompatActivity {
         List<ImageView> planetSquares = getPlanetSquares();
         List<ImageView> planetViews = getPlanetViews();
         PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
-        pd.setPlanets();
+        Set<Region> regionSet = board.getSetVisibleRegions(player);
         pd.setGreyPlanets();
+        pd.setPlanetsNoUnits();
+        pd.setInvisibleRegionsInvisible(player);
         setPlayerInfo();
+
     }
     public void plagueDraw(){
         int increment = 0;
@@ -135,23 +140,24 @@ public class DisplayMapActivity extends AppCompatActivity {
         return drawables;
     }
 
-public void setPlayerInfo(){
-        for(AbstractPlayer player:board.getPlayerSet()){//update player object
-            if(player.getName().equals(ParentActivity.getPlayer().getName())){
-                parentActivity.setPlayer((HumanPlayer)player);
+    public void setPlayerInfo(){
+            for(AbstractPlayer player:board.getPlayerSet()){//update player object
+                if(player.getName().equals(ParentActivity.getPlayer().getName())){
+                    parentActivity.setPlayer((HumanPlayer)player);
+                }
             }
-        }
-    TextView fuelAmount = findViewById(R.id.fuelAmount);
-    TextView techAmount = findViewById(R.id.techAmount);
-    TextView techLevel= findViewById(R.id.techLevel);
-    String fuel= "Fuel : "+ Integer.toString(ParentActivity.getPlayer().getResources().getFuelResource().getFuel());
-    fuelAmount.setText(fuel);
-    String tech="Tech : "+ Integer.toString(ParentActivity.getPlayer().getResources().getTechResource().getTech());
-    techAmount.setText(tech);
-    String level= "Level: "+  Integer.toString(ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
-    techLevel.setText(level);
+        TextView fuelAmount = findViewById(R.id.fuelAmount);
+        TextView techAmount = findViewById(R.id.techAmount);
+        TextView techLevel= findViewById(R.id.techLevel);
+        String fuel= "Fuel : "+ Integer.toString(ParentActivity.getPlayer().getResources().getFuelResource().getFuel());
+        fuelAmount.setText(fuel);
+        String tech="Tech : "+ Integer.toString(ParentActivity.getPlayer().getResources().getTechResource().getTech());
+        techAmount.setText(tech);
+        String level= "Level: "+  Integer.toString(ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
+        techLevel.setText(level);
 
-}
+    }
+
     public void getOrders(){
         Intent i = getIntent();
         String order = i.getStringExtra("ORDER");
@@ -564,7 +570,7 @@ public void setPlayerInfo(){
         r9.setName("Solaris");
         Region r10 = new Region(p5, units.get(4));
         r10.setName("Gallifrey");
-        Region r11 = new Region(null, new Unit(0));
+        Region r11 = new Region(new HumanPlayer("Group A"), new Unit(0));
         r11.setName("Cybertron");
 
         List<Region> adj0 = new ArrayList<Region>();
