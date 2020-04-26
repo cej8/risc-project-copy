@@ -366,6 +366,12 @@ public void setPlayerInfo(){
                        HelpDialogFragment helpDialogFragment3 = new HelpDialogFragment("Raid",helpView3);
                        helpDialogFragment3.show(getSupportFragmentManager(),"raid");
                        return true;
+                   case R.id.boost:
+                       LayoutInflater inflater5 = getLayoutInflater();
+                       View helpView5 = inflater5.inflate(R.layout.help_boost, null);
+                       HelpDialogFragment helpDialogFragment5 = new HelpDialogFragment("Boost",helpView5);
+                       helpDialogFragment5.show(getSupportFragmentManager(),"boost");
+                       return true;
                    default:
                        return false;
                }

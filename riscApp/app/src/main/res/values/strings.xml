@@ -15,4 +15,9 @@
         own, it does not need to be adjacent. This order costs tech resources.</string>
     <string name="raid">You can raid adjacent planets from ones you own. When you raid you steal
         tech and fuel resources from your opponent.</string>
+    <string name="unitboost">Boosting units requires increased tech level. Be sure to upgrade your
+        tech level first!</string>
+    <string name="techboost">Boost your tech level to unlock other orders and features.</string>
+    <string name="resourceboost">Boost your resource production on a planet, but be careful if you
+        lose it your opponent gets your extra production.</string>
 </resources>

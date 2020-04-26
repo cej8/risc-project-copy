@@ -17,6 +17,8 @@
                 android:title="Attack"/>
             <item android:id="@+id/raid"
                 android:title="Raid"/>
+            <item android:id="@+id/boost"
+                android:title="Boost"/>
         </menu>
     </item>
 </menu>
