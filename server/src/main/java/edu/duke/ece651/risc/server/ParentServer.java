@@ -178,6 +178,11 @@ public class ParentServer extends Thread{
     return masterServer;
   }
 
+  //Used for testing
+  public List<AbstractPlayer> getAttackCombatAttackers(){
+    return attackCombatAttackers;
+  }
+
   //Function to close all children's connections on game end
   public void closeAll() {
     for (ChildServer child : children) {
@@ -532,7 +537,7 @@ public class ParentServer extends Thread{
       //Avoids issue where losing single region not adjancent to any others
       if(orders.get(i).getPriority() == Constants.ATTACK_COMBAT_PRIORITY){
         //Also need to give region to proper owner, see if second entry does not have (defender)
-        if(results.get(1).indexOf("(defender)") != -1){
+        if(results.get(1).indexOf("(defender)") == -1){
           //attackCombatAttacker's i'th entry is the player in the i'th attackCombat
           attackedRegion.setOwner(attackCombatAttackers.get(i));
         }
@@ -685,6 +690,7 @@ public class ParentServer extends Thread{
   //Method to get freshest version of player from board
   //Needed to update CS version of player so most up to date
   //(resources changed from doAction) is sent
+  //This might not be strictly necessary in reality
   void updatePlayersInChildServers(){
     for(Region r : board.getRegions()){
       AbstractPlayer p = r.getOwner();
