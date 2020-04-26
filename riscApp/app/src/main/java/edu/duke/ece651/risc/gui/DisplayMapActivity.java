@@ -26,17 +26,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.AttackCombat;
 import edu.duke.ece651.risc.shared.AttackMove;
 import edu.duke.ece651.risc.shared.AttackValidator;
 import edu.duke.ece651.risc.shared.Board;
-import edu.duke.ece651.risc.shared.BoardGenerator;
+import edu.duke.ece651.risc.shared.CloakOrder;
+import edu.duke.ece651.risc.shared.CloakValidator;
 import edu.duke.ece651.risc.shared.DeepCopy;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.MoveOrder;
@@ -66,6 +66,7 @@ public class DisplayMapActivity extends AppCompatActivity {
     private ValidatorInterface validator;
     ParentActivity parentActivity = new ParentActivity();
     Board validationTempBoard;
+    AbstractPlayer player;
     AbstractPlayer validationPlayerCopy;
     Activity activity;
 
@@ -80,8 +81,11 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-       // generateBoard();
+        //generateBoard();
+        player = ParentActivity.getPlayer();
         board = ParentActivity.getBoard();
+        List<String> playerNames = board.getPlayerStringList();
+        //board.initializeSpies(playerNames);
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
         validationPlayerCopy=(AbstractPlayer)DeepCopy.deepCopy(ParentActivity.getPlayer());
@@ -111,15 +115,20 @@ public class DisplayMapActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+//        player.printSeenRegions();
+
         List<ImageButton> planetButtons = getPlanetButtons();
         List<TextView> planetPlayers = getPlanetPlayers();
         List<TextView> unitCircles = getUnitCircles();
         List<ImageView> planetSquares = getPlanetSquares();
         List<ImageView> planetViews = getPlanetViews();
         PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
-        pd.setPlanets();
+        Set<Region> regionSet = board.getSetVisibleRegions(player);
         pd.setGreyPlanets();
+        pd.setPlanetsNoUnits();
+        pd.setInvisibleRegionsInvisible(player);
         setPlayerInfo();
+
     }
     public void showSpies(){
         int increment = 0;
@@ -194,18 +203,18 @@ public class DisplayMapActivity extends AppCompatActivity {
         return drawables;
     }
 
-public void setPlayerInfo(){
-     TextView fuelAmount = findViewById(R.id.fuelAmount);
-    TextView techAmount = findViewById(R.id.techAmount);
-    TextView techLevel= findViewById(R.id.techLevel);
-    String fuel= "Fuel : "+ Integer.toString(ParentActivity.getPlayer().getResources().getFuelResource().getFuel());
-    fuelAmount.setText(fuel);
-    String tech="Tech : "+ Integer.toString(ParentActivity.getPlayer().getResources().getTechResource().getTech());
-    techAmount.setText(tech);
-    String level= "Level: "+  Integer.toString(ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
-    techLevel.setText(level);
+    public void setPlayerInfo(){
+	TextView fuelAmount = findViewById(R.id.fuelAmount);
+	TextView techAmount = findViewById(R.id.techAmount);
+	TextView techLevel= findViewById(R.id.techLevel);
+	String fuel= "Fuel : "+ Integer.toString(ParentActivity.getPlayer().getResources().getFuelResource().getFuel());
+	fuelAmount.setText(fuel);
+	String tech="Tech : "+ Integer.toString(ParentActivity.getPlayer().getResources().getTechResource().getTech());
+	techAmount.setText(tech);
+	String level= "Level: "+  Integer.toString(ParentActivity.getPlayer().getMaxTechLevel().getMaxTechLevel());
+	techLevel.setText(level);
+    }
 
-}
     public void getOrders(){
         Intent i = getIntent();
         String order = i.getStringExtra("ORDER");
@@ -310,6 +319,19 @@ public void setPlayerInfo(){
                 }
                 else{
                     invalidFlag="spy upgrade";
+                }
+            }
+            else if (order.equals("cloak")){
+                CloakOrder cloakOrder = new CloakOrder(destination);
+                List<CloakOrder> orders= new ArrayList<CloakOrder>();
+                orders.add(cloakOrder);
+                validator= new CloakValidator(validationPlayerCopy,validationTempBoard);
+                if(validator.validateOrders(orders)) {//if order is valid, add to list to be sent
+                    parentActivity.setOrders(cloakOrder);
+                    cloakOrder.doAction();
+                }
+                else{
+                    invalidFlag="cloak";
                 }
             }
         }
@@ -668,6 +690,8 @@ public void setPlayerInfo(){
     }
 
     private List<Region> getRegionHelper(AbstractPlayer p1, AbstractPlayer p2, AbstractPlayer p3, AbstractPlayer p4, AbstractPlayer p5, List<Unit> units) {
+    p4.setMaxTechLevel(5);
+
 
         Region r0 = new Region(p1, units.get(0));
         r0.setName("Caprica");
@@ -682,19 +706,21 @@ public void setPlayerInfo(){
 
         Region r4 = new Region(p3, units.get(4));
         r4.setName("Krypton");
+        r4.setCloakTurns(3);
         Region r5 = new Region(p3, units.get(5));
         r5.setName("Ego");
         Region r6 = new Region(p3, units.get(0));
         r6.setName("Terra Prime");
         Region r7 = new Region(p4, units.get(1));
         r7.setName("Arda");
+        r7.setCloakTurns(3);
         Region r8 = new Region(p4, units.get(2));
         r8.setName("Dune");
         Region r9 = new Region(p4, units.get(3));
         r9.setName("Solaris");
         Region r10 = new Region(p5, units.get(4));
         r10.setName("Gallifrey");
-        Region r11 = new Region(null, new Unit(0));
+        Region r11 = new Region(new HumanPlayer("Group A"), new Unit(0));
         r11.setName("Cybertron");
 
         List<Region> adj0 = new ArrayList<Region>();

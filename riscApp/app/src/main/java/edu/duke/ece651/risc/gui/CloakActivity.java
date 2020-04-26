@@ -1,19 +1,18 @@
 package edu.duke.ece651.risc.gui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
 
-public class ResourceBoostActivity extends AppCompatActivity {
+public class CloakActivity extends AppCompatActivity {
     List<Region> regions;
     String planetName;
     TextView name;
@@ -41,7 +40,7 @@ public class ResourceBoostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_resource_boost);
+        setContentView(R.layout.activity_cloak);
         board = ParentActivity.getBoard();
         player = ParentActivity.getPlayer();
         regions = board.getRegions();
@@ -51,6 +50,7 @@ public class ResourceBoostActivity extends AppCompatActivity {
         regionLevel=findViewById(R.id.displayLevel);
         helpText = findViewById(R.id.orderHelp);
         plagueDraw();
+        spyDraw();
     }
     @Override
     protected void onStart() {
@@ -66,6 +66,29 @@ public class ResourceBoostActivity extends AppCompatActivity {
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
         setSameOwnerPlanets();
     }
+    // show existing spies
+    public void spyDraw(){
+        int increment = 0;
+        Resources r = getResources();
+        Drawable[] layers = new Drawable[2];
+
+        for (Region region: regions){
+            if(region.getSpies(ParentActivity.getPlayer().getName()).size()>0){//if player has a spy on the region
+                layers[0] = getPlanetDrawable().get(increment);
+                layers[1] = r.getDrawable(R.drawable.spytransparent);
+                LayerDrawable layerDrawable = new LayerDrawable(layers);
+                ImageView imageView = getPlanetViews().get(increment);
+                TextView textView = getUnitCircles().get(increment);
+                textView.setVisibility(View.INVISIBLE);
+                imageView.setImageDrawable(layerDrawable);
+                break;
+            }
+            increment++;
+        }
+        }
+
+
+
     // plague
     public void plagueDraw(){
         int increment = 0;
@@ -109,11 +132,11 @@ public class ResourceBoostActivity extends AppCompatActivity {
         for (AbstractPlayer p : board.getPlayerList()) {
             if (!p.getName().equals(player.getName())) { //if not player's planet, set view to outline
                 for (Region r : board.getPlayerRegionSet(p)) {
-                    if (regionSet.contains(r)) { //if in player's invisible set of regions
+                    if (regionSet.contains(r)) {
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
                         planetDrawable.setUnitCircle(r);
                     }
-                    else{ //if not visible to player
+                    else{
                         regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
                     }
                 }
@@ -131,11 +154,11 @@ public class ResourceBoostActivity extends AppCompatActivity {
 
     public void submitRegion(View view){//button click
         if (planetName == null){
-            helpText.setText("Please select a planet to boost");
+            helpText.setText("Select planet to create spy");
         } else {
             Intent i = new Intent(this,DisplayMapActivity.class);
             i.putExtra("ATTACKTO", planetName);
-            i.putExtra("ORDER","resource boost");
+            i.putExtra("ORDER","cloak");
             startActivity(i);
         }
 
@@ -185,7 +208,7 @@ public class ResourceBoostActivity extends AppCompatActivity {
     public void planetZero(View view){
         Region r = regions.get(0);
         displayInfo(r);
-    }
+        }
     public void planetOne(View view){
         Region r = regions.get(1);
         displayInfo(r);
