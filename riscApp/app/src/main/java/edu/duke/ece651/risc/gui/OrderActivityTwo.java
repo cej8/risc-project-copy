@@ -164,7 +164,7 @@ public class OrderActivityTwo extends AppCompatActivity {
                         planetDrawable.setPlanets();
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
                     } else {
-                        regionImageViewMap.get(source).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(player));
+                        regionImageViewMap.get(source).setBackgroundResource(planetDrawable.getPlayerNameToColorMap().get(player.getName()));
                     }
                 }
             }
