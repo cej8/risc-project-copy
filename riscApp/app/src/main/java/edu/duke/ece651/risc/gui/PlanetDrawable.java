@@ -262,6 +262,17 @@ public void setSpyImage(Region r) {
     }
 
     //player to colored sphere
+    public  Map<String, Integer> getPlayerNameToColorMap(){
+        List<AbstractPlayer> players = board.getPlayerList();
+        List<Integer> planetDrawables = getColorDrawables();
+        Map<String, Integer> playerToColorMap = new HashMap<String, Integer>();
+        for (int i = 0; i < players.size(); i++){
+            playerToColorMap.put(players.get(i).getName(), planetDrawables.get(i));
+        }
+        return playerToColorMap;
+    }
+
+    //player to colored sphere
     public  Map<AbstractPlayer, Integer> getPlayerToColorMap(){
         List<AbstractPlayer> players = board.getPlayerList();
         for (int i = 0; i < players.size();i++){

@@ -107,7 +107,7 @@ public class ResourceBoostActivity extends AppCompatActivity {
         planetDrawable.setGreyOutlines();
         Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
-            if (p != player) { //if not player's planet, set view to outline
+            if (!p.getName().equals(player.getName())) { //if not player's planet, set view to outline
                 for (Region r : board.getPlayerRegionSet(p)) {
                     if (regionSet.contains(r)) { //if in player's invisible set of regions
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));

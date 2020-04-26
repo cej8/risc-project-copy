@@ -82,10 +82,10 @@ public class OrderActivityTwo extends AppCompatActivity {
         source = board.getRegionByName(attackFrom);
         sourceView = regionImageViewMap.get(source);
 
-        sourceView.setBackgroundResource(planetDrawable.getPlayerToColorMap().get(player));
+        sourceView.setBackgroundResource(planetDrawable.getPlayerNameToColorMap().get(player.getName()));
         planetDrawable.getRegionToButtonMap().get(source).setVisibility(View.INVISIBLE);
 
-        planetDrawable.setAllUnitCircles();
+        //planetDrawable.setAllUnitCircles();
         switch(orderMessage){
             case "attack":
                 setDifferentOwnerPlanets();
@@ -147,7 +147,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         Set<String> names = new HashSet<String>(board.getPlayerStringList());
         Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
-            if (p != player) { //if not player's planet, set view to outline
+            if (!(p.getName().equals(player.getName()))) { //if not player's planet, set view to outline
                 for (Region r : board.getPlayerRegionSet(p)) {
                     if (!names.contains(r.getOwner().getName())) { //if list of player names doesn't include this player (e.g. Group A, Group B, etc).
                         regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
@@ -160,7 +160,7 @@ public class OrderActivityTwo extends AppCompatActivity {
                 planetDrawable.setImageButtonsInvisible(p);
             } else { //if player own's planet, set up visible planet
                 for (Region r : board.getPlayerRegionSet(p)) {
-                    if (r != source) {
+                    if (!r.getName().equals(source.getName())){ //if source planet
                         planetDrawable.setPlanets();
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
                     } else {
@@ -177,9 +177,9 @@ public class OrderActivityTwo extends AppCompatActivity {
         Set<String> names = new HashSet<String>(board.getPlayerStringList());
         Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
-            if (p.getName().equals(player.getName())) { //if player's own planet, set view to outline and make button invisible
+            if ((p.getName().equals(player.getName()))) { //if player's planet, set view to outline
                 for (Region r : board.getPlayerRegionSet(p)) {
-                    if (r == source){ //if source planet
+                    if (r.getName().equals(source.getName())){ //if source planet
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p)); //set to player color
                     }
                     else { //not source, player owns, set to outline

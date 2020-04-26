@@ -70,27 +70,34 @@ public class OrderActivity extends AppCompatActivity {
         planetDrawable = new PlanetDrawable(board, planetButtons, playerColors, planetPlayers, unitCircles, planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
-        planetDrawable.setGreyOutlines();
+        planetDrawable.setGreyOutlinesInvisible();
        Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
-            if (p != player) { //if not player's planet, set view to outline
-
-                    for (Region r : board.getPlayerRegionSet(p)) {
+            System.out.println("does " + p.getName() + " == " + player.getName() + ": " + (p.getName() == player.getName().toString()));
+            if (!(p.getName().equals(player.getName()))) { //if not player's planet, set view to outline
+                Log.d("names not equal", p.getName() +" "+  player.getName());
+                for (Region r : board.getPlayerRegionSet(p)) {
                          if (regionSet.contains(r)) {
                             regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
                             planetDrawable.setUnitCircle(r);
+                            Log.d("setting to outline", r.getName());
                         }
                         else{
                             regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+                             Log.d("setting to grey", r.getName());
                          }
                     }
                         planetDrawable.setImageButtonsInvisible(p);
                     }
             else { //if player own's planet, set up visible planet
+                Log.d("names equal", p.getName() +" "+  player.getName());
                 for (Region r : board.getPlayerRegionSet(p)) {
+                    Log.d("setting to drawable", r.getName());
                     planetDrawable.setPlanets();
+                    Log.d("setting to drawable", r.getName());
                     planetDrawable.setUnitCircle(r);
                     regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
+                    regionImageButtonMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p));
                 }
             }
         }

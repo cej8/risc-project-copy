@@ -83,8 +83,6 @@ public class DisplayMapActivity extends AppCompatActivity {
         // TODO: remove generateBoard for whole test
         //generateBoard();
         player = ParentActivity.getPlayer();
-        Log.d("printing seen regions", "true");
-        //board.getRegionSet(player.getName(), true);
         board = ParentActivity.getBoard();
         List<String> playerNames = board.getPlayerStringList();
         //board.initializeSpies(playerNames);
