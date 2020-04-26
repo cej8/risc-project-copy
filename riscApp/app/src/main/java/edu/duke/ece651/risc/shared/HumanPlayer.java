@@ -2,9 +2,14 @@ package edu.duke.ece651.risc.shared;
 
 import java.net.*;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+
 // Class to create a human player (client)
 public class HumanPlayer extends AbstractPlayer {
   private static final long serialVersionUID = 6L;
+
+
   public HumanPlayer(){
     this.isPlaying = true;
     this.playerResource = new PlayerResources(Constants.STARTING_FUEL_PRODUCTION, Constants.STARTING_TECH_PRODUCTION);
@@ -18,5 +23,7 @@ public class HumanPlayer extends AbstractPlayer {
     this.playerResource = new PlayerResources(Constants.STARTING_FUEL_PRODUCTION, Constants.STARTING_TECH_PRODUCTION);
 
   }
-  
+
+
+
 }

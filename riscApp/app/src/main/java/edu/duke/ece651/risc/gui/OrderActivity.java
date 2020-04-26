@@ -15,11 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
@@ -70,25 +69,35 @@ public class OrderActivity extends AppCompatActivity {
         List<ImageView> planetViews = getPlanetViews();
         planetDrawable = new PlanetDrawable(board, planetButtons, playerColors, planetPlayers, unitCircles, planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
-        planetDrawable.setGreyOutlines();
-        planetDrawable.setAllUnitCircles();
+        regionImageButtonMap = planetDrawable.getRegionToButtonMap();
+        planetDrawable.setGreyOutlinesInvisible();
+       Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
-
-                if (!p.getName().equals(player.getName())) { //if not player's planet, set view to outline
-                if (p!=null){ //if owned by someone, set to their outline color and make button invisible
-                    for (Region r : board.getPlayerRegionSet(p)) {
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
+            System.out.println("does " + p.getName() + " == " + player.getName() + ": " + (p.getName() == player.getName().toString()));
+            if (!(p.getName().equals(player.getName()))) { //if not player's planet, set view to outline
+                Log.d("names not equal", p.getName() +" "+  player.getName());
+                for (Region r : board.getPlayerRegionSet(p)) {
+                         if (regionSet.contains(r)) {
+                            regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
+                            planetDrawable.setUnitCircle(r);
+                            Log.d("setting to outline", r.getName());
+                        }
+                        else{
+                            regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+                             Log.d("setting to grey", r.getName());
+                         }
+                    }
                         planetDrawable.setImageButtonsInvisible(p);
                     }
-                }
-                else{ //if player is null, set button invisible and set grey outline
-                    planetDrawable.setGreyOutlines();
-                    planetDrawable.setImageButtonsInvisible(p);
-                }
-            } else { //if player own's planet, set up visible planet
+            else { //if player own's planet, set up visible planet
+                Log.d("names equal", p.getName() +" "+  player.getName());
                 for (Region r : board.getPlayerRegionSet(p)) {
+                    Log.d("setting to drawable", r.getName());
                     planetDrawable.setPlanets();
+                    Log.d("setting to drawable", r.getName());
+                    planetDrawable.setUnitCircle(r);
                     regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
+                    regionImageButtonMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p));
                 }
             }
         }
