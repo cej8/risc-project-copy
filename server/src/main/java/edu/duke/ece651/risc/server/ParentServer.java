@@ -602,7 +602,15 @@ public class ParentServer extends Thread{
                 playerTurnString += results.get(k);
               }
               else{
-                playerTurnString += "(Unknown)";
+                if(order.get(i).getPriority != RAID_PRIORITY){
+                  playerTurnString += "(Unknown)";
+                }
+                else{
+                  //Special case to avoid showing the 4/5 message for Raid
+                  if(k < 4){
+                    playerTurnString += "(Unknown)";
+                  }
+                }
               }
             }
             playerTurnString += "\n";
