@@ -356,6 +356,8 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     HumanPlayer player2 = new HumanPlayer("player2");
     ChildServer cs = new ChildServer(player, ps);
     ChildServer cs2 = new ChildServer(player2, ps);
+    cs.getParentServer();
+    cs.setParentServer(ps);
     ps.addPlayer(cs);
     ps.addPlayer(cs2);
 
@@ -798,8 +800,8 @@ System.out.println(orderMap.keySet());
     //Now both players would be creating placement orders...
     //Create disconnected client object for generating order lists...
     ClientInputInterface clientIn = getClientIn("");
-    ClientOutputInterface writeToNothing = new TextDisplay(new PrintWriter(new
-    PrintStream(new ByteArrayOutputStream())));
+    PrintWriter nowhere = new PrintWriter(new PrintStream(new ByteArrayOutputStream()));
+    ClientOutputInterface writeToNothing = new TextDisplay(nowhere);
     Client fakeClient = new Client(clientIn, writeToNothing, null);
 
     OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", fakeClient);
