@@ -2,8 +2,7 @@ package edu.duke.ece651.risc.shared;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -268,5 +267,34 @@ public class UnitBoostValidatorTest {
     regions.add(r5);
 
     return regions;
+  }
+
+  @Test
+  public void test_assorted(){
+    Board board = new Board();
+    AbstractPlayer p1 = new HumanPlayer("p1");
+    AbstractPlayer p2 = new HumanPlayer("p2");
+    Unit u1 = new Unit(500);
+    Unit u2 = new Unit(2);
+    Unit u3 = new Unit(1);
+    Region r1 = new Region(p1, u1);
+    Region r2 = new Region(p2, u2);
+    Region r3 = new Region(p2, u3);
+    r1.setName("r1");
+    r2.setName("r2");
+    r3.setName("r3");
+    r1.setAdjRegions(Arrays.asList(r2));
+    r2.setAdjRegions(Arrays.asList(r1, r3));
+    r3.setAdjRegions(Arrays.asList(r2));
+    board.setRegions(Arrays.asList(r1, r2, r3));
+    board.initializeSpies(Arrays.asList("p1", "p2"));
+    
+    ValidatorHelper vh1;
+    List<OrderInterface> p1Orders;
+
+    vh1 = new ValidatorHelper(p1, board);
+    p1Orders = new ArrayList<OrderInterface>();
+    p1Orders.add(new UnitBoost(r1, new Unit(499)));
+    assert(!vh1.allOrdersValid(p1Orders));
   }
 }

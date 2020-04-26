@@ -122,13 +122,15 @@ public class OrderVisibility {
 
     assert(tb.getPlayer() == p2);
 
-    assert(sm.getPlayer() == p2);
+    sm.setPlayer(p1);
+    assert(sm.getPlayer() == p1);
 
     assert(mo.getUnits().getUnits().get(0) == 1);
     mo.setUnits(new Unit(1));
 
     Unit unit = new Unit(1);
     assert(unit.getListOfUnitTypes().size() == 1);
+
   }
 
 }
