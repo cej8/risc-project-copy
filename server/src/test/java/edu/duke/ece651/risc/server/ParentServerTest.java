@@ -484,6 +484,8 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
      ps.getChildren().get(i).getPlayer().setPlayerResource(new PlayerResources(10000, 10000));
    }
 
+
+   ps.createStartingGroups();
    for(int i = 0; i < 5; i++){
      ps.assignGroups("Group " + Character.toString('A'+i), ps.getChildren().get(i).getPlayer());
    }
