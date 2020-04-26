@@ -16,6 +16,7 @@
         <activity android:name=".RaidActivity"
             android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity"></activity>
+        <activity android:name=".SpyUpgradeActivity"></activity>
         <activity android:name=".ResourceBoostActivity" />
         <activity android:name=".RepromptRegionsActivity" />
         <activity android:name=".SpectateActivity" />
