@@ -138,8 +138,6 @@ public class Board implements Serializable {
     return null;
   }
 
-}
-
     public void updateVisible(String playerName, Board newBoard) {
         //Get newest version of players
         List<AbstractPlayer> players = new ArrayList<AbstractPlayer>(newBoard.getPlayerSet());
