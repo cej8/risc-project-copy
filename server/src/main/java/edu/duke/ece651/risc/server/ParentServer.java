@@ -70,6 +70,7 @@ public class ParentServer extends Thread{
     children = new ArrayList<ChildServer>();
     players = new ArrayList<String>();
     orderMap = new HashMap<String, List<OrderInterface>>();
+    attackCombatAttackers = new ArrayList<AbstractPlayer>();
     this.plagueID = 0;
     turnResults = Collections.nCopies(MAX_PLAYERS, "Turn 0:\n");
   }
@@ -386,7 +387,6 @@ public class ParentServer extends Thread{
 
   //Method to move through orders (all valid) and add to Map
   public synchronized void addOrdersToMap(List<OrderInterface> orders) {
-    attackCombatAttackers = new ArrayList<AbstractPlayer>();
     // Method to add orders to map
     for (OrderInterface order : orders) {
       // Not sure if better way to do casting...
@@ -498,6 +498,7 @@ public class ParentServer extends Thread{
     if(orderMap.containsKey("AttackCombat")){
       Collections.shuffle(orderMap.get("AttackCombat"));
       applyOrderList(orderMap.get("AttackCombat"));
+      attackCombatAttackers.clear();
     }
 
   }

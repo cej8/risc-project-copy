@@ -480,12 +480,10 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
    TextDisplay out = new TextDisplay();
    ParentServer ps = new ParentServer();
    for(int i = 0; i < 5; i++){
-     HumanPlayer p = new HumanPlayer("" + Character.toString('A'+i));
-     p.setPlayerResource(new PlayerResources(10000, 10000));
-     ps.addPlayer(new ChildServer(p,ps));
+     ps.addPlayer("" + Character.toString('A'+i), null);
+     ps.getChildren().get(i).getPlayer().setPlayerResource(new PlayerResources(10000, 10000));
    }
 
-   ps.createStartingGroups();
    for(int i = 0; i < 5; i++){
      ps.assignGroups("Group " + Character.toString('A'+i), ps.getChildren().get(i).getPlayer());
    }
@@ -1155,6 +1153,8 @@ System.out.println(orderMap.keySet());
     //Wind owned by player2 with 10 units
     
     ParentServer ps = new ParentServer();
+    ps.addPlayer("player1", null);
+    ps.addPlayer("player2", null);
     ps.setBoard(board);
     //Attack from Wind to Earth with 3 then 2 units, move 1 from Wind to Wind
     //Expect two attackMoves (one with 3 one with 2) from Wind
