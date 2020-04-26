@@ -4,11 +4,13 @@ import java.util.List;
 
 import edu.duke.ece651.risc.shared.*;
 
+//Creator for ResourceBoost
 public class ResourceBoostCreator extends OrderCreator {
   public ResourceBoostCreator(ClientInterface c) {
     this.client = c;
   }
-   public void boostHelper(List<OrderInterface> orderList,String destKeyWord) {
+
+  public void boostHelper(List<OrderInterface> orderList,String destKeyWord) {
     Region destination = promptForRegion(destKeyWord);
 
     while (true) {
@@ -19,16 +21,14 @@ public class ResourceBoostCreator extends OrderCreator {
           break;
         }
       } catch (NumberFormatException ne) {
-        // ne.printStackTrace();
         client.getClientOutput().displayString("That was not an integer, please try again.");
       }
     }
   }
 
-
-@Override
-public void addToOrderList(List<OrderInterface> orderList) {
-  boostHelper(orderList, "upgrade resources on");	
-}
+  @Override
+  public void addToOrderList(List<OrderInterface> orderList) {
+    boostHelper(orderList, "upgrade resources on");	
+  }
 
 }

@@ -61,7 +61,7 @@ public class ParentServerTest {
   }
 
   @Test
-  public void test_growUnits() {
+  public void test_endTurn() {
     ParentServer ps = new ParentServer();
     // ps.createBoard();
     ps.addPlayer("player1", null);
@@ -75,7 +75,7 @@ public class ParentServerTest {
     assertEquals(50, player2.getResources().getFuelResource().getFuel());
     assertEquals(30, player.getResources().getTechResource().getTech());
     assertEquals(4, b.getRegions().get(2).getUnits().getUnits().get(0));
-    ps.growUnits();
+    ps.endTurn();
     assertEquals(250, player2.getResources().getFuelResource().getFuel());
     assertEquals(280, player.getResources().getTechResource().getTech()); 
     assertEquals(5, b.getRegions().get(2).getUnits().getUnits().get(0));
@@ -95,7 +95,7 @@ public class ParentServerTest {
 System.out.println("Starting fuel: " + player.getResources().getFuelResource().getFuel());
     ps.setTurn(3);
    
-    ps.growUnits();
+    ps.endTurn();
     ps.applyPlague();
     
     // first plague
@@ -108,7 +108,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     assertEquals(plagueID, ps.getPlagueID());
     assertEquals(800,player.getResources().getFuelResource().getFuel());
     ps.setTurn(4);
-    ps.growUnits();
+    ps.endTurn();
     ps.applyPlague();
     // second plague
     assertEquals(plagueID, ps.getPlagueID());
@@ -118,7 +118,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
    
     plagueFuel = plaguePlayer.getResources().getFuelResource().getFuel();
     ps.setTurn(5);
-    ps.growUnits();
+    ps.endTurn();
     //assertEquals(1100,plagueFuel);
     System.out.println("PlagueID: " + ps.getPlagueID());
     System.out.println("Turn 5 fuel: " + plaguePlayer.getResources().getFuelResource().getFuel());
@@ -126,7 +126,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     ps.applyPlague();
     assertEquals(2300,player.getResources().getFuelResource().getFuel());
     ps.setTurn(6);
-    ps.growUnits();
+    ps.endTurn();
      System.out.println("PlagueID: " + ps.getPlagueID());
     System.out.println("Turn 6 fuel: " + plaguePlayer.getResources().getFuelResource().getFuel());
    
@@ -135,7 +135,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     ps.applyPlague();
     // new plague planet
     ps.setTurn(7);
-    ps.growUnits();
+    ps.endTurn();
     ps.applyPlague();
     assertEquals(3700,player.getResources().getFuelResource().getFuel());
     System.out.println("PlaugeID: " + ps.getPlagueID());
@@ -2009,7 +2009,7 @@ System.out.println(orderMap.keySet());
     assert(acc.getUnits().getUnits().get(0) == 2);
 
     ps.applyOrders();
-    ps.growUnits();
+    ps.endTurn();
     ps.setTurn(0);
     ps.getPlagueID();
 
