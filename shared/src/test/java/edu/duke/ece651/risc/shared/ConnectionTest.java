@@ -76,4 +76,29 @@ public class ConnectionTest {
     }
   }
 
+  @Test
+  public void test_ConnectionNulls(){
+    Connection conn = new Connection();
+    conn.closeAll();
+    int port = 12400;
+    try{
+      Thread t = new Thread(new DummyServerSocket(port));
+      t.start();
+      Thread.sleep(5000);
+      Socket s = new Socket("localhost", port);
+      ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+      ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
+      conn.setInputStream(ois);
+      conn.closeAll();
+      conn.setOutputStream(oos);
+      conn.closeAll();
+      conn.setSocket(s);
+      conn.closeAll();
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
+
+  }
+
 }

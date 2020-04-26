@@ -54,6 +54,10 @@ public class LoginServer extends Thread{
     return user;
   }
 
+  //Helper for testing
+  public void setActiveGameID(int activeGameID){
+    this.activeGameID = activeGameID;
+  }
 
   public int getActiveGameID(){
     return activeGameID;
