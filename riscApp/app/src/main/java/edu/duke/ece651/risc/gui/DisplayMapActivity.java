@@ -80,7 +80,7 @@ public class DisplayMapActivity extends AppCompatActivity {
       //  executeClient.displayServerBoard(helpText);
         // temp for testing
         // TODO: remove generateBoard for whole test
-        generateBoard();
+       // generateBoard();
         board = ParentActivity.getBoard();
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
@@ -119,7 +119,7 @@ public class DisplayMapActivity extends AppCompatActivity {
         PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         pd.setPlanets();
         pd.setGreyPlanets();
-       // setPlayerInfo();
+        setPlayerInfo();
     }
     public void showSpies(){
         int increment = 0;
