@@ -46,7 +46,8 @@ public class FOWDialogFragment extends DialogFragment {
         cloakButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: set cloak functionality
+                Intent cloakOrder = new Intent(activity,CloakActivity.class);
+                startActivity(cloakOrder);
             }
         });
         builder.setView(travelView)
