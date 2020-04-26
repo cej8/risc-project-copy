@@ -181,6 +181,14 @@ public class Board implements Serializable {
     return null;
   }
 
+  public void replacePlayerByName(String replaceName, AbstractPlayer playerToReplaceWith){
+    for(Region r : regions){
+      if(r.getOwner().getName().equals(replaceName)){
+        r.setOwner(playerToReplaceWith);
+      }
+    }
+  }
+
 }
 
 

@@ -549,8 +549,8 @@ public class ParentServer extends Thread{
         }
       }
 
-      //If FOG_OF_WAR then apply (if not initial placements)
-      if(FOG_OF_WAR && turnNumber > 0){
+      //If FOG_OF_WAR then apply
+      if(FOG_OF_WAR){
         //stringVisibility is list<set> of player names who can see each
         //substring of order's results
         List<Set<String>> stringVisibility = orders.get(i).getPlayersVisibleTo();
@@ -704,6 +704,9 @@ public class ParentServer extends Thread{
     //While regions not owned all by one player
     createStartingGroups();
     board.initializeSpies(players);
+    for(ChildServer child : children){
+      child.setClientBoard((Board)DeepCopy.deepCopy(board));
+    }
     while (turnNumber == 1 || numPlayersLeft() > 1) {
       try {
         // Prompt users
