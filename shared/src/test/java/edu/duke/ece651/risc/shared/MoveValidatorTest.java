@@ -124,7 +124,30 @@ public class MoveValidatorTest {
     sb.append(")\n"); //close parentheses
     return sb.toString();
   }
-      
+
+@Test
+   public void test_Leighanne() {
+    List<Region> regions = getRegions(true); 
+    Board board = new Board(regions);
+    Board boardCopy = (Board) DeepCopy.deepCopy(board);
+    regions = boardCopy.getRegions();
+    boardCopy.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves
+    Unit r0 = new Unit(listOfUnitInts(3, 4, 2, 0, 0, 0, 0));
+    regions.get(0).setUnits(r0);
+    System.out.println(regions.get(0).getName() + " has units " + regions.get(0).getUnits().getUnits()); 
+    System.out.println(regions.get(1).getName() + " has units " + regions.get(1).getUnits().getUnits());  
+    Unit unit = new Unit(listOfUnitInts(2, 4, 2, 0, 0, 0, 0));
+    MoveOrder move01 = new MoveOrder(regions.get(0), regions.get(1), unit);
+    System.out.println("Moving " + move01.getUnits().getUnits() + " units out of " + move01.getSource().getName() + " with units " + move01.getSource().getUnits().getUnits()); 
+    MoveValidator mv = new MoveValidator(regions.get(0).getOwner(), board);
+    List<MoveOrder> moveUnits = new ArrayList<MoveOrder>();
+    moveUnits.add(move01);
+    assertEquals(true, mv.validateOrders(moveUnits)); //true, move all but 1
+    move01.doAction();
+    System.out.println(regions.get(0).getName() + " now has units " + regions.get(0).getUnits().getUnits()); 
+    System.out.println(regions.get(1).getName() + " now has units " + regions.get(1).getUnits().getUnits());  
+}
+  
 @Test
    public void test_totalUnits() {
     List<Region> regions = getRegions(true); 
@@ -152,6 +175,7 @@ public class MoveValidatorTest {
     moveUnits = new ArrayList<MoveOrder>();
     moveUnits.add(move01);
     assertEquals(false, mv.validateOrders(moveUnits));//false, move all
+    
   }
   
   private List<Region> getRegions(boolean singleOwner) {
