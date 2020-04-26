@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +36,7 @@ public class PlanetDrawable {
         playerColors = squares;
         playerNames = names;
         players = board.getPlayerList();
+
         this.setPlayerColors();
         unitCircles = circles;
         planetViews = views;
@@ -69,7 +71,11 @@ public class PlanetDrawable {
         playerColors = squares;
         playerNames = names;
         players = board.getPlayerList();
-        this.setPlayerColors();
+      // List<AbstractPlayer>pList=new ArrayList<AbstractPlayer>(board.getPlayerSet());
+       //Collections.sort(pList);
+       //players=pList;
+
+       this.setPlayerColors();
         unitCircles = new ArrayList<TextView>();
         //planetViews = new ArrayList<ImageView>();
         planetViews = views;
@@ -147,9 +153,10 @@ public void setSpyImage(Region r) {
     }
 
     public void setPlayerColors() {
-        for (int i = 0; i < players.size(); i++){
+           for (int i = 0; i < players.size(); i++) {
            playerColors.get(i).setBackgroundResource(getPlayerToColorMap().get(players.get(i)));
            playerNames.get(i).setText(players.get(i).getName());
+
         }
     }
 

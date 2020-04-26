@@ -132,7 +132,9 @@ public class GUISpectate extends Thread {
 
     public void allSpectate(){
         try {
-                String turn = receiveAndDisplayString();
+            parentActivity.setPlayer((HumanPlayer)connection.receiveObject());
+
+            String turn = receiveAndDisplayString();
                 parentActivity.setStartTime(System.currentTimeMillis());
                 parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));//(long) (connection.getSocket().getSoTimeout());
                 //Catch case for issues in testing, should never really happen
