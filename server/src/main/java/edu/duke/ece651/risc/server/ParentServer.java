@@ -602,7 +602,7 @@ public class ParentServer extends Thread{
                 playerTurnString += results.get(k);
               }
               else{
-                if(orders.get(i).getPriority != RAID_PRIORITY){
+                if(orders.get(i).getPriority() != RAID_PRIORITY){
                   playerTurnString += "(Unknown)";
                 }
                 else{
