@@ -61,6 +61,7 @@ public class ParentServer extends Thread{
   //Lock for adding to child list
   private final ReentrantLock childServerAddLock = new ReentrantLock();
 
+  //List of players at source before attacks happen, used to prevent A->B->C issue
   private List<AbstractPlayer> attackCombatAttackers;
   
   public ParentServer(){
@@ -81,6 +82,8 @@ public class ParentServer extends Thread{
     this.masterServer = masterServer;
   }
 
+
+  /* BEGIN ACCESSORS */
   public List<ChildServer> getChildren() {
     return children;
   }
@@ -546,7 +549,7 @@ public class ParentServer extends Thread{
         }
         //Ensure attacker can see
         for(Set<String> vis : stringVisibility){
-          vis.add(attackCombatAttackers.get(i));
+          vis.add(attackCombatAttackers.get(i).getName());
         }
 
         //Ensure actual player (not just Group A)

@@ -5,10 +5,17 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 
+
+// Helper class used in ParentServer
+// Tries to read from stream for client's socket assuming nothing will actually be sent
+// (before game starts or after successful)
+// If socket died then exception OTHER THAN timeout --> close socket and remove connection from ChildServer
 public class ConnectionTester extends Thread{
   private List<ChildServer> children;
   private MasterServer masterServer;
   private int gameID;
+  //Variables for continuing/stopping loop
+  //Only way to ensure stops with how java handles threads...
   private boolean continueRunning = true;
   private boolean hasStopped = false;
 
