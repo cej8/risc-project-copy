@@ -12,6 +12,8 @@ import edu.duke.ece651.risc.shared.*;
 
 import edu.duke.ece651.risc.client.*;
 
+import org.mindrot.jbcrypt.*;
+
 public class ParentServerTest {
   /*
    * @Test public void test_createStartingGroups(){ ParentServer ps = new
@@ -661,30 +663,39 @@ System.out.println(orderMap.keySet());
     string = (StringMessage)(c1in.readObject());
     cout.displayString("Salt");
     cout.displayString(string.unpacker());
-    c1out.writeObject(new StringMessage("123"));
-    c1out.writeObject(new StringMessage("123"));
+    c1out.writeObject(new StringMessage(BCrypt.hashpw("123", string.unpacker())));
+    c1out.writeObject(new StringMessage(BCrypt.hashpw("123", string.unpacker())));
     string = (StringMessage)(c1in.readObject());
     cout.displayString("Success...");
     cout.displayString(string.unpacker());
+    //Player 2 register
     string = (StringMessage)(c2in.readObject());
     cout.displayString("Success...");
     cout.displayString(string.unpacker());
-    //Player 2 register
     c2out.writeObject(new ConfirmationMessage(false));
     c2out.writeObject(new StringMessage("Player 2"));
     string = (StringMessage)(c2in.readObject());
     cout.displayString("Salt");
     cout.displayString(string.unpacker());
-    c2out.writeObject(new StringMessage("123"));
-    c2out.writeObject(new StringMessage("123"));
+    c2out.writeObject(new StringMessage(BCrypt.hashpw("123", string.unpacker())));
+    c2out.writeObject(new StringMessage(BCrypt.hashpw("123", string.unpacker())));
     string = (StringMessage)(c2in.readObject());
     cout.displayString("Success...");
     cout.displayString(string.unpacker());
 
-    //Player 1 joins, player 2 joins
+    //Player 1 join bad in prog then good
+    c1out.writeObject(new ConfirmationMessage(true));
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("Games List In");
+    cout.displayString(string.unpacker());
+    c1out.writeObject(new IntegerMessage(1));
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("Fail");
+    cout.displayString(string.unpacker());
+
     c1out.writeObject(new ConfirmationMessage(false));
     string = (StringMessage)(c1in.readObject());
-    cout.displayString("Games List");
+    cout.displayString("Games List New");
     cout.displayString(string.unpacker());
     c1out.writeObject(new IntegerMessage(1));
     string = (StringMessage)(c1in.readObject());
@@ -692,10 +703,40 @@ System.out.println(orderMap.keySet());
     cout.displayString(string.unpacker());
     confirmation = (ConfirmationMessage)(c1in.readObject());
 
-    //Player 2 join
+    //Player 2 join bad new, dc, re-login, then good
     c2out.writeObject(new ConfirmationMessage(false));
     string = (StringMessage)(c2in.readObject());
-    cout.displayString("Games List");
+    cout.displayString("Games List New");
+    cout.displayString(string.unpacker());
+    c2out.writeObject(new IntegerMessage(3));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Failure");
+    cout.displayString(string.unpacker());
+
+    c2.close();
+    c2in.close();
+    c2out.close();   
+    c2 = new Socket("localhost", port);
+    c2in = new ObjectInputStream(c2.getInputStream());
+    c2out = new ObjectOutputStream(c2.getOutputStream());
+
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+    c2out.writeObject(new ConfirmationMessage(true));
+    c2out.writeObject(new StringMessage("Player 2"));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Salt");
+    cout.displayString(string.unpacker());
+    c2out.writeObject(new StringMessage(BCrypt.hashpw("123", string.unpacker())));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+
+
+    c2out.writeObject(new ConfirmationMessage(false));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Games List New");
     cout.displayString(string.unpacker());
     c2out.writeObject(new IntegerMessage(1));
     string = (StringMessage)(c2in.readObject());
