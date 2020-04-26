@@ -529,6 +529,9 @@ public class ParentServer extends Thread{
           attackedRegion = castOrder.getDestination();
       }
 
+      //stringVisibility is list<set> of player names who can see each
+      //substring of order's results, must be done BEFORE doAction()
+      List<Set<String>> stringVisibility = orders.get(i).getPlayersVisibleTo();
 
       //List of substrings making up order's text result
       List<String> results = orders.get(i).doAction();
@@ -556,9 +559,6 @@ public class ParentServer extends Thread{
 
       //If FOG_OF_WAR then apply
       if(FOG_OF_WAR){
-        //stringVisibility is list<set> of player names who can see each
-        //substring of order's results
-        List<Set<String>> stringVisibility = orders.get(i).getPlayersVisibleTo();
         //Can see is union of all within this set
         Set<String> canSee = new HashSet<>();
         for(int j = 0; j < stringVisibility.size(); j++){
@@ -567,8 +567,16 @@ public class ParentServer extends Thread{
         //For players
         for(int j = 0; j < players.size(); j++){
           String playerTurnString = turnResults.get(j);
+          //If dead then ALWAYS add
+          if(!children.get(j).getPlayer().isPlaying()){
+            for(String s : results){
+              playerTurnString += s;
+            }
+            playerTurnString += "\n";
+            turnResults.add(j, playerTurnString);
+          }
           //If in canSee then give them string for proper turn result
-          if(canSee.contains(players.get(j))){
+          else if(canSee.contains(players.get(j))){
             //For each substring
             for(int k = 0; k < results.size(); k++){
               //If player is visible to substring then add
@@ -583,13 +591,6 @@ public class ParentServer extends Thread{
             turnResults.add(j, playerTurnString);
           }
           //if not playing then dead --> see all
-          else if(!children.get(j).getPlayer().isPlaying()){
-            for(String s : results){
-              playerTurnString += s;
-            }
-            playerTurnString += "\n";
-            turnResults.add(j, playerTurnString);
-          }
         }
       }
       //If no FOW then add all to all
