@@ -70,15 +70,20 @@ public class MoveValidatorTest {
                                                                               // another
     assertEquals(false, mv.validateOrders(moveAllUnits));
 
-    // Orders using 0 units
+    // Orders using -1 units
+    boardCopy = (Board) DeepCopy.deepCopy(board);
+     mv = new MoveValidator(regionCopy.get(0).getOwner(), boardCopy);
     List<Unit> invalidUnits = get6UnitList(-1, 9, 14, 19, 24, 29); // false: moving -1 units
     List<MoveOrder> moveInvalidUnits = getMovesDependent(regionCopy, invalidUnits);
     assertEquals(false, mv.validateOrders(moveInvalidUnits));
 
     // Orders for which sourceUnits < order Units
+    boardCopy = (Board) DeepCopy.deepCopy(board);
+     mv = new MoveValidator(regionCopy.get(0).getOwner(), boardCopy);
     List<Unit> tooManyUnits = get6UnitList(100, 9, 14, 19, 24, 29);
     List<MoveOrder> moveTooManyUnits = getMovesDependent(regionCopy, tooManyUnits);
     assertEquals(false, mv.validateOrders(moveTooManyUnits)); // false: move too many units
+    //order in which source == unit for most, but have enough
   }
 
     //returns a String of all of the board info
@@ -120,8 +125,34 @@ public class MoveValidatorTest {
     return sb.toString();
   }
       
+@Test
+   public void test_totalUnits() {
+    List<Region> regions = getRegions(true); 
+    Board board = new Board(regions);
 
-  
+    Board boardCopy = (Board) DeepCopy.deepCopy(board);
+    regions = boardCopy.getRegions();
+    boardCopy.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves
+    List<Integer> u = listOfUnitInts(4, 5, 5, 5, 5, 5, 5);
+    Unit unit = new Unit(u);
+    MoveOrder move01 = new MoveOrder(regions.get(0), regions.get(1), unit);
+    MoveValidator mv = new MoveValidator(regions.get(0).getOwner(), board);
+    List<MoveOrder> moveUnits = new ArrayList<MoveOrder>();
+    moveUnits.add(move01);
+    assertEquals(true, mv.validateOrders(moveUnits)); //true, move all but 1
+
+    boardCopy = (Board) DeepCopy.deepCopy(board);
+    regions = boardCopy.getRegions();
+    boardCopy.getRegions().get(0).getOwner().getResources().getFuelResource().addFuel(3760); //amount of fuel needed for following moves
+    u = listOfUnitInts(5, 5, 5, 5, 5, 5, 5);
+    unit = new Unit(u);
+    move01 = new MoveOrder(regions.get(0), regions.get(1), unit);
+    mv = new MoveValidator(regions.get(0).getOwner(), board);
+    // Moves using all but one of sourceUnits 
+    moveUnits = new ArrayList<MoveOrder>();
+    moveUnits.add(move01);
+    assertEquals(false, mv.validateOrders(moveUnits));//false, move all
+  }
   
   private List<Region> getRegions(boolean singleOwner) {
     AbstractPlayer p1 = new HumanPlayer("Player 1");

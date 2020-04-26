@@ -25,6 +25,7 @@ public class TechBoostActivity extends AppCompatActivity {
         HumanPlayer player;
         TextView yourFuel;
         TextView fuelCost;
+        TextView helpText;
         Integer yourLevel;
         ImageView level1;
         ImageView level2;
@@ -49,6 +50,7 @@ public class TechBoostActivity extends AppCompatActivity {
             //player = new HumanPlayer("bob"); //player to pass in for testing
             yourFuel = findViewById(R.id.insertYourFuel);
             fuelCost = findViewById(R.id.insertFuelCost);
+            helpText=findViewById(R.id.helpText);
             yesButton = findViewById(R.id.yesBoost);
             noButton = findViewById(R.id.noBoost);
             level1 = findViewById(R.id.level1w);
@@ -97,9 +99,14 @@ public class TechBoostActivity extends AppCompatActivity {
             TechBoostValidator validator= new TechBoostValidator(validationPlayer,validationBoard);
             if(validator.validateOrders(t)) {
                 pa.setOrders(techBoost);
+                Intent techBoostSetup = new Intent(this, DisplayMapActivity.class);
+                startActivity(techBoostSetup);
             }
-            Intent techBoostSetup = new Intent(this, DisplayMapActivity.class);
-            startActivity(techBoostSetup);
+            else{
+                helpText.setText("That order was invalid. Please go back or issue another");
+            }
+
+
         }
 
         //doesn't make order, just go back to map

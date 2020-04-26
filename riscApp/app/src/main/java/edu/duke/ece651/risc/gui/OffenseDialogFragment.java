@@ -41,7 +41,9 @@ public class OffenseDialogFragment extends DialogFragment {
         raidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: setup once raid implemented
+                Intent raidIntent = new Intent(activity,OrderActivity.class);
+                raidIntent.putExtra("ORDER","raid");
+                startActivity(raidIntent);
             }
         });
         builder.setView(travelView)

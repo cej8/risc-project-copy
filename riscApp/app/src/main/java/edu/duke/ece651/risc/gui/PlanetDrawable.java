@@ -170,6 +170,10 @@ public class PlanetDrawable {
             }
         }
     }
+public void setSpyImage(Region r) {
+    ImageButton button = getRegionToButtonMap().get(r);
+    button.setBackgroundResource(R.drawable.spytransparent);
+}
 
 
 //sets drawables to player colors

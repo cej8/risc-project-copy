@@ -6,4 +6,18 @@
     <string name="click_to_continue">Click anywhere to continue</string>
     <string name="textButtonMain">ATTENTION:\nYou may only do this once per turn</string>
     <string name="boost_tech">BOOST MAX TECH LEVEL?</string>
+    <string name="move">You can only move within your territories. A move order is only executed
+        if the source region is attached to the destination via a path of planets you own. Fuel
+        cost is dependent on the number of units moved.</string>
+    <string name="attack">You can only attack adjacent planets from your attacking planet. Fuel cost
+        is dependent on the number of units attacking with.</string>
+    <string name="teleport">You need tech level 4 to teleport. You can teleport to any planet you
+        own, it does not need to be adjacent. This order costs tech resources.</string>
+    <string name="raid">You can raid adjacent planets from ones you own. When you raid you steal
+        tech and fuel resources from your opponent.</string>
+    <string name="unitboost">Boosting units requires increased tech level. Be sure to upgrade your
+        tech level first!</string>
+    <string name="techboost">Boost your tech level to unlock other orders and features.</string>
+    <string name="resourceboost">Boost your resource production on a planet, but be careful if you
+        lose it your opponent gets your extra production.</string>
 </resources>

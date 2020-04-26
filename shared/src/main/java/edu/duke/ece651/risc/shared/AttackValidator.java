@@ -53,8 +53,19 @@ private Board tempBoard;
 @Override
 public boolean validateOrders(List<AttackMove> attackList) {
   boolean validRegions = validateRegions(attackList);
-    boolean validUnits = validateUnits(attackList);
-    return validRegions && validUnits;
+  boolean validUnits = validateUnits(attackList);
+  return validRegions && validUnits;
+}
+
+    private boolean hasEnoughUnits(AttackMove m){
+    int totalUnits = m.getSource().getUnits().getTotalUnits();
+    int moveUnits = m.getUnits().getTotalUnits();
+    if (totalUnits > moveUnits) {
+      return true;
+    }
+    else{
+      return false;
+    }
   }
   // Method to validate corrent units in each region
   //  	@Override
@@ -67,7 +78,7 @@ public boolean validateOrders(List<AttackMove> attackList) {
       Unit attackUnits = new Unit(attack.getUnits().getUnits());
       AttackMove attackCopyMove = new AttackMove(tempSource, tempDest, attackUnits);
       // make sure at least 1 sourceUnit, 1 attackUnit, and sourceUnits > attackUnits
-       boolean validMove = true;
+       boolean validMove = hasEnoughUnits(attackCopyMove);
       // set validMove to false if any of these are false: at least 1 sourceUnit, 1
       // moveUnit, and sourceUnits > moveUnits in each index of source
       
@@ -75,7 +86,7 @@ public boolean validateOrders(List<AttackMove> attackList) {
         if (sourceUnits.getUnits().get(i).equals(0) && attackUnits.getUnits().get(i).equals(0)){
             continue;   
         }
-        else if (((sourceUnits.getUnits().get(i) - 1)< attackUnits.getUnits().get(i)) || (attackUnits.getUnits().get(i) < 0)) {
+        else if ((sourceUnits.getUnits().get(i) < attackUnits.getUnits().get(i)) || (attackUnits.getUnits().get(i) < 0)) {
           validMove = false;
         }
       }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -72,19 +73,19 @@ public class DisplayBonusUnitsActivity extends AppCompatActivity {
         regions = board.getRegions();
         Region region = getRegionByName(board,attackFrom);
         List<Integer> unitList = region.getUnits().getUnits();
-        unitName0.setText("Civilian (" + unitList.get(0) + " units available)");
-        unitName1.setText("Trainee (" + unitList.get(1) + " units available)");
-        unitName2.setText("Junior Technician (" + unitList.get(2) + " units available)");
-        unitName3.setText("Aerospace Engineer (" + unitList.get(3) + " units available)");
-        unitName4.setText("Space Cadet (" + unitList.get(4) + " units available)");
-        unitName5.setText("Astronaut (" + unitList.get(5) + " units available)");
-        unitName6.setText("Space Captain (" + unitList.get(6) + " units available)");
+        unitName0.setText("1) Civilian (" + unitList.get(0) + " units available)");
+        unitName1.setText("2) Trainee (" + unitList.get(1) + " units available)");
+        unitName2.setText("3) Junior Technician (" + unitList.get(2) + " units available)");
+        unitName3.setText("4) Aerospace Engineer (" + unitList.get(3) + " units available)");
+        unitName4.setText("5) Space Cadet (" + unitList.get(4) + " units available)");
+        unitName5.setText("6) Astronaut (" + unitList.get(5) + " units available)");
+        unitName6.setText("7) Space Captain (" + unitList.get(6) + " units available)");
         sendUnits = new ArrayList<Integer>();
     }
     public void next(View view){
         u0 = Integer.parseInt(bonus0.getText().toString());
-        u1 = Integer.parseInt(bonus1.getText().toString());
-        u2 = Integer.parseInt(bonus2.getText().toString());
+        u1 = Integer.parseInt(bonus2.getText().toString());
+        u2 = Integer.parseInt(bonus1.getText().toString());
         u3 = Integer.parseInt(bonus3.getText().toString());
         u4 = Integer.parseInt(bonus4.getText().toString());
         u5 = Integer.parseInt(bonus5.getText().toString());
@@ -96,13 +97,14 @@ public class DisplayBonusUnitsActivity extends AppCompatActivity {
         sendUnits.add(u4);
         sendUnits.add(u5);
         sendUnits.add(u6);
+        for (int i = 0; i < sendUnits.size(); i ++){
+            Log.d("Units",sendUnits.get(i).toString());
+        }
         Intent intent = new Intent(this,DisplayMapActivity.class);
         intent.putIntegerArrayListExtra("UNITS",sendUnits);
         intent.putExtra("ATTACKFROM",attackFrom);
         intent.putExtra("ATTACKTO",attackTo);
         intent.putExtra("ORDER",order);
-//        Orders orders = new Orders(attackFrom,attackTo,order,sendUnits);
-//        orders.getOrders();
         startActivity(intent);
     }
     public Region getRegionByName(Board board, String name){

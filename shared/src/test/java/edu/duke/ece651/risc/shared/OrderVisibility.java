@@ -46,19 +46,89 @@ public class OrderVisibility {
     CloakOrder co = new CloakOrder(r2);
     TechBoost tb = new TechBoost(p2);
     RaidOrder ro = new RaidOrder(r2, r1);
+    TeleportOrder to = new TeleportOrder(r2, r3, new Unit(1));
+    ResourceBoost rbo = new ResourceBoost(r2);
 
     List<Set<String>> vismo = mo.getPlayersVisibleTo();
+    assert(vismo.size() == 4);
+    assert(vismo.get(0).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    assert(vismo.get(1).containsAll(Arrays.asList(p1.getName(),p2.getName())));
+    assert(vismo.get(2).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    assert(vismo.get(3).containsAll(Arrays.asList(p2.getName(),p3.getName())));
+
     List<Set<String>> visam = am.getPlayersVisibleTo();
+    assert(visam.size() == 4);
+    assert(visam.get(0).containsAll(Arrays.asList(p1.getName(),p2.getName())));
+    assert(visam.get(1).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    assert(visam.get(2).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    assert(visam.get(3).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+
     List<Set<String>> visac = ac.getPlayersVisibleTo();
+    assert(visac.size() == 1);
+    assert(visac.get(0).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+
     List<Set<String>> vispo = po.getPlayersVisibleTo();
+    assert(vispo.size() == 1);
+    assert(vispo.get(0).containsAll(Arrays.asList(p2.getName(),p3.getName())));
+
     List<Set<String>> visub = ub.getPlayersVisibleTo();
+    assert(visub.size() == 1);
+    assert(visub.get(0).containsAll(Arrays.asList(p2.getName(),p3.getName())));
+
     List<Set<String>> vissu = su.getPlayersVisibleTo();
+    assert(vissu.size() == 1);
+    assert(vissu.get(0).containsAll(Arrays.asList(p2.getName())));
+
     List<Set<String>> vissm = sm.getPlayersVisibleTo();
+    assert(vissm.size() == 1);
+    assert(vissm.get(0).containsAll(Arrays.asList(p2.getName())));
+
     List<Set<String>> visco = co.getPlayersVisibleTo();
+    assert(visco.size() == 1);
+    assert(visco.get(0).containsAll(Arrays.asList(p1.getName(),p2.getName())));
+
     List<Set<String>> vistb = tb.getPlayersVisibleTo();
+    assert(vistb.size() == 1);
+    assert(vistb.get(0).containsAll(Arrays.asList(p2.getName())));
+
     List<Set<String>> visro = ro.getPlayersVisibleTo();
+    assert(visro.size() == 6);
+    assert(visro.get(0).containsAll(Arrays.asList(p1.getName(),p2.getName())));
+    assert(visro.get(1).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    assert(visro.get(2).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    assert(visro.get(3).containsAll(Arrays.asList(p1.getName(),p2.getName())));
+    assert(visro.get(4).containsAll(Arrays.asList(p2.getName())));
+    assert(visro.get(5).containsAll(Arrays.asList(p1.getName())));
 
+    List<Set<String>> visto = to.getPlayersVisibleTo();
+    assert(visto.size() == 5);
+    assert(visto.get(0).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    assert(visto.get(1).containsAll(Arrays.asList(p1.getName(),p2.getName())));
+    assert(visto.get(2).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    assert(visto.get(3).containsAll(Arrays.asList(p2.getName(),p3.getName())));
+    assert(visto.get(4).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    
+    List<Set<String>> visrbo = rbo.getPlayersVisibleTo();
+    assert(visrbo.size() == 1);
+    assert(visrbo.get(0).containsAll(Arrays.asList(p1.getName(),p2.getName())));
 
+    assert(tb.getPriority() == Constants.UPGRADE_TECH_PRIORITY);
+    assert(ac.getPriority() == Constants.ATTACK_COMBAT_PRIORITY);
+    
+    ro.setDestination(r3);
+    assert(ro.getDestination() == r3);
+    ro.setSource(r4);
+    assert(ro.getSource() == r4);
+
+    assert(tb.getPlayer() == p2);
+
+    assert(sm.getPlayer() == p2);
+
+    assert(mo.getUnits().getUnits().get(0) == 1);
+    mo.setUnits(new Unit(1));
+
+    Unit unit = new Unit(1);
+    assert(unit.getListOfUnitTypes().size() == 1);
   }
 
 }

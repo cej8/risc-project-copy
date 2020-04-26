@@ -81,7 +81,7 @@ public class OrderActivityTwo extends AppCompatActivity {
 
         source = board.getRegionByName(attackFrom);
         sourceView = regionImageViewMap.get(source);
-        //regionImageViewMap.get(source).setVisibility(View.INVISIBLE);
+
         sourceView.setBackgroundResource(planetDrawable.getPlayerToColorMap().get(player));
         planetDrawable.getRegionToButtonMap().get(source).setVisibility(View.INVISIBLE);
 
@@ -177,7 +177,7 @@ public class OrderActivityTwo extends AppCompatActivity {
         Set<String> names = new HashSet<String>(board.getPlayerStringList());
         Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
-            if (p == player) { //if not player's planet, set view to outline
+            if (p.getName().equals(player.getName())) { //if player's own planet, set view to outline and make button invisible
                 for (Region r : board.getPlayerRegionSet(p)) {
                     if (r == source){ //if source planet
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p)); //set to player color

@@ -13,6 +13,7 @@ import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.ConfirmationMessage;
 import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.Constants;
+import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.StringMessage;
 
 public class GUISpectate extends Thread {
@@ -82,6 +83,8 @@ public class GUISpectate extends Thread {
     }
     public void checkAlive(){
         try {
+            parentActivity.setPlayer((HumanPlayer)connection.receiveObject());
+
             String turn = receiveAndDisplayString();
             parentActivity.setStartTime(System.currentTimeMillis());
             parentActivity.setMaxTime((long) (connection.getSocket().getSoTimeout()));//(long) (connection.getSocket().getSoTimeout());

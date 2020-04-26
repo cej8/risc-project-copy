@@ -28,6 +28,8 @@ public class AttackCombat extends SourceDestinationUnitOrder {
     for(Region adj : destination.getAdjRegions()){
       playersDestination.add(adj.getOwner().getName());
     }
+    //ensure attacker can always see
+    playersDestination.add(source.getOwner().getName());
     //Source can only see attacking somewhere, destination can only see attack with something
     return Arrays.asList(playersDestination);
   }

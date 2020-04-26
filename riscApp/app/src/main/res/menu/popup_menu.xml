@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/exit"
+        android:title="Exit Game"/>
+    <item android:id="@+id/viewSpies"
+        android:title="View Spies"/>
+    <item android:id="@+id/backpack"
+        android:title="Backpack"/>
+    <item android:id="@+id/instructions"
+        android:title="Help">
+        <menu>
+            <item android:id="@+id/move"
+                android:title="Move"/>
+            <item android:id="@+id/teleport"
+                android:title="Teleport"/>
+            <item android:id="@+id/attack"
+                android:title="Attack"/>
+            <item android:id="@+id/raid"
+                android:title="Raid"/>
+            <item android:id="@+id/boost"
+                android:title="Boost"/>
+        </menu>
+    </item>
+</menu>
