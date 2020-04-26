@@ -34,7 +34,7 @@ public class SpectateActivity extends AppCompatActivity {
         executeClient.setConnection(ParentActivity.getConnection());
         executeClient.spectate(true,handler);
     }
-  /*  @Override
+    @Override
     protected void onStart() {
         super.onStart();
         List<ImageButton> planetButtons = getPlanetButtons();
@@ -44,8 +44,8 @@ public class SpectateActivity extends AppCompatActivity {
         List<ImageView> planetViews = getPlanetViews();
         PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         pd.setPlanets();
-        pd.setGreyPlanets();
-    }*/
+       // pd.setGreyPlanets();
+    }
 @Override
 public void onBackPressed()
 {

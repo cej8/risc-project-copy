@@ -10,6 +10,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -19,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
@@ -118,8 +120,6 @@ public class DisplayMapActivity extends AppCompatActivity {
         pd.setPlanets();
         pd.setGreyPlanets();
         setPlayerInfo();
-       // setSpyButton(pd);
-
     }
     public void showSpies(){
         int increment = 0;
@@ -322,8 +322,8 @@ public void setPlayerInfo(){
 
         }
     }
-   public void popupMenu(View view){
-       PopupMenu popupMenu = new PopupMenu(this, view);
+   public void popupMenu(final View view){
+       final PopupMenu popupMenu = new PopupMenu(this, view);
        popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
            public boolean onMenuItemClick(MenuItem item) {
@@ -333,16 +333,44 @@ public void setPlayerInfo(){
                        exitFrag.show(getSupportFragmentManager(),"exit");
                        return true;
                    case R.id.viewSpies:
-                       // run set spy method on touch listener
                        showSpies();
                        return true;
                    case R.id.backpack:
-                       // TODO: backpack popup??
                        BackpackDialogFragment backpackFrag = new BackpackDialogFragment(getLevelDrawable());
                        backpackFrag.show(getSupportFragmentManager(),"backpack");
                        return true;
                    case R.id.instructions:
                        // TODO: instructions
+                       return true;
+                   case R.id.move:
+                       LayoutInflater inflater = getLayoutInflater();
+                       View helpView = inflater.inflate(R.layout.help_move, null);
+                       HelpDialogFragment helpDialogFragment = new HelpDialogFragment("Move",helpView);
+                       helpDialogFragment.show(getSupportFragmentManager(),"move");
+                       return true;
+                   case R.id.teleport:
+                       LayoutInflater inflater4 = getLayoutInflater();
+                       View helpView4 = inflater4.inflate(R.layout.help_teleport, null);
+                       HelpDialogFragment helpDialogFragment4 = new HelpDialogFragment("Teleport",helpView4);
+                       helpDialogFragment4.show(getSupportFragmentManager(),"teleport");
+                       return true;
+                   case R.id.attack:
+                       LayoutInflater inflater2 = getLayoutInflater();
+                       View helpView2 = inflater2.inflate(R.layout.help_attack, null);
+                       HelpDialogFragment helpDialogFragment2 = new HelpDialogFragment("Attack",helpView2);
+                       helpDialogFragment2.show(getSupportFragmentManager(),"attack");
+                       return true;
+                   case R.id.raid:
+                       LayoutInflater inflater3 = getLayoutInflater();
+                       View helpView3 = inflater3.inflate(R.layout.help_raid, null);
+                       HelpDialogFragment helpDialogFragment3 = new HelpDialogFragment("Raid",helpView3);
+                       helpDialogFragment3.show(getSupportFragmentManager(),"raid");
+                       return true;
+                   case R.id.boost:
+                       LayoutInflater inflater5 = getLayoutInflater();
+                       View helpView5 = inflater5.inflate(R.layout.help_boost, null);
+                       HelpDialogFragment helpDialogFragment5 = new HelpDialogFragment("Boost",helpView5);
+                       helpDialogFragment5.show(getSupportFragmentManager(),"boost");
                        return true;
                    default:
                        return false;
