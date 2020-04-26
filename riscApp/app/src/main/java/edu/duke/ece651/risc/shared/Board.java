@@ -121,11 +121,24 @@ public class Board implements Serializable {
         return visible;
     }
 
+
     public void initializeSpies(List<String> players) {
         for (Region r : regions) {
             r.initializeSpies(players);
         }
     }
+
+  public AbstractPlayer getPlayerByName(String playerName){
+    List<AbstractPlayer> players = getPlayerList();
+    for(AbstractPlayer player : players){
+      if(player.getName().equals(playerName)){
+        return player;
+      }
+    }
+    return null;
+  }
+
+}
 
     public void updateVisible(String playerName, Board newBoard) {
         //Get newest version of players

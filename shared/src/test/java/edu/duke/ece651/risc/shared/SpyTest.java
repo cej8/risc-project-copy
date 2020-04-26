@@ -143,10 +143,14 @@ public class SpyTest{
     List<OrderInterface> p1Orders;
     List<OrderInterface> p2Orders;
 
+    p1.setPlayerResource(new PlayerResources(100, Constants.CLOAK_COST*2));
+    p2.setPlayerResource(new PlayerResources(100, Constants.CLOAK_COST*2));
+
     vh1 = new ValidatorHelper(p1, board);
     vh2 = new ValidatorHelper(p2, board);
     p1Orders = new ArrayList<OrderInterface>();
     p2Orders = new ArrayList<OrderInterface>();
+
 
     //Try cloaking region don't own
     p1Orders.add(new CloakOrder(r2));

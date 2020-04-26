@@ -21,7 +21,7 @@ public class ValidatorHelper {
 
   public ValidatorHelper(AbstractPlayer player, Board currentBoard) {
     this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
-    this.player = (AbstractPlayer) DeepCopy.deepCopy(player);
+    this.player = tempBoard.getPlayerByName(player.getName());
     this.moveValidator = new MoveValidator(this.player, tempBoard);
     this.attackValidator = new AttackValidator(this.player, tempBoard);
     this.techBoostValidator = new TechBoostValidator(this.player, tempBoard);
@@ -39,8 +39,8 @@ public class ValidatorHelper {
   }
 
   public ValidatorHelper(AbstractPlayer player, Unit u, Board currentBoard) {
-    this.player =  (AbstractPlayer) DeepCopy.deepCopy(player);
     this.tempBoard = (Board) DeepCopy.deepCopy(currentBoard);
+    this.player = tempBoard.getPlayerByName(player.getName());
     this.placementValidator = new PlacementValidator(this.player,u,tempBoard);
   }
 

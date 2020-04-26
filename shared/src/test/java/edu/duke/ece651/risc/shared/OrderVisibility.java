@@ -64,8 +64,10 @@ public class OrderVisibility {
     assert(visam.get(3).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
 
     List<Set<String>> visac = ac.getPlayersVisibleTo();
-    assert(visac.size() == 1);
+    assert(visac.size() == 3);
     assert(visac.get(0).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    assert(visac.get(1).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
+    assert(visac.get(2).containsAll(Arrays.asList(p1.getName(),p2.getName(),p3.getName())));
 
     List<Set<String>> vispo = po.getPlayersVisibleTo();
     assert(vispo.size() == 1);
@@ -122,13 +124,15 @@ public class OrderVisibility {
 
     assert(tb.getPlayer() == p2);
 
-    assert(sm.getPlayer() == p2);
+    sm.setPlayer(p1);
+    assert(sm.getPlayer() == p1);
 
     assert(mo.getUnits().getUnits().get(0) == 1);
     mo.setUnits(new Unit(1));
 
     Unit unit = new Unit(1);
     assert(unit.getListOfUnitTypes().size() == 1);
+
   }
 
 }

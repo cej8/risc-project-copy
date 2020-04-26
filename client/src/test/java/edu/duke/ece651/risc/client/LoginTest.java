@@ -19,7 +19,7 @@ public class LoginTest {
     //First connect success
     objs.add(new StringMessage("Success: connected"));
     //Send "salt"
-    objs.add(new StringMessage(BCrypt.gensalt()));
+    objs.add(new StringMessage(""));
     //Send fail
     objs.add(new StringMessage("Fail: invalid user/password"));
     //Send "salt"
@@ -53,6 +53,29 @@ public class LoginTest {
     ClientLogin login = new ClientLogin(conn, ci, td);
     assert(login.Login());
     
+  }
+
+  @Test
+  public void test_deadSocket() throws IOException{
+     System.out.println("Expect socketclosed or EOF");
+     ArrayList<Object> objs = new ArrayList<Object>();
+    //First connect success
+    objs.add(new StringMessage("Success: connected"));
+    
+
+    Socket mockSocket = MockTests.setupMockSocket(objs);
+
+    
+    InputStream input = new FileInputStream(new File("src/test/resources/testLogin.txt"));
+    TextDisplay td = new TextDisplay();
+    ConsoleInput ci = new ConsoleInput(input);
+    ConnectionManager cm = new ConnectionManager();
+    cm.makeConnection(mockSocket);
+    Connection conn = cm.getConnection();
+    ClientLogin login = new ClientLogin(conn, ci, td);
+    mockSocket.close();
+    login.Login();
+
   }
 
 }
