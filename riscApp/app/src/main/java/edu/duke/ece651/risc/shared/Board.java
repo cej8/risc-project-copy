@@ -106,19 +106,16 @@ public class Board implements Serializable {
             //If you own region --> visible
             if (r.getOwner().getName().equals(playerName)) {
                 visible.add(r.getName());
-                r.getOwner().setSeenRegion(r);
                 //Check all adjacent, if not cloaked (turns == 0) then add to visible
                 for (Region adj : r.getAdjRegions()) {
                     if (includeAdj || adj.getCloakTurns() == 0) {
                         visible.add(adj.getName());
-                        r.getOwner().setSeenRegion(adj);
                     }
                 }
             }
             //Finally if a spy is in region then visible
             if (r.getSpies(playerName).size() > 0) {
                 visible.add(r.getName());
-                r.getOwner().setSeenRegion(r);
             }
         }
         return visible;
