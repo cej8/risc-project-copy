@@ -69,6 +69,7 @@ public class OrderActivity extends AppCompatActivity {
         List<ImageView> planetViews = getPlanetViews();
         planetDrawable = new PlanetDrawable(board, planetButtons, playerColors, planetPlayers, unitCircles, planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
+        regionImageButtonMap = planetDrawable.getRegionToButtonMap();
         planetDrawable.setGreyOutlines();
        Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {

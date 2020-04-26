@@ -35,6 +35,8 @@ import edu.duke.ece651.risc.shared.AttackCombat;
 import edu.duke.ece651.risc.shared.AttackMove;
 import edu.duke.ece651.risc.shared.AttackValidator;
 import edu.duke.ece651.risc.shared.Board;
+import edu.duke.ece651.risc.shared.CloakOrder;
+import edu.duke.ece651.risc.shared.CloakValidator;
 import edu.duke.ece651.risc.shared.DeepCopy;
 import edu.duke.ece651.risc.shared.HumanPlayer;
 import edu.duke.ece651.risc.shared.MoveOrder;
@@ -81,9 +83,11 @@ public class DisplayMapActivity extends AppCompatActivity {
         // TODO: remove generateBoard for whole test
         //generateBoard();
         player = ParentActivity.getPlayer();
+        Log.d("printing seen regions", "true");
+        //board.getRegionSet(player.getName(), true);
         board = ParentActivity.getBoard();
         List<String> playerNames = board.getPlayerStringList();
-        board.initializeSpies(playerNames);
+        //board.initializeSpies(playerNames);
         regions = board.getRegions();
         validationTempBoard= (Board) DeepCopy.deepCopy(this.board);
         validationPlayerCopy=(AbstractPlayer)DeepCopy.deepCopy(ParentActivity.getPlayer());
@@ -113,6 +117,8 @@ public class DisplayMapActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+//        player.printSeenRegions();
+
         List<ImageButton> planetButtons = getPlanetButtons();
         List<TextView> planetPlayers = getPlanetPlayers();
         List<TextView> unitCircles = getUnitCircles();
@@ -315,6 +321,19 @@ public class DisplayMapActivity extends AppCompatActivity {
                 }
                 else{
                     invalidFlag="spy upgrade";
+                }
+            }
+            else if (order.equals("cloak")){
+                CloakOrder cloakOrder = new CloakOrder(destination);
+                List<CloakOrder> orders= new ArrayList<CloakOrder>();
+                orders.add(cloakOrder);
+                validator= new CloakValidator(validationPlayerCopy,validationTempBoard);
+                if(validator.validateOrders(orders)) {//if order is valid, add to list to be sent
+                    parentActivity.setOrders(cloakOrder);
+                    cloakOrder.doAction();
+                }
+                else{
+                    invalidFlag="cloak";
                 }
             }
         }
@@ -673,6 +692,8 @@ public class DisplayMapActivity extends AppCompatActivity {
     }
 
     private List<Region> getRegionHelper(AbstractPlayer p1, AbstractPlayer p2, AbstractPlayer p3, AbstractPlayer p4, AbstractPlayer p5, List<Unit> units) {
+    p4.setMaxTechLevel(5);
+
 
         Region r0 = new Region(p1, units.get(0));
         r0.setName("Caprica");
@@ -687,12 +708,14 @@ public class DisplayMapActivity extends AppCompatActivity {
 
         Region r4 = new Region(p3, units.get(4));
         r4.setName("Krypton");
+        r4.setCloakTurns(3);
         Region r5 = new Region(p3, units.get(5));
         r5.setName("Ego");
         Region r6 = new Region(p3, units.get(0));
         r6.setName("Terra Prime");
         Region r7 = new Region(p4, units.get(1));
         r7.setName("Arda");
+        r7.setCloakTurns(3);
         Region r8 = new Region(p4, units.get(2));
         r8.setName("Dune");
         Region r9 = new Region(p4, units.get(3));

@@ -82,7 +82,8 @@ public class PlanetDrawable {
         for (Region r : board.getRegions()) {
             if (!set.contains(r)) { //if not visible to player
                 getRegionToPlanetViewMap().get(r).setBackgroundResource(R.drawable.grey_planet_outline);
-                setImageButtonInvisible(r);
+                getRegionToButtonMap().get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+                //setImageButtonInvisible(r);
                 Log.d("not visible", r.getName() + " ("+ r.getOwner().getName()+ ")");
             } else { //if player own's planet, set up visible planet
                 Log.d("visible", r.getName() + " ("+ r.getOwner().getName()+ ")");
@@ -162,6 +163,15 @@ public class PlanetDrawable {
 
     //set planets not owned by player to grey outline and remove button
     public void setGreyOutlines(){
+        Set<String> names = new HashSet<String>(board.getPlayerStringList());
+        for (Region r : board.getRegions()) {
+            if (!names.contains(r.getOwner().getName())) {
+                getRegionToPlanetViewMap().get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+            }
+        }
+    }
+
+    public void setGreyOutlinesInvisible(){
         Set<String> names = new HashSet<String>(board.getPlayerStringList());
         for (Region r : board.getRegions()) {
             if (!names.contains(r.getOwner().getName())) {
