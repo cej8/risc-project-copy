@@ -3,8 +3,10 @@ package edu.duke.ece651.risc.shared;
 import java.util.*;
 import com.google.common.collect.Sets; 
 
+// Class for Teleport order
+// Effectively a move that does not require path (only endpoints)
+// Removes units from source, adds to destination, and removes order cost
 public class TeleportOrder extends SourceDestinationUnitOrder {
-  //this class defines how to execute a teleport order of units from one region to another
   private static final long serialVersionUID = 22L;
   public TeleportOrder(Region s, Region d, Unit u){
     this.source = s;
@@ -12,6 +14,13 @@ public class TeleportOrder extends SourceDestinationUnitOrder {
     this.units = u;
   }
 
+  // Priority accessor
+  @Override
+  public int getPriority() {
+    return Constants.TELEPORT_ORDER_PRIORITY;
+  }
+
+  // Visibility
   @Override
   public List<Set<String>> getPlayersVisibleTo(){
     Set<String> playersSource = new HashSet<String>();
@@ -34,6 +43,7 @@ public class TeleportOrder extends SourceDestinationUnitOrder {
                          Sets.union(playersSource, playersDestination));
   }
 
+  //Action
   @Override
   public List<String> doAction() {
     //remove cost of tech resources from a player (50*number of units)
@@ -41,6 +51,7 @@ public class TeleportOrder extends SourceDestinationUnitOrder {
     source.getOwner().getResources().getTechResource().useTech(cost);
     source.getUnits().subtractUnits(this.units);
     destination.getUnits().addUnits(this.units);
+    // Message "(Player) teleported (units) from (Region) to (Region)."
     return Arrays.asList((destination.getOwner().getName() + " teleported " + units.getTotalUnits() + " units from "),
                         source.getName(),
                         " to ",
@@ -48,8 +59,4 @@ public class TeleportOrder extends SourceDestinationUnitOrder {
                         ".");
   }
 
-  @Override
-  public int getPriority() {
-    return Constants.TELEPORT_ORDER_PRIORITY;
-  }
 }

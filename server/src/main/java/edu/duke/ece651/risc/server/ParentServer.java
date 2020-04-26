@@ -544,6 +544,10 @@ public class ParentServer extends Thread{
           //attackCombatAttacker's i'th entry is the player in the i'th attackCombat
           attackedRegion.setOwner(attackCombatAttackers.get(i));
         }
+        //Ensure attacker can see
+        for(Set<String> vis : stringVisibility){
+          vis.add(attackCombatAttackers.get(i));
+        }
 
         //Ensure actual player (not just Group A)
         if(players.contains(attackName)){

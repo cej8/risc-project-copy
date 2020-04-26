@@ -2,6 +2,9 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.List;
 
+// Validator for unit boost
+// Checks that player owns region, has enough units to start, has enough tech to upgrade all, 
+// has the proper tech level for the upgrade, and region does NOT have plague
 public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
   private Board tempBoard;
   private AbstractPlayer player;
@@ -11,14 +14,12 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
     this.player = player;
   }
 
-
   @Override
   public boolean validateOrders(List<UnitBoost> orders) {
     return validateRegions(orders) && validateCost(orders) && validateUnits(orders) && validateAllTech(orders);
   }
 
   // make sure player owns all regions in which units are to be upgraded
-
   public boolean validateRegions(List<UnitBoost> orders) {
     for (UnitBoost boost : orders) {
       if(boost.getDestination().getPlague()){
@@ -41,8 +42,7 @@ public class UnitBoostValidator implements ValidatorInterface<UnitBoost> {
     }
   }
 
-
- public boolean validateAllTech(List<UnitBoost> orders) {
+  public boolean validateAllTech(List<UnitBoost> orders) {
     for (UnitBoost boost : orders) {
       if (!(validateTech(boost))) {
         System.out.println("Invalid UnitBoost: player tech level is "+ player.getMaxTechLevel().getMaxTechLevel() + " but tried to upgrade" + boost.getUnits().getUnits());

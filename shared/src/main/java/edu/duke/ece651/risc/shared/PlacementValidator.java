@@ -3,6 +3,7 @@ package edu.duke.ece651.risc.shared;
 import java.util.List;
 
 // Class to validate if initial unit placements are allowed compared to game rules
+// Needs to check you own the placment region and haven't placed more than you allowed max (passed into validator)
 public class PlacementValidator implements ValidatorInterface<PlacementOrder> {
  private AbstractPlayer player;
   private Unit playerUnits;

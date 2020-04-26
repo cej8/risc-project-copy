@@ -28,13 +28,14 @@ public class RegionLevel implements Serializable {
     return list;
   }
 
+  /* BEGIN ACCESSORS */
   public int getRegionLevel() {
     return regionLevel;
   }
-
   public double getMultiplier() {
     return multiplier;
   }
+  /* END ACCESSORS */
 
   public void upgradeLevel() {
     regionLevel++;//incremtent regionLevel and set new respurce multiplier value

@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+// Validator for technology boost
+// Must check if player has enough resources and hasn't already hit max
+// Also ensures only one can happen per turn
 public class TechBoostValidator implements ValidatorInterface<TechBoost> {
   private Board tempBoard;
   private AbstractPlayer player;

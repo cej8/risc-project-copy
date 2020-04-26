@@ -2,15 +2,39 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.*;
 
+// Class for order to increase player's technology level
+// Costs scaling amount of tech depending on level (internal to TechnologyLevel) 
 public class TechBoost implements PlayerOrder {
-  //this class represents an upgrade order that is issued by a player to increase their maximum technology level
   private static final long serialVersionUID = 15L;
-  
+
   private AbstractPlayer player;
   public TechBoost(AbstractPlayer p){
     setPlayer(p);
   }
+
+  /* BEGIN ACCESSORS */
+  public AbstractPlayer getPlayer() {
+    return player;
+  }
+  public void setPlayer(AbstractPlayer player) {
+    this.player = player;
+  }
+  /* END ACCESSORS */
+
+  // Priority accessor
+  @Override
+  public int getPriority() {
+    return Constants.UPGRADE_TECH_PRIORITY;
+  }
   
+  @Override
+  public List<Set<String>> getPlayersVisibleTo(){
+    Set<String> players = new HashSet<String>();
+    players.add(player.getName());
+    //Only player can see
+    return Arrays.asList(players);
+  }
+
   @Override
   public List<String> doAction() {
     //remove technology resources
@@ -21,19 +45,6 @@ public class TechBoost implements PlayerOrder {
   }
 
   @Override
-  public List<Set<String>> getPlayersVisibleTo(){
-    Set<String> players = new HashSet<String>();
-    players.add(player.getName());
-    //Only player can see
-    return Arrays.asList(players);
-  }
-
-  @Override
-  public int getPriority() {
-    return Constants.UPGRADE_TECH_PRIORITY;
-  }
-
-  @Override
   public void findValuesInBoard(Board board) {
     for(AbstractPlayer p : board.getPlayerSet()){
       if(p.getName().equals(this.player.getName())){
@@ -41,13 +52,5 @@ public class TechBoost implements PlayerOrder {
       }  
     }
   }
-
-  public AbstractPlayer getPlayer() {
-    return player;
-  }
   
-  public void setPlayer(AbstractPlayer player) {
-    this.player = player;
-  }
-
 }

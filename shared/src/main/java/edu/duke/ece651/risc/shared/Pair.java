@@ -2,6 +2,9 @@ package edu.duke.ece651.risc.shared;
 
 import java.io.Serializable;
 
+// Simple K/V pair method (easier than creating single entry maps)
+// Used for saltedhash + salt pairs for logins
+// Why doesn't java have this anyway???
 public class Pair<K,V> implements Serializable{
   private final K first;
   private final V second;

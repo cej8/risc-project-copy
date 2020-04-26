@@ -1,7 +1,10 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.*;
+
 // Class validates if Spy move is valid
+// Needs to ensure there is a spy in the source region, a path exists to the final region, 
+// And hasn't moved into enemy region this turn if will be
 public class SpyMoveValidator implements ValidatorInterface<SpyMoveOrder> {
 
   private Board tempBoard;

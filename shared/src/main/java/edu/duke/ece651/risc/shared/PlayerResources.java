@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.shared;
 
 import java.io.*;
 
+// Class that holds all resource types the player has
 public class PlayerResources implements Serializable {
   private static final long serialVersionUID = 17L;
   private FuelResources foodResource;

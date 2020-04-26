@@ -6,8 +6,10 @@ import java.io.*;
 import java.net.*;
 
 // Class to keep track of game board, including associated regions
+// Simply a list of regions with methods to access information from them
 public class Board implements Serializable {
   private static final long serialVersionUID = 7L;
+  // Region in board
   List<Region> regions;
 
   public Board(){
@@ -19,7 +21,7 @@ public class Board implements Serializable {
     this.setRegions(regionList);
   }
 
-  //get and set List of Regions
+  /* BEGIN ACCESSORS */
   public List<Region> getRegions(){
     return this.regions;
   }
@@ -27,8 +29,9 @@ public class Board implements Serializable {
  public void setRegions(List<Region> regionList){
     this.regions = regionList;
   }
+  /* END ACCESSORS */
 
-
+  //Get number of regions owned by a player
   public int getNumRegionsOwned(AbstractPlayer player){
     int total = 0;
     for(Region r : regions){
@@ -56,19 +59,19 @@ public class Board implements Serializable {
     return playerRegionMap;
   }
   
-      //Creates a Set of all regions a player owns on the Board
-    public Set<Region> getPlayerRegionSet(AbstractPlayer p){
-        List<Region> allRegions = this.getRegions();
-        Set<Region> playerRegions = new HashSet<Region>();
-        for (Region r : allRegions) { //for each region on the board
-            if (r.getOwner() != null) {
-                if (r.getOwner().getName() == p.getName()) { //if player owns it
-                    playerRegions.add(r); //add that region to the set
-                }
-            }
+  //Creates a Set of all regions a player owns on the Board
+  public Set<Region> getPlayerRegionSet(AbstractPlayer p){
+    List<Region> allRegions = this.getRegions();
+    Set<Region> playerRegions = new HashSet<Region>();
+    for (Region r : allRegions) { //for each region on the board
+      if (r.getOwner() != null) {
+        if (r.getOwner().getName() == p.getName()) { //if player owns it
+          playerRegions.add(r); //add that region to the set
         }
-        return playerRegions;
+      }
     }
+    return playerRegions;
+  } 
   
   //Creates a Set of all Players on the Board
   public Set<AbstractPlayer> getPlayerSet(){
@@ -80,29 +83,32 @@ public class Board implements Serializable {
     return allPlayers;
   }
 
+  //Helper to get all visible regions (does not include adjacent cloaked)
   public Set<String> getVisibleRegions(String playerName){
     return getRegionSet(playerName, false);
   }
 
+  //Helper to get visible regions including cloaked (to update cloak counter)
   public Set<String> getVisibleRegionsIncludingCloaked(String playerName){
     return getRegionSet(playerName, true);
   }
 
-  public Set<String> getRegionSet(String playerName, boolean includeAdj){
+  //Gets visible regions for player, with boolean to force include adjacent cloaked
+  public Set<String> getRegionSet(String playerName, boolean includeCloakedAdj){
     Set<String> visible = new HashSet<String>();
     //Add all visible regions to player to set
     for(Region r : regions){
-      //If you own region --> visible
+      //If you own region --> visible no matter what
       if(r.getOwner().getName().equals(playerName)){
         visible.add(r.getName());
-        //Check all adjacent, if not cloaked (turns == 0) then add to visible
+        //Check all adjacent to owned region, if not cloaked (turns == 0) then add to visible (unless flag true)
         for(Region adj : r.getAdjRegions()){
-          if(includeAdj || adj.getCloakTurns() == 0){
+          if(includeCloakedAdj || adj.getCloakTurns() == 0){
             visible.add(adj.getName());
           }
         }
       }
-      //Finally if a spy is in region then visible
+      //Finally if a spy is in region then visible (no matter what)
       if(r.getSpies(playerName).size() > 0){
         visible.add(r.getName());
       }
@@ -110,24 +116,28 @@ public class Board implements Serializable {
     return visible;
   }
 
+  //Helper method to initialize all maps inside of regions with keys for players intended to be on board
   public void initializeSpies(List<String> players){
     for(Region r : regions){
       r.initializeSpies(players);
     }
   }
 
+  //Method to update all region information visible to the player given new board
   public void updateVisible(String playerName, Board newBoard){
     //Get newest version of players
     List<AbstractPlayer> players = new ArrayList<AbstractPlayer>(newBoard.getPlayerSet());
+    //Get all regions to update (visible + cloaked)
     Set<String> allUpdate = newBoard.getVisibleRegionsIncludingCloaked(playerName);
+    //Get all regions to update everything for (visible - cloaked)
     Set<String> visible = newBoard.getVisibleRegions(playerName);
 
-    //Iterate through board, for each value in visibleRegions --> update
+    //Iterate through board, for each value in allUpdate --> update
     List<Region> newRegions = newBoard.getRegions();
     for(int i = 0; i < regions.size(); i++){
       //Always update spy information
       regions.get(i).copySpies(newRegions.get(i));
-      //If in allUpdate (visible + cloaked) then need to update stuff
+      //If in allUpdate (visible + cloaked) then need to update at minimum cloak information
       if(allUpdate.contains(regions.get(i).getName())){
         //Always update cloak
         regions.get(i).setCloakTurns(newRegions.get(i).getCloakTurns());
@@ -147,6 +157,7 @@ public class Board implements Serializable {
     }
   }
 
+  //Helper to get region by string for name
   public Region getRegionByName(String name){
     Map<String, Region> nameToRegionMap = new HashMap<String, Region>();
     for (Region r : this.getRegions()){
@@ -171,6 +182,7 @@ public class Board implements Serializable {
     return allPlayers;
   }
 
+  //Helper to get player object by name from regions
   public AbstractPlayer getPlayerByName(String playerName){
     List<AbstractPlayer> players = getPlayerList();
     for(AbstractPlayer player : players){
@@ -181,6 +193,7 @@ public class Board implements Serializable {
     return null;
   }
 
+  //Helper to replace all player objects with name within board with another object
   public void replacePlayerByName(String replaceName, AbstractPlayer playerToReplaceWith){
     for(Region r : regions){
       if(r.getOwner().getName().equals(replaceName)){

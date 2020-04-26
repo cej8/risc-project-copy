@@ -2,11 +2,13 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.*;
 
+// Abstract class for orders that have a source/destination only
 public abstract class SourceDestinationOrder implements RegionOrder {
   private static final long serialVersionUID = 55L;
   protected Region source;
   protected Region destination;
 
+  /* BEGIN ACCESSORS */
   public void setSource(Region source){
     this.source = source;
   }
@@ -19,6 +21,7 @@ public abstract class SourceDestinationOrder implements RegionOrder {
   public Region getDestination(){
     return destination;
   }
+  /* END ACCESSORS */
 
   @Override
   abstract public int getPriority();

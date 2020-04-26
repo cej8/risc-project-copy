@@ -1,7 +1,9 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.*;
+
 // Data structure to represent a path from one region to another (inclusive of start and end)
+// Effectively list of regions in continuous path from first entry to last
 public class Path {
   private List<Region> path;
   public Path(){

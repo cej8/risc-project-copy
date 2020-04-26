@@ -2,6 +2,8 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.List;
 
+// Validator for cloak method
+// Simply needs to check if you own the region, have the requried tech level of 3, and have enough technology
 public class CloakValidator implements ValidatorInterface<CloakOrder>{
   private Board tempBoard;
   private AbstractPlayer player;

@@ -2,6 +2,9 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.*;
 
+// Class for order to increase units to the next tier
+// Effectively removes units from destination and adds same number at a tier above
+// Boost cost depends on values internal to Unit class
 public class UnitBoost extends DestinationUnitOrder {
   private static final long serialVersionUID = 16L;
 
@@ -13,6 +16,13 @@ public class UnitBoost extends DestinationUnitOrder {
 
   }
 
+  // Priority accessor
+  @Override
+  public int getPriority() {
+    return Constants.UPGRADE_UNITS_PRIORITY;
+  }
+
+  // Visibility
   @Override
   public List<Set<String>> getPlayersVisibleTo(){
     Set<String> playersDestination = new HashSet<String>();
@@ -25,6 +35,7 @@ public class UnitBoost extends DestinationUnitOrder {
     return Arrays.asList(playersDestination);
   }
 
+  // Action
   @Override
   public List<String> doAction() {
     StringBuilder sb = new StringBuilder(
@@ -37,8 +48,9 @@ public class UnitBoost extends DestinationUnitOrder {
     destination.getUnits().addUnits(upgradedUnits);
     // remove old unit from list
     destination.getUnits().subtractUnits(units);
-    sb.append(" to " + destination.getUnits().getUnits() + "\n");
+    sb.append(" to " + destination.getUnits().getUnits() + ".");
     System.out.println(sb.toString());
+    //Message "(Player) upgraded units from (Units) to (Units)"
     return Arrays.asList(sb.toString());
   }
 
@@ -69,9 +81,5 @@ public class UnitBoost extends DestinationUnitOrder {
     return cost;
   }
 
-  @Override
-  public int getPriority() {
-    return Constants.UPGRADE_UNITS_PRIORITY;
-  }
 
 }

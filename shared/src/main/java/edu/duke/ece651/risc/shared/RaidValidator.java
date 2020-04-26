@@ -3,9 +3,11 @@ package edu.duke.ece651.risc.shared;
 import java.util.*;
 
 // Class to validate if a Raid is allowed based on game rules
+// Must ensure regions are adjacent, raider owns source, raider doesn't own destination, source NOT plagued, and that only 1 RaidOrder occurs
 public class RaidValidator implements ValidatorInterface<RaidOrder> {
   private Board tempBoard;
   private AbstractPlayer player;
+  // Value for if hasRaided during turn
   private boolean hasRaided = false;
 
   public RaidValidator(AbstractPlayer player, Board boardCopy) {
@@ -47,6 +49,7 @@ public class RaidValidator implements ValidatorInterface<RaidOrder> {
     boolean destSource = false;
     boolean sourceDest = false;
 
+    // Ensure dest-->source connection
     for(Region adj : destination.getAdjRegions()){
       if(adj.getName().equals(source.getName())){
         destSource = true;
@@ -54,6 +57,7 @@ public class RaidValidator implements ValidatorInterface<RaidOrder> {
       }
     }
     
+    // Ensure source-->dest connection
     for(Region adj : source.getAdjRegions()){
       if(adj.getName().equals(destination.getName())){
         sourceDest = true;

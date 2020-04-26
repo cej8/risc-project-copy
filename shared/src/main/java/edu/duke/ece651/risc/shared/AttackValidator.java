@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Class to check / validate that an attack order is allowed based on game conditions
+// This is only for attackMove (combat valid by proxy)
+// Must ensure has units, has source region, doesn't have destination region, 
+// Regions are adjacent, source NOT plagued, and has enough fuel
 public class AttackValidator implements ValidatorInterface<AttackMove> {
 private Board tempBoard;
   private AbstractPlayer player;
@@ -12,6 +15,7 @@ private Board tempBoard;
     this.tempBoard = boardCopy;
     this.player = player;
   }
+
   // Checks if attack is valid given conditions
   public boolean isValidAttack(AttackMove a) {
     if(a.getSource().getPlague()){
@@ -42,7 +46,7 @@ private Board tempBoard;
     return false;
   }
 
-  // @Override
+  // Ensure regions are valid
   public boolean validateRegions(List<AttackMove> attackList) {
     for (AttackMove attack : attackList) {
       if (!isValidAttack(attack)) {
@@ -54,6 +58,7 @@ private Board tempBoard;
     return true;
   }
 
+  //Method to call --> checks list of attacks
   @Override
   public boolean validateOrders(List<AttackMove> attackList) {
     boolean validRegions = validateRegions(attackList);
@@ -61,6 +66,7 @@ private Board tempBoard;
     return validRegions && validUnits;
   }
 
+  //Ensure won't remove > what in region
   private boolean hasEnoughUnits(AttackMove m){
     int totalUnits = m.getSource().getUnits().getTotalUnits();
     int moveUnits = m.getUnits().getTotalUnits();
@@ -71,8 +77,8 @@ private Board tempBoard;
       return false;
     }
   }
-  // Method to validate corrent units in each region
-  //  	@Override
+  
+  // Method to validate current units in each region
   public boolean validateUnits(List<AttackMove> a) {
     // check to make sure numUnits in source < attackOrder units
     for (AttackMove attack : a) {

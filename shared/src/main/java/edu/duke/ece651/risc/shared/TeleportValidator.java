@@ -1,7 +1,9 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.List;
+
 // Validation class for teleport move
+// Ensure own both endpoints, have enough units to move, won't remove all, has enough cost, and no plauge at source
 public class TeleportValidator implements ValidatorInterface<TeleportOrder> {
   private Board tempBoard;
   private AbstractPlayer player;
@@ -19,6 +21,7 @@ public class TeleportValidator implements ValidatorInterface<TeleportOrder> {
     }
     return true;
   }
+
   private boolean hasEnoughUnits(TeleportOrder m){
     int totalUnits = m.getSource().getUnits().getTotalUnits();
     int moveUnits = m.getUnits().getTotalUnits();
@@ -29,8 +32,8 @@ public class TeleportValidator implements ValidatorInterface<TeleportOrder> {
       return false;
     }
   }
+
   public boolean validOwnership(List<TeleportOrder> tList) {
-    
     // check that a player owns both teh source and destination
     for (TeleportOrder t : tList) {
       if(t.getSource().getPlague()){
