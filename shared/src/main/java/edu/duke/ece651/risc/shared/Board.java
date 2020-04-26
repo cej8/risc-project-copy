@@ -140,7 +140,7 @@ public class Board implements Serializable {
       AbstractPlayer tempOwner = regions.get(i).getOwner();
       int actualOwner = players.indexOf(tempOwner);
       //if -1 then tempOwner DNE in new board (for example Group _ owners)
-      //if case then don't update
+      //if case then don't update (player object no longer exists so nothing to update to)
       if(actualOwner != -1){
         regions.get(i).setOwner(players.get(actualOwner));
       }
@@ -153,25 +153,35 @@ public class Board implements Serializable {
         nameToRegionMap.put(r.getName(), r);
     }
     return nameToRegionMap.get(name);
-}
+  }
 
-//Creates a list (preserve order) of players on board.
-public List<AbstractPlayer> getPlayerList(){
+  //Creates a list (preserve order) of players on board.
+  public List<AbstractPlayer> getPlayerList(){
     List<Region> allRegions = this.getRegions();
     Set<AbstractPlayer> addedPlayers = new HashSet<AbstractPlayer>();
     List<AbstractPlayer> allPlayers = new ArrayList<AbstractPlayer>();
     for (Region r : allRegions) { //for each region on the board
-        if (r.getOwner() != null) {
-            if (!(addedPlayers.contains(r.getOwner()))) { // if that player has not already been to list
-                allPlayers.add(r.getOwner()); //add that region's owner to the set
-                addedPlayers.add(r.getOwner());//add player to list of added players
-            }
+      if (r.getOwner() != null) {
+        if (!(addedPlayers.contains(r.getOwner()))) { // if that player has not already been to list
+          allPlayers.add(r.getOwner()); //add that region's owner to the set
+          addedPlayers.add(r.getOwner());//add player to list of added players
         }
+      }
     }
     return allPlayers;
+  }
+
+  public AbstractPlayer getPlayerByName(String playerName){
+    List<AbstractPlayer> players = getPlayerList();
+    for(AbstractPlayer player : players){
+      if(player.getName().equals(playerName)){
+        return player;
+      }
+    }
+    return null;
+  }
+
 }
 
 
 
-
-}

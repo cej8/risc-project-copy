@@ -31,7 +31,7 @@ public class AttackCombat extends SourceDestinationUnitOrder {
     //ensure attacker can always see
     playersDestination.add(source.getOwner().getName());
     //Source can only see attacking somewhere, destination can only see attack with something
-    return Arrays.asList(playersDestination);
+    return Arrays.asList(playersDestination, playersDestination, playersDestination);
   }
 
   @Override
@@ -76,15 +76,18 @@ public class AttackCombat extends SourceDestinationUnitOrder {
 
     }
 
-    String returnString;
+
+    List<String> returnStrings = new ArrayList<String>();
 
     if (units.getTotalUnits() == 0) {
-      returnString = (destination.getOwner().getName() + " (defender) retains their region ");
+      returnStrings.add(destination.getOwner().getName());
+      returnStrings.add(" (defender) retains their region ");
     } else {
-      returnString = (source.getOwner().getName() + " (attacker) takes over the region ");
+      returnStrings.add(source.getOwner().getName());
+      returnStrings.add(" (attacker) takes over the region ");
     }
-    returnString += destination.getName() + ", " + destination.getUnits().getTotalUnits() + " units survived!";
-    return Arrays.asList(returnString);
+    returnStrings.add(destination.getName() + ", " + destination.getUnits().getTotalUnits() + " units survived!");
+    return returnStrings;
 
   }
 

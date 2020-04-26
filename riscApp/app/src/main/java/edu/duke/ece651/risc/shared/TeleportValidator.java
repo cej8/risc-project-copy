@@ -19,8 +19,7 @@ public class TeleportValidator implements ValidatorInterface<TeleportOrder> {
     }
     return true;
   }
-
-    private boolean hasEnoughUnits(TeleportOrder m){
+  private boolean hasEnoughUnits(TeleportOrder m){
     int totalUnits = m.getSource().getUnits().getTotalUnits();
     int moveUnits = m.getUnits().getTotalUnits();
     if (totalUnits > moveUnits) {
@@ -30,7 +29,6 @@ public class TeleportValidator implements ValidatorInterface<TeleportOrder> {
       return false;
     }
   }
-
   public boolean validOwnership(List<TeleportOrder> tList) {
     
     // check that a player owns both teh source and destination
@@ -78,8 +76,6 @@ public class TeleportValidator implements ValidatorInterface<TeleportOrder> {
     }
     return true;
   }
-
-  
 
   public boolean validResources(List<TeleportOrder> tList) {
     int sum = 0;

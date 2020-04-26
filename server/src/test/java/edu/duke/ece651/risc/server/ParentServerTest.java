@@ -12,6 +12,8 @@ import edu.duke.ece651.risc.shared.*;
 
 import edu.duke.ece651.risc.client.*;
 
+import org.mindrot.jbcrypt.*;
+
 public class ParentServerTest {
   /*
    * @Test public void test_createStartingGroups(){ ParentServer ps = new
@@ -354,6 +356,8 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     HumanPlayer player2 = new HumanPlayer("player2");
     ChildServer cs = new ChildServer(player, ps);
     ChildServer cs2 = new ChildServer(player2, ps);
+    cs.getParentServer();
+    cs.setParentServer(ps);
     ps.addPlayer(cs);
     ps.addPlayer(cs2);
 
@@ -476,16 +480,19 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
    TextDisplay out = new TextDisplay();
    ParentServer ps = new ParentServer();
    for(int i = 0; i < 5; i++){
-     HumanPlayer p = new HumanPlayer("" + Character.toString('A'+i));
-     p.setPlayerResource(new PlayerResources(10000, 10000));
-     ps.addPlayer(new ChildServer(p,ps));
+     ps.addPlayer("" + Character.toString('A'+i), null);
+     ps.getChildren().get(i).getPlayer().setPlayerResource(new PlayerResources(10000, 10000));
    }
+
 
    ps.createStartingGroups();
    for(int i = 0; i < 5; i++){
      ps.assignGroups("Group " + Character.toString('A'+i), ps.getChildren().get(i).getPlayer());
    }
    Board originalBoard = (Board) DeepCopy.deepCopy(ps.getBoard());
+   for(ChildServer child : ps.getChildren()){
+     child.setClientBoard(originalBoard);
+   }
 
    List<Region> regions = ps.getBoard().getRegions();
    List<OrderInterface> orders = new ArrayList<OrderInterface>();
@@ -624,6 +631,8 @@ System.out.println(orderMap.keySet());
     ms.addParentServer(server);
     server.setMAX_PLAYERS(2);
     server.setMAX_MISSED(1);
+    server.setFOG_OF_WAR(false);
+    server.setSTART_WAIT_MINUTES(1.0);
     BoardGenerator genBoard = new BoardGenerator();
     genBoard.createBoard_legacy();
     server.setBoard(genBoard.getBoard());
@@ -659,30 +668,39 @@ System.out.println(orderMap.keySet());
     string = (StringMessage)(c1in.readObject());
     cout.displayString("Salt");
     cout.displayString(string.unpacker());
-    c1out.writeObject(new StringMessage("123"));
-    c1out.writeObject(new StringMessage("123"));
+    c1out.writeObject(new StringMessage(BCrypt.hashpw("123", string.unpacker())));
+    c1out.writeObject(new StringMessage(BCrypt.hashpw("123", string.unpacker())));
     string = (StringMessage)(c1in.readObject());
     cout.displayString("Success...");
     cout.displayString(string.unpacker());
+    //Player 2 register
     string = (StringMessage)(c2in.readObject());
     cout.displayString("Success...");
     cout.displayString(string.unpacker());
-    //Player 2 register
     c2out.writeObject(new ConfirmationMessage(false));
     c2out.writeObject(new StringMessage("Player 2"));
     string = (StringMessage)(c2in.readObject());
     cout.displayString("Salt");
     cout.displayString(string.unpacker());
-    c2out.writeObject(new StringMessage("123"));
-    c2out.writeObject(new StringMessage("123"));
+    c2out.writeObject(new StringMessage(BCrypt.hashpw("123", string.unpacker())));
+    c2out.writeObject(new StringMessage(BCrypt.hashpw("123", string.unpacker())));
     string = (StringMessage)(c2in.readObject());
     cout.displayString("Success...");
     cout.displayString(string.unpacker());
 
-    //Player 1 joins, player 2 joins
+    //Player 1 join bad in prog then good
+    c1out.writeObject(new ConfirmationMessage(true));
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("Games List In");
+    cout.displayString(string.unpacker());
+    c1out.writeObject(new IntegerMessage(1));
+    string = (StringMessage)(c1in.readObject());
+    cout.displayString("Fail");
+    cout.displayString(string.unpacker());
+
     c1out.writeObject(new ConfirmationMessage(false));
     string = (StringMessage)(c1in.readObject());
-    cout.displayString("Games List");
+    cout.displayString("Games List New");
     cout.displayString(string.unpacker());
     c1out.writeObject(new IntegerMessage(1));
     string = (StringMessage)(c1in.readObject());
@@ -690,10 +708,40 @@ System.out.println(orderMap.keySet());
     cout.displayString(string.unpacker());
     confirmation = (ConfirmationMessage)(c1in.readObject());
 
-    //Player 2 join
+    //Player 2 join bad new, dc, re-login, then good
     c2out.writeObject(new ConfirmationMessage(false));
     string = (StringMessage)(c2in.readObject());
-    cout.displayString("Games List");
+    cout.displayString("Games List New");
+    cout.displayString(string.unpacker());
+    c2out.writeObject(new IntegerMessage(3));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Failure");
+    cout.displayString(string.unpacker());
+
+    c2.close();
+    c2in.close();
+    c2out.close();   
+    c2 = new Socket("localhost", port);
+    c2in = new ObjectInputStream(c2.getInputStream());
+    c2out = new ObjectOutputStream(c2.getOutputStream());
+
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+    c2out.writeObject(new ConfirmationMessage(true));
+    c2out.writeObject(new StringMessage("Player 2"));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Salt");
+    cout.displayString(string.unpacker());
+    c2out.writeObject(new StringMessage(BCrypt.hashpw("123", string.unpacker())));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Success...");
+    cout.displayString(string.unpacker());
+
+
+    c2out.writeObject(new ConfirmationMessage(false));
+    string = (StringMessage)(c2in.readObject());
+    cout.displayString("Games List New");
     cout.displayString(string.unpacker());
     c2out.writeObject(new IntegerMessage(1));
     string = (StringMessage)(c2in.readObject());
@@ -755,8 +803,8 @@ System.out.println(orderMap.keySet());
     //Now both players would be creating placement orders...
     //Create disconnected client object for generating order lists...
     ClientInputInterface clientIn = getClientIn("");
-    ClientOutputInterface writeToNothing = new TextDisplay(new PrintWriter(new
-    PrintStream(new ByteArrayOutputStream())));
+    PrintWriter nowhere = new PrintWriter(new PrintStream(new ByteArrayOutputStream()));
+    ClientOutputInterface writeToNothing = new TextDisplay(nowhere);
     Client fakeClient = new Client(clientIn, writeToNothing, null);
 
     OrderCreator placement = OrderFactoryProducer.getOrderCreator("P", fakeClient);
@@ -1110,6 +1158,8 @@ System.out.println(orderMap.keySet());
     //Wind owned by player2 with 10 units
     
     ParentServer ps = new ParentServer();
+    ps.addPlayer("player1", null);
+    ps.addPlayer("player2", null);
     ps.setBoard(board);
     //Attack from Wind to Earth with 3 then 2 units, move 1 from Wind to Wind
     //Expect two attackMoves (one with 3 one with 2) from Wind
@@ -1832,5 +1882,100 @@ System.out.println(orderMap.keySet());
     c3in.close();
     c3out.close();
     }
+
+  @Test
+  public void test_assorted() throws IOException{
+    ParentServer ps = new ParentServer();
+    ps.setMAX_PLAYERS(1);
+    Connection pc = new Connection();
+    assert(ps.tryJoin("a", pc) == true);
+    assert(ps.tryJoin("b", pc) == false);
+    ps.setNotStarted(false);
+    assert(ps.tryJoin("b", pc) == false);
+    ps.setNotStarted(true);
+    assert(ps.tryJoin("a", pc) == true);
+    ps.removePlayer("a");
+
+    ps.setMAX_PLAYERS(5);
+    assert(ps.tryJoin("p1", pc) == true);
+    assert(ps.tryJoin("p2", pc) == true);
+    assert(ps.tryJoin("p3", pc) == true);
+    ps.getChildren().get(2).getPlayer().setPlaying(false);
+
+
+    Board board = new Board();
+    AbstractPlayer p1 = new HumanPlayer("p1");
+    AbstractPlayer p2 = new HumanPlayer("p2");
+    AbstractPlayer p3 = new HumanPlayer("p3");
+    Unit u1 = new Unit(10);
+    Unit u2 = new Unit(10);
+    Unit u3 = new Unit(10);
+    Unit u4 = new Unit(10);
+    Region r1 = new Region(p1, u1);
+    Region r2 = new Region(p2, u2);
+    Region r3 = new Region(p2, u3);
+    Region r4 = new Region(p3, u4);
+    r1.setName("r1");
+    r2.setName("r2");
+    r3.setName("r3");
+    r4.setName("r4");
+    //Square
+    r1.setAdjRegions(Arrays.asList(r4, r2));
+    r2.setAdjRegions(Arrays.asList(r1, r3));
+    r3.setAdjRegions(Arrays.asList(r2, r4));
+    r4.setAdjRegions(Arrays.asList(r3, r1));
+    board.setRegions(Arrays.asList(r1, r2, r3, r4));
+    board.initializeSpies(Arrays.asList("p1", "p2", "p3"));
+    ps.setBoard(board);
+    for(ChildServer child : ps.getChildren()){
+      child.setClientBoard(ps.getBoard());
+    }
+
+    MoveOrder mo = new MoveOrder(r2, r3, new Unit(1));
+    AttackMove am = new AttackMove(r2, r1, new Unit(1));
+    AttackCombat ac = new AttackCombat(r2, r1, new Unit(1));
+    PlacementOrder po = new PlacementOrder(r3, new Unit(1));
+    UnitBoost ub = new UnitBoost(r3, new Unit(1));
+    SpyUpgradeOrder su = new SpyUpgradeOrder(r2);
+    SpyMoveOrder sm = new SpyMoveOrder(r2, r3, p2);
+    CloakOrder co = new CloakOrder(r2);
+    TechBoost tb = new TechBoost(p2);
+    RaidOrder ro = new RaidOrder(r2, r1);
+    TeleportOrder to = new TeleportOrder(r2, r3, new Unit(1));
+    ResourceBoost rbo = new ResourceBoost(r2);
+    AttackCombat ac2 = new AttackCombat(r1, r2, new Unit(1));
+    AttackCombat ac3 = new AttackCombat(r2, r1, new Unit(1));
+
+    List<OrderInterface> orders = new ArrayList<OrderInterface>();
+    orders.add(mo);
+    orders.add(am);
+    orders.add(ac);
+    orders.add(po);
+    orders.add(ub);
+    orders.add(su);
+    orders.add(sm);
+    orders.add(co);
+    orders.add(tb);
+    orders.add(ro);
+    orders.add(to);
+    orders.add(rbo);
+    orders.add(ac2);
+    orders.add(ac3);
+    ps.addOrdersToMap(orders);
+    Map<String, List<OrderInterface>> om = ps.getOrderMap();
+
+    assert(om.get("NotCombat").containsAll(Arrays.asList(mo,am,po,ub,su,sm,co,tb,to,rbo)));
+    assert(om.get("AttackCombat").containsAll(Arrays.asList(ac,ac2)));
+    assert(om.get("RaidOrder").containsAll(Arrays.asList(ro)));
+    AttackCombat acc = (AttackCombat) om.get("AttackCombat").get(0);
+    AttackCombat acc2 = (AttackCombat) om.get("AttackCombat").get(1);
+    assert(acc.getUnits().getUnits().get(0) == 2);
+
+    ps.applyOrders();
+    ps.growUnits();
+    ps.setTurn(0);
+    ps.getPlagueID();
+
+  }
 
 }

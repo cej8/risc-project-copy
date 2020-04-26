@@ -14,35 +14,38 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
 
-public class OrderActivityTwo extends AppCompatActivity {
+public class RaidActivity extends AppCompatActivity {
     List<Region> regions;
-    String planetName;
+    Board board;
+    AbstractPlayer player;
     TextView name;
     TextView owner;
     TextView numUnits;
-    TextView helpText;
-    String attackFrom;
-    String orderMessage;
-    TextView orderHelper;
-    Board board;
+    String planetName;
     Region source;
     PlanetDrawable planetDrawable;
     Map<Region, ImageView> regionImageViewMap;
-    ImageView sourceView;
-    AbstractPlayer player;
     Map<Region, ImageButton> regionImageButtonMap;
+    List<Region> myPlanets;
+    ImageView sourceView;
+    String attackFrom;
+    String orderMessage;
+    TextView orderHelper;
+    TextView helpText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attack_two);
+        setContentView(R.layout.activity_raid);
         board = ParentActivity.getBoard();
         player = ParentActivity.getPlayer();
         regions = board.getRegions();
@@ -77,22 +80,7 @@ public class OrderActivityTwo extends AppCompatActivity {
 
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
         planetDrawable.setAllUnitCircles();
-        switch(orderMessage){
-            case "attack":
-                setDifferentOwnerPlanets();
-                Log.d("onStart switch case", "attack");
-                break;
-            case "move":
-                setSameOwnerPlanets();
-                Log.d("onStart switch case","move");
-                break;
-            case "teleport":
-                setSameOwnerPlanets();
-                Log.d("onStart switch case", "teleport");
-                break;
-            default:
-                Log.d("onStart switch case", "default");
-        }
+        setDifferentOwnerPlanets();
     }
 
     // Plague
@@ -189,8 +177,8 @@ public class OrderActivityTwo extends AppCompatActivity {
         if (planetName == null){
             helpText.setText("Please select a planet");
         } else {
-            Intent i = new Intent(this, DisplayBonusUnitsActivity.class);
-            i.putExtra("PNAME", attackFrom);
+            Intent i = new Intent(this, DisplayMapActivity.class);
+            i.putExtra("ATTACKFROM", attackFrom);
             i.putExtra("ATTACKTO", planetName);
             i.putExtra("ORDER",orderMessage);
             startActivity(i);

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/exit"
+        android:title="Exit Game"/>
+    <item android:id="@+id/viewSpies"
+        android:title="View Spies"/>
+    <item android:id="@+id/backpack"
+        android:title="Backpack"/>
+    <item android:id="@+id/instructions"
+        android:title="Help"/>
+</menu>
