@@ -40,6 +40,9 @@ public class ChildServer implements Runnable{
   //Client's version of the board
   private Board clientBoard;
 
+  //boolean in case disconnect in middle of placements
+  private boolean pickedRegion = false;
+
   public ChildServer(AbstractPlayer player, ParentServer parent){
     this.player = player;
     this.parent = parent;
@@ -102,29 +105,32 @@ public class ChildServer implements Runnable{
     ValidatorHelper validator;
     //Prompt for region --> placement
     //Prompt for region
-    while(true){
-      //Decrease timeout to maxTime-(current-start)
-      //Ensures will time out at maxTime after start
-      playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));
-      //Send board to player (use local unless FOW off)
-      if(parent.getFOG_OF_WAR()){
-        playerConnection.sendObject(clientBoard);
-      }
-      else{
-        playerConnection.sendObject(parent.getBoard());
-      }
-      //Attempt to get groupName string
-      StringMessage groupNameMessage = (StringMessage)(playerConnection.receiveObject());
-      String groupName = groupNameMessage.unpacker();
-      //Return failure if not assignable
-      if(!parent.assignGroups(groupName, player)){
-        playerConnection.sendObject(new StringMessage("Fail: Group already taken."));
-        continue;
-      }
-      //Ensure local knows which region's are theirs
-      clientBoard.replacePlayerByName(groupName, player);
-      break;
-    }
+    if(pickedRegion == false){
+	    while(true){
+	      //Decrease timeout to maxTime-(current-start)
+	      //Ensures will time out at maxTime after start
+	      playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));
+	      //Send board to player (use local unless FOW off)
+	      if(parent.getFOG_OF_WAR()){
+	        playerConnection.sendObject(clientBoard);
+	      }
+	      else{
+	        playerConnection.sendObject(parent.getBoard());
+	      }
+	      //Attempt to get groupName string
+	      StringMessage groupNameMessage = (StringMessage)(playerConnection.receiveObject());
+	      String groupName = groupNameMessage.unpacker();
+	      //Return failure if not assignable
+	      if(!parent.assignGroups(groupName, player)){
+	        playerConnection.sendObject(new StringMessage("Fail: Group already taken."));
+	        continue;
+	      }
+	  		pickedRegion = true;
+	      //Ensure local knows which region's are theirs
+	      clientBoard.replacePlayerByName(groupName, player);
+	      break;
+	    }
+	  }
     //Otherwise succeeds
     playerConnection.sendObject(new StringMessage("Success: Group assigned."));
     int startUnits = Constants.UNIT_START_MULTIPLIER*parent.getBoard().getNumRegionsOwned(player);
@@ -149,6 +155,9 @@ public class ChildServer implements Runnable{
         playerConnection.sendObject(new StringMessage("Fail: placements invalid"));
         continue;
       }
+
+      //Prevent first turn again
+      firstCall = false;
       
       //Convert to parent's board
       for(int i = 0; i < placementOrders.size(); i++){
@@ -183,8 +192,6 @@ public class ChildServer implements Runnable{
       playerConnection.getSocket().setSoTimeout((int)maxTime);
       if(firstCall){
         firstTurnCall();
-        //Prevent first turn again
-        firstCall = false;
       }
       else{
         //Get client's visible version of the board locally
