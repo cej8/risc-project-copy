@@ -490,6 +490,9 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
      ps.assignGroups("Group " + Character.toString('A'+i), ps.getChildren().get(i).getPlayer());
    }
    Board originalBoard = (Board) DeepCopy.deepCopy(ps.getBoard());
+   for(ChildServer child : ps.getChildren()){
+     child.setClientBoard(originalBoard);
+   }
 
    List<Region> regions = ps.getBoard().getRegions();
    List<OrderInterface> orders = new ArrayList<OrderInterface>();
