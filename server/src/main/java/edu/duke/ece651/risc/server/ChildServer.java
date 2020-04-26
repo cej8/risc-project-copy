@@ -52,11 +52,10 @@ public class ChildServer implements Runnable{
   }
 
   
-  // Getters & setters
+  /* BEGIN ACCESSORS */
   public AbstractPlayer getPlayer(){
     return player;
   }
-
   public void setPlayer(AbstractPlayer player){
     this.player = player;
   }
@@ -83,22 +82,22 @@ public class ChildServer implements Runnable{
     return firstCall;
   }
 
-  public void setFinishedTurn(boolean finishedTurn){
-    this.finishedTurn = finishedTurn;
-  }
-
   public boolean getFinishedTurn(){
     return finishedTurn;
+  }
+  public void setFinishedTurn(boolean finishedTurn){
+    this.finishedTurn = finishedTurn;
   }
 
   public Board getClientBoard(){
     return clientBoard;
   }
-
   public void setClientBoard(Board clientBoard){
     this.clientBoard = clientBoard;
   }
+  /* END ACCESSORS */
 
+  // Method for first turn (select group + placements) call
   public void firstTurnCall() throws IOException, SocketException, ClassNotFoundException{
     ValidatorHelper validator;
     //Prompt for region --> placement
@@ -107,7 +106,7 @@ public class ChildServer implements Runnable{
       //Decrease timeout to maxTime-(current-start)
       //Ensures will time out at maxTime after start
       playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));
-      //Send board to player
+      //Send board to player (use local unless FOW off)
       if(parent.getFOG_OF_WAR()){
         playerConnection.sendObject(clientBoard);
       }
@@ -122,6 +121,7 @@ public class ChildServer implements Runnable{
         playerConnection.sendObject(new StringMessage("Fail: Group already taken."));
         continue;
       }
+      //Ensure local knows which region's are theirs
       clientBoard.replacePlayerByName(groupName, player);
       break;
     }
@@ -133,7 +133,7 @@ public class ChildServer implements Runnable{
       //Decrease timeout to maxTime-(current-start)
       //Ensures will time out at maxTime after start
       playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));     
-      //Send board
+      //Send board (use local unless FOW off)
       if(parent.getFOG_OF_WAR()){
         playerConnection.sendObject(clientBoard);
       }
@@ -300,6 +300,7 @@ public class ChildServer implements Runnable{
       System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed more than " + parent.getMAX_MISSED() + " turns, marking as dead");
       player.setPlaying(false);
     }
+    //If missed turn AND never did first turn then mark as dead (can't play) and disconnect
     if(missedTurns == 1 && firstCall == true){
       System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed initial placements, marking as dead");
       player.setPlaying(false);

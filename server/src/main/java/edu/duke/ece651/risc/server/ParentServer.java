@@ -94,7 +94,6 @@ public class ParentServer extends Thread{
     children.add(c);
     childServerAddLock.unlock();
   }
-
   //Method to add username/connection to game by creating new childserver
   //Used by LoginServer
   public synchronized void addPlayer(String username, Connection playerConnection){
@@ -102,8 +101,7 @@ public class ParentServer extends Thread{
     addPlayer(new ChildServer(player, playerConnection, this));
     players.add(username);
   }
- 
-  //Method to remove player from list of users
+  //Method to remove player from list of users (not used)
   public void removePlayer(String username){
     players.remove(username);
   }
@@ -111,7 +109,6 @@ public class ParentServer extends Thread{
   public Board getBoard() {
     return this.board;
   }
-
   public void setBoard(Board board) {
     this.board = board;
   }
@@ -134,11 +131,10 @@ public class ParentServer extends Thread{
     }
   }
 
-  //Used only for testing
+  //Child calls to know game state
   public double getTURN_WAIT_MINUTES() {
     return TURN_WAIT_MINUTES;
   }
-
   //Used only for testing
   public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES) {
     this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
@@ -149,26 +145,25 @@ public class ParentServer extends Thread{
     this.START_WAIT_MINUTES = START_WAIT_MINUTES;
   }
 
-  //Used only for testing
+  //Child calls to know game state
   public boolean getFOG_OF_WAR(){
     return FOG_OF_WAR;
   }
-
   //Used only for testing
   public void setFOG_OF_WAR(boolean FOG_OF_WAR){
     this.FOG_OF_WAR = FOG_OF_WAR;
   }
   
-  //Used only for testing
+  //Child calls to know game state
   public int getMAX_MISSED(){
     return MAX_MISSED;
   }
-
   //Used only for testing
   public void setMAX_MISSED(int MAX_MISSED){
     this.MAX_MISSED = MAX_MISSED;
   }
 
+  //Testing
   public void setNotStarted(boolean notStarted){
     this.notStarted = notStarted;
   }
@@ -181,10 +176,20 @@ public class ParentServer extends Thread{
     return masterServer;
   }
 
+  // set turn used for testing
+  public void setTurn(int i){
+    this.turnNumber = i;
+  }
+  
+  public int getPlagueID(){
+    return this.plagueID;
+  }
+
   //Used for testing
   public List<AbstractPlayer> getAttackCombatAttackers(){
     return attackCombatAttackers;
   }
+  /* END ACCESSORS */
 
   //Function to close all children's connections on game end
   public void closeAll() {
@@ -401,13 +406,13 @@ public class ParentServer extends Thread{
       OrderInterface castOrder;
       if (order.getPriority() == Constants.PLACEMENT_PRIORITY) {
         castOrder = (PlacementOrder) (order);
-      } else if (order.getPriority() == Constants.ATTACK_MOVE_PRIORITY) {
+      }
+      else if (order.getPriority() == Constants.ATTACK_MOVE_PRIORITY) {
         castOrder = (AttackMove) (order);
-
-      } else if (order.getPriority() == Constants.ATTACK_COMBAT_PRIORITY) {
+      }
+      else if (order.getPriority() == Constants.ATTACK_COMBAT_PRIORITY) {
         castOrder = (AttackCombat) (order);
       }
-
       else if (order.getPriority() == Constants.MOVE_PRIORITY) {
         castOrder = (MoveOrder) (order);
       }
@@ -417,23 +422,22 @@ public class ParentServer extends Thread{
        else if (order.getPriority() == Constants.UPGRADE_TECH_PRIORITY) {
         castOrder = (TechBoost) (order);
       }
-         else if (order.getPriority() == Constants.UPGRADE_RESOURCE_PRIORITY) {
+      else if (order.getPriority() == Constants.UPGRADE_RESOURCE_PRIORITY) {
         castOrder = (ResourceBoost) (order);
       }
-         else if (order.getPriority() == Constants.TELEPORT_ORDER_PRIORITY){
-           castOrder = (TeleportOrder) (order);
+      else if (order.getPriority() == Constants.TELEPORT_ORDER_PRIORITY){
+        castOrder = (TeleportOrder) (order);
       }
-   
-       else if (order.getPriority() == Constants.SPYUPGRADE_PRIORITY) {
+      else if (order.getPriority() == Constants.SPYUPGRADE_PRIORITY) {
         castOrder = (SpyUpgradeOrder) (order);
       }
-       else if (order.getPriority() == Constants.SPYMOVE_PRIORITY) {
+      else if (order.getPriority() == Constants.SPYMOVE_PRIORITY) {
         castOrder = (SpyMoveOrder) (order);
       }
-       else if (order.getPriority() == Constants.CLOAK_PRIORITY) {
+      else if (order.getPriority() == Constants.CLOAK_PRIORITY) {
         castOrder = (CloakOrder) (order);
       }
-       else if (order.getPriority() == Constants.RAID_PRIORITY){
+      else if (order.getPriority() == Constants.RAID_PRIORITY){
         castOrder = (RaidOrder) (order);
       }
      
@@ -441,6 +445,7 @@ public class ParentServer extends Thread{
         continue;
       }
 
+      // Check class name --> put in correct map entry
       String className = castOrder.getClass().getName();
       className = className.substring(className.lastIndexOf('.') + 1);
       //Handle non-combat in order
@@ -455,9 +460,12 @@ public class ParentServer extends Thread{
 
       //Combine attacks to same region by same player
       if(className.equals("AttackCombat")){
+        //If combat check
+
         boolean foundOrder = false;
+        //Cast to get accessors
         SourceDestinationUnitOrder sduOrderNew = (SourceDestinationUnitOrder) castOrder;
-        
+        //For all in list already
         for(OrderInterface combatOrder : orderMap.get("AttackCombat")){
           if(foundOrder){ break; }
           //If both have same source owner and go to same region
@@ -471,12 +479,13 @@ public class ParentServer extends Thread{
              for(int i = 0; i < newOrderUnits.size(); i++){
                oldOrderUnits.set(i, oldOrderUnits.get(i)+newOrderUnits.get(i));
              }
-             //Set oldOrderUnits to sum
              foundOrder = true;
           }
         }
         //if found then do not add (immediately continue)
         if(foundOrder){ continue; }
+        //If new then need to put source's player into list to prevent A->B->C issue
+        //Make sure player from ChildServer instead of board!
         else{
           String playerName = sduOrderNew.getSource().getOwner().getName();
           attackCombatAttackers.add(children.get(players.indexOf(playerName)).getPlayer());
@@ -485,7 +494,6 @@ public class ParentServer extends Thread{
 
       // Add order to list
       orderMap.get(className).add(castOrder);
-
     }
   }
 
@@ -493,9 +501,10 @@ public class ParentServer extends Thread{
     // Apply orders to map
     // Mostly hardcoded due to explicit order ordering
 
+    //Get new turn list for players
     turnResults = new ArrayList<String>(Collections.nCopies(players.size(), "Turn " + turnNumber + ":\n"));
 
-    //Do all not combat first then attackCombat random ordered
+    //Do all not combat first then raid random then attackCombat random
     if(orderMap.containsKey("NotCombat")){
       applyOrderList(orderMap.get("NotCombat"));
     }
@@ -506,13 +515,14 @@ public class ParentServer extends Thread{
     if(orderMap.containsKey("AttackCombat")){
       Collections.shuffle(orderMap.get("AttackCombat"));
       applyOrderList(orderMap.get("AttackCombat"));
+      //Clear attackers list
       attackCombatAttackers.clear();
     }
 
   }
 
   public void applyOrderList(List<OrderInterface> orders) {
-    // Simply call doAction for each order
+    // Call doAction on each and build strings for returning to player
 
     //Defaults (always will be set if used) for attackCombat update special case
     String attackName = "";
@@ -522,6 +532,7 @@ public class ParentServer extends Thread{
     for (int i = 0; i < orders.size(); i++) {
       //Special case --> force update for ChildServer involved in AttackCombat
       //Need to get this BEFORE doAction()
+      //Get the region names, etc.
       if(orders.get(i).getPriority() == Constants.ATTACK_COMBAT_PRIORITY){
           AttackCombat castOrder = (AttackCombat) orders.get(i);
           //Get attack/defend player names
@@ -547,24 +558,24 @@ public class ParentServer extends Thread{
           //attackCombatAttacker's i'th entry is the player in the i'th attackCombat
           attackedRegion.setOwner(attackCombatAttackers.get(i));
         }
-        //Ensure attacker can see
+        //Ensure attacker can see combat results
         for(Set<String> vis : stringVisibility){
           vis.add(attackCombatAttackers.get(i).getName());
         }
 
-        //Ensure actual player (not just Group A)
+        //Ensure actual player (not just Group A) --> update clientBoard
         if(players.contains(attackName)){
           Board attackBoard = children.get(players.indexOf(attackName)).getClientBoard();
           attackBoard.getRegionByName(attackedRegionName).copyInformation(board.getRegionByName(attackedRegionName));
         }
-        //Ensure actual player (not just Group A)
+        //Ensure actual player (not just Group A) --> update clientBoard
         if(players.contains(defendName)){
           Board defendBoard = children.get(players.indexOf(defendName)).getClientBoard();
           defendBoard.getRegionByName(attackedRegionName).copyInformation(board.getRegionByName(attackedRegionName));
         }
       }
 
-      //If FOG_OF_WAR then apply
+      //If FOG_OF_WAR then we will use visilbity of order to add to messages for clients
       if(FOG_OF_WAR){
         //Can see is union of all within this set
         Set<String> canSee = new HashSet<>();
@@ -582,7 +593,7 @@ public class ParentServer extends Thread{
             playerTurnString += "\n";
             turnResults.add(j, playerTurnString);
           }
-          //If in canSee then give them string for proper turn result
+          //else if in canSee then give them string for proper turn result
           else if(canSee.contains(players.get(j))){
             //For each substring
             for(int k = 0; k < results.size(); k++){
@@ -597,7 +608,6 @@ public class ParentServer extends Thread{
             playerTurnString += "\n";
             turnResults.add(j, playerTurnString);
           }
-          //if not playing then dead --> see all
         }
       }
       //If no FOW then add all to all
@@ -614,11 +624,11 @@ public class ParentServer extends Thread{
         }
       }
     }
-
+    //Clear order list on finish
     orders.clear();
   }
 
-  // Method to call child threads, will prompt player and add all orders to map
+  //Method to call child threads, will prompt player and add all orders to map
   //This DOES NOT timeout based on thread age, will wait for all threads to return
   //ChildServers internally handle their own timeouts by leveraging socket timeouts
   //based on TURN_WAIT_MINUTES as a maximum for time spent within run() method
@@ -635,32 +645,34 @@ public class ParentServer extends Thread{
       children.get(i).setTurnMessage(turnResults.get(i));
     }
     //Create thread to check sockets for those who submit turns
+    //Pings socket internally if player submits turn --> logs out if DC's
     ConnectionTester cT = new ConnectionTester(children, masterServer, gameID);
     Thread t = new Thread(cT);
     t.start();
     threads.invokeAll(todo);
-    //Stop the listener
+    //Stop the listener when threads join
     cT.stopLoop();
     //Wait until cT has actually stopped run() loop
     while(!cT.hasStopped()) {Thread.sleep(10);};
     System.out.println(gameID + " : " + "Threads finished");
   }
+
   public void growResources(Region r){
     //grow resources by fuel production times mulitplier for region level
     double multiplier=r.getRegionLevel().getMultiplier();
     r.getOwner().getResources().getFuelResource().addFuel((int)(r.getFuelProduction()*multiplier));
     r.getOwner().getResources().getTechResource().addTech((int)(r.getTechProduction()*multiplier));
-   
-
   }
-  // method to add additional unit after round complete to all regions on board
-  public void growUnits() {
+
+  // method to handle the end of turn growth (units, resources, cloaking, etc.)
+  public void endTurn() {
     for (Region r : board.getRegions()) {
-      // increment number of basic units
+      // For regions that are owned by an actual player...
       if(players.contains(r.getOwner().getName())){
         if(!r.getPlague()){ // if plague == false on Region add production to player
             growResources(r);
         }
+        //Add one level 0 unit
         r.getUnits().getUnits().set(0, r.getUnits().getUnits().get(0) + 1);
       }
       //Set all spies as not moved for next turn
@@ -687,14 +699,6 @@ public class ParentServer extends Thread{
     // otherwise do nothing
   }
 
-  // set turn used for testing
-  public void setTurn(int i){
-    this.turnNumber = i;
-  }
-  public int getPlagueID(){
-    return this.plagueID;
-  }
-
   //Method to get freshest version of player from board
   //Needed to update CS version of player so most up to date
   //(resources changed from doAction) is sent
@@ -717,10 +721,13 @@ public class ParentServer extends Thread{
     
     //While regions not owned all by one player
     createStartingGroups();
+    //Start spies now that we know all players
     board.initializeSpies(players);
+    //Give children copy of initial board (just Group _)
     for(ChildServer child : children){
       child.setClientBoard((Board)DeepCopy.deepCopy(board));
     }
+    //Continue until <1 left (always do first though!)
     while (turnNumber == 1 || numPlayersLeft() > 1) {
       try {
         // Prompt users
@@ -732,21 +739,20 @@ public class ParentServer extends Thread{
       }
       // Apply orders
       applyOrders();
+      //If not first turn (not placements) then need to do post turn
       if (turnNumber > 1) {
-        growUnits();
+        endTurn();
       }
       turnNumber++;
       // Evolution 3: Plague
-      applyPlague();    
+      applyPlague();
+      //Ensure childServers have most recent version of player
       updatePlayersInChildServers();
     }
-    if (numPlayersLeft() <= 1) {
+
+    if (numPlayersLeft() == 1) {
       // If one player alive then create message --> send
-      StringMessage winnerMessage = new StringMessage("Somehow no one is left?");
-      if(playersLeft().iterator().hasNext()){
-        AbstractPlayer winner = playersLeft().iterator().next();
-        winnerMessage = new StringMessage(winner.getName() + " is the winner!");
-      }
+      StringMessage winnerMessage = new StringMessage(playersLeft().iterator().next().getName() + " is the winner!");
       System.out.println(gameID + " : " + winnerMessage.unpacker());
       // Send message to all children
       for (int i = 0; i < children.size(); i++) {
@@ -759,8 +765,9 @@ public class ParentServer extends Thread{
         }
       }
     }
-    // Close all
+    // Close all no matter what
     closeAll();
+    //Remove server from game list
     masterServer.removeParentServer(gameID);
   }
 
