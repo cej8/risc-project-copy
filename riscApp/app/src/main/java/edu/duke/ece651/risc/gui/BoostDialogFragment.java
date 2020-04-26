@@ -30,7 +30,6 @@ public class BoostDialogFragment extends DialogFragment {
         Button unitButton = travelView.findViewById(R.id.unitButton);
         Button techButton = travelView.findViewById(R.id.techButton);
         Button resourceButton = travelView.findViewById(R.id.resourceButton);
-
         unitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

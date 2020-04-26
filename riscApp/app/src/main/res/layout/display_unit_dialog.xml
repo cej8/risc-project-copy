@@ -22,8 +22,8 @@
 
     <TextView
         android:id="@+id/plague"
-        android:layout_width="361dp"
-        android:layout_height="22dp"
+        android:layout_width="363dp"
+        android:layout_height="53dp"
         android:text=""
         android:textAllCaps="true"
         android:textColor="@color/black"

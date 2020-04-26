@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/oval"
         android:onClick="spyOrder"
-        android:text="spy"
+        android:text="spy upgrade"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
