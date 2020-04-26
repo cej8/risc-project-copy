@@ -1,6 +1,8 @@
 package edu.duke.ece651.risc.shared;
 
 // Class to handle program constants
+// This is used by both server and client to ensure values are synced
+// Some values have object sets/gets (like FOG_OF_WAR) that pull from here but can be set (for testing)
 public final class Constants {
   // time to wait for initial connection of players (must be > 0)
   public static final double START_WAIT_MINUTES = 2.5;
@@ -24,7 +26,6 @@ public final class Constants {
   public static final boolean FOG_OF_WAR = true;
  
   //priorities for ordering moves 
-
   public static final int ATTACK_COMBAT_PRIORITY = 70;
   public static final int ATTACK_MOVE_PRIORITY = 50;
   public static final int MOVE_PRIORITY = 30;
@@ -38,20 +39,20 @@ public final class Constants {
   public static final int UPGRADE_RESOURCE_PRIORITY = 35;
   public static final int RAID_PRIORITY = 69;
 
-  // cost to attack - food 
+  // cost to attack - food - initial upgrade
   public static final int ATTACK_COST = 1;
   public static final int TELEPORT_COST = 50;
+  public static final int STARTING_UPGRADE_COST = 50;
+  // Player defaults
   public static final int STARTING_FUEL_PRODUCTION = 50;
   public static final int STARTING_TECH_PRODUCTION = 30;
+  public static final int STARTING_TECH_LEVEL = 1;
 
+  // Spy costs
   public static final int CLOAK_COST = 100;
   public static final int SPYUPGRADE_COST = 20;
-  //board values
+  // Default board/region values
   public static final int REGION_SIZE = 10;
-  // Technology Defaults
-  public static final int STARTING_TECH_LEVEL = 1;
-  public static final int STARTING_UPGRADE_COST = 50;
-  //Region Level Defaults
   public static final int STARTING_REGION_LEVEL = 1;
 
 }

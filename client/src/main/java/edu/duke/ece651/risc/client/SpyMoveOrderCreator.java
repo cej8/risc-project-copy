@@ -3,6 +3,7 @@ import edu.duke.ece651.risc.shared.*;
 
 import java.util.List;
 
+// Creator for SpyMoveOrder
 public class SpyMoveOrderCreator extends OrderCreator {
   public SpyMoveOrderCreator(ClientInterface c){
     this.client = c;

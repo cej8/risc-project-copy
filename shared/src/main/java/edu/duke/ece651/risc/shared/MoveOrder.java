@@ -3,8 +3,10 @@ package edu.duke.ece651.risc.shared;
 import java.util.*;
 import com.google.common.collect.Sets; 
 
+// Class for MoveOrders (move units between your regions)
+// Simple removes units from source and adds them to destination
+// Must also remove fuel cost for moving units (smallest path sum of sizes)*(number of units)
 public class MoveOrder extends SourceDestinationUnitOrder {
-  // this class defines how to execute a move order operation on the board
   private static final long serialVersionUID = 9L; // is there a more intuitive numbering we could use?
 
   public MoveOrder(Region s, Region d, Unit u) {
@@ -18,6 +20,7 @@ public class MoveOrder extends SourceDestinationUnitOrder {
     return Constants.MOVE_PRIORITY;
   }
 
+  // Move only visible to endpoints
   @Override
   public List<Set<String>> getPlayersVisibleTo(){
     Set<String> playersSource = new HashSet<String>();
@@ -39,6 +42,7 @@ public class MoveOrder extends SourceDestinationUnitOrder {
                          playersDestination);
   }
 
+  // Removes units from source, adds them to destination, removes fuel cost from source player
   @Override
   public List<String> doAction() {
     int cost = source.findShortestPath(destination).getTotalCost() * units.getTotalUnits();

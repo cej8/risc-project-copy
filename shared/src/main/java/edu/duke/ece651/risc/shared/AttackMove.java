@@ -3,9 +3,10 @@ package edu.duke.ece651.risc.shared;
 import java.util.*;
 import com.google.common.collect.Sets; 
 
+// Class handles the initial moving of units in preparation for an attack of a region
+// Effectively just removes attacking units from attacker region
+// Repurposed code from doSourceaAction of AttackOrder
 public class AttackMove extends SourceDestinationUnitOrder {
-  //this class handles the initial moving of units in preparation for an attack of a region
-  //Repurposed code from doSourceaAction of AttackOrder
   private static final long serialVersionUID= 20L;
   
   public AttackMove(Region attacker, Region defender, Unit attackingUnits){
@@ -14,11 +15,13 @@ public class AttackMove extends SourceDestinationUnitOrder {
      this.units = attackingUnits;
   }
 
+  // Priority Accessor
   @Override
   public int getPriority(){
       return Constants.ATTACK_MOVE_PRIORITY;
   }
 
+  // Visbility list
   @Override
   public List<Set<String>> getPlayersVisibleTo(){
     Set<String> playersSource = new HashSet<String>();
@@ -40,14 +43,15 @@ public class AttackMove extends SourceDestinationUnitOrder {
                          Sets.union(playersSource, playersDestination));
   }
 
+  // Action just removes attacking units from attacking region and subtracts cost
   @Override
   public List<String> doAction(){
-  // remove units from source (source location)
+    // remove units from source (source location)
     source.getUnits().subtractUnits(this.units);
-    //source.getOwner().useFood(Constants.ATTACK_COST);
+    // deduct fuel cost for attack
     int cost = units.getTotalUnits() * Constants.ATTACK_COST;
     source.getOwner().getResources().getFuelResource().useFuel(cost);
-    //Returns as form "(Blank) is attacking (Blank) with units"
+    //Returns as form "(Attacker) is attacking (Defenders)'s (Region) with (units) units!"
     return Arrays.asList(source.getOwner().getName() + "'s " + source.getName(),
                          " is attacking ",
                          destination.getOwner().getName() + "'s " + destination.getName(), 

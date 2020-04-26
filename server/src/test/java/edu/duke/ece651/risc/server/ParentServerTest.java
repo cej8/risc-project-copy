@@ -61,7 +61,7 @@ public class ParentServerTest {
   }
 
   @Test
-  public void test_growUnits() {
+  public void test_endTurn() {
     ParentServer ps = new ParentServer();
     // ps.createBoard();
     ps.addPlayer("player1", null);
@@ -75,7 +75,7 @@ public class ParentServerTest {
     assertEquals(50, player2.getResources().getFuelResource().getFuel());
     assertEquals(30, player.getResources().getTechResource().getTech());
     assertEquals(4, b.getRegions().get(2).getUnits().getUnits().get(0));
-    ps.growUnits();
+    ps.endTurn();
     assertEquals(250, player2.getResources().getFuelResource().getFuel());
     assertEquals(280, player.getResources().getTechResource().getTech()); 
     assertEquals(5, b.getRegions().get(2).getUnits().getUnits().get(0));
@@ -95,7 +95,7 @@ public class ParentServerTest {
 System.out.println("Starting fuel: " + player.getResources().getFuelResource().getFuel());
     ps.setTurn(3);
    
-    ps.growUnits();
+    ps.endTurn();
     ps.applyPlague();
     
     // first plague
@@ -108,7 +108,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     assertEquals(plagueID, ps.getPlagueID());
     assertEquals(800,player.getResources().getFuelResource().getFuel());
     ps.setTurn(4);
-    ps.growUnits();
+    ps.endTurn();
     ps.applyPlague();
     // second plague
     assertEquals(plagueID, ps.getPlagueID());
@@ -118,7 +118,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
    
     plagueFuel = plaguePlayer.getResources().getFuelResource().getFuel();
     ps.setTurn(5);
-    ps.growUnits();
+    ps.endTurn();
     //assertEquals(1100,plagueFuel);
     System.out.println("PlagueID: " + ps.getPlagueID());
     System.out.println("Turn 5 fuel: " + plaguePlayer.getResources().getFuelResource().getFuel());
@@ -126,7 +126,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     ps.applyPlague();
     assertEquals(2300,player.getResources().getFuelResource().getFuel());
     ps.setTurn(6);
-    ps.growUnits();
+    ps.endTurn();
      System.out.println("PlagueID: " + ps.getPlagueID());
     System.out.println("Turn 6 fuel: " + plaguePlayer.getResources().getFuelResource().getFuel());
    
@@ -135,7 +135,7 @@ System.out.println("Starting fuel: " + player.getResources().getFuelResource().g
     ps.applyPlague();
     // new plague planet
     ps.setTurn(7);
-    ps.growUnits();
+    ps.endTurn();
     ps.applyPlague();
     assertEquals(3700,player.getResources().getFuelResource().getFuel());
     System.out.println("PlaugeID: " + ps.getPlagueID());
@@ -631,7 +631,7 @@ System.out.println(orderMap.keySet());
     ms.addParentServer(server);
     server.setMAX_PLAYERS(2);
     server.setMAX_MISSED(1);
-    server.setFOG_OF_WAR(false);
+    server.setFOG_OF_WAR(true);
     server.setSTART_WAIT_MINUTES(1.0);
     BoardGenerator genBoard = new BoardGenerator();
     genBoard.createBoard_legacy();
@@ -813,7 +813,7 @@ System.out.println(orderMap.keySet());
     //Both clients asked create placements...
     //Player 1 will place 3 on all
     //Need to set board/player for client placements
-    fakeClient.setBoard(board);
+    fakeClient.setBoard(server.getBoard());
     fakeClient.setPlayer(new HumanPlayer("Player 1"));
     String placements;
     List<OrderInterface> initialPlacements = new ArrayList<OrderInterface>();
@@ -1198,35 +1198,7 @@ System.out.println(orderMap.keySet());
     ms.addParentServer(server);
     server.setMAX_PLAYERS(3);
     server.setMAX_MISSED(3);
-
-    AbstractPlayer player1 = new HumanPlayer("Group A");
-    AbstractPlayer player2 = new HumanPlayer("Group B");
-    AbstractPlayer player3 = new HumanPlayer("Group C");
-    Region region1 = new Region(player1, new Unit(0));
-    region1.setName("A");
-    Region region2 = new Region(player2, new Unit(0));
-    region2.setName("B");
-    Region region3 = new Region(player3, new Unit(0));
-    region3.setName("C");
-    List<Region> adjRegion1 = new ArrayList<Region>();
-    adjRegion1.add(region2);
-    adjRegion1.add(region3);
-    region1.setAdjRegions(adjRegion1);
-    List<Region> adjRegion2 = new ArrayList<Region>();
-    adjRegion2.add(region1);
-    adjRegion2.add(region3);
-    region2.setAdjRegions(adjRegion2);
-    List<Region> adjRegion3 = new ArrayList<Region>();
-    adjRegion3.add(region1);
-    adjRegion3.add(region2);
-    region3.setAdjRegions(adjRegion3);
-    List<Region> regions = new ArrayList<Region>();
-    regions.add(region1);
-    regions.add(region2);
-    regions.add(region3);
-    Board boardNew = new Board(regions);
-    boardNew.initializeSpies(Arrays.asList("Player 1", "Player 2", "Player 3"));
-    //Above creates 3 regions in triangle
+    server.setFOG_OF_WAR(false);
 
     //Set max turn time to 10 seconds...
     server.setTURN_WAIT_MINUTES(10.0/60);
@@ -1311,6 +1283,9 @@ System.out.println(orderMap.keySet());
     cout.displayString(string.unpacker());
     confirmation = (ConfirmationMessage)(c1in.readObject());
 
+    //Give p1 resources for later
+    server.getChildren().get(0).getPlayer().setPlayerResource(new PlayerResources(100000,100000));
+
     //Player 2 join
     c2out.writeObject(new ConfirmationMessage(false));
     string = (StringMessage)(c2in.readObject());
@@ -1351,6 +1326,35 @@ System.out.println(orderMap.keySet());
     assertEquals("Player 3", player.getName());
 
     Thread.sleep(2000);
+
+    AbstractPlayer player1 = new HumanPlayer("Group A");
+    AbstractPlayer player2 = new HumanPlayer("Group B");
+    AbstractPlayer player3 = new HumanPlayer("Group C");
+    Region region1 = new Region(player1, new Unit(0));
+    region1.setName("A");
+    Region region2 = new Region(player2, new Unit(0));
+    region2.setName("B");
+    Region region3 = new Region(player3, new Unit(0));
+    region3.setName("C");
+    List<Region> adjRegion1 = new ArrayList<Region>();
+    adjRegion1.add(region2);
+    adjRegion1.add(region3);
+    region1.setAdjRegions(adjRegion1);
+    List<Region> adjRegion2 = new ArrayList<Region>();
+    adjRegion2.add(region1);
+    adjRegion2.add(region3);
+    region2.setAdjRegions(adjRegion2);
+    List<Region> adjRegion3 = new ArrayList<Region>();
+    adjRegion3.add(region1);
+    adjRegion3.add(region2);
+    region3.setAdjRegions(adjRegion3);
+    List<Region> regions = new ArrayList<Region>();
+    regions.add(region1);
+    regions.add(region2);
+    regions.add(region3);
+    Board boardNew = new Board(regions);
+    boardNew.initializeSpies(Arrays.asList("Player 1", "Player 2", "Player 3"));
+
     server.setBoard(boardNew);
 
     //Next firstCall of run()
@@ -1404,6 +1408,17 @@ System.out.println(orderMap.keySet());
     board = (Board)(c3in.readObject());
     cout.displayString("c3 board after take group c");
     cout.displayBoard(board);
+
+    board = server.getBoard();
+    cout.displayString("Server board");
+    cout.displayBoard(board);
+    List<Region> rList = board.getRegions();
+    assert(rList.get(0).getOwner().getName().equals(server.getChildren().get(0).getPlayer().getName()));
+    assert(rList.get(1).getOwner().getName().equals(server.getChildren().get(1).getPlayer().getName()));
+    assert(rList.get(2).getOwner().getName().equals(server.getChildren().get(2).getPlayer().getName()));
+    assert(rList.get(0).getOwner() == server.getChildren().get(0).getPlayer());
+    assert(rList.get(1).getOwner() == server.getChildren().get(1).getPlayer());
+    assert(rList.get(2).getOwner() == server.getChildren().get(2).getPlayer());
 
     //Now both players would be creating placement orders...
     //Create disconnected client object for generating order lists...
@@ -1518,7 +1533,6 @@ System.out.println(orderMap.keySet());
     //Now give player 1 100 units
     board = server.getBoard();
     board.getRegions().get(0).setUnits(new Unit(100));
-    board.getRegions().get(0).getOwner().setPlayerResource(new PlayerResources(100000,100000));
     server.setBoard(board);
 
     //Now input moves...
@@ -1621,15 +1635,6 @@ System.out.println(orderMap.keySet());
     string = (StringMessage)(c2in.readObject());
     cout.displayString("c2 order expected success");
     cout.displayString(string.unpacker());
-    
-    cout.displayString("P3 nothing");
-    p3move = "D\n";
-    fakeClient.setClientInput(getClientIn(p3move));
-    orders = orderhelper.createOrders();
-    c3out.writeObject(orders);
-    string = (StringMessage)(c3in.readObject());
-    cout.displayString("c3 order success");
-    cout.displayString(string.unpacker());
 
     //P1 attacks C with 99
     cout.displayString("P1 attacks c with 99");
@@ -1641,9 +1646,38 @@ System.out.println(orderMap.keySet());
     cout.displayString("c1 order expected success");
     cout.displayString(string.unpacker());
 
+    Map<String, List<OrderInterface>> omap = server.getOrderMap();
+    List<AbstractPlayer> aca = server.getAttackCombatAttackers();
+    AttackCombat ac = (AttackCombat) omap.get("AttackCombat").get(0);
+    List<Region> rListAC = server.getBoard().getRegions();
+    assert(ac.getSource().equals(rListAC.get(0)));
+    assert(ac.getDestination().equals(rListAC.get(2)));
+    assert(ac.getSource().getOwner().getName().equals(server.getChildren().get(0).getPlayer().getName()));
+    assert(aca.get(0).getName().equals(server.getChildren().get(0).getPlayer().getName()));
+    assert(ac.getSource().getOwner() == server.getChildren().get(0).getPlayer());
+    assert(aca.get(0) == server.getChildren().get(0).getPlayer());
+
+    cout.displayString("P3 nothing");
+    p3move = "D\n";
+    fakeClient.setClientInput(getClientIn(p3move));
+    orders = orderhelper.createOrders();
+    c3out.writeObject(orders);
+    string = (StringMessage)(c3in.readObject());
+    cout.displayString("c3 order success");
+    cout.displayString(string.unpacker());
+
     //Turn ends....
     cout.displayString("Parent now applies orders...");
     cout.displayString("C should taken by A");
+
+    Thread.sleep(1000);
+    rListAC = server.getBoard().getRegions();
+    cout.displayBoard(server.getBoard());
+    assert(rListAC.get(2).getOwner().getName().equals(server.getChildren().get(0).getPlayer().getName()));
+    assert(rListAC.get(2).getOwner() == server.getChildren().get(0).getPlayer());
+    assert(rListAC.get(0).getOwner().getName().equals(server.getChildren().get(0).getPlayer().getName()));
+    assert(rListAC.get(0).getOwner() == server.getChildren().get(0).getPlayer());
+
 
     //Start turn stuff
 
@@ -1674,6 +1708,9 @@ System.out.println(orderMap.keySet());
     board = (Board)(c1in.readObject());
     cout.displayString("c1 board");
     cout.displayBoard(board);
+
+    List<Region> rs = board.getRegions();
+    assert(rs.get(0).getOwner().getName().equals(rs.get(2).getOwner().getName()));
 
     string = (StringMessage)(c2in.readObject());
     cout.displayString("c2 turn message");
@@ -1972,7 +2009,7 @@ System.out.println(orderMap.keySet());
     assert(acc.getUnits().getUnits().get(0) == 2);
 
     ps.applyOrders();
-    ps.growUnits();
+    ps.endTurn();
     ps.setTurn(0);
     ps.getPlagueID();
 

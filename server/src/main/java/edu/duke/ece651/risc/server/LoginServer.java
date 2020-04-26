@@ -17,8 +17,6 @@ Maintains connection for current player but does not handle passing messages to 
 Used as value for seeing which players are connected within MasterServer.
 */
 
-
-
 public class LoginServer extends Thread{
   //MS that owns LS
   private MasterServer masterServer;
@@ -41,29 +39,31 @@ public class LoginServer extends Thread{
     this.activeGameID = -1;
   }
 
+  /* BEGIN ACCESSORS */
   public Connection getConnection(){
     return playerConnection;
-  }
-
-  //Helper method for testing
-  public void setUser(String user){
-    this.user = user;
   }
 
   public String getUser(){
     return user;
   }
-
-  //Helper for testing
-  public void setActiveGameID(int activeGameID){
-    this.activeGameID = activeGameID;
+  //Helper method for testing
+  public void setUser(String user){
+    this.user = user;
   }
 
   public int getActiveGameID(){
     return activeGameID;
   }
+  //Helper for testing
+  public void setActiveGameID(int activeGameID){
+    this.activeGameID = activeGameID;
+  }
+  /* END ACCESSORS */
 
-  //Should get through login
+  //Method for the login flow
+  //Prompts user if they have an account then for username/password (or two if registering)
+  //If fails any step returns to asking if they already have an account
   //Does not include encryption on messages
   //Does not obfuscate responses by matching length/message count
   public void loginProcess() throws IOException, ClassNotFoundException{

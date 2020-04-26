@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.*;
 
 // Class to validate if a move is allowed based on game rules
+// Must own both endpoints, have a path between them, have enough source units, not remove all source units,
+// have enough fuel, and source is not plagued
+// Also cannot move to the same region started from
 public class MoveValidator implements ValidatorInterface<MoveOrder> {
   private Board tempBoard;
   private AbstractPlayer player;

@@ -3,9 +3,9 @@ package edu.duke.ece651.risc.shared;
 import java.io.Serializable;
 import java.util.*;
 
-//import com.google.common.reflect.TypeToken.TypeSet;
 
-// Class to set number of units for players
+// Class that maintains units
+// Effectively list of 7 unit levels, with integer at entry being the number of that specific unit
 public class Unit implements Serializable {
   private List<Integer> units;
   private static Map<Integer, Integer> techToBonusMap;
@@ -137,7 +137,6 @@ public class Unit implements Serializable {
     units.set(tech + increase, units.get(tech + increase) + 1); // add one to numOfType you're upgrading
   }
 
-  // this.units[i]-subtrahend.units[i]
   public void subtractUnits(Unit subtrahend) {
     for (int i = 0; i < this.getUnits().size(); i++) {
       this.getUnits().set(i, this.getUnits().get(i) - subtrahend.getUnits().get(i));
@@ -149,22 +148,5 @@ public class Unit implements Serializable {
       this.getUnits().set(i, this.getUnits().get(i) + addend.getUnits().get(i));
     }
   }
-  // //returns set of unit types in this list of units
-  // public Set<String> getSetOfUnitTypes() {
-  // Set<String> set = new HashSet<String>();
-  // for (int i = 0; i < units.size(); i++){
-  // set.add(this.getUnitTypeFromTech(i));
-  // }
-  // return set;
-  // }
-  // //returns map of unit types to num of unit types
-  // public Map<String, Integer> getTypetoNumMap() {
-  // Map<String, Integer> unitNumTypeMap = new HashMap<String, Integer>();
-  // for (int i = 0; i < units.size(); i++){
-  // String key = techToTypeMap.get(i);
-  // unitNumTypeMap.put(key, units.get(i));
-  // }
-  // return unitNumTypeMap;
-  // }
 
 }

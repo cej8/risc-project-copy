@@ -5,6 +5,7 @@ import java.net.Socket;
 import edu.duke.ece651.risc.shared.Connection;
 import edu.duke.ece651.risc.shared.Constants;
 
+// Class to manage creation of connection to server
 public class ConnectionManager extends Thread {
    private Connection connection;
     private String address;
@@ -13,43 +14,47 @@ public class ConnectionManager extends Thread {
   public ConnectionManager(){
     connection = new Connection();
   }
-    public ConnectionManager(String address, int port){
-      //connection = new Connection();
-      this();
-      this.address = address;
-        this.port = port;
-    }
-    public Connection getConnection() {
-        return connection;
-    }
-    public void makeConnection(String address, int port) {
-        Socket socket;
-        try {
-            socket = new Socket(address, port);
-            makeConnection(socket);
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
 
-    public void makeConnection(Socket socket) {
-        try {
-            connection.setSocket(socket);
-            connection.getStreamsFromSocket();
-            socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
-            } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
-  public void connectGame(){
-          if(connection.getSocket() == null){
-            makeConnection(address,port);
-        }
-  
+  public ConnectionManager(String address, int port){
+    this();
+    this.address = address;
+    this.port = port;
   }
-    @Override
-    public void run(){
-      connectGame();
+
+  public Connection getConnection() {
+    return connection;
+  }
+  
+  public void makeConnection(String address, int port) {
+    Socket socket;
+    try {
+      socket = new Socket(address, port);
+      makeConnection(socket);
+    } catch (Exception e) {
+      e.printStackTrace(System.out);
     }
+  }
+
+  public void makeConnection(Socket socket) {
+    try {
+      connection.setSocket(socket);
+      connection.getStreamsFromSocket();
+      socket.setSoTimeout((int) (Constants.START_WAIT_MINUTES * 60 * 1000));
+    } catch (Exception e) {
+      e.printStackTrace(System.out);
+    }
+  }
+
+  public void connectGame(){
+    if(connection.getSocket() == null){
+      makeConnection(address,port);
+    }
+  }
+
+  @Override
+  public void run(){
+    connectGame();
+  }
+
 }
 

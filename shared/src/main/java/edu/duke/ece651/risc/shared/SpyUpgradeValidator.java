@@ -2,6 +2,9 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.List;
 
+// Validator for spy upgrades
+// Needs to ensure player owns region, has a level 0 unit present, will not remove only unit there,
+// and has enough technology
 public class SpyUpgradeValidator implements ValidatorInterface<SpyUpgradeOrder>{
   private Board tempBoard;
   private AbstractPlayer player;

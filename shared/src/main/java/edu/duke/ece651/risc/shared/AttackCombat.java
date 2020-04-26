@@ -2,10 +2,12 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.*;
 
+// This class handles the actual combat resolution
+// Uses internal units for attacker, uses Destination's units for defender
+// Upon winning Destination's owner set to Source's owner
+// To avoid A->B->C problem must externally contain Source's player before attacks occur
+// Repurposed code from doDestinationAction of AttackOrder
 public class AttackCombat extends SourceDestinationUnitOrder {
-  // this class handles the actual combat resolution when an attack is issued by a
-  // player
-  // Repurposed code from doDestinationAction of AttackOrder
 
   private static final long serialVersionUID = 21L;
 
@@ -15,11 +17,13 @@ public class AttackCombat extends SourceDestinationUnitOrder {
     this.units = attackingUnits;
   }
 
+  // Priority accessor
   @Override
   public int getPriority() {
     return Constants.ATTACK_COMBAT_PRIORITY;
   }
 
+  // Method for visibility
   @Override
   public List<Set<String>> getPlayersVisibleTo(){
     Set<String> playersDestination = new HashSet<String>();
@@ -28,25 +32,29 @@ public class AttackCombat extends SourceDestinationUnitOrder {
     for(Region adj : destination.getAdjRegions()){
       playersDestination.add(adj.getOwner().getName());
     }
-    //ensure attacker can always see
-    playersDestination.add(source.getOwner().getName());
-    //Source can only see attacking somewhere, destination can only see attack with something
+    //Attack only visible to those who can see destination
     return Arrays.asList(playersDestination, playersDestination, playersDestination);
   }
 
+  // Attacks take place as follows:
+  // While one side has units remaining the highest is picked from one and the lowest from the other
+  // Both will roll a D20 and add the unit bonus to their roll (see Unit)
+  // In ties defender wins
+  // User with higher unit starts with attacker, swaps each roll
   @Override
   public List<String> doAction() {
-    // set initial evaluation order
+    // Start with attacker using highest
     boolean attackerIsStronger = true;
     // Continue executing attack until one player has no more units left in region
     // or attack group
 
+    // Loop until one has 0 left
     while (!isWinner(source, destination, units)) {
       Integer aUnitType = 0;
       Integer dUnitType = 0;
       Region loseUnits = null;
 
-      // get types fo unit involved in each roll for bonus to be passed in
+      // get types of unit involved in each roll for bonus to be passed in
       // alternate betwwen highest bonus and lowest bonus
       if (attackerIsStronger) {
         aUnitType = getHighestBonus(units);
@@ -57,6 +65,7 @@ public class AttackCombat extends SourceDestinationUnitOrder {
         dUnitType = getHighestBonus(destination.getUnits());
         attackerIsStronger = true;
       }
+      // Perform roll
       loseUnits = rollHelper(source, destination, units.getBonusFromTech(aUnitType),
           destination.getUnits().getBonusFromTech(dUnitType));
 
@@ -76,7 +85,10 @@ public class AttackCombat extends SourceDestinationUnitOrder {
 
     }
 
-
+    //Get return string
+    //Broken into 3 to allow scanning for (defender) in ParentServer
+    //Must avoid destination/player names in case of conflict
+    //Return as (Player) (defender/attacker) retains/takes over region (destination name), (units) units survived!
     List<String> returnStrings = new ArrayList<String>();
 
     if (units.getTotalUnits() == 0) {

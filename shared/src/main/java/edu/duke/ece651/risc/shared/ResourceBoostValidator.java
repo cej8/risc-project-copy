@@ -1,6 +1,7 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.List;
+
 // Class validates that player own region, has enough tech, and has valid tech level to do action
 public class ResourceBoostValidator implements ValidatorInterface<ResourceBoost> {
     private Board tempBoard;
@@ -14,7 +15,7 @@ public class ResourceBoostValidator implements ValidatorInterface<ResourceBoost>
   public boolean validTechLevel(List<ResourceBoost> orders){
      //compare region level to max region level that player has unlocked
     //region level 2 is availabl at tech level 2
-    //region level 3 is availabel at tehc level 4
+    //region level 3 is availabel at tech level 4
     //region level is available at tech level 6
     for(ResourceBoost r: orders){
       Region tempDest = r.getDestination().getRegionByName(tempBoard, r.getDestination().getName());

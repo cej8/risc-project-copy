@@ -2,18 +2,21 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.*;
 
+// Abstract class for orders with source/destination and internal player
 public abstract class SourceDestinationPlayerOrder implements RegionPlayerOrder {
   private static final long serialVersionUID = 48L;
   protected Region source;
   protected Region destination;
   protected AbstractPlayer player;
 
+  /* BEGIN ACCESSORS */
   public void setDestination(Region destination){
     this.destination = destination;
   }
   public Region getDestination(){
     return destination;
   }
+  
   public void setSource(Region source){
     this.source = source;
   }
@@ -24,10 +27,10 @@ public abstract class SourceDestinationPlayerOrder implements RegionPlayerOrder 
   public void setPlayer(AbstractPlayer player){
     this.player = player;
   }
-  
   public AbstractPlayer getPlayer(){
     return player;
   }
+  /* END ACCESSORS*/
 
 
   @Override

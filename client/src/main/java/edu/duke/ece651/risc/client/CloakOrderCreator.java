@@ -3,6 +3,7 @@ import edu.duke.ece651.risc.shared.*;
 
 import java.util.List;
 
+// Creator for CloakOrder
 public class CloakOrderCreator extends OrderCreator {
   public CloakOrderCreator(ClientInterface c){
     this.client = c;

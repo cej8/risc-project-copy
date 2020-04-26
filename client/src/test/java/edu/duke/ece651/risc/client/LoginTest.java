@@ -57,7 +57,7 @@ public class LoginTest {
 
   @Test
   public void test_deadSocket() throws IOException{
-     System.out.println("Expect socketclosed or EOF");
+     System.out.println("Should do bad input twice then socketclosed or EOF");
      ArrayList<Object> objs = new ArrayList<Object>();
     //First connect success
     objs.add(new StringMessage("Success: connected"));

@@ -1,9 +1,8 @@
 package edu.duke.ece651.risc.client;
 import edu.duke.ece651.risc.shared.*;
-import java.util.List;
+import java.util.*;
 
-import edu.duke.ece651.risc.shared.OrderInterface;
-// Creates teleport order based on "teleport" keyword
+// Creator for TeleportOrder
 public class TeleportOrderCreator extends OrderCreator {
   public TeleportOrderCreator(ClientInterface c){
     this.client = c;
@@ -22,7 +21,6 @@ public class TeleportOrderCreator extends OrderCreator {
           break;
         }
       } catch (NumberFormatException ne) {
-        // ne.printStackTrace();
         client.getClientOutput().displayString("That was not an integer, please try again.");
       }
     }
@@ -32,4 +30,5 @@ public class TeleportOrderCreator extends OrderCreator {
   public void addToOrderList(List<OrderInterface> orderList) {
     teleportHelper(orderList, "teleport from", "teleport to");
   }
+
 }

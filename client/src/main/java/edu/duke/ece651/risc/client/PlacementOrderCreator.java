@@ -6,7 +6,7 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-
+// Creator for PlacmeentOrders
 public class PlacementOrderCreator extends OrderCreator {
   public PlacementOrderCreator(ClientInterface c){
     this.client = c;
@@ -22,17 +22,15 @@ public class PlacementOrderCreator extends OrderCreator {
         placementList.add(placementOrder);
         break;
       } catch (NumberFormatException ne) {
-        // ne.printStackTrace();
         client.getClientOutput().displayString("That was not an integer, please try again.");
       }
     }
-    // return placementList;
   }
+  
   public void createPlacements(List<OrderInterface>orderList) {
     // Prompt user for placements, create list of placementOrders, send to server
     int startUnits = Constants.UNIT_START_MULTIPLIER * client.getBoard().getNumRegionsOwned(client.getPlayer());
     client.getClientOutput().displayString("You are " + client.getPlayer().getName() + ", prepare to place " + startUnits + " units.");
-    // List<OrderInterface> placementList = new ArrayList<OrderInterface>();
     List<Region> regionList = client.getBoard().getRegions();
     Region placement;
     String regionName;
@@ -43,7 +41,6 @@ public class PlacementOrderCreator extends OrderCreator {
         placementOrderHelper(orderList, regionName, placement);
       }
     }
-    // return placementList;
   }
 
   @Override

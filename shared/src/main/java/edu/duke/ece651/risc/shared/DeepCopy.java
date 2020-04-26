@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.shared;
 
 import java.io.*;
 // Class to create deep copy of any object from input or output stream
+// Simply uses seralizability to create new object
 public class DeepCopy {
 
   static public Object deepCopy(Object obj) { 

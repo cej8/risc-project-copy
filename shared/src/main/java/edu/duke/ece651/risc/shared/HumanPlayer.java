@@ -2,7 +2,9 @@ package edu.duke.ece651.risc.shared;
 
 import java.net.*;
 import java.io.*;
+
 // Class to create a human player (client)
+// Effectively same as AbstractPlayer
 public class HumanPlayer extends AbstractPlayer {
   private static final long serialVersionUID = 6L;
   public HumanPlayer(){
@@ -16,7 +18,6 @@ public class HumanPlayer extends AbstractPlayer {
     this.name = name;
     maxTechLevel = new TechnologyLevel();
     this.playerResource = new PlayerResources(Constants.STARTING_FUEL_PRODUCTION, Constants.STARTING_TECH_PRODUCTION);
-
   }
   
 }
