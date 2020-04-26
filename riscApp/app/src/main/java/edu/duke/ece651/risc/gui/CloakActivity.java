@@ -1,19 +1,18 @@
 package edu.duke.ece651.risc.gui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +22,8 @@ import java.util.Set;
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
-import edu.duke.ece651.risc.shared.Spy;
 
-public class SpyUpgradeActivity extends AppCompatActivity {
+public class CloakActivity extends AppCompatActivity {
     List<Region> regions;
     String planetName;
     TextView name;
@@ -42,7 +40,7 @@ public class SpyUpgradeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_spy_upgrade);
+        setContentView(R.layout.activity_cloak);
         board = ParentActivity.getBoard();
         player = ParentActivity.getPlayer();
         regions = board.getRegions();
@@ -161,7 +159,7 @@ public class SpyUpgradeActivity extends AppCompatActivity {
         } else {
             Intent i = new Intent(this,DisplayMapActivity.class);
             i.putExtra("ATTACKTO", planetName);
-            i.putExtra("ORDER","spy upgrade");
+            i.putExtra("ORDER","cloak");
             startActivity(i);
         }
 

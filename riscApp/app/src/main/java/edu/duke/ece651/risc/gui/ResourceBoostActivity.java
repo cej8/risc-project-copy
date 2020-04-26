@@ -64,7 +64,6 @@ public class ResourceBoostActivity extends AppCompatActivity {
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
 
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
-        //planetDrawable.setAllUnitCircles();
         setSameOwnerPlanets();
     }
     // plague
@@ -109,13 +108,12 @@ public class ResourceBoostActivity extends AppCompatActivity {
         Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
             if (p != player) { //if not player's planet, set view to outline
-
                 for (Region r : board.getPlayerRegionSet(p)) {
-                    if (regionSet.contains(r)) {
+                    if (regionSet.contains(r)) { //if in player's invisible set of regions
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
                         planetDrawable.setUnitCircle(r);
                     }
-                    else{
+                    else{ //if not visible to player
                         regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
                     }
                 }
