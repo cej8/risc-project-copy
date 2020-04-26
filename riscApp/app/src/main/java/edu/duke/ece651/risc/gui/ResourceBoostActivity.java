@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
@@ -63,7 +64,7 @@ public class ResourceBoostActivity extends AppCompatActivity {
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
 
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
-        planetDrawable.setAllUnitCircles();
+        //planetDrawable.setAllUnitCircles();
         setSameOwnerPlanets();
     }
     // plague
@@ -104,22 +105,26 @@ public class ResourceBoostActivity extends AppCompatActivity {
     }
     //helper function for orders in which you can only select planets you own
     public void setSameOwnerPlanets(){
+        planetDrawable.setGreyOutlines();
+        Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
+            if (p != player) { //if not player's planet, set view to outline
 
-            if (!p.getName().equals(player.getName())) { //if not player's planet, set view to outline
-                if (p!=null){ //if owned by someone, set to their outline color and make button invisible
-                    for (Region r : board.getPlayerRegionSet(p)) {
+                for (Region r : board.getPlayerRegionSet(p)) {
+                    if (regionSet.contains(r)) {
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
-                        planetDrawable.setImageButtonsInvisible(p);
+                        planetDrawable.setUnitCircle(r);
+                    }
+                    else{
+                        regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
                     }
                 }
-                else{ //if player is null, set button invisible and set grey outline
-                    planetDrawable.setGreyOutlines();
-                    planetDrawable.setImageButtonsInvisible(p);
-                }
-            } else { //if player own's planet, set up visible planet
+                planetDrawable.setImageButtonsInvisible(p);
+            }
+            else { //if player own's planet, set up visible planet
                 for (Region r : board.getPlayerRegionSet(p)) {
                     planetDrawable.setPlanets();
+                    planetDrawable.setUnitCircle(r);
                     regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
                 }
             }
