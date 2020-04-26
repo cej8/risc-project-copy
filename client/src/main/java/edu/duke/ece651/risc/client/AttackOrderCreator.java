@@ -6,11 +6,12 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+// Creator for AttackCombat + AttackMove sister orders
 public class AttackOrderCreator extends OrderCreator{
-  // private Client client;
  public AttackOrderCreator(ClientInterface c){
     this.client=c;
   }
+
   public void attackHelper(List<OrderInterface> orderList, String sourceKeyWord, String destKeyWord) {
     Region source = promptForRegion(sourceKeyWord);
     Region destination = promptForRegion(destKeyWord);
@@ -27,7 +28,6 @@ public class AttackOrderCreator extends OrderCreator{
           }
         }
       } catch (NumberFormatException ne) {
-        // ne.printStackTrace();
         client.getClientOutput().displayString("That was not an integer, please try again.");
       }
     }
@@ -37,4 +37,5 @@ public class AttackOrderCreator extends OrderCreator{
   public void addToOrderList(List<OrderInterface> orderList) {
     attackHelper(orderList, "attack from", "attack");
   }
+
 }

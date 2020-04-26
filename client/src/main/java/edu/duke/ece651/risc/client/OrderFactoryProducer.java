@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.client;
 
+// Factory for all order types
 public class OrderFactoryProducer {
   public static OrderCreator getOrderCreator(String orderKey, ClientInterface c) {
     OrderCreator factory = null;
@@ -35,11 +36,10 @@ public class OrderFactoryProducer {
         factory = new SpyUpgradeOrderCreator(c);
         c.getClientOutput().displayString("You made a Spy Upgrade order, what else would you like to do?");
         break;
-         case "R":// resource boost
-           factory = new ResourceBoostCreator(c);
-         c.getClientOutput().displayString("You made a Upgrade resource order, what else would you like to do?");
+      case "R":// resource boost
+        factory = new ResourceBoostCreator(c);
+        c.getClientOutput().displayString("You made a Upgrade resource order, what else would you like to do?");
         break;
-
       case "V":// spy move
         factory = new SpyMoveOrderCreator(c);
         c.getClientOutput().displayString("You made a Spy Move order, what else would you like to do?");
@@ -54,4 +54,5 @@ public class OrderFactoryProducer {
     }
     return factory;
   }
+  
 }

@@ -6,6 +6,7 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+// Creator for MoveOrder types
 public class MoveOrderCreator extends OrderCreator {
   public MoveOrderCreator(ClientInterface c) {
     this.client = c;
@@ -25,7 +26,6 @@ public class MoveOrderCreator extends OrderCreator {
           break;
         }
       } catch (NumberFormatException ne) {
-        // ne.printStackTrace();
         client.getClientOutput().displayString("That was not an integer, please try again.");
       }
     }

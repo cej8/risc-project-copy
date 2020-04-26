@@ -6,6 +6,7 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+// Main order creator class, used to prompt/create orders
 public abstract class OrderCreator {
 
   protected ClientInterface client;
@@ -57,21 +58,7 @@ public abstract class OrderCreator {
         orderUnits.add(0); //adds a 0 to that index if none
       }
     }
-    // return getUnitListFromClient();
     return new Unit(orderUnits);
   }
-
-  // public Unit getUnitListFromClient() {
-  //   // stub for potential method to get a list right from the user
-  //   List<Integer> list = new ArrayList<Integer>();
-  //   list.add(0);
-  //   list.add(1);
-  //   list.add(2);
-  //   list.add(3);
-  //   list.add(0);
-  //   list.add(0);
-  //   list.add(0);
-  //   return new Unit(list);
-  // }
 
 }

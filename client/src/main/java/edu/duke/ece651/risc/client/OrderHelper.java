@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+
+// Class called from client to access order factory/creators
 public class OrderHelper {
   private ClientInterface client;
   public OrderHelper(ClientInterface c) {
@@ -14,13 +16,11 @@ public class OrderHelper {
 
   public boolean getOrderList(List<OrderInterface> orderList, String response) {
     response = response.toUpperCase();
-    //System.out.println("Response = " + response);
     if (response.equals("D")) {
       return false;
     }
     OrderCreator oc = OrderFactoryProducer.getOrderCreator(response, client);
     if (oc == null) { // if order entered was invalid, add nothing to list
-      // System.out.println("Order wasn't created");
       return true;
     }
     oc.addToOrderList(orderList);
@@ -35,11 +35,9 @@ public class OrderHelper {
     boolean orderSelect = true;
     while (orderSelect) {
       // prompt user
-
       client.getClientOutput().displayString("You are " + client.getPlayer().getName()
-
           + ", what would you like to do?\n (M)ove\n (A)ttack\n (U)nit Boost\n (T)ech Boost\n (R)esource Boost\n T(E)leport\n (C)loak\n Sp(Y) Upgrade\n Spy Mo(V)e\n Ra(I)d\n (D)one");
-
+      
       response = client.getClientInput().readInput();
       orderSelect = getOrderList(orderList, response);
     }

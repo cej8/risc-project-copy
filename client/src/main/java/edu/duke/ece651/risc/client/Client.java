@@ -7,21 +7,35 @@ import java.util.*;
 import java.io.*;
 import org.mindrot.jbcrypt.*;
 
+// Big Boy console client, mostly depricated but used for testing
+// GUI is a version of this broken into multiple files, otherwise
+// Very little handling has changed from V1 (just new creators for orders
+// and new FOW functionality)
+// As such I am not going to detail much new here...
+
 public class Client extends Thread implements ClientInterface {
+  // Socket/stream connections
   private Connection connection;
+  // Local board
   private Board board;
+  // boolean for still playing
   private boolean isPlaying = true;
+  // Interfaces for I/O (only text)
   private ClientInputInterface clientInput;
   private ClientOutputInterface clientOutput;
+  // Interal version of server's player object
   private HumanPlayer player;
+  // Connection information
   private String address;
   private int port;
 
+  //Local versions of constants
   private double TURN_WAIT_MINUTES = Constants.TURN_WAIT_MINUTES;
   private double START_WAIT_MINUTES = Constants.START_WAIT_MINUTES+.1;
   private double LOGIN_WAIT_MINUTES = Constants.LOGIN_WAIT_MINUTES;
   private boolean FOG_OF_WAR = Constants.FOG_OF_WAR;
 
+  // boolean for if it is first turn of a game
   private boolean firstCall = true;
 
   public Client() {
@@ -52,36 +66,21 @@ public class Client extends Thread implements ClientInterface {
     this.firstCall = firstCall;
   }
   
-  public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
-    this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
-  }
-  public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES){
-    this.START_WAIT_MINUTES = START_WAIT_MINUTES;
-  }
-  public void setLOGIN_WAIT_MINUTES(double LOGIN_WAIT_MINUTES){
-    this.LOGIN_WAIT_MINUTES = LOGIN_WAIT_MINUTES;
-  }
-
-  public void setFOG_OF_WAR(boolean FOG_OF_WAR){
-    this.FOG_OF_WAR = FOG_OF_WAR;
-  }
-
-  public void setBoard(Board board) {
-    this.board = board;
+  /* BEGIN ACCESSORS */
+  public Connection getConnection() {
+    return connection;
   }
 
   public Board getBoard() {
     return board;
   }
-
-  public Connection getConnection() {
-    return connection;
+  public void setBoard(Board board) {
+    this.board = board;
   }
 
   public ClientInputInterface getClientInput() {
     return clientInput;
   }
-
   public void setClientInput(ClientInputInterface clientInput) {
     this.clientInput.close();
     this.clientInput = clientInput;
@@ -91,13 +90,29 @@ public class Client extends Thread implements ClientInterface {
     return clientOutput;
   }
 
+  public HumanPlayer getPlayer() {
+    return this.player;
+  }
   public void setPlayer(HumanPlayer player) {
     this.player = player;
   }
 
-  public HumanPlayer getPlayer() {
-    return this.player;
+  public void setTURN_WAIT_MINUTES(double TURN_WAIT_MINUTES){
+    this.TURN_WAIT_MINUTES = TURN_WAIT_MINUTES;
   }
+
+  public void setSTART_WAIT_MINUTES(double START_WAIT_MINUTES){
+    this.START_WAIT_MINUTES = START_WAIT_MINUTES;
+  }
+
+  public void setLOGIN_WAIT_MINUTES(double LOGIN_WAIT_MINUTES){
+    this.LOGIN_WAIT_MINUTES = LOGIN_WAIT_MINUTES;
+  }
+
+  public void setFOG_OF_WAR(boolean FOG_OF_WAR){
+    this.FOG_OF_WAR = FOG_OF_WAR;
+  }
+  /* END ACCESSORS */
   
   public void setSocketTimeout(int timeout) throws SocketException {
     connection.getSocket().setSoTimeout(timeout);

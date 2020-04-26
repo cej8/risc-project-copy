@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+// Factory for DestinationUnitOrder type
 public class DestinationUnitOrderFactory extends AbstractOrderFactory{
   public static OrderInterface getOrder(String unitKeyWord, Region destination, Unit units){
     // OrderInterface order = null;
