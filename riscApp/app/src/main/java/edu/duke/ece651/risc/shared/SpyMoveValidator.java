@@ -1,7 +1,10 @@
 package edu.duke.ece651.risc.shared;
 
 import java.util.*;
+
 // Class validates if Spy move is valid
+// Needs to ensure there is a spy in the source region, a path exists to the final region,
+// And hasn't moved into enemy region this turn if will be
 public class SpyMoveValidator implements ValidatorInterface<SpyMoveOrder> {
 
   private Board tempBoard;
@@ -35,13 +38,14 @@ public class SpyMoveValidator implements ValidatorInterface<SpyMoveOrder> {
       }
     }
 
-    return false;    
+    return false;
   }
 
   private boolean isValidMove(SpyMoveOrder move){
     Region start = move.getSource().getRegionByName(tempBoard, move.getSource().getName());
     Region end = move.getDestination().getRegionByName(tempBoard, move.getDestination().getName());
     AbstractPlayer player = move.getPlayer();
+    SpyMoveOrder spyMoveCopy = new SpyMoveOrder(start, end, player);
     //There are no spies in region
     if(start.getSpies(player.getName()).size() == 0){
       return false;
@@ -60,7 +64,7 @@ public class SpyMoveValidator implements ValidatorInterface<SpyMoveOrder> {
       return false;
     }
     //Otherwise path exists and is legal, doAction()
-    move.doAction();
+    spyMoveCopy.doAction();
     return true;
   }
 
@@ -73,5 +77,5 @@ public class SpyMoveValidator implements ValidatorInterface<SpyMoveOrder> {
     }
     return true;
   }
-  
+
 }
