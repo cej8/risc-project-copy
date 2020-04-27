@@ -57,6 +57,9 @@ public class OrderActivity extends AppCompatActivity {
         String h = "Select planet to " + orderMessage + " from";
         orderHelper.setText(h);
         plagueDraw();
+        if (orderMessage.equals("spy move")) {
+            spyDraw();
+        }
     }
 
     @Override
@@ -73,7 +76,6 @@ public class OrderActivity extends AppCompatActivity {
         planetDrawable.setGreyOutlinesInvisible();
        Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
-            System.out.println("does " + p.getName() + " == " + player.getName() + ": " + (p.getName() == player.getName().toString()));
             if (!(p.getName().equals(player.getName()))) { //if not player's planet, set view to outline
                 Log.d("names not equal", p.getName() +" "+  player.getName());
                 for (Region r : board.getPlayerRegionSet(p)) {
@@ -97,7 +99,7 @@ public class OrderActivity extends AppCompatActivity {
                     Log.d("setting to drawable", r.getName());
                     planetDrawable.setUnitCircle(r);
                     regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
-                    regionImageButtonMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p));
+                    regionImageButtonMap.get(r).setBackgroundResource(planetDrawable.getPlayerNameToColorMap().get(p.getName()));
                 }
             }
         }
@@ -107,18 +109,25 @@ public class OrderActivity extends AppCompatActivity {
     public void attackFrom(View view){
         if (planetName == null){
                 helpText.setText("Please select a planet");
+        } else {
+            if (orderMessage.equals("raid")){
+                Intent intent = new Intent(this,RaidActivity.class);
+                intent.putExtra("PNAME",planetName);
+                intent.putExtra("ORDER",orderMessage);
+                startActivity(intent);
+
+            } else if (orderMessage.equals("spy move")){
+                Intent intent = new Intent(this,SpyMoveActivity.class);
+                intent.putExtra("PNAME",planetName);
+                intent.putExtra("ORDER",orderMessage);
+                startActivity(intent);
+
             } else {
-                if (orderMessage.equals("raid")){
-                    Intent intent = new Intent(this,RaidActivity.class);
-                    intent.putExtra("PNAME",planetName);
-                    intent.putExtra("ORDER",orderMessage);
-                    startActivity(intent);
-                } else {
-                    Intent i = new Intent(this, OrderActivityTwo.class);
-                    i.putExtra("PNAME", planetName);
-                    i.putExtra("ORDER", orderMessage);
-                    startActivity(i);
-                }
+                Intent i = new Intent(this, OrderActivityTwo.class);
+                i.putExtra("PNAME", planetName);
+                i.putExtra("ORDER", orderMessage);
+                startActivity(i);
+            }
         }
     }
 
@@ -141,6 +150,28 @@ public class OrderActivity extends AppCompatActivity {
             increment++;
         }
     }
+
+    public void spyDraw(){
+        int increment = 0;
+        Resources r = getResources();
+        Drawable[] layers = new Drawable[2];
+
+        for (Region region: regions){
+            if(region.getSpies(ParentActivity.getPlayer().getName()).size()>0){//if player has a spy on the region
+                layers[0] = getPlanetDrawable().get(increment);
+                layers[1] = r.getDrawable(R.drawable.spytransparent);
+                LayerDrawable layerDrawable = new LayerDrawable(layers);
+                ImageView imageView = getPlanetViews().get(increment);
+                TextView textView = getUnitCircles().get(increment);
+                textView.setVisibility(View.INVISIBLE);
+                imageView.setImageDrawable(layerDrawable);
+                break;
+            }
+            increment++;
+        }
+    }
+
+
     public List<Drawable> getPlanetDrawable(){
         List<Drawable> drawables = new ArrayList<Drawable>();
         Resources r = getResources();

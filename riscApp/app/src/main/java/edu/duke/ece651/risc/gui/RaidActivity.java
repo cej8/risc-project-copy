@@ -78,8 +78,9 @@ public class RaidActivity extends AppCompatActivity {
         source = board.getRegionByName(attackFrom);
         sourceView = regionImageViewMap.get(source);
 
+
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
-        planetDrawable.setAllUnitCircles();
+        planetDrawable.setUnitCircles(player);
         setDifferentOwnerPlanets();
     }
 
@@ -120,56 +121,46 @@ public class RaidActivity extends AppCompatActivity {
         return drawables;
     }
 
-    //helper function for orders in which you can only select planets you own
-    public void setSameOwnerPlanets(){
-        for (AbstractPlayer p : board.getPlayerList()) {
-
-            if (!p.getName().equals(player.getName())) { //if not player's planet, set view to outline
-                if (p!=null){ //if owned by someone, set to their outline color and make button invisible
-                    for (Region r : board.getPlayerRegionSet(p)) {
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
-                        planetDrawable.setImageButtonsInvisible(p);
-                    }
-                }
-            } else { //if player own's planet, set up visible planet
-                for (Region r : board.getPlayerRegionSet(p)) {
-                    if (r == source){ //if source planet
-                        Log.d("source", r.getName());
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p)); //set source to player color
-                        planetDrawable.setImageButtonInvisible(r); //can't click source
-                    }
-                    else { //
-                        planetDrawable.setPlanets();
-                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
-                    }
-                }
-            }
-        }
-        planetDrawable.setGreyOutlines();
-    }
 
     //helper function for orders in which you can only select planets you don't own
     public void setDifferentOwnerPlanets() {
+        planetDrawable.setGreyPlanets();
+        Set<String> names = new HashSet<String>(board.getPlayerStringList());
+        Set<Region> regionSet = board.getSetVisibleRegions(player);
         for (AbstractPlayer p : board.getPlayerList()) {
-
-            if (p.getName().equals(player.getName())) { //if player's own planet, set view to outline and make button invisible
+            if ((p.getName().equals(player.getName()))) { //if player's planet, set view to outline
                 for (Region r : board.getPlayerRegionSet(p)) {
-                    if (r == source){ //if source planet
-                        planetDrawable.setImageButtonsInvisible(p); //can't click
+                    if (r.getName().equals(source.getName())){ //if source planet
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p)); //set to player color
                     }
                     else { //not source, player owns, set to outline
                         regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
                     }
                 }
-            } else { //if player doesn't own planet
+                planetDrawable.setImageButtonsInvisible(p);
+            } else { //if player own's planet, set up visible planet
                 for (Region r : board.getPlayerRegionSet(p)) {
-                    planetDrawable.setPlanets(); //set planet & planet drawables
-                    regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
+                    if (regionSet.contains(r)) {
+                        //planetDrawable.setPlanets();
+                        if (!names.contains(r.getOwner().getName())) { //if list of player names doesn't include this player (e.g. Group A, Group B, etc).
+                            regionImageButtonMap.get(r).setBackgroundResource(R.drawable.grey_planet);
+                            Log.d("no owner", r.getName());
+                        }
+                        else {
+                            regionImageButtonMap.get(r).setBackgroundResource(planetDrawable.getPlayerToColorMap().get(p));
+                            Log.d("visible destination", r.getName());
+
+                        }
+                        regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
+                    }
+                    else {
+                        regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+                        regionImageButtonMap.get(r).setVisibility(View.INVISIBLE);
+                        Log.d("invisible destination", r.getName());
+                    }
                 }
             }
         }
-        planetDrawable.setGreyPlanets();
     }
 
 

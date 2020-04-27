@@ -154,18 +154,17 @@ public class SpyUpgradeActivity extends AppCompatActivity {
         }
     }
 
-    public void submitRegion(View view){//button click
-        if (planetName == null){
+    public void submitRegion(View view) {//button click
+        if (planetName == null) {
             helpText.setText("Select planet to create spy");
         } else {
-            Intent i = new Intent(this,DisplayMapActivity.class);
+            Intent i = new Intent(this, DisplayMapActivity.class);
             i.putExtra("ATTACKTO", planetName);
-            i.putExtra("ORDER","spy upgrade");
+            i.putExtra("ORDER", "spy upgrade");
             startActivity(i);
         }
-
-
     }
+
     public void setSelectionInvisible(Region r) {
         planetDrawable.setImageViewVisible(null);
         regionImageViewMap.get(r).setVisibility(View.INVISIBLE);

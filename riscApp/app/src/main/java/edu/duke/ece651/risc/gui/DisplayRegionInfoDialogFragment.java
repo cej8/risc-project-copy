@@ -102,7 +102,7 @@ public class DisplayRegionInfoDialogFragment extends DialogFragment {
             if (hasPlague){
                 plague.setText("Your planet has the plague, it will produce no resources");
             }
-            List<Spy> spyList = region.getSpies(owner);
+            List<Spy> spyList = region.getSpies(ParentActivity.getPlayer().getName());
             if (spyList.size() > 0){
                     spies.setText("Sshhh you have a spy on this planet");
             }
