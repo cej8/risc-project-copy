@@ -2,6 +2,9 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.List;
 
+// Validator for spy upgrades
+// Needs to ensure player owns region, has a level 0 unit present, will not remove only unit there,
+// and has enough technology
 public class SpyUpgradeValidator implements ValidatorInterface<SpyUpgradeOrder>{
   private Board tempBoard;
   private AbstractPlayer player;
@@ -24,6 +27,7 @@ public class SpyUpgradeValidator implements ValidatorInterface<SpyUpgradeOrder>{
   public boolean isValidOrder(SpyUpgradeOrder order){
     Region destination = order.getDestination().getRegionByName(tempBoard, order.getDestination().getName());
     Unit destUnits = destination.getUnits();
+    SpyUpgradeOrder suCopy= new SpyUpgradeOrder(destination);
     //Ensure player owns destination
     if(!destination.getOwner().getName().equals(player.getName())){
       return false;
@@ -41,7 +45,7 @@ public class SpyUpgradeValidator implements ValidatorInterface<SpyUpgradeOrder>{
       return false;
     }
     //If above true then commit
-    order.doAction();
+    suCopy.doAction();
     return true;
   }
 }

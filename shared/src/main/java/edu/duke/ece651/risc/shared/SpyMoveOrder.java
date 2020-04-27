@@ -4,6 +4,7 @@ import java.util.*;
 
 // Class to allow moving of spies between regions
 // Unlimited movement within player's own regions, 1 region per turn into enemy regions per turn
+// Move otherwise costless
 public class SpyMoveOrder extends SourceDestinationPlayerOrder {
   private static final long serialVersionUID = 46L; 
 
@@ -13,11 +14,13 @@ public class SpyMoveOrder extends SourceDestinationPlayerOrder {
     this.player = player;
   }
 
+  // Priority accessor
   @Override
   public int getPriority() {
     return Constants.SPYMOVE_PRIORITY;
   }
 
+  // visibilty
   @Override
   public List<Set<String>> getPlayersVisibleTo(){
     Set<String> players = new HashSet<String>();
@@ -26,6 +29,7 @@ public class SpyMoveOrder extends SourceDestinationPlayerOrder {
     return Arrays.asList(players);
   }
 
+  // removes spy from source list, adds to destination, sets flag to true if enters enemy region
   @Override
   public List<String> doAction() {
     //Get spy, remove from source
@@ -37,6 +41,7 @@ public class SpyMoveOrder extends SourceDestinationPlayerOrder {
     if(!player.getName().equals(destination.getOwner().getName())){
       spy.setHasMoved(true);
     }
+    // Message "(Player) moved a spy from (Region) to (Region)."
     return Arrays.asList( (player.getName() + " moved a spy from " + source.getName() + " to " + destination.getName() + ".") );
   }
 

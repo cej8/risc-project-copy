@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.*;
 
+// Class for orders with source/destination and internal units
 public abstract class SourceDestinationUnitOrder implements RegionUnitOrder {
   //this class contains relevant fields for order operations between two regions (source and destination)
   private static final long serialVersionUID = 8L; 
@@ -9,12 +10,14 @@ public abstract class SourceDestinationUnitOrder implements RegionUnitOrder {
   protected Region destination;
   protected Unit units;
 
+  /* BEGIN ACCESSORS */
   public void setDestination(Region destination){
     this.destination = destination;
   }
   public Region getDestination(){
     return destination;
   }
+
   public void setSource(Region source){
     this.source = source;
   }
@@ -25,10 +28,10 @@ public abstract class SourceDestinationUnitOrder implements RegionUnitOrder {
   public Unit getUnits(){
     return units;
   }
-
   public void setUnits(Unit units){
     this.units = units;
   }
+  /* END ACCESSORS */
 
   @Override
   abstract public int getPriority();

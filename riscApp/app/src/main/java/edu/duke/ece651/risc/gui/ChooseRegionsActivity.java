@@ -56,7 +56,8 @@ public class ChooseRegionsActivity extends AppCompatActivity {
         List<ImageButton> planetButtons = getPlanetButtons();
         List<TextView> planetPlayers = getPlanetPlayers();
         List<ImageView> planetSquares = getPlanetSquares();
-        PlanetDrawable planetDrawable = new PlanetDrawable(ParentActivity.getBoard(), planetButtons, planetSquares, planetPlayers);
+        List<ImageView> planetViews = getPlanetViews();
+        PlanetDrawable planetDrawable = new PlanetDrawable(ParentActivity.getBoard(), planetButtons, planetSquares, planetPlayers, planetViews);
         planetDrawable.setPlanetsNoUnits();
         planetDrawable.setGreyOutlines();
     }
@@ -248,4 +249,34 @@ public class ChooseRegionsActivity extends AppCompatActivity {
         planetButtons.add(planet11);
         return planetButtons;
     }
+
+    public List<ImageView> getPlanetViews(){
+        List<ImageView> views = new ArrayList<ImageView>();
+        ImageView p0I = findViewById(R.id.p0I);
+        ImageView p1I = findViewById(R.id.p1I);
+        ImageView p2I = findViewById(R.id.p2I);
+        ImageView p3I = findViewById(R.id.p3I);
+        ImageView p4I = findViewById(R.id.p4I);
+        ImageView p5I = findViewById(R.id.p5I);
+        ImageView p6I = findViewById(R.id.p6I);
+        ImageView p7I = findViewById(R.id.p7I);
+        ImageView p8I = findViewById(R.id.p8I);
+        ImageView p9I = findViewById(R.id.p9I);
+        ImageView p10I = findViewById(R.id.p10I);
+        ImageView p11I = findViewById(R.id.p11I);
+        views.add(p0I);
+        views.add(p1I);
+        views.add(p2I);
+        views.add(p3I);
+        views.add(p4I);
+        views.add(p5I);
+        views.add(p6I);
+        views.add(p7I);
+        views.add(p8I);
+        views.add(p9I);
+        views.add(p10I);
+        views.add(p11I);
+        return views;
+    }
+
 }

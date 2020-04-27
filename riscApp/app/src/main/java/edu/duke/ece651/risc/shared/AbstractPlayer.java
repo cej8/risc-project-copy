@@ -1,7 +1,10 @@
 package edu.duke.ece651.risc.shared;
 
 import java.io.*;
-// Abstract class to handle Player specifc methods 
+import java.util.HashMap;
+import java.util.Map;
+
+// Abstract class to handle Player specifc methods
 public abstract class AbstractPlayer implements Serializable, Comparable<AbstractPlayer>{
   protected String name;
   protected boolean isPlaying;
@@ -72,6 +75,8 @@ public abstract class AbstractPlayer implements Serializable, Comparable<Abstrac
     return comp.getName().equals(name);
 
   }
+
+
 
 }
 

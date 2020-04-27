@@ -8,6 +8,9 @@ import edu.duke.ece651.risc.shared.ConfirmationMessage;
 import edu.duke.ece651.risc.shared.IntegerMessage;
 import edu.duke.ece651.risc.shared.*;
 
+// Class to mirror server's LoginServer
+// Should handle the login + game selection flow
+
 public class ClientLogin {
   private Connection connection;
   private ClientInputInterface clientInput;
@@ -30,6 +33,8 @@ public class ClientLogin {
     }
     return firstCall;
   }
+
+  //Helper method
   public String receiveAndDisplayString() throws IOException, ClassNotFoundException{
     StringMessage message = (StringMessage) (connection.receiveObject());
     String str = message.unpacker();

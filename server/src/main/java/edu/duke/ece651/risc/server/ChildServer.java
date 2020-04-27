@@ -25,8 +25,6 @@ public class ChildServer implements Runnable{
 
   //Boolean for if firstCall of threads (placement)
   private boolean firstCall = true;
-  //Boolean for first turn with actual moves, if true then get server's PlacementBoard
-  private boolean firstTurnWithMoves = true;
   //Boolean for if connection has failed (playerConnection null/DC'ed)
   private boolean connectionFailed = false;
 
@@ -42,6 +40,9 @@ public class ChildServer implements Runnable{
   //Client's version of the board
   private Board clientBoard;
 
+  //boolean in case disconnect in middle of placements
+  private boolean pickedRegion = false;
+
   public ChildServer(AbstractPlayer player, ParentServer parent){
     this.player = player;
     this.parent = parent;
@@ -54,11 +55,10 @@ public class ChildServer implements Runnable{
   }
 
   
-  // Getters & setters
+  /* BEGIN ACCESSORS */
   public AbstractPlayer getPlayer(){
     return player;
   }
-
   public void setPlayer(AbstractPlayer player){
     this.player = player;
   }
@@ -85,53 +85,67 @@ public class ChildServer implements Runnable{
     return firstCall;
   }
 
-  public void setFinishedTurn(boolean finishedTurn){
-    this.finishedTurn = finishedTurn;
-  }
-
   public boolean getFinishedTurn(){
     return finishedTurn;
+  }
+  public void setFinishedTurn(boolean finishedTurn){
+    this.finishedTurn = finishedTurn;
   }
 
   public Board getClientBoard(){
     return clientBoard;
   }
-
   public void setClientBoard(Board clientBoard){
     this.clientBoard = clientBoard;
   }
+  /* END ACCESSORS */
 
+  // Method for first turn (select group + placements) call
   public void firstTurnCall() throws IOException, SocketException, ClassNotFoundException{
     ValidatorHelper validator;
     //Prompt for region --> placement
     //Prompt for region
-    while(true){
-      //Decrease timeout to maxTime-(current-start)
-      //Ensures will time out at maxTime after start
-      playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));
-      //Send board to player
-      playerConnection.sendObject(parent.getBoard());
-      //Attempt to get groupName string
-      StringMessage groupNameMessage = (StringMessage)(playerConnection.receiveObject());
-      String groupName = groupNameMessage.unpacker();
-      //Return failure if not assignable
-      if(!parent.assignGroups(groupName, player)){
-        playerConnection.sendObject(new StringMessage("Fail: Group invalid or already taken."));
-        continue;
-      }
-      break;
-    }
+    if(pickedRegion == false){
+	    while(true){
+	      //Decrease timeout to maxTime-(current-start)
+	      //Ensures will time out at maxTime after start
+	      playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));
+	      //Send board to player (use local unless FOW off)
+	      if(parent.getFOG_OF_WAR()){
+	        playerConnection.sendObject(clientBoard);
+	      }
+	      else{
+	        playerConnection.sendObject(parent.getBoard());
+	      }
+	      //Attempt to get groupName string
+	      StringMessage groupNameMessage = (StringMessage)(playerConnection.receiveObject());
+	      String groupName = groupNameMessage.unpacker();
+	      //Return failure if not assignable
+	      if(!parent.assignGroups(groupName, player)){
+	        playerConnection.sendObject(new StringMessage("Fail: Group already taken."));
+	        continue;
+	      }
+	  		pickedRegion = true;
+	      //Ensure local knows which region's are theirs
+	      clientBoard.replacePlayerByName(groupName, player);
+	      break;
+	    }
+	  }
     //Otherwise succeeds
     playerConnection.sendObject(new StringMessage("Success: Group assigned."));
     int startUnits = Constants.UNIT_START_MULTIPLIER*parent.getBoard().getNumRegionsOwned(player);
-    
     //Prompt for placement
     while(true){
       //Decrease timeout to maxTime-(current-start)
       //Ensures will time out at maxTime after start
       playerConnection.getSocket().setSoTimeout((int)(maxTime-(System.currentTimeMillis() - startTime)));     
-      //Send board
-      playerConnection.sendObject(parent.getBoard());
+      //Send board (use local unless FOW off)
+      if(parent.getFOG_OF_WAR()){
+        playerConnection.sendObject(clientBoard);
+      }
+      else{
+        playerConnection.sendObject(parent.getBoard());
+      }
       //Retrieve orders
       List<OrderInterface> placementOrders;//changed for new order interface
       placementOrders = (ArrayList<OrderInterface>)(playerConnection.receiveObject());
@@ -141,6 +155,9 @@ public class ChildServer implements Runnable{
         playerConnection.sendObject(new StringMessage("Fail: placements invalid"));
         continue;
       }
+
+      //Prevent first turn again
+      firstCall = false;
       
       //Convert to parent's board
       for(int i = 0; i < placementOrders.size(); i++){
@@ -175,15 +192,10 @@ public class ChildServer implements Runnable{
       playerConnection.getSocket().setSoTimeout((int)maxTime);
       if(firstCall){
         firstTurnCall();
-        //Prevent first turn again
-        firstCall = false;
       }
       else{
         //Get client's visible version of the board locally
         if(parent.getFOG_OF_WAR()){
-          if(firstTurnWithMoves){ //If first turn with moves then get placement board
-            clientBoard = (Board)DeepCopy.deepCopy(parent.getBoard());
-          }
           clientBoard.updateVisible(player.getName(), parent.getBoard());
         }
         else{
@@ -252,7 +264,6 @@ public class ChildServer implements Runnable{
             playerConnection.sendObject(new StringMessage("Success: spectate"));
           }
         }
-        firstTurnWithMoves = false;
       }
     }
     catch(Exception e){
@@ -296,6 +307,7 @@ public class ChildServer implements Runnable{
       System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed more than " + parent.getMAX_MISSED() + " turns, marking as dead");
       player.setPlaying(false);
     }
+    //If missed turn AND never did first turn then mark as dead (can't play) and disconnect
     if(missedTurns == 1 && firstCall == true){
       System.out.println(parent.getGameID() + " : (" + player.getName() + ") missed initial placements, marking as dead");
       player.setPlaying(false);

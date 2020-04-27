@@ -4,7 +4,7 @@ import edu.duke.ece651.risc.shared.*;
 import java.util.*;
 import java.io.*;
 
-
+// Class for displaying console version of the game, mainly testing/legacy at this point
 public class TextDisplay implements ClientOutputInterface {
 
   PrintWriter output;

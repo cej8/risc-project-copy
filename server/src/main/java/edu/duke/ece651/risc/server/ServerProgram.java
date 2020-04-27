@@ -2,6 +2,9 @@ package edu.duke.ece651.risc.server;
 
 import edu.duke.ece651.risc.shared.*;
 
+
+//Actual excutable program
+//Just calls MasterServer...
 public class ServerProgram {
 
   public static void main(String[] args){

@@ -1,6 +1,7 @@
 package edu.duke.ece651.risc.client;
 import edu.duke.ece651.risc.shared.*;
 
+// Factory for DestinationOrder type
 public class DestinationOrderFactory extends AbstractOrderFactory{
   public static OrderInterface getOrder(String unitKeyWord, Region destination){
     switch(unitKeyWord){

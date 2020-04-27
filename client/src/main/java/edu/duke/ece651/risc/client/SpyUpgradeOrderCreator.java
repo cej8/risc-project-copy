@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.client;
 import edu.duke.ece651.risc.shared.*;
 import java.util.List;
 
+// Creator for SpyUpgradeOrder
 public class SpyUpgradeOrderCreator extends OrderCreator {
   public SpyUpgradeOrderCreator(ClientInterface c){
     this.client = c;

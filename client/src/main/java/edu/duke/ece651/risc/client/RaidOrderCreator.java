@@ -2,6 +2,7 @@ package edu.duke.ece651.risc.client;
 import edu.duke.ece651.risc.shared.*;
 import java.util.List;
 
+// Creator for RaidOrder type
 public class RaidOrderCreator extends OrderCreator {
   public RaidOrderCreator(ClientInterface c){
     this.client = c;
@@ -18,4 +19,5 @@ public class RaidOrderCreator extends OrderCreator {
   public void addToOrderList(List<OrderInterface> orderList){
     raidHelper(orderList, "start a raid from", "raid");
   }
+  
 }

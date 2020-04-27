@@ -2,13 +2,14 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.*;
 
-// Class contains relevant fields for order operations with only a destination
+// Abstract class for orders on single region with units
 public abstract class DestinationUnitOrder implements RegionUnitOrder {
 
   private static final long serialVersionUID = 10L;
   protected Region destination;
   protected Unit units;
 
+  /* BEGIN ACCESSORS */
   public void setDestination(Region destination){
     this.destination = destination;
   }
@@ -19,6 +20,7 @@ public abstract class DestinationUnitOrder implements RegionUnitOrder {
   public Unit getUnits(){
     return units;
   }
+  /* END ACCESSORS */
 
   @Override
   abstract public int getPriority();

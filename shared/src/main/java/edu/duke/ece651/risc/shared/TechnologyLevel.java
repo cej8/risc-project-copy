@@ -2,8 +2,10 @@ package edu.duke.ece651.risc.shared;
 
 import java.io.Serializable;
 
+// Object that maintains technology level of player
+// Also maintains region levels and costs of upgrades
+// Also used to generate cost of TechBoost given current level
 public class TechnologyLevel implements Serializable {
-  //this class reprensents the maximum technolgy level of a player
   private static final long serialVersionUID = 14L;
   private int maxTechLevel;
   private int costToUpgrade;
@@ -14,15 +16,6 @@ public class TechnologyLevel implements Serializable {
     this.costToUpgrade = Constants.STARTING_UPGRADE_COST;
     this.maxRegionLevel = Constants.STARTING_REGION_LEVEL;
   }
-
-  public int getMaxTechLevel() {
-    return maxTechLevel;
-  }
-  public int getMaxRegionLevel() {
-    return maxRegionLevel;
-  }
-
-
   
   public TechnologyLevel(int maxTechLevel){
     this();
@@ -31,16 +24,28 @@ public class TechnologyLevel implements Serializable {
     }
   }
 
-  
+  /* BEGIN ACCESSORS */
+  public int getMaxTechLevel() {
+    return maxTechLevel;
+  }
+
+  public int getCostToUpgrade() {
+    return costToUpgrade;
+  }
+
+  public int getMaxRegionLevel() {
+    return maxRegionLevel;
+  }
+  /* END ACCESSORS */
+
+  // Helper to increase tech level/cost
   public void upgradeLevel(){
     maxTechLevel++;
     costToUpgrade += 25 * (maxTechLevel-1);
     setRegionUnlock();
   }
 
-public int getCostToUpgrade() {
-	return costToUpgrade;
-}
+  // Helper to increase regionlevel/gate unlocks
   private void setRegionUnlock(){
     //upgrade region level on even tech levels
     if(maxRegionLevel==4){
@@ -49,7 +54,6 @@ public int getCostToUpgrade() {
     if(maxTechLevel%2==0){
       this.maxRegionLevel++;
     }
-   
   }
 
 }

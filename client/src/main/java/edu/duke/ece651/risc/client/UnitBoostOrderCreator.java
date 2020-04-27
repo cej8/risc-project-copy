@@ -6,10 +6,10 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+// Creator for UnitBoostOrder
 public class UnitBoostOrderCreator extends OrderCreator {
   public UnitBoostOrderCreator(ClientInterface c) {
     this.client = c;
-
   }
 
   public void upgradeHelper(List<OrderInterface> orderList, String destKeyWord) {
@@ -24,7 +24,6 @@ public class UnitBoostOrderCreator extends OrderCreator {
           break;
         }
       } catch (NumberFormatException ne) {
-        // ne.printStackTrace();
         client.getClientOutput().displayString("That was not an integer, please try again.");
       }
     }

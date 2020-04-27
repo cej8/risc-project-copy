@@ -2,16 +2,19 @@ package edu.duke.ece651.risc.shared;
 
 import java.util.*;
 
+// Abstract class for orders on single region without any extra requirements
 public abstract class DestinationOrder implements RegionOrder {
   private static final long serialVersionUID = 40L;
   protected Region destination;
 
+  /* BEGIN ACCESSORS */
   public void setDestination(Region destination){
     this.destination = destination;
   }
   public Region getDestination(){
     return destination;
   }
+  /* END ACCESSORS */
 
   @Override
   abstract public int getPriority();

@@ -6,10 +6,10 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
-
+// Creator for TechBoostOrder
 public class TechBoostOrderCreator extends OrderCreator{
-  //  private Client client;
   PlayerOrderFactory factory;
+
   public TechBoostOrderCreator(ClientInterface c){
     this.client=c;
     factory = new PlayerOrderFactory();
@@ -29,4 +29,5 @@ public class TechBoostOrderCreator extends OrderCreator{
   public void addToOrderList(List<OrderInterface> orderList) {
     techBoostHelper(orderList);	
   }
+  
 }

@@ -81,6 +81,72 @@ public class PlanetDrawable {
         planetViews = views;
     }
 
+    //setNotVisibleRegionsInvisible
+
+    public void setInvisibleRegionsInvisible(AbstractPlayer player) {
+        Set<Region> set = board.getSetVisibleRegions(player); //get all visible regions to player
+        for (Region r : board.getRegions()) {
+            if (!set.contains(r)) { //if not visible to player
+                getRegionToPlanetViewMap().get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+                getRegionToButtonMap().get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+                //setImageButtonInvisible(r);
+                Log.d("not visible", r.getName() + " ("+ r.getOwner().getName()+ ")");
+            } else { //if player own's planet, set up visible planet
+                Log.d("visible", r.getName() + " ("+ r.getOwner().getName()+ ")");
+                getRegionToPlanetViewMap().get(r).setBackgroundResource(getRegionToPlanetDrawableMap().get(r));//.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+                setUnitCircle(r);
+            }
+        }
+
+    }
+
+    //set units and planets for a particular player
+    public void setPlanets(AbstractPlayer p) {
+        this.setPlanetsNoUnits();
+        // Set<Region> regionSet = board.getPlayerRegionSet(p);
+        Set<Region> regionSet = board.getSetVisibleRegions(p);
+        Log.d("inside setPlanets", "getRegionSetByName for " + p.getName());
+        //this.setUnitCircles(regionSet);
+        setInvisibleRegionsInvisible(p);
+    }
+
+    //set planets and units
+    public void setPlanets() {
+        this.setPlanetsNoUnits();
+        this.setAllUnitCircles();
+    }
+
+    //set all regions to display units
+    public void setAllUnitCircles() {
+        Set<Region> regionSet = new HashSet<Region>(board.getRegions());
+        this.setUnitCircles(regionSet);
+    }
+
+    //set a set of regions to display unit
+    public void setUnitCircles(AbstractPlayer p){
+        Set<Region> regionSet = board.getSetVisibleRegions(p); //get all visible regions to player
+        Map<Region, TextView> regionToCircleMap = getRegionToCircleMap();
+        for (Region r : board.getRegions()) {
+            if (regionSet.contains(r)) {
+                regionToCircleMap.get(r).setText(Integer.toString(r.getUnits().getTotalUnits()));
+            }
+        }
+    }
+    //set a set of regions to display unit
+    public void setUnitCircle(Region region){
+        Map<Region, TextView> regionToCircleMap = getRegionToCircleMap();
+        regionToCircleMap.get(region).setText(Integer.toString(region.getUnits().getTotalUnits()));
+    }
+
+    //set a set of regions to display unit
+    public void setUnitCircles(Set<Region> regionSet){
+        Map<Region, TextView> regionToCircleMap = getRegionToCircleMap();
+        for (Region r : board.getRegions()) {
+            if (!regionSet.contains(r)) {
+                regionToCircleMap.get(r).setText(Integer.toString(r.getUnits().getTotalUnits()));
+            }
+        }
+    }
     //set planets without units
     public void setPlanetsNoUnits() {
         for (AbstractPlayer p : players){
@@ -90,19 +156,31 @@ public class PlanetDrawable {
 
 //set unowned planets grey
     public void setGreyPlanets(){
+        Set<String> names = new HashSet<String>(board.getPlayerStringList());
         for (Region r : board.getRegions()) {
-            if (r.getOwner() == null) {
-                getRegionToButtonMap().get(r).setBackgroundResource(R.drawable.grey_planet);
+            if (!names.contains(r.getOwner().getName())) { //if list of player names doesn't include this player (e.g. Group A, Group B, etc).
                 getRegionToPlanetViewMap().get(r).setBackgroundResource(getRegionToPlanetDrawableMap().get(r));
-
+                getRegionToButtonMap().get(r).setBackgroundResource(R.drawable.grey_planet);
+                getRegionToButtonMap().get(r).setVisibility(View.VISIBLE);
+                Log.d("grey planet", r.getName());
             }
         }
     }
 
     //set planets not owned by player to grey outline and remove button
     public void setGreyOutlines(){
+        Set<String> names = new HashSet<String>(board.getPlayerStringList());
         for (Region r : board.getRegions()) {
-            if (r.getOwner() == null) {
+            if (!names.contains(r.getOwner().getName())) {
+                getRegionToPlanetViewMap().get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+            }
+        }
+    }
+
+    public void setGreyOutlinesInvisible(){
+        Set<String> names = new HashSet<String>(board.getPlayerStringList());
+        for (Region r : board.getRegions()) {
+            if (!names.contains(r.getOwner().getName())) {
                 getRegionToPlanetViewMap().get(r).setBackgroundResource(R.drawable.grey_planet_outline);
                 getRegionToButtonMap().get(r).setVisibility(View.INVISIBLE);
             }
@@ -129,28 +207,6 @@ public void setSpyImage(Region r) {
     }
 
 
-
-    //set planets and units
-    public void setPlanets() {
-        this.setPlanetsNoUnits();
-        this.setAllUnitCircles();
-    }
-
-    //set all regions to display units
-    public void setAllUnitCircles() {
-        Set<Region> regionSet = new HashSet<Region>(board.getRegions());
-        this.setUnitCircles(regionSet);
-    }
-
-    //set a set of regions to display unit
-    public void setUnitCircles(Set<Region> regionSet){
-        Map<Region, TextView> regionToCircleMap = getRegionToCircleMap();
-        for (Region r : board.getRegions()) {
-            if (regionSet.contains(r)) {
-                regionToCircleMap.get(r).setText(Integer.toString(r.getUnits().getTotalUnits()));
-            }
-        }
-    }
 
     public void setPlayerColors() {
            for (int i = 0; i < players.size(); i++) {
@@ -203,6 +259,17 @@ public void setSpyImage(Region r) {
             playerToOutlineMap.put(players.get(i), planetDrawables.get(i));
         }
         return playerToOutlineMap;
+    }
+
+    //player to colored sphere
+    public  Map<String, Integer> getPlayerNameToColorMap(){
+        List<AbstractPlayer> players = board.getPlayerList();
+        List<Integer> planetDrawables = getColorDrawables();
+        Map<String, Integer> playerToColorMap = new HashMap<String, Integer>();
+        for (int i = 0; i < players.size(); i++){
+            playerToColorMap.put(players.get(i).getName(), planetDrawables.get(i));
+        }
+        return playerToColorMap;
     }
 
     //player to colored sphere
