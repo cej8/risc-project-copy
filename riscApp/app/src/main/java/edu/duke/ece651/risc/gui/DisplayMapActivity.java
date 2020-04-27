@@ -48,6 +48,8 @@ import edu.duke.ece651.risc.shared.Region;
 import edu.duke.ece651.risc.shared.ResourceBoost;
 import edu.duke.ece651.risc.shared.ResourceBoostValidator;
 import edu.duke.ece651.risc.shared.Spy;
+import edu.duke.ece651.risc.shared.SpyMoveOrder;
+import edu.duke.ece651.risc.shared.SpyMoveValidator;
 import edu.duke.ece651.risc.shared.SpyUpgradeOrder;
 import edu.duke.ece651.risc.shared.SpyUpgradeValidator;
 import edu.duke.ece651.risc.shared.TeleportOrder;
@@ -148,11 +150,7 @@ public class DisplayMapActivity extends AppCompatActivity {
             }
             increment++;
         }
-
-
     }
-
-
 
 
     public void plagueDraw(){
@@ -319,6 +317,19 @@ public class DisplayMapActivity extends AppCompatActivity {
                 }
                 else{
                     invalidFlag="spy upgrade";
+                }
+            }
+            else if (order.equals("spy move")){
+                SpyMoveOrder spyMoveOrder = new SpyMoveOrder(source, destination, player);
+                List<SpyMoveOrder>s= new ArrayList<SpyMoveOrder>();
+                s.add(spyMoveOrder);
+                validator= new SpyMoveValidator(validationPlayerCopy,validationTempBoard);
+                if(validator.validateOrders(s)) {//if order is valid, add to list to be sent
+                    parentActivity.setOrders(spyMoveOrder);
+                    spyMoveOrder.doAction();
+                }
+                else{
+                    invalidFlag="spy move";
                 }
             }
             else if (order.equals("cloak")){

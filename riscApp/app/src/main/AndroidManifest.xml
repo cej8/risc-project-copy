@@ -13,10 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RaidActivity"
+        <activity android:name=".SpyMoveDestinationActivity"></activity>
+        <activity android:name=".SpyMoveActivity" />
+        <activity
+            android:name=".RaidActivity"
             android:screenOrientation="landscape"
-            tools:ignore="LockedOrientationActivity"></activity>
-        <activity android:name=".SpyUpgradeActivity"></activity>
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".SpyUpgradeActivity" />
         <activity android:name=".ResourceBoostActivity" />
         <activity android:name=".RepromptRegionsActivity" />
         <activity android:name=".SpectateActivity" />
@@ -64,23 +67,23 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".JoinGameActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".NewGameActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".GameTypeActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".RegisterActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ConfirmLoginActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             tools:ignore="LockedOrientationActivity" />
         <activity android:name=".TechBoostActivity" />
         <activity
