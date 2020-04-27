@@ -45,6 +45,7 @@ public class SpyMoveValidator implements ValidatorInterface<SpyMoveOrder> {
     Region start = move.getSource().getRegionByName(tempBoard, move.getSource().getName());
     Region end = move.getDestination().getRegionByName(tempBoard, move.getDestination().getName());
     AbstractPlayer player = move.getPlayer();
+    SpyMoveOrder spyMoveCopy = new SpyMoveOrder(start, end, player);
     //There are no spies in region
     if(start.getSpies(player.getName()).size() == 0){
       return false;
@@ -63,7 +64,7 @@ public class SpyMoveValidator implements ValidatorInterface<SpyMoveOrder> {
       return false;
     }
     //Otherwise path exists and is legal, doAction()
-    move.doAction();
+    spyMoveCopy.doAction();
     return true;
   }
 

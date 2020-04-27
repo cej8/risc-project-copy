@@ -25,6 +25,7 @@ public class CloakValidator implements ValidatorInterface<CloakOrder>{
 
   public boolean isValidOrder(CloakOrder order){
     Region destination = order.getDestination().getRegionByName(tempBoard, order.getDestination().getName());
+    CloakOrder cloakCopy = new CloakOrder(destination);
     //Ensure player owns destination
     if(!destination.getOwner().getName().equals(player.getName())){
       return false;
@@ -38,7 +39,7 @@ public class CloakValidator implements ValidatorInterface<CloakOrder>{
       return false;
     }
     //If above true then commit
-    order.doAction();
+    cloakCopy.doAction();
     return true;
   }
 }
