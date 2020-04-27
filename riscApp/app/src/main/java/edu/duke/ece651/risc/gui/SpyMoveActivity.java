@@ -92,7 +92,7 @@ public class SpyMoveActivity extends AppCompatActivity {
                 TextView textView = getUnitCircles().get(increment);
                 textView.setVisibility(View.INVISIBLE);
                 imageView.setImageDrawable(layerDrawable);
-                break;
+
             }
             increment++;
         }

@@ -83,7 +83,7 @@ public class SpyUpgradeActivity extends AppCompatActivity {
                 TextView textView = getUnitCircles().get(increment);
                 textView.setVisibility(View.INVISIBLE);
                 imageView.setImageDrawable(layerDrawable);
-                break;
+
             }
             increment++;
         }
