@@ -1,5 +1,6 @@
 package edu.duke.ece651.risc.gui;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,42 +27,40 @@ import edu.duke.ece651.risc.shared.AbstractPlayer;
 import edu.duke.ece651.risc.shared.Board;
 import edu.duke.ece651.risc.shared.Region;
 
-public class OrderActivity extends AppCompatActivity {
+public class SpyMoveActivity extends AppCompatActivity {
     List<Region> regions;
     String planetName;
     TextView name;
     TextView owner;
     TextView numUnits;
     TextView helpText;
-    TextView orderHelper;
-    String orderMessage;
+    TextView regionLevel;
     Board board;
-    AbstractPlayer player;
     PlanetDrawable planetDrawable;
     Map<Region, ImageView> regionImageViewMap;
+    AbstractPlayer player;
     Map<Region, ImageButton> regionImageButtonMap;
+    List<Region> myPlanets;
+    String spyFrom;
+    TextView orderHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attack);
+        setContentView(R.layout.activity_spy_move);
         board = ParentActivity.getBoard();
         player = ParentActivity.getPlayer();
         regions = board.getRegions();
         name = findViewById(R.id.displayPame);
         owner = findViewById(R.id.displayOwner);
         numUnits = findViewById(R.id.displayUnits);
-        helpText = findViewById(R.id.attackHelp);
+        helpText = findViewById(R.id.spyHelp);
         orderHelper = findViewById(R.id.orderHelper);
         Intent i = getIntent();
-        orderMessage =  i.getStringExtra("ORDER");
-        Log.d("Order Message", orderMessage);
-        String h = "Select planet to " + orderMessage + " from";
+        String h = "Select planet \nfrom which\n to move a spy";
         orderHelper.setText(h);
         plagueDraw();
-        if (orderMessage.equals("spy move")) {
-            spyDraw();
-        }
+        spyDraw();
     }
 
     @Override
@@ -68,70 +69,38 @@ public class OrderActivity extends AppCompatActivity {
         List<ImageButton> planetButtons = getPlanetButtons();
         List<TextView> planetPlayers = getPlanetPlayers();
         List<TextView> unitCircles = getUnitCircles();
-        List<ImageView> playerColors = getPlayerColors();
+        List<ImageView> planetSquares = getPlanetSquares();
         List<ImageView> planetViews = getPlanetViews();
-        planetDrawable = new PlanetDrawable(board, planetButtons, playerColors, planetPlayers, unitCircles, planetViews);
+        planetDrawable = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         regionImageViewMap = planetDrawable.getRegionToPlanetViewMap();
+
         regionImageButtonMap = planetDrawable.getRegionToButtonMap();
-        planetDrawable.setGreyOutlinesInvisible();
-       Set<Region> regionSet = board.getSetVisibleRegions(player);
-        for (AbstractPlayer p : board.getPlayerList()) {
-            if (!(p.getName().equals(player.getName()))) { //if not player's planet, set view to outline
-                Log.d("names not equal", p.getName() +" "+  player.getName());
-                for (Region r : board.getPlayerRegionSet(p)) {
-                         if (regionSet.contains(r)) {
-                            regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(p));
-                            planetDrawable.setUnitCircle(r);
-                            Log.d("setting to outline", r.getName());
-                        }
-                        else{
-                            regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
-                             Log.d("setting to grey", r.getName());
-                         }
-                    }
-                        planetDrawable.setImageButtonsInvisible(p);
-                    }
-            else { //if player own's planet, set up visible planet
-                Log.d("names equal", p.getName() +" "+  player.getName());
-                for (Region r : board.getPlayerRegionSet(p)) {
-                    Log.d("setting to drawable", r.getName());
-                    planetDrawable.setPlanets();
-                    Log.d("setting to drawable", r.getName());
-                    planetDrawable.setUnitCircle(r);
-                    regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
-                    regionImageButtonMap.get(r).setBackgroundResource(planetDrawable.getPlayerNameToColorMap().get(p.getName()));
-                }
+        setPlanets();
+    }
+    // show existing spies
+    public void spyDraw(){
+        int increment = 0;
+        Resources r = getResources();
+        Drawable[] layers = new Drawable[2];
+
+        for (Region region: regions){
+            if(region.getSpies(ParentActivity.getPlayer().getName()).size()>0){//if player has a spy on the region
+                layers[0] = getPlanetDrawable().get(increment);
+                layers[1] = r.getDrawable(R.drawable.spytransparent);
+                LayerDrawable layerDrawable = new LayerDrawable(layers);
+                ImageView imageView = getPlanetViews().get(increment);
+                TextView textView = getUnitCircles().get(increment);
+                textView.setVisibility(View.INVISIBLE);
+                imageView.setImageDrawable(layerDrawable);
+
             }
+            increment++;
         }
     }
 
 
-    public void attackFrom(View view){
-        if (planetName == null){
-                helpText.setText("Please select a planet");
-        } else {
-            if (orderMessage.equals("raid")){
-                Intent intent = new Intent(this,RaidActivity.class);
-                intent.putExtra("PNAME",planetName);
-                intent.putExtra("ORDER",orderMessage);
-                startActivity(intent);
 
-            } else if (orderMessage.equals("spy move")){
-                Intent intent = new Intent(this,SpyMoveActivity.class);
-                intent.putExtra("PNAME",planetName);
-                intent.putExtra("ORDER",orderMessage);
-                startActivity(intent);
-
-            } else {
-                Intent i = new Intent(this, OrderActivityTwo.class);
-                i.putExtra("PNAME", planetName);
-                i.putExtra("ORDER", orderMessage);
-                startActivity(i);
-            }
-        }
-    }
-
-    // Plague
+    // plague
     public void plagueDraw(){
         int increment = 0;
         Resources r = getResources();
@@ -150,28 +119,6 @@ public class OrderActivity extends AppCompatActivity {
             increment++;
         }
     }
-
-    public void spyDraw(){
-        int increment = 0;
-        Resources r = getResources();
-        Drawable[] layers = new Drawable[2];
-
-        for (Region region: regions){
-            if(region.getSpies(ParentActivity.getPlayer().getName()).size()>0){//if player has a spy on the region
-                layers[0] = getPlanetDrawable().get(increment);
-                layers[1] = r.getDrawable(R.drawable.spytransparent);
-                LayerDrawable layerDrawable = new LayerDrawable(layers);
-                ImageView imageView = getPlanetViews().get(increment);
-                TextView textView = getUnitCircles().get(increment);
-                textView.setVisibility(View.INVISIBLE);
-                imageView.setImageDrawable(layerDrawable);
-                break;
-            }
-            increment++;
-        }
-    }
-
-
     public List<Drawable> getPlanetDrawable(){
         List<Drawable> drawables = new ArrayList<Drawable>();
         Resources r = getResources();
@@ -189,7 +136,52 @@ public class OrderActivity extends AppCompatActivity {
         drawables.add(r.getDrawable(R.drawable.p12nb));
         return drawables;
     }
+    //helper function for orders in which you can only select planets you own
+    public void setPlanets() {
+        planetDrawable.setGreyPlanets();
+        Set<String> names = new HashSet<String>(board.getPlayerStringList());
+        Set<Region> regionSet = board.getSetVisibleRegions(player);
+        planetDrawable.setUnitCircles(player);
+        for (Region r : board.getRegions()) {
+            if (regionSet.contains(r)) { //if visible
+                Log.d("num spies " + r.getName(), String.valueOf(r.getSpies(r.getOwner().getName()).size()));
+                if(r.getSpies(ParentActivity.getPlayer().getName()).size()>0){//if player has a spy on the region
+                    if (!names.contains(r.getOwner().getName())) { //if no owner).
+                        regionImageButtonMap.get(r).setBackgroundResource(R.drawable.grey_planet);
+                        Log.d("no owner, spies", r.getName());
+                    } else { //if owner
+                        regionImageButtonMap.get(r).setBackgroundResource(planetDrawable.getPlayerNameToColorMap().get(r.getOwner().getName()));
+                        Log.d("visible destination", r.getName());
+                        Log.d("spies", r.getOwner().getName());
+                    }
+                    regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getRegionToPlanetDrawableMap().get(r));
+                    regionImageButtonMap.get(r).setVisibility(View.VISIBLE);
+                } else {//if no spies (but visible)
+                    regionImageViewMap.get(r).setBackgroundResource(planetDrawable.getPlayerToOutlineMap().get(r.getOwner()));
+                    regionImageButtonMap.get(r).setVisibility(View.INVISIBLE);
+                    Log.d("no spies", r.getOwner().getName());
+                    Log.d("invisible destination", r.getName());
+                }
+            }
+            else { //(if not visible)
+                regionImageViewMap.get(r).setBackgroundResource(R.drawable.grey_planet_outline);
+                regionImageButtonMap.get(r).setVisibility(View.INVISIBLE);
+                Log.d("invisible destination", r.getName());
+            }
+        }
+    }
 
+
+    public void spyFrom(View view){
+        if (planetName == null){
+            helpText.setText("Please select a planet");
+        }
+        else {
+            Intent intent = new Intent(this,SpyMoveDestinationActivity.class);
+            intent.putExtra("PNAME",planetName);
+            startActivity(intent);
+        }
+    }
 
 
     public void setSelectionInvisible(Region r) {
@@ -201,7 +193,10 @@ public class OrderActivity extends AppCompatActivity {
 
 
     public void setPlanetInfo(Region r){
+        Log.d("Inside setPlanetInfo", r.getName());
         name.setText(r.getName());
+//        String rLevel="Current Level: "+ Integer.toString(r.getRegionLevel().getRegionLevel());
+//        regionLevel.setText(rLevel);
         if (r.getOwner()!=null) {
             String o = "Owner: " + r.getOwner().getName();
             owner.setText(o);
@@ -217,6 +212,7 @@ public class OrderActivity extends AppCompatActivity {
             this.planetName = r.getName();
         }
     }
+
     public void displayInfo(Region r){
         if (r.getPlague()){
             Context context = getApplicationContext();
@@ -229,6 +225,7 @@ public class OrderActivity extends AppCompatActivity {
             setSelectionInvisible(r);
         }
     }
+
     public void planetZero(View view){
         Region r = regions.get(0);
         displayInfo(r);
@@ -352,11 +349,11 @@ public class OrderActivity extends AppCompatActivity {
         return planetPlayers;
     }
 
-    public List<ImageView> getPlayerColors() {
+    public List<ImageView> getPlanetSquares() {
         List<ImageView> planetSquares = new ArrayList<ImageView>();
         ImageView square0 = findViewById(R.id.square0);
         ImageView square1 = findViewById(R.id.square1);
-        ImageView  square2 = findViewById(R.id.square2);
+        ImageView square2 = findViewById(R.id.square2);
         ImageView square3 = findViewById(R.id.square3);
         ImageView square4 = findViewById(R.id.square4);
         planetSquares.add(square0);
@@ -377,9 +374,9 @@ public class OrderActivity extends AppCompatActivity {
         ImageButton planet6 = findViewById(R.id.p6);
         ImageButton planet7 = findViewById(R.id.p7);
         ImageButton planet8 = findViewById(R.id.p8);
-        ImageButton  planet9 = findViewById(R.id.p9);
-        ImageButton  planet10 = findViewById(R.id.p10);
-        ImageButton  planet11 = findViewById(R.id.p11);
+        ImageButton planet9 = findViewById(R.id.p9);
+        ImageButton planet10 = findViewById(R.id.p10);
+        ImageButton planet11 = findViewById(R.id.p11);
         planetButtons.add(planet0);
         planetButtons.add(planet1);
         planetButtons.add(planet2);

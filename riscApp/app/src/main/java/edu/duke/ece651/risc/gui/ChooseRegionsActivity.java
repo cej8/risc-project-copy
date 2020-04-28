@@ -58,6 +58,8 @@ public class ChooseRegionsActivity extends AppCompatActivity {
         List<ImageView> planetSquares = getPlanetSquares();
         List<ImageView> planetViews = getPlanetViews();
         PlanetDrawable planetDrawable = new PlanetDrawable(ParentActivity.getBoard(), planetButtons, planetSquares, planetPlayers, planetViews);
+        //PlanetDrawable planetDrawable = new PlanetDrawable(ParentActivity.getBoard(), planetButtons, planetSquares, planetPlayers);
+
         planetDrawable.setPlanetsNoUnits();
         planetDrawable.setGreyOutlines();
     }

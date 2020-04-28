@@ -29,6 +29,7 @@ public class FOWDialogFragment extends DialogFragment {
         View travelView = inflater.inflate(R.layout.fow_dialog,null);
         Button spyButton = travelView.findViewById(R.id.spyButton);
         Button cloakButton = travelView.findViewById(R.id.cloakButton);
+        Button spyMove = travelView.findViewById(R.id.spyMove);
         if(this.pa.getPlayer().getMaxTechLevel().getMaxTechLevel()<3){
             cloakButton.setVisibility(View.INVISIBLE);
         }
@@ -48,6 +49,14 @@ public class FOWDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 Intent cloakOrder = new Intent(activity,CloakActivity.class);
                 startActivity(cloakOrder);
+            }
+        });
+        spyMove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent spyMoveOrder = new Intent(activity,SpyMoveActivity.class);
+                spyMoveOrder.putExtra("ORDER","spy move");
+                startActivity(spyMoveOrder);
             }
         });
         builder.setView(travelView)

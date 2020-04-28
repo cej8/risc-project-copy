@@ -11,12 +11,13 @@
         android:id="@+id/newG"
         android:layout_width="172dp"
         android:layout_height="51dp"
-        android:layout_marginTop="208dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginBottom="25dp"
         android:background="@drawable/whiteoval"
         android:onClick="gameNew"
         android:text="New Game"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/register"
+        app:layout_constraintBottom_toTopOf="@+id/old"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,9 +27,9 @@
         android:id="@+id/old"
         android:layout_width="170dp"
         android:layout_height="60dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/whiteoval"
-        android:layout_marginBottom="296dp"
+        android:layout_marginBottom="75dp"
         android:onClick="gameOld"
         android:text="Continue Game"
         android:textColor="#0000FF"
@@ -37,6 +38,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/newG" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,6 +44,7 @@ public class SpectateActivity extends AppCompatActivity {
         List<ImageView> planetViews = getPlanetViews();
         PlanetDrawable pd = new PlanetDrawable(board, planetButtons, planetSquares, planetPlayers, unitCircles, planetViews);
         pd.setPlanets();
+        pd.setAllUnitCircles();
        // pd.setGreyPlanets();
     }
 @Override
