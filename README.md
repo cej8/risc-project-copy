@@ -2,10 +2,10 @@
 ![coverage](https://gitlab.oit.duke.edu/ld170/risc-project1/badges/master/coverage.svg?job=test_stable)
 
 
-ECE 651: RISC Evolution 2 (Space Invaders)
+ECE 651: RISC Evolution 3 (Space Invaders)
 ======================================
 
-Final commit ID: 6611ce8e
+Final commit ID: 095043c5
 
 Hosting server can be done with './gradlew run-server' in highest level of repository. This will open server on the machine 153.3.64.158 with the default port of 12345.
 
